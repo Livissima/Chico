@@ -1,0 +1,65 @@
+[project]
+name = "chico"
+version = "0.1.0"
+description = "Seu projeto Chico - Uma aplicação fantástica"
+authors = [
+    {name = "Seu Nome", email = "seu.email@exemplo.com"}
+]
+readme = "README.md"
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+keywords = ["app", "backend", "frontend", "python"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+dependencies = [
+    "pandas",
+    "selenium",
+    "tabula-py",
+    # Adicione outras dependências aqui
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "isort>=5.12.0",
+]
+
+[build-system]
+requires = []
+build-backend = "setuptools.build_meta"
+
+# Configurações para ferramentas adicionais
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+
+# Se estiver usando FastAPI ou similar
+[tool.uvicorn]
+app = "app.main:app"
+host = "0.0.0.0"
+port = 8000
+reload = true
+
+# Para empacotamento e distribuição
+[tool.setuptools]
+packages = {find = {where = ["app"]}}
+
+[tool.setuptools.package-data]
+"*" = ["*.txt", "*.json", "*.yaml", "*.yml"]
