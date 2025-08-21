@@ -1,7 +1,8 @@
-credenciais.txt
-.idea/misc.xml
-.idea/GO_Office.iml
 
+.env
+.env.local
+.env.production
+*.env
 # Created by https://www.toptal.com/developers/gitignore/api/pycharm
 # Edit at https://www.toptal.com/developers/gitignore?templates=pycharm
 
