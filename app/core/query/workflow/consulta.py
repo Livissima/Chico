@@ -1,7 +1,7 @@
-from app.backend.query.source.tratamentos.tratamento import Tratamento
-from app.backend.query.workflow.formatação import Formatação
-from app.backend.query.workflow.integração import Integração
-from app.backend.query.source.leitura import Leitura
+from app.core.query.source.tratamentos.tratamento import Tratamento
+from app.core.query.workflow.formatação import Formatação
+from app.core.query.workflow.integração import Integração
+from app.core.query.source.leitura import Leitura
 from pandas import DataFrame
 
 

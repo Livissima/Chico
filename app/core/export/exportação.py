@@ -1,8 +1,8 @@
 import pathlib
 
 from pandas import DataFrame
-from app.backend.export.exportaçãocsv import ExportaçãoCSV
-from app.backend.export.exportaçãoxlsx import ExportaçãoXLSX
+from app.core.export.exportaçãocsv import ExportaçãoCSV
+from app.core.export.exportaçãoxlsx import ExportaçãoXLSX
 
 
 class Exportação:

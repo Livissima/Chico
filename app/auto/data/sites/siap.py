@@ -1,4 +1,4 @@
-from app.utils.env_config import ID_SIAP, SENHA_SIAP
+from app.config.env_config import ID_SIAP, SENHA_SIAP
 
 class Siap:
     url = 'https://siap.educacao.go.gov.br/'

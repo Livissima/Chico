@@ -30,7 +30,7 @@ dev = [
 
 [build-system]
 requires = []
-#build-backend = "setuptools.build_meta"
+#build-core = "setuptools.build_meta"
 
 # Configurações para ferramentas adicionais
 [tool.black]
