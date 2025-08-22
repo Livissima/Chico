@@ -1,7 +1,7 @@
 import re
 from pandas import DataFrame
 import pandas as pd
-from app.backend.query.workflow.formatação import Formatação
+from app.core.query.workflow.formatação import Formatação
 
 
 class TratamentoContatos:

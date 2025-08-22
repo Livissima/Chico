@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 from customtkinter import CTk, CTkFrame
 
-from app.backend import Consulta, Exportação
+from app.core import Consulta, Exportação
 from app.ui.functions.obterdiretório import PesquisaDiretório
 from app.ui.screens import PROJECT_NAME
 from app.ui.widgets.botão import Botão

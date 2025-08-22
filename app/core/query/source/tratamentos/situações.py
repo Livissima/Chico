@@ -1,5 +1,5 @@
 from pandas import DataFrame
-from app.backend.query.workflow.formatação import Formatação
+from app.core.query.workflow.formatação import Formatação
 
 
 class TratamentoSituações:

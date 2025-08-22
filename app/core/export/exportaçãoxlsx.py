@@ -1,7 +1,7 @@
 import os
 from typing import Literal
 
-from app.backend.query.workflow.variáveis import Variáveis
+from app.core.query.workflow.variáveis import Variáveis
 from pandas import DataFrame, ExcelWriter
 
 #todo: Adicionar método para definir path de output pela UI
