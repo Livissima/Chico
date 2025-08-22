@@ -4,7 +4,7 @@ from pandas import DataFrame
 from selenium.webdriver import Chrome
 
 from app.auto.functions.navegação import Navegação
-from app.auto.info.sites.propriedades import Propriedades
+from app.auto.data.sites.propriedades import Propriedades
 from typing import Literal
 import pandas as pd
 

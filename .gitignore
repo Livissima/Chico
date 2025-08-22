@@ -1,3 +1,5 @@
+# Dados de configuração da aplicação
+data/app_settings.json
 .env
 .env.local
 .env.production

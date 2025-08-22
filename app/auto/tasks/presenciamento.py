@@ -1,6 +1,6 @@
 from selenium.webdriver.common.by import By
 
-from app.auto.info.sites.propriedades import Propriedades
+from app.auto.data.sites.propriedades import Propriedades
 from app.auto.functions.navegação import Navegação
 from selenium.webdriver import Chrome
 

@@ -4,7 +4,7 @@ from customtkinter import CTkFrame, CTk
 
 from app.auto.bot.navegador import Navegador
 from app.ui.widgets import Texto, Botão
-from .__init__ import TITLE
+from .__init__ import PROJECT_NAME
 
 if TYPE_CHECKING:
     from .janelaprincipal import JanelaPrincipal
@@ -24,7 +24,7 @@ class TelaBot(CTkFrame):
         # self.mainloop()
 
     def _configurar_layout(self):
-        self.controller.title(f'{TITLE} - Bot')
+        self.controller.title(f'{PROJECT_NAME} - Bot')
 
 
     def _inserir_widgets(self):

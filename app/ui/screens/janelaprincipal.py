@@ -1,7 +1,7 @@
 from customtkinter import CTk, CTkFrame
 from app.ui import Dimensionamento
 from app.ui.screens.utils.alternador_de_telas import AlternadorDeTelas
-from .__init__ import TITLE
+from .__init__ import PROJECT_NAME, PROJECT_VERSION
 
 
 class JanelaPrincipal(CTk):
@@ -22,7 +22,7 @@ class JanelaPrincipal(CTk):
         self.alternador.abrir('inicial')
 
     def _configurar_layout(self):
-        self.title(f'{TITLE}')
+        self.title(f'{PROJECT_NAME}')
         self._set_appearance_mode('Dark')
         self._dimensionamento()
 
