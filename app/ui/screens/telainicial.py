@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
-from app.frontend.screens import TITLE
-from app.frontend.widgets import Texto, Botão
+from app.ui.screens import TITLE
+from app.ui.widgets import Texto, Botão
 
 if TYPE_CHECKING:
     from .janelaprincipal import JanelaPrincipal

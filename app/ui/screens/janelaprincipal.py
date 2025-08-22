@@ -1,6 +1,6 @@
 from customtkinter import CTk, CTkFrame
-from app.frontend import Dimensionamento
-from app.frontend.screens.utils.alternador_de_telas import AlternadorDeTelas
+from app.ui import Dimensionamento
+from app.ui.screens.utils.alternador_de_telas import AlternadorDeTelas
 from .__init__ import TITLE
 
 
