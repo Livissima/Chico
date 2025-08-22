@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from customtkinter import CTkFrame, CTk
 
 from app.auto.bot.navegador import Navegador
-from app.frontend.widgets import Texto, Botão
+from app.ui.widgets import Texto, Botão
 from .__init__ import TITLE
 
 if TYPE_CHECKING:

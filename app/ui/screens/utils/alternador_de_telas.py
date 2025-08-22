@@ -1,6 +1,6 @@
-from app.frontend.screens.telabot import TelaBot
-from app.frontend.screens.telaconsulta import TelaConsulta
-from app.frontend.screens.telainicial import TelaInicial
+from app.ui.screens.telabot import TelaBot
+from app.ui.screens.telaconsulta import TelaConsulta
+from app.ui.screens.telainicial import TelaInicial
 
 
 class AlternadorDeTelas:

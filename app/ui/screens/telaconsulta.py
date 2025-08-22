@@ -4,11 +4,11 @@ from typing import TYPE_CHECKING
 from customtkinter import CTk, CTkFrame
 
 from app.backend import Consulta, Exportação
-from app.frontend.functions.obterdiretório import PesquisaDiretório
-from app.frontend.screens import TITLE
-from app.frontend.widgets.botão import Botão
-from app.frontend.widgets.input import Input
-from app.frontend.widgets.texto import Texto
+from app.ui.functions.obterdiretório import PesquisaDiretório
+from app.ui.screens import TITLE
+from app.ui.widgets.botão import Botão
+from app.ui.widgets.input import Input
+from app.ui.widgets.texto import Texto
 
 if TYPE_CHECKING:
     from .janelaprincipal import JanelaPrincipal

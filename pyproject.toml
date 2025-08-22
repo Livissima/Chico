@@ -1,28 +1,22 @@
 [project]
-name = "chico"
-version = "0.1.0"
-description = "Seu projeto Chico - Uma aplicação fantástica"
+name = "Chico"
+version = "1.0.0"
+description = "Chico é um aplicativo desenvolvido para auxiliar tarefas administrativas em escolas."
 authors = [
-    {name = "Seu Nome", email = "seu.email@exemplo.com"}
+    {name = "Livíssima ", email = "seu.email@exemplo.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.8"
 license = {file = "LICENSE"}
-keywords = ["app", "backend", "frontend", "python"]
+keywords = []
 classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
+    "Development Status :: ____ - Beta",
+    "Intended Audience :: ________",
+    "Programming Language :: Python :: 3.12",
 ]
 
 dependencies = [
-    "pandas",
-    "selenium",
-    "tabula-py",
+    "pandas", "selenium", "tabula-py", ""
     # Adicione outras dependências aqui
 ]
 
@@ -50,12 +44,12 @@ profile = "black"
 testpaths = ["tests"]
 python_files = "test_*.py"
 
-# Se estiver usando FastAPI ou similar
-[tool.uvicorn]
-app = "app.main:app"
-host = "0.0.0.0"
-port = 8000
-reload = true
+## Se estiver usando FastAPI ou similar
+#[tool.uvicorn]
+#app = "app.main:app"
+#host = "0.0.0.0"
+#port = 8000
+#reload = true
 
 # Para empacotamento e distribuição
 [tool.setuptools]
