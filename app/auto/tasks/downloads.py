@@ -3,7 +3,7 @@ import time
 from typing import Callable
 from selenium.webdriver import Chrome
 
-from app.auto.info.sites.propriedades import Propriedades
+from app.auto.data.sites.propriedades import Propriedades
 from app.auto.functions.impressão import Impressão
 from app.auto.functions.navegação import Navegação
 

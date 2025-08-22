@@ -4,7 +4,7 @@ from app.auto.tasks.downloads import Downloads
 from app.auto.tasks.gerenciaracessos import GerenciarAcessos
 from app.auto.tasks.presenciamento import Presenciamento
 from selenium import webdriver
-from app.auto.info.misc.parâmetroswebdriver import ParâmetrosWebdriver
+from app.auto.data.misc.parâmetroswebdriver import ParâmetrosWebdriver
 
 
 class Navegador:

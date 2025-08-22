@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from app.ui.screens import TITLE
+from app.ui.screens import PROJECT_NAME, PROJECT_VERSION
 from app.ui.widgets import Texto, Botão
 
 if TYPE_CHECKING:
@@ -16,7 +16,7 @@ class TelaInicial:
         self._inserir_widgets()  # self.mainloop()
 
     def _configurar_layout(self) :
-        self.controller.title(f'{TITLE}')
+        self.controller.title(f'{PROJECT_NAME}    v.{PROJECT_VERSION}')
 
 
 
@@ -31,7 +31,7 @@ class TelaInicial:
         self.título = Texto(
             self.master,
             controller=self.controller,
-            texto='GO Office',
+            texto=f'{PROJECT_NAME}',
             fonte=('times new roman', 30),
             x=0,
             y=0,

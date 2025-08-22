@@ -6,8 +6,8 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.expected_conditions import presence_of_element_located, visibility_of_element_located, element_to_be_clickable
 
-from app.auto.info.sites.propriedades import Propriedades
-from app.auto.info.misc.escola import Escola
+from app.auto.data.sites.propriedades import Propriedades
+from app.auto.data.misc.escola import Escola
 
 
 class Navegação:

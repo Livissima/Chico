@@ -1,4 +1,4 @@
-from app.config import ID_SIGE, SENHA_SIGE
+from app.utils.env_config import ID_SIGE, SENHA_SIGE
 
 
 class Sige:

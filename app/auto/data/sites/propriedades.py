@@ -1,8 +1,8 @@
 import datetime
 
-from app.auto.info.sites.netescola import NetEscola
-from app.auto.info.sites.siap import Siap
-from app.auto.info.sites.sige import Sige
+from app.auto.data.sites.netescola import NetEscola
+from app.auto.data.sites.siap import Siap
+from app.auto.data.sites.sige import Sige
 
 
 class Propriedades:

@@ -1,48 +1,48 @@
 [project]
 name = "Chico"
-version = "1.0.0"
+version = "BETA"
 description = "Chico é um aplicativo desenvolvido para auxiliar tarefas administrativas em escolas."
 authors = [
     {name = "Livíssima ", email = "seu.email@exemplo.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.8"
+#requires-python = ">=3.8"
 license = {file = "LICENSE"}
 keywords = []
 classifiers = [
-    "Development Status :: ____ - Beta",
-    "Intended Audience :: ________",
+#    "Development Status :: ____ - Beta",
+#    "Intended Audience :: ________",
     "Programming Language :: Python :: 3.12",
 ]
 
 dependencies = [
-    "pandas", "selenium", "tabula-py", ""
+    "pandas", "selenium", "tabula-py",
     # Adicione outras dependências aqui
 ]
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=7.0.0",
-    "black>=23.0.0",
-    "flake8>=6.0.0",
-    "isort>=5.12.0",
+#    "pytest>=7.0.0",
+#    "black>=23.0.0",
+#    "flake8>=6.0.0",
+#    "isort>=5.12.0",
 ]
 
 [build-system]
 requires = []
-build-backend = "setuptools.build_meta"
+#build-backend = "setuptools.build_meta"
 
 # Configurações para ferramentas adicionais
 [tool.black]
-line-length = 88
-target-version = ['py38']
+#line-length = 88
+#target-version = ['py38']
 
 [tool.isort]
-profile = "black"
+#profile = "black"
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
-python_files = "test_*.py"
+#testpaths = ["tests"]
+#python_files = "test_*.py"
 
 ## Se estiver usando FastAPI ou similar
 #[tool.uvicorn]
@@ -53,7 +53,7 @@ python_files = "test_*.py"
 
 # Para empacotamento e distribuição
 [tool.setuptools]
-packages = {find = {where = ["app"]}}
+#packages = {find = {where = ["app"]}}
 
 [tool.setuptools.package-data]
-"*" = ["*.txt", "*.json", "*.yaml", "*.yml"]
+#"*" = ["*.txt", "*.json", "*.yaml", "*.yml"]

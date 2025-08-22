@@ -5,7 +5,7 @@ from customtkinter import CTk, CTkFrame
 
 from app.backend import Consulta, Exportação
 from app.ui.functions.obterdiretório import PesquisaDiretório
-from app.ui.screens import TITLE
+from app.ui.screens import PROJECT_NAME
 from app.ui.widgets.botão import Botão
 from app.ui.widgets.input import Input
 from app.ui.widgets.texto import Texto
@@ -26,7 +26,7 @@ class TelaConsulta(CTkFrame):
         self._inserir_widgets()
 
     def _configurar_layout(self):
-        self.controller.title(f'{TITLE} - Consulta')
+        self.controller.title(f'{PROJECT_NAME} - Consulta')
 
     def _inserir_widgets(self):
         self.__inserir_textos()

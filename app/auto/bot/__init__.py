@@ -1,4 +1,4 @@
 # from .navegador import Navegador
-# from .info import *
+# from .data import *
 #
 #todo renomear auto para browser
