@@ -1,8 +1,11 @@
 import os.path
+import shutil
 import time
 from typing import Callable
 from selenium.webdriver import Chrome
-
+import tempfile
+import platform
+import subprocess
 from app.auto.data.sites.propriedades import Propriedades
 from app.auto.functions.impressão import Impressão
 from app.auto.functions.navegação import Navegação
@@ -12,14 +15,12 @@ class Downloads:
     def __init__(
             self,
             navegador: Chrome,
-            pasta_temporária: str,
-            pasta_destino_comum: str,
+            destino: str,
             *alvos
     ):
         print(f'class Downloads instanciada.')
         self.master = navegador
-        self.pasta_temporária = pasta_temporária
-        self.destino_comum = pasta_destino_comum
+        self.destino_comum = destino
 
         self.nv = Navegação(navegador, 'sige')
         self.pp = Propriedades('sige')
@@ -103,9 +104,25 @@ class Downloads:
             'gêneros' : os.path.join(self.destino_comum, 'Gêneros')
         }
 
+
     def _imprimir(self, tipo, nome):
-        Impressão(
-            self.master,
-            self.pasta_temporária,
-            self._map_pastas_por_tipo
-        ).imprimir_e_mover(tipo, nome)
+        temporária = self.abrir_temporária()
+        try:
+            Impressão(
+                navegador=self.master,
+                pasta_temp=temporária.name,
+                tipos_para_pastas=self._map_pastas_por_tipo
+            ).imprimir_e_mover(tipo, nome)
+        finally:
+            self.fechar_temporária(temporária)
+
+    @staticmethod
+    def abrir_temporária():
+        pasta_temporária = tempfile.TemporaryDirectory(prefix='.temp')
+        if platform.system() == 'Windows':
+            subprocess.call(['attrib', '+h', pasta_temporária.name])
+        return pasta_temporária
+
+    @staticmethod
+    def fechar_temporária(pasta):
+        pasta.cleanup()

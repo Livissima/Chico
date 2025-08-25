@@ -9,6 +9,7 @@ from .__init__ import PROJECT_NAME, PROJECT_VERSION
 from app.ui.widgets.botão import Botão
 from app.ui.widgets.input import Input
 from app.ui.widgets.texto import Texto
+from .utils.cabeçalhos import Cabeçalhos
 
 if TYPE_CHECKING:
     from .janelaprincipal import JanelaPrincipal
@@ -26,36 +27,14 @@ class TelaConsulta(CTkFrame):
         self._inserir_widgets()
 
     def _configurar_layout(self):
-        self.controller.title(f'{PROJECT_NAME} - Consulta')
-
+        #self.controller.title(f'{PROJECT_NAME} - Consulta')
+        Cabeçalhos(self, 'consulta')
     def _inserir_widgets(self):
         self.__inserir_textos()
         self.__iserir_inputs()
         self.__inserir_botões()
 
     def __inserir_textos(self):
-        self.título = Texto(
-            master=self.master,
-            controller=self.controller,
-            texto='GO Office',
-            fonte=('times new roman', 30),
-            x=0,
-            y=0,
-            altura=35,
-            largura=self.controller.largura,
-        )
-
-        self.título = Texto(
-            master=self.master,
-            controller=self.controller,
-            texto='Auxiliar de Secretaria',
-            fonte=('Arial', 15),
-            x=0,
-            y=29,
-            altura=25,
-            largura=self.controller.largura,
-        )
-
         self.tex_insira_caminho = Texto(
             master=self.master,
             controller=self.controller,

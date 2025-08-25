@@ -3,6 +3,8 @@ from typing import TYPE_CHECKING
 from customtkinter import CTkFrame, CTk
 
 from app.auto.bot.navegador import Navegador
+from app.ui.screens.telabot_sige import TelaBotSige
+from app.ui.screens.utils.cabeçalhos import Cabeçalhos
 from app.ui.widgets import Texto, Botão
 from .__init__ import PROJECT_NAME, PROJECT_VERSION
 
@@ -21,11 +23,9 @@ class TelaBot(CTkFrame):
         self.pack(expand=True, fill='both')
         self._configurar_layout()
         self._inserir_widgets()
-        # self.mainloop()
 
     def _configurar_layout(self):
-        self.controller.title(f'{PROJECT_NAME} - Bot')
-
+        Cabeçalhos(self, 'bot')
 
     def _inserir_widgets(self):
         self.__inserir_textos()
@@ -34,38 +34,7 @@ class TelaBot(CTkFrame):
         self.__inserir_dropdowns()
 
     def __inserir_textos(self):
-        self.título = Texto(
-            master=self.master,
-            controller=self.controller,
-            texto='BOT',
-            x=0,
-            y=0,
-            altura=35,
-            largura=self.controller.largura,
-            fonte=('times new roman', 30)
-        )
-
-        self.título = Texto(
-            master=self.master,
-            controller=self.controller,
-            texto='Automação de tarefas',
-            fonte=('Arial', 15),
-            x=0,
-            y=29,
-            altura=25,
-            largura=self.controller.largura,
-        )
-
-        self.título = Texto(
-            master=self.master,
-            controller=self.controller,
-            texto='Automação de tarefas',
-            fonte=('Arial', 15),
-            x=0,
-            y=29,
-            altura=25,
-            largura=self.controller.largura,
-        )
+        pass
 
     def __inserir_inputs(self):
         pass
@@ -82,10 +51,11 @@ class TelaBot(CTkFrame):
             y=100,
             largura=100,
         )
+
         self.bt_sige = Botão(
             master=self.master,
             controller=self.controller,
-            função=lambda: Navegador(tarefa='downloads', ),
+            função=lambda: self.controller.alternador.abrir('bot sige'),
             texto='SIGE',
             fonte=('Arial', 20),
             formato='bold',
@@ -114,7 +84,6 @@ class TelaBot(CTkFrame):
             formato='bold',
             x=10,
             y=10,
-
         )
 
     def __inserir_dropdowns(self):
@@ -130,7 +99,3 @@ class TelaBot(CTkFrame):
         # )
         pass
 
-
-
-if __name__ == '__main__':
-    TelaBot()
