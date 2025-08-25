@@ -5,7 +5,7 @@ from customtkinter import CTk, CTkFrame
 
 from app.core import Consulta, Exportação
 from app.ui.functions.obterdiretório import PesquisaDiretório
-from app.ui.screens import PROJECT_NAME
+from .__init__ import PROJECT_NAME, PROJECT_VERSION
 from app.ui.widgets.botão import Botão
 from app.ui.widgets.input import Input
 from app.ui.widgets.texto import Texto

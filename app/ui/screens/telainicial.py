@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from app.ui.screens import PROJECT_NAME, PROJECT_VERSION
+from .__init__ import PROJECT_NAME, PROJECT_VERSION
 from app.ui.widgets import Texto, Botão
 
 if TYPE_CHECKING:
@@ -42,7 +42,7 @@ class TelaInicial:
         self.título = Texto(
             self.master,
             controller=self.controller,
-            texto='Auxiliar de Secretaria',
+            texto='Auxílio administrativo',
             fonte=('Arial', 15),
             x=0,
             y=29,
