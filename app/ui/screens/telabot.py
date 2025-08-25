@@ -4,7 +4,7 @@ from customtkinter import CTkFrame, CTk
 
 from app.auto.bot.navegador import Navegador
 from app.ui.widgets import Texto, Botão
-from .__init__ import PROJECT_NAME
+from .__init__ import PROJECT_NAME, PROJECT_VERSION
 
 if TYPE_CHECKING:
     from .janelaprincipal import JanelaPrincipal

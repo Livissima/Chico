@@ -7,4 +7,3 @@ Navegador(
     alvos=['fichas', 'contatos', 'situações', 'gêneros']
 )
 
-
