@@ -2,6 +2,8 @@ from typing import TYPE_CHECKING
 
 from .__init__ import PROJECT_NAME, PROJECT_VERSION
 from app.ui.widgets import Texto, Botão
+from app.ui.screens.utils.cabeçalhos import Cabeçalhos
+
 
 if TYPE_CHECKING:
     from .janelaprincipal import JanelaPrincipal
@@ -12,12 +14,13 @@ class TelaInicial:
         # super().__init__(controller)
         self.master = master
         self.controller = controller
+
         self._configurar_layout()
         self._inserir_widgets()  # self.mainloop()
 
     def _configurar_layout(self) :
-        self.controller.title(f'{PROJECT_NAME}    v.{PROJECT_VERSION}')
-
+        #self.controller.title(f'{PROJECT_NAME}    v.{PROJECT_VERSION}')
+        Cabeçalhos(self, 'inicial')
 
 
     
@@ -28,27 +31,28 @@ class TelaInicial:
         self.__inserir_dropdowns()
 
     def __inserir_textos(self):
-        self.título = Texto(
-            self.master,
-            controller=self.controller,
-            texto=f'{PROJECT_NAME}',
-            fonte=('times new roman', 30),
-            x=0,
-            y=0,
-            altura=35,
-            largura=self.controller.largura,
-        )
+        #self.título = Texto(
+        #    self.master,
+        #    controller=self.controller,
+        #    texto=f'{PROJECT_NAME}',
+        #    fonte=('times new roman', 30),
+        #    x=0,
+        #    y=0,
+        #    altura=35,
+        #    largura=self.controller.largura,
+        #)
 
-        self.título = Texto(
-            self.master,
-            controller=self.controller,
-            texto='Auxílio administrativo',
-            fonte=('Arial', 15),
-            x=0,
-            y=29,
-            altura=25,
-            largura=self.controller.largura,
-        )
+        #self.título = Texto(
+        #    self.master,
+        #    controller=self.controller,
+        #    texto='Auxílio administrativo',
+        #    fonte=('Arial', 15),
+        #    x=0,
+        #    y=29,
+        #    altura=25,
+        #    largura=self.controller.largura,
+        #)
+        pass
 
     def __inserir_inputs(self):
         pass
@@ -57,7 +61,7 @@ class TelaInicial:
         self.botão_bot = Botão(
             self.master,
             controller=self.controller,
-            função= lambda: self.controller.alternador.abrir('auto'),
+            função= lambda: self.controller.alternador.abrir('bot'),
             texto='BOT',
             formato='bold',
             x=20,

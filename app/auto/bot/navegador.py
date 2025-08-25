@@ -41,19 +41,18 @@ class Navegador:
         if tarefa == 'downloads':
             parâmetros = normalizar_dicionário(self._obter_parâmetros('relatórios'))
 
-            pasta_temporária = parâmetros.get('pasta_temporaria')
-            pasta_destino = parâmetros.get('pasta_destino_comum')
+            pasta_destino = parâmetros.get('destino')
             alvos = parâmetros.get('alvos')
 
-            if not pasta_temporária or not pasta_destino or not alvos:
-                raise ValueError('Necessário informar pasta_temporária, pasta_destino_comum e alvos')
+            if not pasta_destino or not alvos:
+                raise ValueError('Necessário informar destino e alvos')
 
             if isinstance(alvos, str):
                 alvos = [alvo.strip() for alvo in alvos.split(',') if alvo.strip()]
 
             wd_settings = parâmetros.get('webdriver_settings') or ParâmetrosWebdriver().impressão
             self.navegador = webdriver.Chrome(wd_settings)
-            Downloads(self.navegador, pasta_temporária, pasta_destino, *alvos)
+            Downloads(self.navegador, pasta_destino, *alvos)
             return
 
         if tarefa == 'siap':
