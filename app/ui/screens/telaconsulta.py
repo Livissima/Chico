@@ -27,72 +27,73 @@ class TelaConsulta(CTkFrame):
         self._inserir_widgets()
 
     def _configurar_layout(self):
-        #self.controller.title(f'{PROJECT_NAME} - Consulta')
         Cabeçalhos(self, 'consulta')
+
+
     def _inserir_widgets(self):
         self.__inserir_textos()
         self.__iserir_inputs()
         self.__inserir_botões()
 
     def __inserir_textos(self):
-        self.tex_insira_caminho = Texto(
-            master=self.master,
-            controller=self.controller,
-            texto=' Insira o caminho para cada pasta de relatórios e clique em CONSULTAR.',
-            fonte=('Arial', 16),
-            x=0,
-            y=75,
-            altura=25,
-            largura=self.controller.largura,
-        )
+        # self.tex_insira_caminho = Texto(
+        #     master=self.master,
+        #     controller=self.controller,
+        #     texto=' Insira o caminho para cada pasta de relatórios e clique em CONSULTAR.',
+        #     fonte=('Arial', 16),
+        #     x=0,
+        #     y=75,
+        #     altura=25,
+        #     largura=self.controller.largura,
+        # )
 
-        self.tex_fichas = Texto(
+        self.tx_pasta_dados = Texto(
             master=self.master,
             controller=self.controller,
-            texto='Fichas:',
+            texto='Pasta dados:',
             fonte=('arial', 15),
             formato='bold',
             x=0+5,
             y=118,
             altura=15,
-            largura=55
+            largura=100
         )
 
-        self.tex_contatos = Texto(
-            master=self.master,
-            controller=self.controller,
-            texto='Contatos:',
-            fonte=('arial', 15),
-            formato='bold',
-            x=0+5,
-            y=118 + 50,
-            altura=15,
-            largura=70
-        )
-
-        self.text_situações = Texto(
-            master=self.master,
-            controller=self.controller,
-            texto='Situações:',
-            fonte=('arial', 15),
-            formato='bold',
-            x=0+5,
-            y=118 + 50 + 50,
-            altura=15,
-            largura=70
-        )
-
-        self.tex_gêneros = Texto(
-            master=self.master,
-            controller=self.controller,
-            texto='Gêneros:',
-            fonte=('arial', 15),
-            formato='bold',
-            x=0+5,
-            y=118 + 50 + 50 + 50,
-            altura=15,
-            largura=70
-        )
+        # self.tex_contatos = Texto(
+        #     master=self.master,
+        #     controller=self.controller,
+        #     texto='Contatos:',
+        #     fonte=('arial', 15),
+        #     formato='bold',
+        #     x=0+5,
+        #     y=118 + 50,
+        #     altura=15,
+        #     largura=70
+        # )
+        #
+        # self.text_situações = Texto(
+        #     master=self.master,
+        #     controller=self.controller,
+        #     texto='Situações:',
+        #     fonte=('arial', 15),
+        #     formato='bold',
+        #     x=0+5,
+        #     y=118 + 50 + 50,
+        #     altura=15,
+        #     largura=70
+        # )
+        #
+        # self.tex_gêneros = Texto(
+        #     master=self.master,
+        #     controller=self.controller,
+        #     texto='Gêneros:',
+        #     fonte=('arial', 15),
+        #     formato='bold',
+        #     x=0+5,
+        #     y=118 + 50 + 50 + 50,
+        #     altura=15,
+        #     largura=70
+        # )
 
         self.painel_resposta = Texto(
             master=self.master,
@@ -110,7 +111,8 @@ class TelaConsulta(CTkFrame):
             master=self.master,
             controller=self.controller,
             texto='Localizar',
-            fonte=('times new roman', 13),
+            fonte=('times new roman', 15),
+            formato='bold',
             x=5,
             y=136,
             função=self.pesquisar_fichas,
@@ -118,42 +120,42 @@ class TelaConsulta(CTkFrame):
             largura=100
         )
 
-        self.botão_localizar_contatos = Botão(
-            master=self.master,
-            controller=self.controller,
-            texto='Localizar',
-            fonte=('times new roman', 13),
-            x=5,
-            y=136 + 50,
-            função=self.pesquisar_contatos,
-            altura=25,
-            largura=100
-        )
-
-
-        self.botão_localizar_situações = Botão(
-            master=self.master,
-            controller=self.controller,
-            texto='Localizar',
-            fonte=('times new roman', 13),
-            x=5,
-            y=136 + 50 + 50,
-            função=self.pesquisar_situações,
-            altura=25,
-            largura=100
-        )
-
-        self.botão_localizar_gêneros = Botão(
-            master=self.master,
-            controller=self.controller,
-            texto='Localizar',
-            fonte=('times new roman', 13),
-            x=5,
-            y=136 + 50 + 50 + 50,
-            função=self.pesquisar_gêneros,
-            altura=25,
-            largura=100
-        )
+        # self.botão_localizar_contatos = Botão(
+        #     master=self.master,
+        #     controller=self.controller,
+        #     texto='Localizar',
+        #     fonte=('times new roman', 13),
+        #     x=5,
+        #     y=136 + 50,
+        #     função=self.pesquisar_contatos,
+        #     altura=25,
+        #     largura=100
+        # )
+        #
+        #
+        # self.botão_localizar_situações = Botão(
+        #     master=self.master,
+        #     controller=self.controller,
+        #     texto='Localizar',
+        #     fonte=('times new roman', 13),
+        #     x=5,
+        #     y=136 + 50 + 50,
+        #     função=self.pesquisar_situações,
+        #     altura=25,
+        #     largura=100
+        # )
+        #
+        # self.botão_localizar_gêneros = Botão(
+        #     master=self.master,
+        #     controller=self.controller,
+        #     texto='Localizar',
+        #     fonte=('times new roman', 13),
+        #     x=5,
+        #     y=136 + 50 + 50 + 50,
+        #     função=self.pesquisar_gêneros,
+        #     altura=25,
+        #     largura=100
+        # )
 
         self.botão_consultar = Botão(
             master=self.master,
@@ -183,46 +185,46 @@ class TelaConsulta(CTkFrame):
         self.input_fichas = Input(
             master=self.master,
             controller=self.controller,
-            texto=r'C:\Users\...\...\Fichas',
-            fonte=('arial', 10),
+            texto=r'C:\Users\...\...\Dados',
+            fonte=('arial', 12),
             x=120,
             y=135,
             altura=28,
             largura=420+55
         )
 
-        self.input_contatos = Input(
-            master=self.master,
-            controller=self.controller,
-            texto=r'C:\Users\...\...\Contatos',
-            fonte=('arial', 10),
-            x=120,
-            y=135 + 50,
-            altura=28,
-            largura=420+55
-        )
-
-        self.input_situações = Input(
-            master=self.master,
-            controller=self.controller,
-            texto=r'C:\Users\...\...\Situações',
-            fonte=('arial', 10),
-            x=120,
-            y=135 + 50 + 50,
-            altura=28,
-            largura=420+55
-        )
-
-        self.input_gêneros = Input(
-            master=self.master,
-            controller=self.controller,
-            texto=r'C:\Users\...\...\Gêneros',
-            fonte=('arial', 10),
-            x=120,
-            y=135 + 50 + 50 + 50,
-            altura=28,
-            largura=420+55
-        )
+        # self.input_contatos = Input(
+        #     master=self.master,
+        #     controller=self.controller,
+        #     texto=r'C:\Users\...\...\Contatos',
+        #     fonte=('arial', 10),
+        #     x=120,
+        #     y=135 + 50,
+        #     altura=28,
+        #     largura=420+55
+        # )
+        #
+        # self.input_situações = Input(
+        #     master=self.master,
+        #     controller=self.controller,
+        #     texto=r'C:\Users\...\...\Situações',
+        #     fonte=('arial', 10),
+        #     x=120,
+        #     y=135 + 50 + 50,
+        #     altura=28,
+        #     largura=420+55
+        # )
+        #
+        # self.input_gêneros = Input(
+        #     master=self.master,
+        #     controller=self.controller,
+        #     texto=r'C:\Users\...\...\Gêneros',
+        #     fonte=('arial', 10),
+        #     x=120,
+        #     y=135 + 50 + 50 + 50,
+        #     altura=28,
+        #     largura=420+55
+        # )
 
     def consultar(self):
         self.painel_resposta.atualizar_texto('Consultando')
