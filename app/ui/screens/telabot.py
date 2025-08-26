@@ -2,14 +2,12 @@ from typing import TYPE_CHECKING
 
 from customtkinter import CTkFrame, CTk
 
-from app.auto.bot.navegador import Navegador
-from app.ui.screens.telabot_sige import TelaBotSige
+from app.auto.bot import Bot
 from app.ui.screens.utils.cabeçalhos import Cabeçalhos
-from app.ui.widgets import Texto, Botão
-from .__init__ import PROJECT_NAME, PROJECT_VERSION
+from app.ui.widgets import Botão
 
 if TYPE_CHECKING:
-    from .janelaprincipal import JanelaPrincipal
+    pass
 
 class TelaBot(CTkFrame):
     #todo: Bolar um esqueminha de botão que aborte a automação em curso.
@@ -43,7 +41,7 @@ class TelaBot(CTkFrame):
         self.bt_siap = Botão(
             master=self.master,
             controller=self.controller,
-            função=lambda: Navegador(tarefa='siap'),
+            função=lambda: Bot(tarefa='siap'),
             texto='SIAP',
             fonte=('Arial', 20),
             formato='bold',

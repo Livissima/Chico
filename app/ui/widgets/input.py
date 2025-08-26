@@ -69,3 +69,7 @@ class Input(CTkFrame):
     def __getattr__(self, item):
         return getattr(self.input, item)
 
+    def __str__(self):
+        return str(self.input.get())
+
+

@@ -7,7 +7,7 @@ from customtkinter import CTkFrame, CTk
 class PesquisaDiretório(CTkFrame):
     def __init__(
             self,
-            master: CTk,
+            master,
             título_janela: str,
             widget_input_diretório
     ):

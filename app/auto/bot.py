@@ -7,7 +7,7 @@ from selenium import webdriver
 from app.auto.data.misc.parâmetroswebdriver import ParâmetrosWebdriver
 
 
-class Navegador:
+class Bot:
     def __init__(
             self,
             tarefa: Literal['downloads', 'siap', 'gerenciar'],
@@ -15,7 +15,7 @@ class Navegador:
             **kwargs
     ):
 
-        print(f'Navegador instanciado para a task "{tarefa}"')
+        print(f'Bot instanciado para a task "{tarefa}"')
 
         self._tarefa = remover_acentos(tarefa)
         self._kwargs_tarefa = normalizar_dicionário(kwargs_tarefa)
@@ -39,7 +39,7 @@ class Navegador:
             raise KeyError(f'Tarefa inválida para o navegador: {tarefa}')
 
         if tarefa == 'downloads':
-            parâmetros = normalizar_dicionário(self._obter_parâmetros('relatórios'))
+            parâmetros = normalizar_dicionário(self._obter_parâmetros('downloads'))
 
             pasta_destino = parâmetros.get('destino')
             alvos = parâmetros.get('alvos')
