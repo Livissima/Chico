@@ -1,4 +1,5 @@
 from app.ui.screens.telabot import TelaBot
+from app.ui.screens.telabot_credenciais import TelaBotCredenciais
 from app.ui.screens.telabot_sige import TelaBotSige
 from app.ui.screens.telaconsulta import TelaConsulta
 from app.ui.screens.telainicial import TelaInicial
@@ -12,7 +13,8 @@ class AlternadorDeTelas:
             'inicial': TelaInicial,
             'bot': TelaBot,
             'consulta': TelaConsulta,
-            'bot sige' : TelaBotSige
+            'bot sige' : TelaBotSige,
+            'bot google' : TelaBotCredenciais
         }
 
 

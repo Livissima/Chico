@@ -3,6 +3,12 @@ import os
 from pathlib import Path
 from typing import Any, Dict, Optional
 # from app.config.env_config import
+from pathlib import Path
+from platformdirs import user_documents_dir
+
+
+
+DIRETÓRIO_BASE_PADRÃO = str(os.path.join(Path(user_documents_dir()), 'SIGE'))
 
 class ConfigManager:
     def __init__(self):

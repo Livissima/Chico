@@ -10,6 +10,7 @@ from app.ui.widgets.botão import Botão
 from app.ui.widgets.input import Input
 from app.ui.widgets.texto import Texto
 from .utils.cabeçalhos import Cabeçalhos
+from ...config.app_config import DIRETÓRIO_BASE_PADRÃO
 
 if TYPE_CHECKING:
     from .janelaprincipal import JanelaPrincipal
@@ -104,7 +105,7 @@ class TelaConsulta(CTkFrame):
         self.in_diretório_base = Input(
             master=self.master,
             controller=self.controller,
-            texto=fr'{os.path.join(Path(user_documents_dir()), 'SIGE')}',
+            texto=fr'{DIRETÓRIO_BASE_PADRÃO}',
             fonte=('arial', 12),
             x=120,
             y=135,
@@ -115,10 +116,10 @@ class TelaConsulta(CTkFrame):
 
     def consultar(self):
 
-        diretório_dados = Path(os.path.join(Path(user_documents_dir()), 'SIGE'))
+        diretório_dados = DIRETÓRIO_BASE_PADRÃO
 
         def direcionar(alvo) -> str:
-            return os.path.join(diretório_dados, 'fonte', alvo)
+            return str(os.path.join(diretório_dados, 'fonte', alvo))
 
         try:
             self.tx_feedback.att('Consultando')
@@ -139,7 +140,7 @@ class TelaConsulta(CTkFrame):
 
     @staticmethod
     def _obter_situação():
-        diretório = Path(user_documents_dir()) / 'SIGE' / 'fonte'
+        diretório = Path(DIRETÓRIO_BASE_PADRÃO / 'fonte')
         if diretório.exists():
             return f'A consulta será realizada a partir do diretório:\n{diretório}', 'white'
         else:

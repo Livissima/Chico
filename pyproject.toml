@@ -1,7 +1,7 @@
 [project]
 name = "Chico"
 version = "BETA"
-description = "Chico é um aplicativo desenvolvido para auxiliar tarefas administrativas em escolas."
+description = "Chico é um utilitário para atividades administrativas do cotidiano escolar."
 authors = [
     {name = "Livíssima ", email = "seu.email@exemplo.com"}
 ]

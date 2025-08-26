@@ -16,30 +16,32 @@ class Cabeçalhos:
             'inicial' : self.inicial,
             'bot' : self.bot,
             'consulta' : self.consulta,
-            'bot sige' : self.bot_sige
+            'bot sige' : self.bot_sige,
+            'bot credenciais': self.bot_credenciais
         }
         setar = config[tela]
 
         self.master.controller.title(f'{setar['título']}')
+
         self.master.título = Texto(
             self.master.master,
             controller=self.master.controller,
             texto=setar['cabeçalho'],
             fonte=('times new roman', 30),
-            x=0,
+            x='centro',
             y=0,
-            altura=35,
-            largura=self.master.controller.largura
+            altura=45,
+            largura=self.master.controller.largura-10
         )
         self.master.título = Texto(
             self.master.master,
             controller=self.master.controller,
             texto=setar['descrição'],
             fonte=('Arial', 15),
-            x=0,
-            y=29,
-            altura=25,
-            largura=self.master.controller.largura
+            x='centro',
+            y=40,
+            altura=30,
+            largura=self.master.controller.largura-10
         )
 
 
@@ -48,7 +50,7 @@ class Cabeçalhos:
         return {
             'título' : f'{PROJECT_NAME}    v.{PROJECT_VERSION}',
             'cabeçalho' : f'{PROJECT_NAME}',
-            'descrição' : 'Auxílio administrativo'
+            'descrição' : 'Utilitário administrativo'
         }
 
     @property
@@ -73,4 +75,12 @@ class Cabeçalhos:
             'título' : f'{PROJECT_NAME} - Bot SIGE',
             'cabeçalho' : 'BOT SIGE',
             'descrição' : 'Automação de tarefas'
+        }
+
+    @property
+    def bot_credenciais(self):
+        return {
+            'título' : f'{PROJECT_NAME} - Bot Credenciais',
+            'cabeçalho' : 'BOT Credenciais',
+            'descrição' : 'Gerenciamento automático de credenciais'
         }
