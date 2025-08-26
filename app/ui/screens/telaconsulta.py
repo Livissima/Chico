@@ -1,11 +1,11 @@
+import os.path
+from os import PathLike
 from pathlib import Path
 from typing import TYPE_CHECKING
-
+from platformdirs import user_desktop_dir, user_documents_dir
 from customtkinter import CTk, CTkFrame
-
 from app.core import Consulta, Exportação
-from app.ui.functions.obterdiretório import PesquisaDiretório
-from .__init__ import PROJECT_NAME, PROJECT_VERSION
+from app.ui.functions.pesquisa_diretório import PesquisaDiretório
 from app.ui.widgets.botão import Botão
 from app.ui.widgets.input import Input
 from app.ui.widgets.texto import Texto
@@ -29,73 +29,28 @@ class TelaConsulta(CTkFrame):
     def _configurar_layout(self):
         Cabeçalhos(self, 'consulta')
 
-
     def _inserir_widgets(self):
         self.__inserir_textos()
         self.__iserir_inputs()
         self.__inserir_botões()
 
     def __inserir_textos(self):
-        # self.tex_insira_caminho = Texto(
-        #     master=self.master,
-        #     controller=self.controller,
-        #     texto=' Insira o caminho para cada pasta de relatórios e clique em CONSULTAR.',
-        #     fonte=('Arial', 16),
-        #     x=0,
-        #     y=75,
-        #     altura=25,
-        #     largura=self.controller.largura,
-        # )
 
-        self.tx_pasta_dados = Texto(
+        self.tx_intro = Texto(
             master=self.master,
             controller=self.controller,
-            texto='Pasta dados:',
+            texto=self._obter_situação()[0],
             fonte=('arial', 15),
             formato='bold',
+            cor=self._obter_situação()[1],
             x=0+5,
-            y=118,
-            altura=15,
-            largura=100
+            y=150,
+            altura=100,
+            largura=self.controller.largura
         )
 
-        # self.tex_contatos = Texto(
-        #     master=self.master,
-        #     controller=self.controller,
-        #     texto='Contatos:',
-        #     fonte=('arial', 15),
-        #     formato='bold',
-        #     x=0+5,
-        #     y=118 + 50,
-        #     altura=15,
-        #     largura=70
-        # )
-        #
-        # self.text_situações = Texto(
-        #     master=self.master,
-        #     controller=self.controller,
-        #     texto='Situações:',
-        #     fonte=('arial', 15),
-        #     formato='bold',
-        #     x=0+5,
-        #     y=118 + 50 + 50,
-        #     altura=15,
-        #     largura=70
-        # )
-        #
-        # self.tex_gêneros = Texto(
-        #     master=self.master,
-        #     controller=self.controller,
-        #     texto='Gêneros:',
-        #     fonte=('arial', 15),
-        #     formato='bold',
-        #     x=0+5,
-        #     y=118 + 50 + 50 + 50,
-        #     altura=15,
-        #     largura=70
-        # )
 
-        self.painel_resposta = Texto(
+        self.tx_feedback = Texto(
             master=self.master,
             controller=self.controller,
             texto='',
@@ -107,7 +62,7 @@ class TelaConsulta(CTkFrame):
         )
 
     def __inserir_botões(self):
-        self.botão_localizar_fichas = Botão(
+        self.bt_localizar_diretório_base = Botão(
             master=self.master,
             controller=self.controller,
             texto='Localizar',
@@ -115,47 +70,11 @@ class TelaConsulta(CTkFrame):
             formato='bold',
             x=5,
             y=136,
-            função=self.pesquisar_fichas,
+            função=self._pesquisar_diretório,
             altura=25,
             largura=100
         )
 
-        # self.botão_localizar_contatos = Botão(
-        #     master=self.master,
-        #     controller=self.controller,
-        #     texto='Localizar',
-        #     fonte=('times new roman', 13),
-        #     x=5,
-        #     y=136 + 50,
-        #     função=self.pesquisar_contatos,
-        #     altura=25,
-        #     largura=100
-        # )
-        #
-        #
-        # self.botão_localizar_situações = Botão(
-        #     master=self.master,
-        #     controller=self.controller,
-        #     texto='Localizar',
-        #     fonte=('times new roman', 13),
-        #     x=5,
-        #     y=136 + 50 + 50,
-        #     função=self.pesquisar_situações,
-        #     altura=25,
-        #     largura=100
-        # )
-        #
-        # self.botão_localizar_gêneros = Botão(
-        #     master=self.master,
-        #     controller=self.controller,
-        #     texto='Localizar',
-        #     fonte=('times new roman', 13),
-        #     x=5,
-        #     y=136 + 50 + 50 + 50,
-        #     função=self.pesquisar_gêneros,
-        #     altura=25,
-        #     largura=100
-        # )
 
         self.botão_consultar = Botão(
             master=self.master,
@@ -182,10 +101,10 @@ class TelaConsulta(CTkFrame):
         )
 
     def __iserir_inputs(self):
-        self.input_fichas = Input(
+        self.in_diretório_base = Input(
             master=self.master,
             controller=self.controller,
-            texto=r'C:\Users\...\...\Dados',
+            texto=fr'{os.path.join(Path(user_documents_dir()), 'SIGE')}',
             fonte=('arial', 12),
             x=120,
             y=135,
@@ -193,77 +112,43 @@ class TelaConsulta(CTkFrame):
             largura=420+55
         )
 
-        # self.input_contatos = Input(
-        #     master=self.master,
-        #     controller=self.controller,
-        #     texto=r'C:\Users\...\...\Contatos',
-        #     fonte=('arial', 10),
-        #     x=120,
-        #     y=135 + 50,
-        #     altura=28,
-        #     largura=420+55
-        # )
-        #
-        # self.input_situações = Input(
-        #     master=self.master,
-        #     controller=self.controller,
-        #     texto=r'C:\Users\...\...\Situações',
-        #     fonte=('arial', 10),
-        #     x=120,
-        #     y=135 + 50 + 50,
-        #     altura=28,
-        #     largura=420+55
-        # )
-        #
-        # self.input_gêneros = Input(
-        #     master=self.master,
-        #     controller=self.controller,
-        #     texto=r'C:\Users\...\...\Gêneros',
-        #     fonte=('arial', 10),
-        #     x=120,
-        #     y=135 + 50 + 50 + 50,
-        #     altura=28,
-        #     largura=420+55
-        # )
 
     def consultar(self):
-        self.painel_resposta.atualizar_texto('Consultando')
-        consulta = Consulta(
-            path_fichas=self.input_fichas.valor,
-            path_contatos=self.input_contatos.valor,
-            path_situações=self.input_situações.valor,
-            path_gêneros=self.input_gêneros.valor
-        )
-        self.painel_resposta.atualizar_texto('Exportando')
-        Exportação(consulta=consulta, path_destino=Path.home() / "Desktop")
 
-        self.painel_resposta.atualizar_texto('Planilhas geradas e exportadas para a área de trabalho')
+        diretório_dados = Path(os.path.join(Path(user_documents_dir()), 'SIGE'))
 
-    #todo: Unificar em uma função flexível, que retorne uma função sem executar
-    def pesquisar_fichas(self):
+        def direcionar(alvo) -> str:
+            return os.path.join(diretório_dados, 'fonte', alvo)
+
+        try:
+            self.tx_feedback.att('Consultando')
+            consulta = Consulta(
+                path_fichas=direcionar('fichas'),
+                path_contatos=direcionar('contatos'),
+                path_situações=direcionar('situações'),
+                path_gêneros=direcionar('gêneros')
+            )
+
+            self.tx_feedback.att('Exportando')
+
+            Exportação(consulta=consulta, path_destino=diretório_dados)
+
+            self.tx_feedback.att('Planilhas geradas e exportadas para a área de trabalho')
+
+        except FileNotFoundError: self.tx_feedback.att('Erro ao consultar')
+
+    @staticmethod
+    def _obter_situação():
+        diretório = Path(user_documents_dir()) / 'SIGE' / 'fonte'
+        if diretório.exists():
+            return f'A consulta será realizada a partir do diretório:\n{diretório}', 'white'
+        else:
+            return f'Diretório `{diretório}` não encontrado neste computador.\nPor favor, selecione manualmente o diretório base.', 'red'
+
+    def _pesquisar_diretório(self):
         PesquisaDiretório(
             self,
-            título_janela='Selecione a pasta com relatórios de fichas.',
-            widget_input_diretório=self.input_fichas)
-        print(self.input_fichas.valor)
-
-    def pesquisar_contatos(self):
-        PesquisaDiretório(
-            self,
-            título_janela='Selecione a pasta com relatórios de contatos.',
-            widget_input_diretório=self.input_contatos)
-        print(self.input_contatos.valor)
-
-    def pesquisar_situações(self):
-        PesquisaDiretório(
-            self,
-            título_janela='Selecione a pasta com relatórios de situações.',
-            widget_input_diretório=self.input_situações)
-        print(self.input_situações.valor)
-
-    def pesquisar_gêneros(self):
-        PesquisaDiretório(
-            self,
-            título_janela='Selecione a pasta com relatórios de gêneros.',
-            widget_input_diretório=self.input_gêneros)
-        print(self.input_gêneros.valor)
+            título_janela='Selecione a pasta.',
+            widget_input_diretório=self.in_diretório_base)
+        print(self.in_diretório_base.valor)
+        self.tx_intro.att(f'Diretório base atualizado!')

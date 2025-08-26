@@ -11,6 +11,7 @@ class Texto(CTkFrame):
             texto: str,
             fonte: tuple[str, int] = ('Arial', 16),
             formato: Literal['bold', 'italic', 'underline', 'overstrike'] | list[Literal['bold', 'italic', 'underline', 'overstrike']]  = 'normal',
+            cor = None,
             x: int = 0,
             y: int = 0,
             largura: int = 35,
@@ -31,7 +32,8 @@ class Texto(CTkFrame):
             text=texto,
             font=(fonte[0].title(), int(fonte[1]), formato),
             compound=compound,
-            anchor=anchor
+            anchor=anchor,
+            text_color=cor
         )
 
         self.div_texto.place(relx=0.5, rely=0.5, anchor='center')
@@ -54,7 +56,7 @@ class Texto(CTkFrame):
 
         self.place(x=_x, y=_y)
 
-
-    def atualizar_texto(self, novo_texto: str):
-        self.div_texto.configure(text=novo_texto)
+    #todo: talvez dê para adapatar para um decorator
+    def att(self, novo_texto: str, cor: str = 'white'):
+        self.div_texto.configure(text=novo_texto, text_color=cor)
         self.div_texto.update()

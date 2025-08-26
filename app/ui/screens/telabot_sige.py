@@ -1,17 +1,17 @@
-import os.path
+from pathlib import Path
 
 from customtkinter import CTkFrame
+from platformdirs import user_documents_dir
 
-from app.auto.bot.navegador import Navegador
+from app.auto.bot import Bot
 from app.ui.widgets import Botão, Input, CheckBox
 from typing import TYPE_CHECKING
 
 from .utils.cabeçalhos import Cabeçalhos
-from ..functions.obterdiretório import PesquisaDiretório
-from ...__metadata__ import PROJECT_NAME
+from ..functions.pesquisa_diretório import PesquisaDiretório
 
 if TYPE_CHECKING:
-    from .janelaprincipal import JanelaPrincipal
+    pass
 
 
 class TelaBotSige(CTkFrame):
@@ -28,7 +28,7 @@ class TelaBotSige(CTkFrame):
         alvos = self.ck_alvos.valor()
         alvos = [chave.lower() for chave, valor in alvos.items() if valor]
         return {
-            'destino' : self.input_pasta_dados.valor,
+            'destino' : Path(user_documents_dir()) / 'SIGE' / 'fonte',
             'alvos' : alvos
         }
 
@@ -50,7 +50,7 @@ class TelaBotSige(CTkFrame):
         self.input_pasta_dados = Input(
             master=self.master,
             controller=self.controller,
-            texto=r'C:\Users\...\...\Dados',
+            texto=str(Path(user_documents_dir()) / 'SIGE' / 'fonte'),
             fonte=('arial', 10),
             x=120,
             y=135,
@@ -74,7 +74,7 @@ class TelaBotSige(CTkFrame):
         self.bt_localizar_dados = Botão(
             master=self.master,
             controller=self.controller,
-            texto='Localizar',
+            texto='Definir pasta',
             fonte=('times new roman', 15),
             formato='bold',
             x=5,
@@ -94,8 +94,8 @@ class TelaBotSige(CTkFrame):
             y=300,
             largura=90,
             # função=lambda: print(self._kwargs)
-            função=lambda: Navegador(tarefa='downloads', destino=self._kwargs['destino'], alvos=self._kwargs['alvos'])
-            # função=lambda : Navegador(tarefa='downloads', kwargs_tarefa=self._kwargs)
+            função=lambda: Bot(tarefa='downloads', destino=self._kwargs['destino'], alvos=self._kwargs['alvos'])
+            # função=lambda : Bot(tarefa='downloads', kwargs_tarefa=self._kwargs)
         )
         pass
 

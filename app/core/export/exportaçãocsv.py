@@ -1,5 +1,5 @@
 import os
-
+from pathlib import Path
 from pandas import DataFrame
 
 
@@ -18,7 +18,7 @@ class ExportaçãoCSV:
         'Estudante', 'Data de Nascimento', 'Turma', 'Telefone 1', 'Telefone 2', 'Telefone 3', 'Irmão 1', 'Irmão 2'
     ]
 
-    def __init__(self, consulta: DataFrame, path: str):
+    def __init__(self, consulta: DataFrame, path: Path):
         self.path = os.path.join(path, 'Contatos Google.csv')
         self.consulta = consulta
 

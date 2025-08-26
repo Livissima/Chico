@@ -1,16 +1,18 @@
-import pathlib
+from pathlib import Path
 
 from pandas import DataFrame
+
+from app.core import Consulta
 from app.core.export.exportaçãocsv import ExportaçãoCSV
 from app.core.export.exportaçãoxlsx import ExportaçãoXLSX
 
 
 class Exportação:
-
+    #todo exportar um ATALHO para área de trabalho. Path(user_desktop_dir())
     def __init__(
             self,
-            consulta: DataFrame,
-            path_destino: str
+            consulta: Consulta,
+            path_destino: Path
     ):
 
         print(f'df_formatado chegando na exportação: {consulta.shape}')
