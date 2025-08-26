@@ -1,11 +1,9 @@
 class Variáveis:
 
     @property
-    def fantasmas(self):
+    def excl(self):
         return [
-            #todo: remodelar propriedade.    (!!!)
 
-            '22122587380'   # ANA LAURA DAMASCENO FIDELES     - 9A,
         ]
 
     nomes_disciplinas = {

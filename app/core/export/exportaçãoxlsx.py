@@ -35,7 +35,7 @@ class ExportaçãoXLSX:
 
         elif situação == 'Cursando':
             df: DataFrame = self.consulta[self.consulta['Situação'] == 'Cursando']
-            df: DataFrame = df[~df['Matrícula'].isin(Variáveis().fantasmas)]
+            # df: DataFrame = df[~df['Matrícula'].isin(Variáveis().excl)]
 #             df_integrado = df_integrado.reset_index(drop=True)
 #             df_integrado.index = df_integrado.index + 1
             df.to_excel(self.writer, sheet_name=nome)

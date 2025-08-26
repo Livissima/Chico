@@ -22,8 +22,6 @@ class JanelaPrincipal(CTk):
         self.alternador.abrir('inicial')
 
     def _configurar_layout(self):
-        self.title(f'{PROJECT_NAME}')
-        self._set_appearance_mode('Dark')
         self._dimensionamento()
 
     def _dimensionamento(self):

@@ -8,7 +8,7 @@ class Botão(CTkFrame) :
             self,
             master: CTk,
             controller,
-            função: any,
+            função,
             texto: str,
             fonte: tuple[str, int] = ('Arial', 16),
             formato: Literal['bold', 'italic', 'underline', 'overstrike'] | list[

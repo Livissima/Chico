@@ -1,23 +1,23 @@
 from pathlib import Path
 
-from customtkinter import CTkFrame
+from customtkinter import CTkFrame, CTk
 from platformdirs import user_documents_dir
 
 from app.auto.bot import Bot
-from app.ui.widgets import Botão, Input, CheckBox
+from app.ui.widgets import Botão, Input, CheckBox, Texto
 from typing import TYPE_CHECKING
 
 from .utils.cabeçalhos import Cabeçalhos
 from ..functions.pesquisa_diretório import PesquisaDiretório
 
 if TYPE_CHECKING:
-    pass
+    from .janelaprincipal import JanelaPrincipal
 
 
 class TelaBotSige(CTkFrame):
     def __init__(self, master, controller: "JanelaPrincipal"):
         super().__init__(master)
-        self.master = master
+        self.master: CTk = master
         self.controller = controller
         self.pack(expand=True, fill='both')
         self._configurar_layout()
@@ -44,7 +44,15 @@ class TelaBotSige(CTkFrame):
 
 
     def __inserir_textos(self):
-        pass
+        self.tx_feedback = Texto(
+            master=self.master,
+            controller=self.controller,
+            texto='',
+            fonte=('arial', 20),
+            y=400-5,
+            altura=100,
+            largura=self.controller.largura-10,
+        )
 
     def __inserir_inputs(self):
         self.input_pasta_dados = Input(
@@ -57,7 +65,7 @@ class TelaBotSige(CTkFrame):
             altura=28,
             largura=420+55
         )
-        pass
+
 
     def __inserir_botões(self):
         self.bt_back = Botão(
@@ -110,7 +118,6 @@ class TelaBotSige(CTkFrame):
             y=200
         )
         pass
-
 
 
     def pesquisar_pasta_dados(self):

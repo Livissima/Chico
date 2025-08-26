@@ -4,7 +4,7 @@ from customtkinter import CTkFrame, CTk
 
 from app.auto.bot import Bot
 from app.ui.screens.utils.cabeçalhos import Cabeçalhos
-from app.ui.widgets import Botão
+from app.ui.widgets import Botão, Texto
 
 if TYPE_CHECKING:
     pass
@@ -32,7 +32,15 @@ class TelaBot(CTkFrame):
         self.__inserir_dropdowns()
 
     def __inserir_textos(self):
-        pass
+        self.tx_feedback = Texto(
+            master=self.master,
+            controller=self.controller,
+            texto='',
+            fonte=('arial', 20),
+            y=400 - 5,
+            altura=100,
+            largura=self.controller.largura - 10
+        )
 
     def __inserir_inputs(self):
         pass
@@ -64,7 +72,7 @@ class TelaBot(CTkFrame):
         self.bt_google = Botão(
             master=self.master,
             controller=self.controller,
-            função=self.controller.quit,
+            função=lambda: self.controller.alternador.abrir('bot google'),
             texto='Google',
             fonte=('Arial', 20),
             formato='bold',

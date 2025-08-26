@@ -4,8 +4,6 @@ from typing import Literal
 from customtkinter import CTkFrame, CTk, CTkEntry
 
 
-# from Frontend import ALTURA_COMUM, LARGURA_COMUM, STICKY_COMUM
-
 
 class Input(CTkFrame):
     def __init__(
@@ -26,6 +24,7 @@ class Input(CTkFrame):
         self.controller = controller
         self.altura_widget = altura
         self.largura_widget = largura
+        self.texto = texto
         self.alocar(x, y)
 
         self.input = CTkEntry(
@@ -36,6 +35,7 @@ class Input(CTkFrame):
             width=largura,
 
         )
+        # self.input.insert(0, texto)
         self.input.place(relx=0.5, rely=0.5, anchor='center')
 
         # self.div_input.configure(justify=tk.CENTER)
@@ -62,9 +62,9 @@ class Input(CTkFrame):
     def valor(self):
         return self.input.get()
 
-    def atualizar_valor_zerado(self):
-        self.input.delete(0, tk.END)
-        self.input.insert(0, '1')
+    # def atualizar_valor_zerado(self):
+    #     self.input.delete(0, tk.END)
+    #     self.input.insert(0, '1')
 
     def __getattr__(self, item):
         return getattr(self.input, item)
@@ -72,4 +72,11 @@ class Input(CTkFrame):
     def __str__(self):
         return str(self.input.get())
 
+    def att(self, valor):
+        self.input.delete(0, "end")
+        self.input.insert(0, valor)
+
+    def limpar(self):
+        self.input.delete(0, "end")
+        self.input.configure(placeholder_text=self.texto)
 
