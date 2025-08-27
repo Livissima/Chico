@@ -2,9 +2,10 @@ from typing import TYPE_CHECKING
 
 from customtkinter import CTkFrame, CTk
 
-from .__init__ import PROJECT_NAME, PROJECT_VERSION
 from app.ui.widgets import Texto, Botão, Input
 from app.ui.screens.utils.cabeçalhos import Cabeçalhos
+from .utils.desfazimento import Desfazimento
+
 from ..functions.pesquisa_diretório import PesquisaDiretório
 from ...config.app_config import DIRETÓRIO_BASE_PADRÃO
 
@@ -15,7 +16,7 @@ if TYPE_CHECKING:
 class TelaInicial(CTkFrame):
     def __init__(self, master, controller: "Janela"):
         super().__init__(controller)
-        self.bt_desfazer = None
+        self._bt_desfazer = None
         self.master: CTk = master
         self.controller = controller
         # self.controller.novo_diretório = self._in_diretório_base.valor
@@ -35,25 +36,20 @@ class TelaInicial(CTkFrame):
         self.__inserir_dropdowns()
 
         self.__inserir_botões()
-        self.aplicar_botão_de_desfazer()
-
-
 
     def __inserir_textos(self):
         self.tx_intro = Texto(
-            master=self.master,
-            controller=self.controller,
+            self,
             texto=f'Diretório base:\n{DIRETÓRIO_BASE_PADRÃO}',
             fonte=('arial', 15),
             x='centro',
             y=80,
             largura=self.controller.largura-10,
-            altura=60
+            altura=40
         )
 
         self.tx_alterar_diretório = Texto(
-            master=self.master,
-            controller=self.controller,
+            self,
             texto='Alterar diretório (opcional)',
             formato='bold',
             x=5,
@@ -62,8 +58,7 @@ class TelaInicial(CTkFrame):
         )
 
         self._tx_feedback = Texto(
-            master=self.master,
-            controller=self.controller,
+            self,
             texto='',
             fonte=('arial', 20),
             y=400-5,
@@ -74,8 +69,7 @@ class TelaInicial(CTkFrame):
     def __inserir_inputs(self):
 
         self._in_diretório_base = Input(
-            master=self.master,
-            controller=self.controller,
+            self,
             texto=self.controller.novo_diretório,
             fonte=('arial', 15),
             x=160,
@@ -87,8 +81,7 @@ class TelaInicial(CTkFrame):
     def __inserir_botões(self):
 
         self.bt_bot = Botão(
-            self.master,
-            controller=self.controller,
+            self,
             função= lambda: self.controller.alternador.abrir('bot'),
             texto='BOT',
             formato='bold',
@@ -98,8 +91,7 @@ class TelaInicial(CTkFrame):
         )
 
         self.bt_consulta = Botão(
-            self.master,
-            controller=self.controller,
+            self,
             função= lambda: self.controller.alternador.abrir('consulta'),
             texto='Consulta',
             formato='bold',
@@ -109,9 +101,8 @@ class TelaInicial(CTkFrame):
         )
 
         self.bt_pesquisar_diretório = Botão(
-            master=self.master,
-            controller=self.controller,
-            função=self._pesquisar_diretório,
+            self,
+            função=lambda: PesquisaDiretório(self, 'testando', self._in_diretório_base),
             texto='Pesquisar diretório',
             fonte=('arial', 14),
             formato='bold',
@@ -121,57 +112,34 @@ class TelaInicial(CTkFrame):
             largura=150
         )
 
-
-
-
+        self._bt_desfazer = Botão(
+            self,
+            função=lambda: self._desfazer(),
+            condição=self.controller.novo_diretório != DIRETÓRIO_BASE_PADRÃO,
+            texto='↩',
+            fonte=('arial', 25),
+            x=550
+        )
 
 
     def __inserir_dropdowns(self):
         pass
 
     def _pesquisar_diretório(self):
-        print(f'Atual: {self.controller.novo_diretório}')
-
-        self._in_diretório_base.att(self.controller.novo_diretório)
-
-        PesquisaDiretório(
-            self,
-            título_janela='Selecione o novo novo_diretório base',
-            widget_input_diretório=self._in_diretório_base
-        )
-        self.controller.novo_diretório = self._in_diretório_base.valor
-        self.aplicar_botão_de_desfazer()
-
-
-
-
-        # if self.controller.novo_diretório == DIRETÓRIO_BASE_PADRÃO:
-        #     print(f'alteração cancelada. ficou {self.controller.novo_diretório}')
-        #     return
-
-
-        # print(f'Alteração desfeita. Ficou {self.controller.novo_diretório}')
+        PesquisaDiretório(self, 'testando', self._in_diretório_base)
 
     def aplicar_botão_de_desfazer(self):
         if self.controller.novo_diretório != DIRETÓRIO_BASE_PADRÃO:
 
             self._tx_feedback.att(f'Diretório base atualizado!')
 
-            self.bt_desfazer = Botão(
-                master=self.master,
-                controller=self.controller,
-                função=lambda: self._desfazer(),
-                texto='↩',
-                fonte=('arial', 25),
-                x=550
-            )
+
         return None
 
     def _desfazer(self):
-        self.controller.novo_diretório = DIRETÓRIO_BASE_PADRÃO
-        self._in_diretório_base.limpar()
-        self._tx_feedback.att('Diretório base revertido para o padrão.')
-        self.bt_desfazer.destroy()
+        self._bt_desfazer.atualizar_visibilidade(
+            self.controller.novo_diretório != DIRETÓRIO_BASE_PADRÃO
+        )
+        Desfazimento(self).desfazer()
 
-        print(f'Novo: {self.controller.novo_diretório}')
 

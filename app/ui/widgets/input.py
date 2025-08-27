@@ -8,8 +8,7 @@ from customtkinter import CTkFrame, CTk, CTkEntry
 class Input(CTkFrame):
     def __init__(
             self,
-            master: CTk,
-            controller,
+            classe,
             texto: str,
             fonte: tuple[str, int] = ('Arial', 12),
             formato: Literal['bold', 'italic', 'underline', 'overstrike'] | list[
@@ -19,9 +18,11 @@ class Input(CTkFrame):
             altura: int = 35,
             largura: int = 35,
     ):
-        super().__init__(master, width=largura, height=altura)
-        self.master: CTk = master
-        self.controller = controller
+        self.master = classe.master
+        self.controller = classe.controller
+
+        super().__init__(self.master, width=largura, height=altura)
+
         self.altura_widget = altura
         self.largura_widget = largura
         self.texto = texto

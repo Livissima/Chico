@@ -6,10 +6,10 @@ from customtkinter import CTkFrame, CTk, CTkButton
 class Botão(CTkFrame) :
     def __init__(
             self,
-            master: CTk,
-            controller,
-            função,
+            classe,
             texto: str,
+            função,
+            condição: bool = True,
             fonte: tuple[str, int] = ('Arial', 16),
             formato: Literal['bold', 'italic', 'underline', 'overstrike'] | list[
                 Literal['bold', 'italic', 'underline', 'overstrike']] = 'normal',
@@ -18,12 +18,18 @@ class Botão(CTkFrame) :
             altura: int = 35,
             largura: int = 35
     ):
-        super().__init__(master, width=largura, height=altura)
-        self.master: CTk = master
-        self.controller = controller
+        self.master: CTkFrame = classe.master
+        self.controller: CTk = classe.controller
+
+        super().__init__(self.master, width=largura, height=altura)
         self.altura_widget = altura
         self.largura_widget = largura
-        self.alocar(x, y)
+        self._x = x
+        self._y = y
+
+        self.condição = condição
+
+
 
         self.botão = CTkButton(
             self,
@@ -35,6 +41,10 @@ class Botão(CTkFrame) :
         )
 
         self.botão.place(relx=0.5, rely=0.5, anchor='center')
+
+        self.atualizar_visibilidade(self.condição)
+
+
 
     def alocar(self, x, y) :
         _x = 0
@@ -54,4 +64,13 @@ class Botão(CTkFrame) :
 
         self.place(x=_x, y=_y)
 
+    def atualizar_visibilidade(self, condição):
+        self.condição = condição
 
+        if self.condição:
+            self.alocar(self._x, self._y)
+        else:
+            self.place_forget()
+
+    # def __getattr__(self, item):
+    #     return getattr(self, item)

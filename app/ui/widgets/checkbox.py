@@ -7,8 +7,7 @@ from customtkinter import CTkFrame, CTk, CTkCheckBox
 class CheckBox(CTkFrame):
     def __init__(
             self,
-            master: CTk,
-            controller,
+            classe,
             opções: List[str],
             fonte: tuple[str, int] = ('Arial', 16),
             formato: Literal['bold', 'italic', 'underline', 'overstrike'] | list[
@@ -19,17 +18,18 @@ class CheckBox(CTkFrame):
             largura: int = 35,
             espaçamento: int = 5
     ):
+        self.master: CTkFrame = classe.master
+        self.controller: CTk = classe.controller
         super().__init__(
-            master,
+            self.master,
             width=largura*len(opções) + espaçamento*(len(opções)-1),
             height=altura
         )
-        self.master: CTk = master
-        self.controller = controller
+
         self.altura_widget = altura
         self.largura_widget = largura
-        self.checkboxes = {}
 
+        self.checkboxes = {}
 
 
         for idx, texto in enumerate(opções):

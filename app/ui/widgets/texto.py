@@ -6,8 +6,7 @@ from customtkinter import CTkFrame, CTk, CTkLabel
 class Texto(CTkFrame):
     def __init__(
             self,
-            master: CTk,
-            controller,
+            classe,
             texto: str,
             fonte: tuple[str, int] = ('Arial', 16),
             formato: Literal['bold', 'italic', 'underline', 'overstrike'] | list[Literal['bold', 'italic', 'underline', 'overstrike']]  = 'normal',
@@ -20,9 +19,10 @@ class Texto(CTkFrame):
             anchor: str = 'center',
 
     ):
-        super().__init__(master, width=largura, height=altura)
-        self.master: CTk = master
-        self.controller = controller
+        self.master: CTkFrame = classe.master
+        self.controller: CTk = classe.controller
+        super().__init__(self.master, width=largura, height=altura)
+
         self.altura_widget = altura
         self.largura_widget = largura
         self.alocar(x, y)

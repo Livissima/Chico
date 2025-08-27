@@ -1,15 +1,16 @@
 import os.path
-from os import PathLike
+from os.path import split
 from pathlib import Path
 from typing import TYPE_CHECKING
-from platformdirs import user_desktop_dir, user_documents_dir
 from customtkinter import CTk, CTkFrame
 from app.core import Consulta, Exportação
 from app.ui.functions.pesquisa_diretório import PesquisaDiretório
 from app.ui.widgets.botão import Botão
 from app.ui.widgets.input import Input
 from app.ui.widgets.texto import Texto
+
 from .utils.cabeçalhos import Cabeçalhos
+from .utils.desfazimento import Desfazimento
 from ...config.app_config import DIRETÓRIO_BASE_PADRÃO
 
 if TYPE_CHECKING:
@@ -21,12 +22,14 @@ class TelaConsulta(CTkFrame):
 
     def __init__(self, master: CTk, controller: "Janela"):
         super().__init__(master)
-        self.bt_desfazer = None
+        self._bt_desfazer = None
         self.master: CTk = master
         self.controller = controller
+
         # self.pack(expand=True, fill='both')
         self._configurar_layout()
         self._inserir_widgets()
+        # Desfazimento(self)
 
     def _configurar_layout(self):
         Cabeçalhos(self, 'consulta')
@@ -35,13 +38,12 @@ class TelaConsulta(CTkFrame):
         self.__inserir_textos()
         self.__iserir_inputs()
         self.__inserir_botões()
-        self.aplicar_botão_de_desfazer()
+
 
     def __inserir_textos(self):
 
         self.tx_intro = Texto(
-            master=self.master,
-            controller=self.controller,
+            self,
             texto=self._obter_situação()[0],
             fonte=('arial', 15),
             formato='bold',
@@ -53,9 +55,8 @@ class TelaConsulta(CTkFrame):
         )
 
 
-        self.tx_feedback = Texto(
-            master=self.master,
-            controller=self.controller,
+        self._tx_feedback = Texto(
+            self,
             texto='',
             fonte=('times new roman', 25),
             x=0,
@@ -66,22 +67,19 @@ class TelaConsulta(CTkFrame):
 
     def __inserir_botões(self):
         self.bt_localizar_diretório_base = Botão(
-            master=self.master,
-            controller=self.controller,
+            self,
             texto='Localizar',
             fonte=('times new roman', 15),
             formato='bold',
             x=5,
             y=136,
-            função=self._pesquisar_diretório,
+            função=lambda: self._pesquisar_diretório(),
             altura=25,
             largura=100
         )
 
-
         self.botão_consultar = Botão(
-            master=self.master,
-            controller=self.controller,
+            self,
             função=self.consultar,
             texto='CONSULTAR',
             fonte=('times new roman', 20),
@@ -93,8 +91,7 @@ class TelaConsulta(CTkFrame):
         )
 
         self.bt_back = Botão(
-            master=self.master,
-            controller=self.controller,
+            self,
             função=lambda: self.controller.alternador.abrir('inicial'),
             texto='←',
             fonte=('Arial', 20),
@@ -103,10 +100,18 @@ class TelaConsulta(CTkFrame):
             y=10,
         )
 
+        self._bt_desfazer = Botão(
+            self,
+            função=lambda: self._desfazer(),
+            condição=self.controller.novo_diretório != DIRETÓRIO_BASE_PADRÃO,
+            texto='↩',
+            fonte=('arial', 25),
+            x=550
+        )
+
     def __iserir_inputs(self):
-        self.in_diretório_base = Input(
-            master=self.master,
-            controller=self.controller,
+        self._in_diretório_base = Input(
+            self,
             texto=fr'{os.path.join(self.controller.novo_diretório, 'fonte')}',
             fonte=('arial', 12),
             x=120,
@@ -115,17 +120,14 @@ class TelaConsulta(CTkFrame):
             largura=420+55
         )
 
-
-
     def consultar(self):
-
         diretório_dados = DIRETÓRIO_BASE_PADRÃO
 
         def direcionar(alvo) -> str:
             return str(os.path.join(diretório_dados, 'fonte', alvo))
 
         try:
-            self.tx_feedback.att('Consultando')
+            self._tx_feedback.att('Consultando')
             consulta = Consulta(
                 path_fichas=direcionar('fichas'),
                 path_contatos=direcionar('contatos'),
@@ -133,56 +135,42 @@ class TelaConsulta(CTkFrame):
                 path_gêneros=direcionar('gêneros')
             )
 
-            self.tx_feedback.att('Exportando')
+            self._tx_feedback.att('Exportando')
 
             Exportação(consulta=consulta, path_destino=diretório_dados)
 
-            self.tx_feedback.att('Planilhas geradas e exportadas para a área de trabalho')
+            self._tx_feedback.att('Planilhas geradas e exportadas para a área de trabalho')
 
-        except FileNotFoundError: self.tx_feedback.att('Erro ao consultar')
+        except FileNotFoundError: self._tx_feedback.att('Erro ao consultar')
 
 
     def _obter_situação(self):
-        diretório = Path(str(os.path.join(self.controller.novo_diretório, 'fonte')))
-        if diretório.exists():
+        diretório = str(os.path.join(self.controller.novo_diretório, 'fonte'))
+        cumprimento_diretório = len(diretório)
+        if cumprimento_diretório > 50:
+            diretório = diretório.split('\\')
+            print(diretório)
+            # # diretório = os.path.join(diretório[0], *diretório[1:3], '...', '...', *diretório[-1:])
+            # diretório = [trecho.replace(':', ": ") for trecho in diretório]
+            # print(diretório)
+        else: print('erro')
+
+
+        # if Path(diretório).exists():
+        if diretório:
             return (f'A consulta será realizada a partir do diretório:\n'
                     f'{diretório}'), 'white'
         else:
-            return (f'Diretório `{diretório}` não encontrado neste computador.\n'
+            return (f'Diretório não encontrado neste computador.\n'
+                    f'{diretório}\n'
                     f'Você já executou o Bot de Downloads?'), 'orange'
 
+
     def _pesquisar_diretório(self):
-        PesquisaDiretório(
-            self,
-            título_janela='Selecione a pasta.',
-            widget_input_diretório=self.in_diretório_base)
-        print(self.in_diretório_base.valor)
-        self.controller.novo_diretório = self.in_diretório_base.valor
-
+        PesquisaDiretório(self, 'Selecione o novo diretório', self._in_diretório_base)
         self.tx_intro.att(self._obter_situação()[0], self._obter_situação()[1])
-        self.aplicar_botão_de_desfazer()
 
-    def aplicar_botão_de_desfazer(self):
-        if self.controller.novo_diretório != DIRETÓRIO_BASE_PADRÃO:
-
-            self.tx_feedback.att(f'Diretório base atualizado!')
-
-            self.bt_desfazer = Botão(
-                master=self.master,
-                controller=self.controller,
-                função=lambda: self._desfazer(),
-                texto='↩',
-                fonte=('arial', 25),
-                x=550
-            )
-        return None
 
     def _desfazer(self):
-        self.controller.novo_diretório = DIRETÓRIO_BASE_PADRÃO
-        self.in_diretório_base.limpar()
-        self.tx_feedback.att('Diretório base revertido para o padrão.')
-        self.bt_desfazer.destroy()
+        Desfazimento(self).desfazer()
         self.tx_intro.att(self._obter_situação()[0], self._obter_situação()[1])
-
-        print(f'Novo: {self.controller.novo_diretório}')
-

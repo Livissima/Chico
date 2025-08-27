@@ -1,11 +1,8 @@
 from customtkinter import CTkFrame, CTk
-from platformdirs import user_documents_dir
-
 from app.auto.bot import Bot
 from app.ui.widgets import Botão, Input, Texto
 from typing import TYPE_CHECKING
 
-from .telainicial import TelaInicial
 from .utils.cabeçalhos import Cabeçalhos
 from ..functions.pesquisa_diretório import PesquisaDiretório
 from ...auto.tasks import GerenciarAcessos
@@ -38,8 +35,7 @@ class TelaBotCredenciais(CTkFrame):
 
     def __inserir_botões(self):
         self.bt_back = Botão(
-            master=self.master,
-            controller=self.controller,
+            self,
             função=lambda: self.controller.alternador.abrir('bot'),
             texto='←',
             fonte=('Arial', 20),
@@ -49,9 +45,7 @@ class TelaBotCredenciais(CTkFrame):
         )
 
         self.bt_netescola = Botão(
-            master=self.master,
-            controller=self.controller,
-            # função=lambda: print(self.controller.novo_diretório),
+            self,
             função=lambda: Bot(
                 tarefa='gerenciar',
                 path_database= self.controller.novo_diretório,
@@ -59,7 +53,4 @@ class TelaBotCredenciais(CTkFrame):
             ),
             texto='Netescola',
             largura=100
-
-
-
         )

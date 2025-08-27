@@ -3,7 +3,7 @@ from customtkinter import CTk, CTkFrame
 from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
 from app.ui import Dimensionamento
 from app.ui.screens.utils.alternador_de_telas import AlternadorDeTelas
-from .__init__ import PROJECT_NAME, PROJECT_VERSION
+
 
 
 class Janela(CTk):
