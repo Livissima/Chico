@@ -81,6 +81,8 @@ class Bot:
             )
             return
 
+
+
     def __getattr__(self, item):
         if self.navegador:
             return getattr(self.navegador, item)

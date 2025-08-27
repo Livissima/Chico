@@ -14,11 +14,11 @@ class TelaBot(CTkFrame):
     #todo: Elaborar funções para pedir confirmação para executar o auto
     #todo: Inserir dicas flutuantes
 
-    def __init__(self, master: CTk, controller: "JanelaPrincipal"):
+    def __init__(self, master: CTk, controller: "Janela"):
         super().__init__(master)
         self.master: CTk = master
         self.controller = controller
-        self.pack(expand=True, fill='both')
+        # self.pack(expand=True, fill='both')
         self._configurar_layout()
         self._inserir_widgets()
 
@@ -46,6 +46,9 @@ class TelaBot(CTkFrame):
         pass
 
     def __inserir_botões(self):
+        y = 90
+        largura = 130
+
         self.bt_siap = Botão(
             master=self.master,
             controller=self.controller,
@@ -54,8 +57,8 @@ class TelaBot(CTkFrame):
             fonte=('Arial', 20),
             formato='bold',
             x=10+80,
-            y=100,
-            largura=100,
+            y=y,
+            largura=largura,
         )
 
         self.bt_sige = Botão(
@@ -66,19 +69,19 @@ class TelaBot(CTkFrame):
             fonte=('Arial', 20),
             formato='bold',
             x=10+150+80,
-            y=100,
-            largura=100,
+            y=y,
+            largura=largura,
         )
-        self.bt_google = Botão(
+        self.bt_credenciais = Botão(
             master=self.master,
             controller=self.controller,
             função=lambda: self.controller.alternador.abrir('bot google'),
-            texto='Google',
+            texto='Credenciais',
             fonte=('Arial', 20),
             formato='bold',
             x=10+150+150+80,
-            y=100,
-            largura=100,
+            y=y,
+            largura=largura,
         )
 
         self.bt_back = Botão(
@@ -93,15 +96,5 @@ class TelaBot(CTkFrame):
         )
 
     def __inserir_dropdowns(self):
-        # self.tarefa = Dropdown(
-        #     self,
-        #     # variável_da_div=self.botao,
-        #     alternativas=Tarefas().tarefas,
-        #     x=10,
-        #     y=100,
-        #     largura=150,
-        #     altura=30,
-        #     fonte=('arial', 15)
-        # )
         pass
 

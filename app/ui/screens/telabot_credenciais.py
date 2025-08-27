@@ -5,19 +5,20 @@ from app.auto.bot import Bot
 from app.ui.widgets import Botão, Input, Texto
 from typing import TYPE_CHECKING
 
+from .telainicial import TelaInicial
 from .utils.cabeçalhos import Cabeçalhos
 from ..functions.pesquisa_diretório import PesquisaDiretório
 from ...auto.tasks import GerenciarAcessos
 
 if TYPE_CHECKING:
-    from .janelaprincipal import JanelaPrincipal
+    from .janela import Janela
 
 class TelaBotCredenciais(CTkFrame):
-    def __init__(self, master, controller: "JanelaPrincipal"):
+    def __init__(self, master, controller: "Janela"):
         super().__init__(master)
         self.master: CTk = master
         self.controller = controller
-        self.pack(expand=True, fill='both')
+        # self.pack(expand=True, fill='both')
         self._configurar_layout()
         self._inserir_widgets()
 
@@ -47,9 +48,18 @@ class TelaBotCredenciais(CTkFrame):
             y=10,
         )
 
-        self.bt_start = Botão(
+        self.bt_netescola = Botão(
             master=self.master,
             controller=self.controller,
-            função=lambda: Bot(tarefa='gerenciar')
-        )
+            # função=lambda: print(self.controller.novo_diretório),
+            função=lambda: Bot(
+                tarefa='gerenciar',
+                path_database= self.controller.novo_diretório,
+                tipo='netescola'
+            ),
+            texto='Netescola',
+            largura=100
 
+
+
+        )

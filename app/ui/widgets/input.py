@@ -62,10 +62,6 @@ class Input(CTkFrame):
     def valor(self):
         return self.input.get()
 
-    # def atualizar_valor_zerado(self):
-    #     self.input.delete(0, tk.END)
-    #     self.input.insert(0, '1')
-
     def __getattr__(self, item):
         return getattr(self.input, item)
 
@@ -78,5 +74,5 @@ class Input(CTkFrame):
 
     def limpar(self):
         self.input.delete(0, "end")
-        self.input.configure(placeholder_text=self.texto)
+        self.input.configure(placeholder_text=self.controller.novo_diretório)
 

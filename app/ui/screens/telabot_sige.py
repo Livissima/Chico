@@ -1,3 +1,4 @@
+import os.path
 from pathlib import Path
 
 from customtkinter import CTkFrame, CTk
@@ -11,15 +12,16 @@ from .utils.cabeçalhos import Cabeçalhos
 from ..functions.pesquisa_diretório import PesquisaDiretório
 
 if TYPE_CHECKING:
-    from .janelaprincipal import JanelaPrincipal
+    from .janela import Janela
 
 
 class TelaBotSige(CTkFrame):
-    def __init__(self, master, controller: "JanelaPrincipal"):
+    def __init__(self, master, controller: "Janela"):
         super().__init__(master)
         self.master: CTk = master
         self.controller = controller
-        self.pack(expand=True, fill='both')
+
+        # self.pack(expand=True, fill='both')
         self._configurar_layout()
         self._inserir_widgets()
 
@@ -44,6 +46,16 @@ class TelaBotSige(CTkFrame):
 
 
     def __inserir_textos(self):
+        self.tx_intro = Texto(
+            master=self.master,
+            controller=self.controller,
+            texto='Diretório selecionado:',
+            fonte=('arial', 15),
+            formato='bold',
+            y=200,
+            largura=self.controller.largura-5,
+        )
+
         self.tx_feedback = Texto(
             master=self.master,
             controller=self.controller,
@@ -58,7 +70,7 @@ class TelaBotSige(CTkFrame):
         self.input_pasta_dados = Input(
             master=self.master,
             controller=self.controller,
-            texto=str(Path(user_documents_dir()) / 'SIGE' / 'fonte'),
+            texto=str(os.path.join(self.controller.novo_diretório, 'fonte')),
             fonte=('arial', 10),
             x=120,
             y=135,
@@ -121,6 +133,7 @@ class TelaBotSige(CTkFrame):
 
 
     def pesquisar_pasta_dados(self):
+        print()
         PesquisaDiretório(
             self,
             título_janela='Selecione a pasta onde serão armazenados os relatórios',

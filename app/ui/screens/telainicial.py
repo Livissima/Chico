@@ -9,14 +9,16 @@ from ..functions.pesquisa_diretório import PesquisaDiretório
 from ...config.app_config import DIRETÓRIO_BASE_PADRÃO
 
 if TYPE_CHECKING:
-    from .janelaprincipal import JanelaPrincipal
+    from .janela import Janela
 
 
 class TelaInicial(CTkFrame):
-    def __init__(self, master, controller: "JanelaPrincipal"):
+    def __init__(self, master, controller: "Janela"):
         super().__init__(controller)
+        self.bt_desfazer = None
         self.master: CTk = master
         self.controller = controller
+        # self.controller.novo_diretório = self._in_diretório_base.valor
 
         self._configurar_layout()
         self._inserir_widgets()  # self.mainloop()
@@ -30,8 +32,12 @@ class TelaInicial(CTkFrame):
 
         self.__inserir_textos()
         self.__inserir_inputs()
-        self.__inserir_botões()
         self.__inserir_dropdowns()
+
+        self.__inserir_botões()
+        self.aplicar_botão_de_desfazer()
+
+
 
     def __inserir_textos(self):
         self.tx_intro = Texto(
@@ -55,7 +61,7 @@ class TelaInicial(CTkFrame):
             largura=220
         )
 
-        self.tx_feedback = Texto(
+        self._tx_feedback = Texto(
             master=self.master,
             controller=self.controller,
             texto='',
@@ -67,10 +73,10 @@ class TelaInicial(CTkFrame):
 
     def __inserir_inputs(self):
 
-        self.in_diretório_base = Input(
+        self._in_diretório_base = Input(
             master=self.master,
             controller=self.controller,
-            texto=f'{DIRETÓRIO_BASE_PADRÃO}',
+            texto=self.controller.novo_diretório,
             fonte=('arial', 15),
             x=160,
             y=self.primeira_linha,
@@ -115,38 +121,57 @@ class TelaInicial(CTkFrame):
             largura=150
         )
 
+
+
+
+
+
     def __inserir_dropdowns(self):
         pass
 
     def _pesquisar_diretório(self):
+        print(f'Atual: {self.controller.novo_diretório}')
+
+        self._in_diretório_base.att(self.controller.novo_diretório)
 
         PesquisaDiretório(
             self,
-            título_janela='Selecione o novo diretório base',
-            widget_input_diretório=self.in_diretório_base
+            título_janela='Selecione o novo novo_diretório base',
+            widget_input_diretório=self._in_diretório_base
         )
-        novo_diretório = self.in_diretório_base.valor
-
-        if not novo_diretório:
-            return
-
-        print(self.in_diretório_base.valor)
+        self.controller.novo_diretório = self._in_diretório_base.valor
+        self.aplicar_botão_de_desfazer()
 
 
-        self.tx_feedback.att(f'Diretório base alterado.')
 
 
-        def desfazer():
+        # if self.controller.novo_diretório == DIRETÓRIO_BASE_PADRÃO:
+        #     print(f'alteração cancelada. ficou {self.controller.novo_diretório}')
+        #     return
 
-            self.in_diretório_base.limpar()
-            self.tx_feedback.att('Alteração de diretório revertida.')
 
-        self.bt_desfazer = Botão(
-            master=self.master,
-            controller=self.controller,
-            função=lambda: desfazer(),
-            texto='↩',
-            fonte=('arial', 25),
-            x=550
-        )
+        # print(f'Alteração desfeita. Ficou {self.controller.novo_diretório}')
+
+    def aplicar_botão_de_desfazer(self):
+        if self.controller.novo_diretório != DIRETÓRIO_BASE_PADRÃO:
+
+            self._tx_feedback.att(f'Diretório base atualizado!')
+
+            self.bt_desfazer = Botão(
+                master=self.master,
+                controller=self.controller,
+                função=lambda: self._desfazer(),
+                texto='↩',
+                fonte=('arial', 25),
+                x=550
+            )
+        return None
+
+    def _desfazer(self):
+        self.controller.novo_diretório = DIRETÓRIO_BASE_PADRÃO
+        self._in_diretório_base.limpar()
+        self._tx_feedback.att('Diretório base revertido para o padrão.')
+        self.bt_desfazer.destroy()
+
+        print(f'Novo: {self.controller.novo_diretório}')
 
