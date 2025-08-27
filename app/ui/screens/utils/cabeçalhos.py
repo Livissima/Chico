@@ -24,8 +24,7 @@ class Cabeçalhos:
         self.master.controller.title(f'{setar['título']}')
 
         self.master.título = Texto(
-            self.master.master,
-            controller=self.master.controller,
+            self.master,
             texto=setar['cabeçalho'],
             fonte=('times new roman', 30),
             x='centro',
@@ -34,8 +33,7 @@ class Cabeçalhos:
             largura=self.master.controller.largura-10
         )
         self.master.título = Texto(
-            self.master.master,
-            controller=self.master.controller,
+            self.master,
             texto=setar['descrição'],
             fonte=('Arial', 15),
             x='centro',

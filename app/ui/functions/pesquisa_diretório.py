@@ -3,33 +3,71 @@ from tkinter.filedialog import askdirectory
 
 from customtkinter import CTkFrame, CTk
 
+from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
+
 
 class PesquisaDiretório(CTkFrame):
     def __init__(
             self,
-            master,
+            classe,
             título_janela: str,
-            widget_input_diretório
+            widget_input
     ):
-        super().__init__(master=master)
+        self.classe = classe
+        self.controller = classe.controller
 
-        self.widget_input_diretório = widget_input_diretório
+        super().__init__(master=classe)
+
+        self.widget_input = widget_input
         self.título_janela = título_janela
         self.path: str  = ''
+
         self.pesquisar()
 
     def pesquisar(self):
-        pesquisa = self._pesquisar()
-        self._atualizar_texto(pesquisa)
+
+        print(f'Atual: {self.controller.novo_diretório}')
+
+        self.widget_input.att(self.controller.novo_diretório)
+
+        self.obter_diretório()
+
+        self.controller.novo_diretório = self.path
+
+        self.classe._bt_desfazer.atualizar_visibilidade(
+            self.controller.novo_diretório != DIRETÓRIO_BASE_PADRÃO
+        )
+
+        if self.controller.novo_diretório == DIRETÓRIO_BASE_PADRÃO:
+            print(f'Alteração cancelada. Ficou {self.controller.novo_diretório}')
+
+            return
+
+        if self.controller.novo_diretório != DIRETÓRIO_BASE_PADRÃO:
+            print(f'Alterado para: {self.controller.novo_diretório}')
+            self.classe._tx_feedback.att(f'Diretório base atualizado.')
+            return
 
 
-    def _pesquisar(self):
-        return askdirectory(title=self.título_janela)
+    def obter_diretório(self):
+        pesquisa = askdirectory(title=self.título_janela)
+        self._atualizar_valor_widget(pesquisa)
 
-    def _atualizar_texto(self, pesquisa):
+    def _atualizar_valor_widget(self, pesquisa):
+        #todo: criar método para atualizar o tx_feedback.
+
         if pesquisa:
             self.path = os.path.normpath(pesquisa)
-            self.widget_input_diretório.delete(0, 'end')
-            self.widget_input_diretório.insert(0, self.path)
+            self.widget_input.delete(0, 'end')
+            self.widget_input.insert(0, self.path)
+            return
+
+        if not pesquisa:
+            self.path = self.controller.novo_diretório
+            self.widget_input.delete(0, 'end')
+            self.widget_input.insert(0, self.path)
+
+
+
 
 

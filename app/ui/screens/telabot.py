@@ -7,7 +7,7 @@ from app.ui.screens.utils.cabeçalhos import Cabeçalhos
 from app.ui.widgets import Botão, Texto
 
 if TYPE_CHECKING:
-    pass
+    from .janela import Janela
 
 class TelaBot(CTkFrame):
     #todo: Bolar um esqueminha de botão que aborte a automação em curso.
@@ -33,8 +33,7 @@ class TelaBot(CTkFrame):
 
     def __inserir_textos(self):
         self.tx_feedback = Texto(
-            master=self.master,
-            controller=self.controller,
+            self,
             texto='',
             fonte=('arial', 20),
             y=400 - 5,
@@ -50,8 +49,7 @@ class TelaBot(CTkFrame):
         largura = 130
 
         self.bt_siap = Botão(
-            master=self.master,
-            controller=self.controller,
+            self,
             função=lambda: Bot(tarefa='siap'),
             texto='SIAP',
             fonte=('Arial', 20),
@@ -62,8 +60,7 @@ class TelaBot(CTkFrame):
         )
 
         self.bt_sige = Botão(
-            master=self.master,
-            controller=self.controller,
+            self,
             função=lambda: self.controller.alternador.abrir('bot sige'),
             texto='SIGE',
             fonte=('Arial', 20),
@@ -73,8 +70,7 @@ class TelaBot(CTkFrame):
             largura=largura,
         )
         self.bt_credenciais = Botão(
-            master=self.master,
-            controller=self.controller,
+            self,
             função=lambda: self.controller.alternador.abrir('bot google'),
             texto='Credenciais',
             fonte=('Arial', 20),
@@ -85,8 +81,7 @@ class TelaBot(CTkFrame):
         )
 
         self.bt_back = Botão(
-            master=self.master,
-            controller=self.controller,
+            self,
             função=lambda: self.controller.alternador.abrir('inicial'),
             texto='←',
             fonte=('Arial', 20),

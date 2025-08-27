@@ -8,7 +8,7 @@ from customtkinter import CTkFrame, CTk, CTkOptionMenu
 class Dropdown(CTkFrame):
     def __init__(
             self,
-            master: CTk,
+            classe,
             # variável_da_div: StringVar,
             alternativas: list[str],
             fonte: tuple[str, int] = ('Arial', 16),
@@ -19,8 +19,9 @@ class Dropdown(CTkFrame):
             altura: int = 35,
             largura: int = 35,
     ):
-        super().__init__(master, width=largura, height=altura)
-        self.master: CTk = master
+        self.master: CTk = classe.master
+        super().__init__(self.master, width=largura, height=altura)
+
         self.altura_widget = altura
         self.largura_widget = largura
         self.alocar(x, y)

@@ -47,8 +47,7 @@ class TelaBotSige(CTkFrame):
 
     def __inserir_textos(self):
         self.tx_intro = Texto(
-            master=self.master,
-            controller=self.controller,
+            self,
             texto='Diretório selecionado:',
             fonte=('arial', 15),
             formato='bold',
@@ -57,8 +56,7 @@ class TelaBotSige(CTkFrame):
         )
 
         self.tx_feedback = Texto(
-            master=self.master,
-            controller=self.controller,
+            self,
             texto='',
             fonte=('arial', 20),
             y=400-5,
@@ -68,8 +66,7 @@ class TelaBotSige(CTkFrame):
 
     def __inserir_inputs(self):
         self.input_pasta_dados = Input(
-            master=self.master,
-            controller=self.controller,
+            self,
             texto=str(os.path.join(self.controller.novo_diretório, 'fonte')),
             fonte=('arial', 10),
             x=120,
@@ -81,8 +78,7 @@ class TelaBotSige(CTkFrame):
 
     def __inserir_botões(self):
         self.bt_back = Botão(
-            master=self.master,
-            controller=self.controller,
+            self,
             função=lambda: self.controller.alternador.abrir('bot'),
             texto='←',
             fonte=('Arial', 20),
@@ -92,8 +88,7 @@ class TelaBotSige(CTkFrame):
         )
 
         self.bt_localizar_dados = Botão(
-            master=self.master,
-            controller=self.controller,
+            self,
             texto='Definir pasta',
             fonte=('times new roman', 15),
             formato='bold',
@@ -105,8 +100,7 @@ class TelaBotSige(CTkFrame):
         )
 
         self.bt_iniciar = Botão(
-            master=self.master,
-            controller=self.controller,
+            self,
             texto='Iniciar',
             fonte=('times new roman', 20),
             formato='bold',
@@ -121,8 +115,7 @@ class TelaBotSige(CTkFrame):
 
     def __inserir_checkboxes(self):
         self.ck_alvos = CheckBox(
-            master=self.master,
-            controller=self.controller,
+            self,
             opções=['Fichas', 'Contatos', 'Situações', 'Gêneros'],
             altura=30,
             largura=100,
@@ -137,7 +130,7 @@ class TelaBotSige(CTkFrame):
         PesquisaDiretório(
             self,
             título_janela='Selecione a pasta onde serão armazenados os relatórios',
-            widget_input_diretório=self.input_pasta_dados
+            widget_input=self.input_pasta_dados
         )
 
     def __inserir_dropdowns(self):
