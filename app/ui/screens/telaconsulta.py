@@ -13,17 +13,18 @@ from .utils.cabeçalhos import Cabeçalhos
 from ...config.app_config import DIRETÓRIO_BASE_PADRÃO
 
 if TYPE_CHECKING:
-    from .janelaprincipal import JanelaPrincipal
+    from .janela import Janela
 
 class TelaConsulta(CTkFrame):
     #todo: aprimorar o widget de feedback da consulta, que continua consultando
     # quando o código crasha
 
-    def __init__(self, master: CTk, controller: "JanelaPrincipal"):
+    def __init__(self, master: CTk, controller: "Janela"):
         super().__init__(master)
+        self.bt_desfazer = None
         self.master: CTk = master
         self.controller = controller
-        self.pack(expand=True, fill='both')
+        # self.pack(expand=True, fill='both')
         self._configurar_layout()
         self._inserir_widgets()
 
@@ -34,6 +35,7 @@ class TelaConsulta(CTkFrame):
         self.__inserir_textos()
         self.__iserir_inputs()
         self.__inserir_botões()
+        self.aplicar_botão_de_desfazer()
 
     def __inserir_textos(self):
 
@@ -105,13 +107,14 @@ class TelaConsulta(CTkFrame):
         self.in_diretório_base = Input(
             master=self.master,
             controller=self.controller,
-            texto=fr'{DIRETÓRIO_BASE_PADRÃO}',
+            texto=fr'{os.path.join(self.controller.novo_diretório, 'fonte')}',
             fonte=('arial', 12),
             x=120,
             y=135,
             altura=28,
             largura=420+55
         )
+
 
 
     def consultar(self):
@@ -138,13 +141,15 @@ class TelaConsulta(CTkFrame):
 
         except FileNotFoundError: self.tx_feedback.att('Erro ao consultar')
 
-    @staticmethod
-    def _obter_situação():
-        diretório = Path(DIRETÓRIO_BASE_PADRÃO / 'fonte')
+
+    def _obter_situação(self):
+        diretório = Path(str(os.path.join(self.controller.novo_diretório, 'fonte')))
         if diretório.exists():
-            return f'A consulta será realizada a partir do diretório:\n{diretório}', 'white'
+            return (f'A consulta será realizada a partir do diretório:\n'
+                    f'{diretório}'), 'white'
         else:
-            return f'Diretório `{diretório}` não encontrado neste computador.\nPor favor, selecione manualmente o diretório base.', 'red'
+            return (f'Diretório `{diretório}` não encontrado neste computador.\n'
+                    f'Você já executou o Bot de Downloads?'), 'orange'
 
     def _pesquisar_diretório(self):
         PesquisaDiretório(
@@ -152,4 +157,32 @@ class TelaConsulta(CTkFrame):
             título_janela='Selecione a pasta.',
             widget_input_diretório=self.in_diretório_base)
         print(self.in_diretório_base.valor)
-        self.tx_intro.att(f'Diretório base atualizado!')
+        self.controller.novo_diretório = self.in_diretório_base.valor
+
+        self.tx_intro.att(self._obter_situação()[0], self._obter_situação()[1])
+        self.aplicar_botão_de_desfazer()
+
+    def aplicar_botão_de_desfazer(self):
+        if self.controller.novo_diretório != DIRETÓRIO_BASE_PADRÃO:
+
+            self.tx_feedback.att(f'Diretório base atualizado!')
+
+            self.bt_desfazer = Botão(
+                master=self.master,
+                controller=self.controller,
+                função=lambda: self._desfazer(),
+                texto='↩',
+                fonte=('arial', 25),
+                x=550
+            )
+        return None
+
+    def _desfazer(self):
+        self.controller.novo_diretório = DIRETÓRIO_BASE_PADRÃO
+        self.in_diretório_base.limpar()
+        self.tx_feedback.att('Diretório base revertido para o padrão.')
+        self.bt_desfazer.destroy()
+        self.tx_intro.att(self._obter_situação()[0], self._obter_situação()[1])
+
+        print(f'Novo: {self.controller.novo_diretório}')
+
