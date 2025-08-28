@@ -8,6 +8,7 @@ from selenium.webdriver.support.expected_conditions import presence_of_element_l
 
 from app.auto.data.sites.propriedades import Propriedades
 from app.auto.data.misc.escola import Escola
+from app.ui.screens.config.parâmetros import parâmetros
 
 
 class Navegação:
@@ -15,8 +16,9 @@ class Navegação:
         self._master = master
         self._pp = Propriedades(site)
         self._ue = Escola()
-        self._timeout = 10
+        self._timeout = 15
         self._args_wait = {'driver': self._master, 'timeout': self._timeout}
+
 
 
     def clicar(self, by: Literal['xpath', 'id', 'css'], *chaves: str):
@@ -52,7 +54,6 @@ class Navegação:
                 raise f"Erro: {e}\nMétodo: `clicar`\nitem: '{caminho_str}'\n"
             else:
                 raise f"Erro: {e}\nMétodo: `clicar`\ntag: '{tag}'"
-
 
     def caminhar(self, destino: Literal['fichas', 'contatos', 'situações', 'gêneros']):
         # uma recursão seria melhor
@@ -97,9 +98,9 @@ class Navegação:
         WebDriverWait(**self._args_wait).until(visibility_of_element_located(elemento))
 
     def iterar_turmas(self):
-        for série in self._ue.séries:
+        for série in parâmetros.séries_selecionadas:
             self._selecionar_série(série)
-            turmas_correspoentes = self._ue.turmas_por_serie[série]
+            turmas_correspoentes = parâmetros.turmas_selecionadas_por_série[série]
             for turma in turmas_correspoentes:
                 self._selecionar_turma(turma)
                 yield série, turma

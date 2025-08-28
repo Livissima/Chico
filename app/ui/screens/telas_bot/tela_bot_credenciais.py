@@ -2,6 +2,7 @@ import os.path
 
 from customtkinter import CTkFrame, CTk
 from app.auto.bot import Bot
+from app.ui.screens.config.parâmetros import parâmetros
 from app.ui.widgets import Botão, Texto
 from typing import TYPE_CHECKING
 
@@ -56,7 +57,7 @@ class TelaBotCredenciais(CTkFrame):
             self,
             função=lambda: Bot(
                 tarefa='gerenciar',
-                path_database= os.path.join(self.controller.novo_diretório, 'Database.xlsx'),
+                path_database= os.path.join(parâmetros.novo_diretório, 'Database.xlsx'),
                 tipo='netescola'
             ),
             texto='Netescola',

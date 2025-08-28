@@ -1,8 +1,8 @@
-from app.ui.screens.telas_bot.inicial.tela import TelaBot
-from app.ui.screens.telas_bot.credenciais.tela import TelaBotCredenciais
-from app.ui.screens.telas_bot.sige.tela import TelaBotSige
-from app.ui.screens.consulta.tela import TelaConsulta
-from app.ui.screens.inicial.tela import TelaInicial
+from app.ui.screens.telas_bot.tela_bot_inicial import TelaBot
+from app.ui.screens.telas_bot.tela_bot_credenciais import TelaBotCredenciais
+from app.ui.screens.telas_bot.tela_bot_sige import TelaBotSige
+from app.ui.screens.tela_consulta import TelaConsulta
+from app.ui.screens.tela_inicial import TelaInicial
 
 
 class AlternadorDeTelas:

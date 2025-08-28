@@ -5,6 +5,7 @@ from customtkinter import CTkFrame, CTk
 from platformdirs import user_documents_dir
 
 from app.auto.bot import Bot
+from app.ui.screens.config.parâmetros import parâmetros
 from app.ui.widgets import Botão, Input, CheckBox, Texto
 from typing import TYPE_CHECKING
 
@@ -65,7 +66,7 @@ class TelaBotSige(CTkFrame):
     def __inserir_inputs(self):
         self.input_pasta_dados = Input(
             self,
-            texto=str(os.path.join(self.controller.novo_diretório, 'fonte')),
+            texto=str(os.path.join(parâmetros.novo_diretório, 'fonte')),
             fonte=('arial', 10),
             x=120,
             y=135,
@@ -104,9 +105,7 @@ class TelaBotSige(CTkFrame):
             x='centro',
             y=300,
             largura=90,
-            # função=lambda: print(self._kwargs)
-            função=lambda: Bot(tarefa='downloads', destino=self._kwargs['destino'], alvos=self._kwargs['alvos'])
-            # função=lambda : Bot(tarefa='downloads', kwargs_tarefa=self._kwargs)
+            função=lambda: self.iniciar()
         )
         pass
 
@@ -122,17 +121,24 @@ class TelaBotSige(CTkFrame):
 
         self.ck_turmas = CheckBox(
             self,
-            opções=self.controller.turmas,
+            opções=parâmetros.turmas_disponíveis,
+            fonte=('arial', 13),
+            largura=20,
+            espaçamento=20
         )
 
+    def __inserir_dropdowns(self):
+        pass
+
     def pesquisar_pasta_dados(self):
-        print()
         PesquisaDiretório(
             self,
             título_janela='Selecione a pasta onde serão armazenados os relatórios',
             widget_input=self.input_pasta_dados
         )
 
-    def __inserir_dropdowns(self):
-        pass
-
+    def iniciar(self):
+        valores = self.ck_turmas.valor()
+        turmas_selecionadas = [turma for turma, selecionada in valores.items() if selecionada]
+        parâmetros.turmas_selecionadas = turmas_selecionadas
+        Bot(tarefa='downloads', destino=self._kwargs['destino'], alvos=self._kwargs['alvos'])

@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 from customtkinter import CTk, CTkFrame
 from app.core import Consulta, Exportação
 from app.ui.functions.pesquisa_diretório import PesquisaDiretório
+from app.ui.screens.config.parâmetros import parâmetros
 from app.ui.widgets.botão import Botão
 from app.ui.widgets.input import Input
 from app.ui.widgets.texto import Texto
@@ -98,7 +99,7 @@ class TelaConsulta(CTkFrame):
         self._bt_desfazer = Botão(
             self,
             função=lambda: self._desfazer(),
-            condição=self.controller.novo_diretório != DIRETÓRIO_BASE_PADRÃO,
+            condição=parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO,
             texto='↩',
             fonte=('arial', 25),
             x=550
@@ -107,7 +108,7 @@ class TelaConsulta(CTkFrame):
     def __iserir_inputs(self):
         self._in_diretório_base = Input(
             self,
-            texto=fr'{os.path.join(self.controller.novo_diretório, 'fonte')}',
+            texto=fr'{os.path.join(parâmetros.novo_diretório, 'fonte')}',
             fonte=('arial', 12),
             x=120,
             y=135,
@@ -116,7 +117,7 @@ class TelaConsulta(CTkFrame):
         )
 
     def consultar(self):
-        diretório_base = self.controller.novo_diretório
+        diretório_base = parâmetros.novo_diretório
         fonte = str(os.path.join(diretório_base, 'fonte'))
 
         try:
@@ -138,7 +139,7 @@ class TelaConsulta(CTkFrame):
             _diretório = _diretório.replace(':', ':\\')
             return _diretório
 
-        diretório = str(os.path.join(self.controller.novo_diretório, 'fonte'))
+        diretório = str(os.path.join(parâmetros.novo_diretório, 'fonte'))
 
         if len(diretório) > 60:
             diretório_display = truncar_diretório(diretório)

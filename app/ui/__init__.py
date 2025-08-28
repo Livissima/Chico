@@ -1,5 +1,5 @@
 from app.ui.screens.config.dimensionamento import Dimensionamento
-from app.ui.screens.consulta.tela import TelaConsulta
+from app.ui.screens.tela_consulta import TelaConsulta
 
 
 

@@ -24,10 +24,7 @@ class ExportaçãoCSV:
 
         self.csv = self.atribuir(self.consulta)
 
-
         self._exportar()
-
-
 
     def atribuir(self, consulta):
 

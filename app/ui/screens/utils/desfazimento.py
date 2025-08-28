@@ -1,6 +1,7 @@
 from customtkinter import CTkFrame
 
 from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
+from app.ui.screens.config.parâmetros import parâmetros
 
 
 class Desfazimento(CTkFrame):
@@ -13,12 +14,12 @@ class Desfazimento(CTkFrame):
 
 
     def desfazer(self):
-        self.controller.novo_diretório = DIRETÓRIO_BASE_PADRÃO
+        parâmetros.novo_diretório = DIRETÓRIO_BASE_PADRÃO
         self._in_diretório_base.limpar()
         self._tx_feedback.att('Diretório revertido para o padrão.')
         # self._bt_desfazer.destroy()
 
-        print(f'Desfeito para: {self.controller.novo_diretório}')
+        print(f'Desfeito para: {parâmetros.novo_diretório}')
 
     def __getattr__(self, item):
         return getattr(self.classe, item)
