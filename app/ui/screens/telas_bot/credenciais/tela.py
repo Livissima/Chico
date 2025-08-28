@@ -1,14 +1,14 @@
+import os.path
+
 from customtkinter import CTkFrame, CTk
 from app.auto.bot import Bot
-from app.ui.widgets import Botão, Input, Texto
+from app.ui.widgets import Botão
 from typing import TYPE_CHECKING
 
-from .utils.cabeçalhos import Cabeçalhos
-from ..functions.pesquisa_diretório import PesquisaDiretório
-from ...auto.tasks import GerenciarAcessos
+from app.ui.screens.config.cabeçalhos import Cabeçalhos
 
 if TYPE_CHECKING:
-    from .janela import Janela
+    pass
 
 class TelaBotCredenciais(CTkFrame):
     def __init__(self, master, controller: "Janela"):
@@ -20,7 +20,7 @@ class TelaBotCredenciais(CTkFrame):
         self._inserir_widgets()
 
     def _configurar_layout(self):
-        Cabeçalhos(self, 'bot credenciais')
+        Cabeçalhos(self, 'telas_bot credenciais')
 
     def _inserir_widgets(self):
         self.__inserir_textos()
@@ -36,7 +36,7 @@ class TelaBotCredenciais(CTkFrame):
     def __inserir_botões(self):
         self.bt_back = Botão(
             self,
-            função=lambda: self.controller.alternador.abrir('bot'),
+            função=lambda: self.controller.alternador.abrir('telas_bot'),
             texto='←',
             fonte=('Arial', 20),
             formato='bold',
@@ -48,9 +48,18 @@ class TelaBotCredenciais(CTkFrame):
             self,
             função=lambda: Bot(
                 tarefa='gerenciar',
-                path_database= self.controller.novo_diretório,
+                path_database= os.path.join(self.controller.novo_diretório, 'Database.xlsx'),
                 tipo='netescola'
             ),
             texto='Netescola',
-            largura=100
+            largura=100,
+            x=150,
+        )
+
+        self.bt_google = Botão(
+            self,
+            função=lambda: print('botão google'),
+            texto='Google',
+            largura=100,
+            x=350
         )

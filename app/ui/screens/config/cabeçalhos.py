@@ -14,10 +14,10 @@ class Cabeçalhos:
     def cabeçalhar(self, tela):
         config = {
             'inicial' : self.inicial,
-            'bot' : self.bot,
+            'telas_bot' : self.bot,
             'consulta' : self.consulta,
-            'bot sige' : self.bot_sige,
-            'bot credenciais': self.bot_credenciais
+            'telas_bot sige' : self.bot_sige,
+            'telas_bot credenciais': self.bot_credenciais
         }
         setar = config[tela]
 

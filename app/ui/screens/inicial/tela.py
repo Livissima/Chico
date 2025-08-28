@@ -1,16 +1,14 @@
 from typing import TYPE_CHECKING
-
 from customtkinter import CTkFrame, CTk
-
 from app.ui.widgets import Texto, Botão, Input
-from app.ui.screens.utils.cabeçalhos import Cabeçalhos
-from .utils.desfazimento import Desfazimento
+from app.ui.screens.config.cabeçalhos import Cabeçalhos
+from app.ui.screens.utils.desfazimento import Desfazimento
 
-from ..functions.pesquisa_diretório import PesquisaDiretório
-from ...config.app_config import DIRETÓRIO_BASE_PADRÃO
+from app.ui.functions.pesquisa_diretório import PesquisaDiretório
+from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
 
 if TYPE_CHECKING:
-    from .janela import Janela
+    pass
 
 
 class TelaInicial(CTkFrame):
@@ -82,7 +80,7 @@ class TelaInicial(CTkFrame):
 
         self.bt_bot = Botão(
             self,
-            função= lambda: self.controller.alternador.abrir('bot'),
+            função= lambda: self.controller.alternador.abrir('telas_bot'),
             texto='BOT',
             formato='bold',
             x=20+160,
@@ -132,7 +130,6 @@ class TelaInicial(CTkFrame):
         if self.controller.novo_diretório != DIRETÓRIO_BASE_PADRÃO:
 
             self._tx_feedback.att(f'Diretório base atualizado!')
-
 
         return None
 

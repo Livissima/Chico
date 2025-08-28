@@ -14,7 +14,3 @@ class Social:
         return getattr(self.df_social, item)
 
 
-if __name__ == '__main__':
-    path = r'C:\Users\meren\OneDrive - Secretaria de Estado da Educação\Secretaria\2025\Dados\Estudantes\Base de dados\Etnia e religião.xlsx'
-    instancia = Social(path)
-    print(instancia.df_social)

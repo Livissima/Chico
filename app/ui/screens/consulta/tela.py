@@ -1,5 +1,4 @@
 import os.path
-from os.path import split
 from pathlib import Path
 from typing import TYPE_CHECKING
 from customtkinter import CTk, CTkFrame
@@ -9,12 +8,12 @@ from app.ui.widgets.botão import Botão
 from app.ui.widgets.input import Input
 from app.ui.widgets.texto import Texto
 
-from .utils.cabeçalhos import Cabeçalhos
-from .utils.desfazimento import Desfazimento
-from ...config.app_config import DIRETÓRIO_BASE_PADRÃO
+from app.ui.screens.config.cabeçalhos import Cabeçalhos
+from app.ui.screens.utils.desfazimento import Desfazimento
+from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
 
 if TYPE_CHECKING:
-    from .janela import Janela
+    pass
 
 class TelaConsulta(CTkFrame):
     #todo: aprimorar o widget de feedback da consulta, que continua consultando
@@ -26,10 +25,8 @@ class TelaConsulta(CTkFrame):
         self.master: CTk = master
         self.controller = controller
 
-        # self.pack(expand=True, fill='both')
         self._configurar_layout()
         self._inserir_widgets()
-        # Desfazimento(self)
 
     def _configurar_layout(self):
         Cabeçalhos(self, 'consulta')
@@ -38,7 +35,6 @@ class TelaConsulta(CTkFrame):
         self.__inserir_textos()
         self.__iserir_inputs()
         self.__inserir_botões()
-
 
     def __inserir_textos(self):
 
@@ -53,7 +49,6 @@ class TelaConsulta(CTkFrame):
             altura=100,
             largura=self.controller.largura
         )
-
 
         self._tx_feedback = Texto(
             self,
@@ -121,55 +116,48 @@ class TelaConsulta(CTkFrame):
         )
 
     def consultar(self):
-        diretório_dados = DIRETÓRIO_BASE_PADRÃO
-
-        def direcionar(alvo) -> str:
-            return str(os.path.join(diretório_dados, 'fonte', alvo))
+        diretório_base = self.controller.novo_diretório
+        fonte = str(os.path.join(diretório_base, 'fonte'))
 
         try:
             self._tx_feedback.att('Consultando')
-            consulta = Consulta(
-                path_fichas=direcionar('fichas'),
-                path_contatos=direcionar('contatos'),
-                path_situações=direcionar('situações'),
-                path_gêneros=direcionar('gêneros')
-            )
+            consulta = Consulta(diretório_fonte=fonte)
 
             self._tx_feedback.att('Exportando')
 
-            Exportação(consulta=consulta, path_destino=diretório_dados)
+            Exportação(consulta=consulta, path_destino=diretório_base)
 
-            self._tx_feedback.att('Planilhas geradas e exportadas para a área de trabalho')
+            self._tx_feedback.att(f'Planilhas geradas e exportadas para\n{diretório_base}')
 
         except FileNotFoundError: self._tx_feedback.att('Erro ao consultar')
 
-
     def _obter_situação(self):
+        def truncar_diretório(_dir: str) -> str:
+            _diretório = _dir.split('\\')
+            _diretório = os.path.join(*_diretório[0 :3], '...', '...', *_diretório[-2 :])
+            _diretório = _diretório.replace(':', ':\\')
+            return _diretório
+
         diretório = str(os.path.join(self.controller.novo_diretório, 'fonte'))
-        cumprimento_diretório = len(diretório)
-        if cumprimento_diretório > 50:
-            diretório = diretório.split('\\')
-            print(diretório)
-            # # diretório = os.path.join(diretório[0], *diretório[1:3], '...', '...', *diretório[-1:])
-            # diretório = [trecho.replace(':', ": ") for trecho in diretório]
-            # print(diretório)
-        else: print('erro')
 
-
-        # if Path(diretório).exists():
-        if diretório:
-            return (f'A consulta será realizada a partir do diretório:\n'
-                    f'{diretório}'), 'white'
+        if len(diretório) > 60:
+            diretório_display = truncar_diretório(diretório)
         else:
-            return (f'Diretório não encontrado neste computador.\n'
-                    f'{diretório}\n'
-                    f'Você já executou o Bot de Downloads?'), 'orange'
+            diretório_display = diretório
 
+
+        if Path(diretório).exists():
+            return (f'A consulta será realizada a partir do diretório:\n'
+                    f'{diretório_display}'), 'white'
+        else:
+            #todo: melhorar essa mensagem
+            return (f'Diretório não encontrado neste computador.\n'
+                    f'{diretório_display}\n'
+                    f'Você já executou o Bot de Downloads?'), 'orange'
 
     def _pesquisar_diretório(self):
         PesquisaDiretório(self, 'Selecione o novo diretório', self._in_diretório_base)
         self.tx_intro.att(self._obter_situação()[0], self._obter_situação()[1])
-
 
     def _desfazer(self):
         Desfazimento(self).desfazer()

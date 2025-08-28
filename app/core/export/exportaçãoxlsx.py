@@ -4,7 +4,7 @@ from typing import Literal
 from app.core.query.workflow.variáveis import Variáveis
 from pandas import DataFrame, ExcelWriter
 
-#todo: Adicionar método para definir path de output pela UI
+#todo: Adicionar método para definir diretório_fonte de output pela UI
 #todo: adicionar método para salvar os paths selecionados
 
 class ExportaçãoXLSX:
