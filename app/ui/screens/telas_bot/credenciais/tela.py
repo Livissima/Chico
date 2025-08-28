@@ -2,7 +2,7 @@ import os.path
 
 from customtkinter import CTkFrame, CTk
 from app.auto.bot import Bot
-from app.ui.widgets import Botão
+from app.ui.widgets import Botão, Texto
 from typing import TYPE_CHECKING
 
 from app.ui.screens.config.cabeçalhos import Cabeçalhos
@@ -28,6 +28,10 @@ class TelaBotCredenciais(CTkFrame):
         self.__inserir_botões()
 
     def __inserir_textos(self):
+        # self.tx_feedback = Texto(
+        #     self,
+        #
+        # )
         pass
 
     def __inserir_inputs(self):
@@ -45,6 +49,10 @@ class TelaBotCredenciais(CTkFrame):
         )
 
         self.bt_netescola = Botão(
+            #todo: dá pra melhorar isso aqui definindo um escopo de turmas.
+            # ou ainda definindo um ordenamento no DataFrame que considere os novatos primeiro (ou somente eles)
+            #todo: dá pra pensar também em uma forma de pular os alunos que dêem error sem quebrar o código.
+            # todo: o feedback no console está inacurado.
             self,
             função=lambda: Bot(
                 tarefa='gerenciar',
