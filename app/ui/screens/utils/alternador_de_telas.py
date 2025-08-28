@@ -1,8 +1,8 @@
-from app.ui.screens.telabot import TelaBot
-from app.ui.screens.telabot_credenciais import TelaBotCredenciais
-from app.ui.screens.telabot_sige import TelaBotSige
-from app.ui.screens.telaconsulta import TelaConsulta
-from app.ui.screens.telainicial import TelaInicial
+from app.ui.screens.telas_bot.inicial.tela import TelaBot
+from app.ui.screens.telas_bot.credenciais.tela import TelaBotCredenciais
+from app.ui.screens.telas_bot.sige.tela import TelaBotSige
+from app.ui.screens.consulta.tela import TelaConsulta
+from app.ui.screens.inicial.tela import TelaInicial
 
 
 class AlternadorDeTelas:
@@ -11,10 +11,10 @@ class AlternadorDeTelas:
         self.controller = controller
         self.telas_ativas = {
             'inicial': TelaInicial,
-            'bot': TelaBot,
+            'telas_bot': TelaBot,
             'consulta': TelaConsulta,
-            'bot sige' : TelaBotSige,
-            'bot google' : TelaBotCredenciais
+            'telas_bot sige' : TelaBotSige,
+            'telas_bot google' : TelaBotCredenciais
         }
 
 

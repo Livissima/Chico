@@ -5,7 +5,7 @@ class Sige:
 
     url = 'https://sige.educacao.go.gov.br/sige/login.asp'
 
-    #todo usar f-string nesse path para flexibilizar. Na verdade, não faz sentido que uma classe do SIGE tenha esse
+    #todo usar f-string nesse diretório_fonte para flexibilizar. Na verdade, não faz sentido que uma classe do SIGE tenha esse
     # tipo de informação ou méthodo, fazendo mais sentido elaborar uma classe própria para credenciais.
 
     @property

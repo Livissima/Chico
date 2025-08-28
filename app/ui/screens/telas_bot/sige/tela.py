@@ -8,11 +8,11 @@ from app.auto.bot import Bot
 from app.ui.widgets import Botão, Input, CheckBox, Texto
 from typing import TYPE_CHECKING
 
-from .utils.cabeçalhos import Cabeçalhos
-from ..functions.pesquisa_diretório import PesquisaDiretório
+from app.ui.screens.config.cabeçalhos import Cabeçalhos
+from app.ui.functions.pesquisa_diretório import PesquisaDiretório
 
 if TYPE_CHECKING:
-    from .janela import Janela
+    pass
 
 
 class TelaBotSige(CTkFrame):
@@ -21,7 +21,6 @@ class TelaBotSige(CTkFrame):
         self.master: CTk = master
         self.controller = controller
 
-        # self.pack(expand=True, fill='both')
         self._configurar_layout()
         self._inserir_widgets()
 
@@ -35,7 +34,7 @@ class TelaBotSige(CTkFrame):
         }
 
     def _configurar_layout(self):
-        Cabeçalhos(self, 'bot sige')
+        Cabeçalhos(self, 'telas_bot sige')
 
     def _inserir_widgets(self):
         self.__inserir_textos()
@@ -43,7 +42,6 @@ class TelaBotSige(CTkFrame):
         self.__inserir_botões()
         self.__inserir_dropdowns()
         self.__inserir_checkboxes()
-
 
     def __inserir_textos(self):
         self.tx_intro = Texto(
@@ -75,11 +73,10 @@ class TelaBotSige(CTkFrame):
             largura=420+55
         )
 
-
     def __inserir_botões(self):
         self.bt_back = Botão(
             self,
-            função=lambda: self.controller.alternador.abrir('bot'),
+            função=lambda: self.controller.alternador.abrir('telas_bot'),
             texto='←',
             fonte=('Arial', 20),
             formato='bold',
@@ -122,8 +119,11 @@ class TelaBotSige(CTkFrame):
             x='centro',
             y=200
         )
-        pass
 
+        self.ck_turmas = CheckBox(
+            self,
+            opções=self.controller.turmas,
+        )
 
     def pesquisar_pasta_dados(self):
         print()

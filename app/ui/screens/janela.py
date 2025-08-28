@@ -12,6 +12,8 @@ class Janela(CTk):
         self.container = CTkFrame(self)
         self.container.pack(expand=True, fill='both')
         self.novo_diretório = DIRETÓRIO_BASE_PADRÃO
+        self.turmas = []
+
 
         self._configurar_layout()
 
@@ -32,6 +34,3 @@ class Janela(CTk):
         Dimensionamento(self).posicionar()
         self.largura = Dimensionamento.largura
         self.altura = Dimensionamento.altura
-
-if __name__ == '__main__':
-    Janela()

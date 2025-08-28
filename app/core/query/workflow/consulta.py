@@ -1,3 +1,5 @@
+import os
+
 from app.core.query.source.tratamentos.tratamento import Tratamento
 from app.core.query.workflow.formatação import Formatação
 from app.core.query.workflow.integração import Integração
@@ -9,11 +11,13 @@ class Consulta:
 
     def __init__(
             self,
-            path_fichas: str,
-            path_contatos: str,
-            path_situações: str,
-            path_gêneros: str
+            diretório_fonte: str
     ):
+        path_fichas: str = os.path.join(diretório_fonte, 'fichas')
+        path_contatos: str = os.path.join(diretório_fonte, 'contatos')
+        path_situações: str = os.path.join(diretório_fonte, 'situações')
+        path_gêneros: str = os.path.join(diretório_fonte, 'gêneros')
+
         print('class Consulta instanciada.\n')
 
         self.paths = {

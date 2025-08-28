@@ -3,11 +3,11 @@ from typing import TYPE_CHECKING
 from customtkinter import CTkFrame, CTk
 
 from app.auto.bot import Bot
-from app.ui.screens.utils.cabeçalhos import Cabeçalhos
+from app.ui.screens.config.cabeçalhos import Cabeçalhos
 from app.ui.widgets import Botão, Texto
 
 if TYPE_CHECKING:
-    from .janela import Janela
+    pass
 
 class TelaBot(CTkFrame):
     #todo: Bolar um esqueminha de botão que aborte a automação em curso.
@@ -23,7 +23,7 @@ class TelaBot(CTkFrame):
         self._inserir_widgets()
 
     def _configurar_layout(self):
-        Cabeçalhos(self, 'bot')
+        Cabeçalhos(self, 'telas_bot')
 
     def _inserir_widgets(self):
         self.__inserir_textos()
@@ -61,7 +61,7 @@ class TelaBot(CTkFrame):
 
         self.bt_sige = Botão(
             self,
-            função=lambda: self.controller.alternador.abrir('bot sige'),
+            função=lambda: self.controller.alternador.abrir('telas_bot sige'),
             texto='SIGE',
             fonte=('Arial', 20),
             formato='bold',
@@ -71,7 +71,7 @@ class TelaBot(CTkFrame):
         )
         self.bt_credenciais = Botão(
             self,
-            função=lambda: self.controller.alternador.abrir('bot google'),
+            função=lambda: self.controller.alternador.abrir('telas_bot google'),
             texto='Credenciais',
             fonte=('Arial', 20),
             formato='bold',

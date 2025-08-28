@@ -6,8 +6,9 @@ from .extra.acessos import Acessos
 
 
 class Integração:
-    #todo: Importar a responsabilidade de chamada de filtrar fantasmas. Assim, a classe vai resultar em
-    #dataframes que serão transferidos para a exportação
+    #todo: Importar a responsabilidade de chamada de filtrar excls. Assim, a classe vai resultar em
+    # dataframes que serão transferidos para a exportação
+
     def __init__(self, dfs_tratados: dict[str, DataFrame]):
         self.df = dfs_tratados
         self.path_df_social: str = r'C:\Users\meren\OneDrive - Secretaria de Estado da Educação\Secretaria\2025\Dados\Estudantes\Base de dados\Etnia e religião.xlsx'  #temporário. Preciso que esta variável seja mais flexível e adiquirida dinamicamente.
@@ -23,10 +24,14 @@ class Integração:
         df_base['Senha padrão'] = self._integrar_senha_padrão(df_base)
         df_base['Nova senha'] = self._integrar_nova_senha(df_base)
 
+        try:
+            df_base = self._integrar_sociais(df_base, self.path_df_social)
+        except FileNotFoundError as exception:
+            print(f'Séries não puderam ser carregadas: {exception}')
 
-        df_base = self._integrar_sociais(df_base, self.path_df_social)
+        finally:
+            return df_base
 
-        return df_base
 
     @staticmethod
     def _integrar_senha_padrão(df_base: DataFrame) -> Series:
