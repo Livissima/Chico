@@ -38,7 +38,6 @@ class Formatação:
 
         df = df.drop_duplicates(subset= 'Matrícula', keep= 'first', ignore_index = True)
 
-        df.to_excel('Formatação_df.xlsx')
         return df
 
 
