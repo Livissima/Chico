@@ -8,7 +8,7 @@ from app.ui.functions.pesquisa_diretório import PesquisaDiretório
 from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
 
 if TYPE_CHECKING:
-    pass
+    from app.ui.screens.janela import Janela
 
 
 class TelaInicial(CTkFrame):
