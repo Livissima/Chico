@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 from customtkinter import CTkFrame, CTk
+
+from app.ui.screens.config.parâmetros import parâmetros
 from app.ui.widgets import Texto, Botão, Input
 from app.ui.screens.config.cabeçalhos import Cabeçalhos
 from app.ui.screens.utils.desfazimento import Desfazimento
@@ -68,7 +70,7 @@ class TelaInicial(CTkFrame):
 
         self._in_diretório_base = Input(
             self,
-            texto=self.controller.novo_diretório,
+            texto=parâmetros.novo_diretório,
             fonte=('arial', 15),
             x=160,
             y=self.primeira_linha,
@@ -113,12 +115,11 @@ class TelaInicial(CTkFrame):
         self._bt_desfazer = Botão(
             self,
             função=lambda: self._desfazer(),
-            condição=self.controller.novo_diretório != DIRETÓRIO_BASE_PADRÃO,
+            condição=parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO,
             texto='↩',
             fonte=('arial', 25),
             x=550
         )
-
 
     def __inserir_dropdowns(self):
         pass
@@ -127,7 +128,7 @@ class TelaInicial(CTkFrame):
         PesquisaDiretório(self, 'testando', self._in_diretório_base)
 
     def aplicar_botão_de_desfazer(self):
-        if self.controller.novo_diretório != DIRETÓRIO_BASE_PADRÃO:
+        if parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO:
 
             self._tx_feedback.att(f'Diretório base atualizado!')
 
@@ -135,7 +136,7 @@ class TelaInicial(CTkFrame):
 
     def _desfazer(self):
         self._bt_desfazer.atualizar_visibilidade(
-            self.controller.novo_diretório != DIRETÓRIO_BASE_PADRÃO
+            parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO
         )
         Desfazimento(self).desfazer()
 

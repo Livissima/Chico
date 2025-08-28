@@ -3,6 +3,7 @@ from typing import Literal
 
 from customtkinter import CTkFrame, CTk, CTkEntry
 
+from app.ui.screens.config.parâmetros import parâmetros
 
 
 class Input(CTkFrame):
@@ -75,5 +76,5 @@ class Input(CTkFrame):
 
     def limpar(self):
         self.input.delete(0, "end")
-        self.input.configure(placeholder_text=self.controller.novo_diretório)
+        self.input.configure(placeholder_text=parâmetros.novo_diretório)
 

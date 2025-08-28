@@ -5,6 +5,7 @@ from pandas import DataFrame
 from app.core import Consulta
 from app.core.export.exportaçãocsv import ExportaçãoCSV
 from app.core.export.exportaçãoxlsx import ExportaçãoXLSX
+from app.core.export.exportaçãoresumo import ExportaçãoResumo
 
 
 class Exportação:
@@ -19,15 +20,10 @@ class Exportação:
 
         self.consulta = consulta
         self.path = path_destino
-        self._exportar_ambos()
+        self.exportar_tudo()
 
-    def _exportar_ambos(self):
+    def exportar_tudo(self):
         ExportaçãoXLSX(self.consulta, self.path)
         ExportaçãoCSV(self.consulta, self.path)
-
-
-
-
-
-
+        ExportaçãoResumo(self.consulta, self.path)
 

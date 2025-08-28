@@ -1,9 +1,7 @@
 from customtkinter import CTk, CTkFrame
-
 from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
 from app.ui import Dimensionamento
 from app.ui.screens.utils.alternador_de_telas import AlternadorDeTelas
-
 
 
 class Janela(CTk):
@@ -11,9 +9,6 @@ class Janela(CTk):
         super().__init__()
         self.container = CTkFrame(self)
         self.container.pack(expand=True, fill='both')
-        self.novo_diretório = DIRETÓRIO_BASE_PADRÃO
-        self.turmas = []
-
 
         self._configurar_layout()
 
