@@ -1,11 +1,9 @@
 from pathlib import Path
 
-from pandas import DataFrame
-
 from app.core import Consulta
-from app.core.export.exportaçãocsv import ExportaçãoCSV
-from app.core.export.exportaçãoxlsx import ExportaçãoXLSX
-from app.core.export.exportaçãoresumo import ExportaçãoResumo
+from app.core.export.exportações.exportaçãocsv import ExportaçãoCSV
+from app.core.export.exportações.exportaçãoxlsx import ExportaçãoXLSX
+from app.core.export.exportações.exportaçãoresumo import ExportaçãoResumo
 
 
 class Exportação:

@@ -65,7 +65,7 @@ class Sige:
                                                                'contatos dos alunos': '/html/body/div[7]/ul/li[4]/ul/li[2]/ul/li[1]/ul/li[6]/a'
                                           },
                                           'alunos': {'_xpath': '/html/body/div[7]/ul/li[4]/ul/li[2]/ul/li[2]/a',
-                                                     'situação': '/html/body/div[7]/ul/li[4]/ul/li[2]/ul/li[2]/ul/li[2]/a'
+                                                     'situação': '/html/body/div[7]/ul/li[4]/ul/li[2]/ul/li[2]/ul/li[2]/a',
                                           },
                                           'acomp. pedagógico': {'_xpath': '/html/body/div[7]/ul/li[4]/ul/li[2]/ul/li[3]/a',
                                                                 'alunos por idade': '/html/body/div[7]/ul/li[4]/ul/li[2]/ul/li[3]/ul/li[6]/a'
@@ -73,12 +73,10 @@ class Sige:
                            }
             }
         }
+
     @property
     def caminhos(self) -> dict[str, list[tuple]]:
-
-        xpaths = self.xpaths
-
-        caminhos = {
+        return {
             'prefixos' : [(docs := ('lápis', 'documentos')),       (prefixo := ('lápis docs', 'relatórios'))],
 
             'fichas' : [docs, (*prefixo, '_xpath'),      (*prefixo, 'dados cadastrais', '_xpath'),
@@ -97,5 +95,4 @@ class Sige:
                          ]
         }
 
-        return caminhos
 

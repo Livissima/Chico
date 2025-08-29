@@ -18,7 +18,7 @@ class ExportaçãoCSV:
         'Estudante', 'Data de Nascimento', 'Turma', 'Telefone 1', 'Telefone 2', 'Telefone 3', 'Irmão 1', 'Irmão 2'
     ]
 
-    def __init__(self, consulta: DataFrame, path: Path):
+    def __init__(self, consulta, path: Path):
         self.path = os.path.join(path, 'Contatos Google.csv')
         self.consulta = consulta
 
