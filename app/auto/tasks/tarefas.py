@@ -1,5 +1,5 @@
-class Tarefas:
-    @property
-    def tarefas(self):
-        return ['Downloads', 'Gerenciar Acessos', 'Presenciamento', 'ScrapingSige']
-
+# class Tarefas:
+#     @property
+#     def tarefas(self):
+#         return ['Downloads', 'Gerenciar Acessos', 'Presenciamento', 'ScrapingSige']
+#

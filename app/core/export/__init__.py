@@ -1,3 +1,3 @@
 from .exportação import Exportação
-from .exportaçãoxlsx import ExportaçãoXLSX
-from .exportaçãocsv import ExportaçãoCSV
+from app.core.export.exportações.exportaçãoxlsx import ExportaçãoXLSX
+from app.core.export.exportações.exportaçãocsv import ExportaçãoCSV
