@@ -1,7 +1,7 @@
 from customtkinter import CTkFrame
 
 from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
-from app.ui.screens.config.parâmetros import parâmetros
+from app.ui.config.parâmetros import parâmetros
 
 
 class Desfazimento(CTkFrame):

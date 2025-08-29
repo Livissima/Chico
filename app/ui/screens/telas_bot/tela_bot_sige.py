@@ -5,11 +5,11 @@ from customtkinter import CTkFrame, CTk
 from platformdirs import user_documents_dir
 
 from app.auto.bot import Bot
-from app.ui.screens.config.parâmetros import parâmetros
+from app.ui.config.parâmetros import parâmetros
 from app.ui.widgets import Botão, Input, CheckBox, Texto
 from typing import TYPE_CHECKING
 
-from app.ui.screens.config.cabeçalhos import Cabeçalhos
+from app.ui.config.cabeçalhos import Cabeçalhos
 from app.ui.functions.pesquisa_diretório import PesquisaDiretório
 
 if TYPE_CHECKING:
