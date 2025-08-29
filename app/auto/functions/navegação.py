@@ -20,7 +20,6 @@ class Navegação:
         self._args_wait = {'driver': self._master, 'timeout': self._timeout}
 
 
-
     def clicar(self, by: Literal['xpath', 'id', 'css'], *chaves: str):
         by_dict_de_dicts = {
             'xpath' : self._pp.xpaths, 'id' : self._pp.ids, 'css' : self._pp.css_selectors
@@ -55,10 +54,10 @@ class Navegação:
             else:
                 raise f"Erro: {e}\nMétodo: `clicar`\ntag: '{tag}'"
 
-    def caminhar(self, destino: Literal['fichas', 'contatos', 'situações', 'gêneros']):
+    def caminhar(self, destino: str):
         # uma recursão seria melhor
-        if destino not in ['fichas', 'contatos', 'situações', 'gêneros']:
-            raise KeyError(f"Tipo inválido chamado no método de ir para menu: '{destino}'")
+        # if destino not in ['fichas', 'contatos', 'situações', 'gêneros']:
+        #     raise KeyError(f"Tipo inválido chamado no método de ir para menu: '{destino}'")
 
         print(f'    Caminhando para {destino}')
         destinos = self._pp.caminhos
@@ -92,6 +91,34 @@ class Navegação:
             else:
                 raise f"Erro: {e}\nMétodo: `digitar_xpath`\nstring: '{string}'\nxpath: {xpath}"
 
+    def obter_valor(self, *chaves) -> str:
+        xpaths = self._pp.xpaths
+
+        for chave in chaves :
+            xpaths = xpaths[chave]
+        xpath = xpaths
+
+        elemento: tuple[str, str] = (By.XPATH, xpath)
+
+        try:
+            WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
+            WebDriverWait(**self._args_wait).until(visibility_of_element_located(elemento))
+            _elemento = WebDriverWait(**self._args_wait).until(element_to_be_clickable(elemento))
+            valor = _elemento.text
+
+            self.aguardar()
+            return valor
+
+        except ValueError as e:
+            caminho = self._obter_chave_por_valor(self.xpaths, xpath)
+            if caminho:
+                caminho_str = " > ".join(caminho)
+                raise f"Erro: {e}\nMétodo: `obter_valor`\nitem: {caminho_str}\n"
+            else:
+                raise f"Erro: {e}\nMétodo: `obter_valor`\nxpath: {xpath}"
+
+
+
     def aguardar(self):
         elemento = (By.TAG_NAME, 'body')
         WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
@@ -104,7 +131,6 @@ class Navegação:
             for turma in turmas_correspoentes:
                 self._selecionar_turma(turma)
                 yield série, turma
-
 
     def _selecionar_turma(self, turma):
         self.__selecionar_opção('composição', valor='199')
