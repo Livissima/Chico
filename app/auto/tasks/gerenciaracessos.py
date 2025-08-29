@@ -47,6 +47,7 @@ class GerenciarAcessos:
             sys.stdout.write(f'\r {ind} {aluno} - {_turma}: {texto}.')
             sys.stdout.flush()
         início = 15
+
         for index, row in self.df.iloc[início:].iterrows():
             estudante  = row['Estudante']
             turma      = row['Turma']
