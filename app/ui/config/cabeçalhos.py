@@ -63,8 +63,8 @@ class Cabeçalhos:
     def consulta(self):
         return {
             'título' : f'{PROJECT_NAME} - Consulta',
-            'cabeçalho' : '----',
-            'descrição' : '--'
+            'cabeçalho' : 'Consulta',
+            'descrição' : 'Consulta de PDFs para formar database.'
         }
 
     @property

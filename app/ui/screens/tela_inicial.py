@@ -10,7 +10,7 @@ from app.ui.functions.pesquisa_diretório import PesquisaDiretório
 from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
 
 if TYPE_CHECKING:
-    pass
+    from .janela import Janela
 
 
 class TelaInicial(CTkFrame):
@@ -22,7 +22,7 @@ class TelaInicial(CTkFrame):
         # self.controller.novo_diretório = self._in_diretório_base.valor
 
         self._configurar_layout()
-        self._inserir_widgets()  # self.mainloop()
+        self._inserir_widgets()
 
     def _configurar_layout(self) :
         Cabeçalhos(self, 'inicial')
