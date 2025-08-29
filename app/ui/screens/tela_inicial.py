@@ -1,16 +1,16 @@
 from typing import TYPE_CHECKING
 from customtkinter import CTkFrame, CTk
 
-from app.ui.screens.config.parâmetros import parâmetros
+from app.ui.config.parâmetros import parâmetros
 from app.ui.widgets import Texto, Botão, Input
-from app.ui.screens.config.cabeçalhos import Cabeçalhos
-from app.ui.screens.utils.desfazimento import Desfazimento
+from app.ui.config.cabeçalhos import Cabeçalhos
+from app.ui.functions.desfazimento import Desfazimento
 
 from app.ui.functions.pesquisa_diretório import PesquisaDiretório
 from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
 
 if TYPE_CHECKING:
-    from app.ui.screens.janela import Janela
+    pass
 
 
 class TelaInicial(CTkFrame):

@@ -8,7 +8,7 @@ from selenium.webdriver.support.expected_conditions import presence_of_element_l
 
 from app.auto.data.sites.propriedades import Propriedades
 from app.auto.data.misc.escola import Escola
-from app.ui.screens.config.parâmetros import parâmetros
+from app.ui.config.parâmetros import parâmetros
 
 
 class Navegação:

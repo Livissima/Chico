@@ -1,6 +1,8 @@
+#apenas alguns testes
+
+
 import time
 from functools import wraps
-
 
 def cronometrar(função) :
     @wraps(função)

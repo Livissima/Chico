@@ -1,6 +1,6 @@
 from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
 from collections import defaultdict
-from app.ui.screens.utils.prévias import Prévias
+from app.ui.utils.prévias import Prévias
 
 
 class Parâmetros:

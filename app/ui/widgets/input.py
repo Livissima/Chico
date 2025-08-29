@@ -1,9 +1,8 @@
-import tkinter as tk
 from typing import Literal
 
-from customtkinter import CTkFrame, CTk, CTkEntry
+from customtkinter import CTkFrame, CTkEntry
 
-from app.ui.screens.config.parâmetros import parâmetros
+from app.ui.config.parâmetros import parâmetros
 
 
 class Input(CTkFrame):

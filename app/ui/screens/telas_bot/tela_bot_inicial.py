@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from customtkinter import CTkFrame, CTk
 
 from app.auto.bot import Bot
-from app.ui.screens.config.cabeçalhos import Cabeçalhos
+from app.ui.config.cabeçalhos import Cabeçalhos
 from app.ui.widgets import Botão, Texto
 
 if TYPE_CHECKING:

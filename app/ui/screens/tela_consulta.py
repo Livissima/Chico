@@ -4,13 +4,13 @@ from typing import TYPE_CHECKING
 from customtkinter import CTk, CTkFrame
 from app.core import Consulta, Exportação
 from app.ui.functions.pesquisa_diretório import PesquisaDiretório
-from app.ui.screens.config.parâmetros import parâmetros
+from app.ui.config.parâmetros import parâmetros
 from app.ui.widgets.botão import Botão
 from app.ui.widgets.input import Input
 from app.ui.widgets.texto import Texto
 
-from app.ui.screens.config.cabeçalhos import Cabeçalhos
-from app.ui.screens.utils.desfazimento import Desfazimento
+from app.ui.config.cabeçalhos import Cabeçalhos
+from app.ui.functions.desfazimento import Desfazimento
 from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
 
 if TYPE_CHECKING:

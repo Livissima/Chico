@@ -2,11 +2,11 @@ import os.path
 
 from customtkinter import CTkFrame, CTk
 from app.auto.bot import Bot
-from app.ui.screens.config.parâmetros import parâmetros
-from app.ui.widgets import Botão, Texto
+from app.ui.config.parâmetros import parâmetros
+from app.ui.widgets import Botão
 from typing import TYPE_CHECKING
 
-from app.ui.screens.config.cabeçalhos import Cabeçalhos
+from app.ui.config.cabeçalhos import Cabeçalhos
 
 if TYPE_CHECKING:
     pass
