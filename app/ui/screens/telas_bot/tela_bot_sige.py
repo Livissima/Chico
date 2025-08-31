@@ -5,7 +5,10 @@ from customtkinter import CTkFrame, CTk
 from platformdirs import user_documents_dir
 
 from app.auto.bot import Bot
+
+from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
 from app.ui.config.parâmetros import parâmetros
+from app.ui.functions.desfazimento import Desfazimento
 from app.ui.widgets import Botão, Input, CheckBox, Texto
 from typing import TYPE_CHECKING
 
@@ -13,7 +16,7 @@ from app.ui.config.cabeçalhos import Cabeçalhos
 from app.ui.functions.pesquisa_diretório import PesquisaDiretório
 
 if TYPE_CHECKING:
-    pass
+    from app.ui.screens.janela import Janela
 
 
 class TelaBotSige(CTkFrame):
@@ -45,7 +48,7 @@ class TelaBotSige(CTkFrame):
         self.__inserir_checkboxes()
 
     def __inserir_textos(self):
-        self.tx_intro = Texto(
+        self._tx_intro = Texto(
             self,
             texto='Diretório selecionado:',
             fonte=('arial', 15),
@@ -54,7 +57,7 @@ class TelaBotSige(CTkFrame):
             largura=self.controller.largura-5,
         )
 
-        self.tx_feedback = Texto(
+        self._tx_feedback = Texto(
             self,
             texto='',
             fonte=('arial', 20),
@@ -64,10 +67,10 @@ class TelaBotSige(CTkFrame):
         )
 
     def __inserir_inputs(self):
-        self.input_pasta_dados = Input(
+        self._in_diretório_base = Input(
             self,
             texto=str(os.path.join(parâmetros.novo_diretório, 'fonte')),
-            fonte=('arial', 10),
+            fonte=('arial', 15),
             x=120,
             y=135,
             altura=28,
@@ -75,7 +78,7 @@ class TelaBotSige(CTkFrame):
         )
 
     def __inserir_botões(self):
-        self.bt_back = Botão(
+        self._bt_back = Botão(
             self,
             função=lambda: self.controller.alternador.abrir('telas_bot'),
             texto='←',
@@ -85,7 +88,7 @@ class TelaBotSige(CTkFrame):
             y=10,
         )
 
-        self.bt_localizar_dados = Botão(
+        self._bt_localizar_dados = Botão(
             self,
             texto='Definir pasta',
             fonte=('times new roman', 15),
@@ -97,7 +100,7 @@ class TelaBotSige(CTkFrame):
             largura=100
         )
 
-        self.bt_iniciar = Botão(
+        self._bt_iniciar = Botão(
             self,
             texto='Iniciar',
             fonte=('times new roman', 20),
@@ -105,9 +108,30 @@ class TelaBotSige(CTkFrame):
             x='centro',
             y=300,
             largura=90,
-            função=lambda: self.iniciar()
+            função=lambda: self.iniciar_tarefa(),
+            condição=len(parâmetros.turmas_disponíveis) > 0
         )
-        pass
+        self._bt_desfazer = Botão(
+            self,
+            função=lambda: self._desfazer(),
+            condição=parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO,
+            texto='↩',
+            fonte=('arial', 25),
+            x=560,
+            y=135+30
+        )
+
+        self.bt_sondagem_emergencial = Botão(
+            self,
+            função=lambda: Bot(tarefa='sondagem', path=parâmetros.novo_diretório),
+            condição=len(parâmetros.turmas_disponíveis) == 0,
+            texto='SONDAR',
+            fonte=('arial', 15),
+            formato='bold',
+            x='centro',
+            y=300,
+            largura=90
+        )
 
     def __inserir_checkboxes(self):
         self.ck_alvos = CheckBox(
@@ -134,11 +158,33 @@ class TelaBotSige(CTkFrame):
         PesquisaDiretório(
             self,
             título_janela='Selecione a pasta onde serão armazenados os relatórios',
-            widget_input=self.input_pasta_dados
+            widget_input=self._in_diretório_base
         )
+        self.verificar_resumo()
 
-    def iniciar(self):
+    def iniciar_tarefa(self):
         valores = self.ck_turmas.valor()
         turmas_selecionadas = [turma for turma, selecionada in valores.items() if selecionada]
         parâmetros.turmas_selecionadas = turmas_selecionadas
         Bot(tarefa='downloads', destino=self._kwargs['destino'], alvos=self._kwargs['alvos'])
+
+    def verificar_resumo(self):
+        self.bt_sondagem_emergencial.atualizar_visibilidade(len(parâmetros.turmas_disponíveis) == 0)
+        if len(parâmetros.turmas_disponíveis) == 0:
+            self._bt_iniciar.mudar_cor('grey')
+        if len(parâmetros.turmas_disponíveis) > 0:
+            self._bt_iniciar.mudar_cor('blue')
+
+
+
+    def _desfazer(self):
+        Desfazimento(self).desfazer()
+        self._bt_desfazer.atualizar_visibilidade(
+            parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO
+        )
+
+        self.verificar_resumo()
+
+    def sondar(self):
+        Bot(tarefa='sondagem', path=parâmetros.novo_diretório)
+        self.verificar_resumo()

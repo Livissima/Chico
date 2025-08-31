@@ -55,7 +55,7 @@ class PesquisaDiretório(CTkFrame):
         self._atualizar_valor_widget(pesquisa)
 
     def _atualizar_valor_widget(self, pesquisa):
-        #todo: criar método para atualizar o tx_feedback.
+        #todo: criar método para atualizar o _tx_feedback.
 
         if pesquisa:
             self.path = os.path.normpath(pesquisa)

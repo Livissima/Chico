@@ -29,7 +29,7 @@ class TelaBotCredenciais(CTkFrame):
         self.__inserir_botões()
 
     def __inserir_textos(self):
-        # self.tx_feedback = Texto(
+        # self._tx_feedback = Texto(
         #     self,
         #
         # )
