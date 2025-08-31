@@ -1,3 +1,4 @@
+from app.ui.screens.tela_estatísticas import TelaEstatísticas
 from app.ui.screens.telas_bot.tela_bot_inicial import TelaBot
 from app.ui.screens.telas_bot.tela_bot_credenciais import TelaBotCredenciais
 from app.ui.screens.telas_bot.tela_bot_sige import TelaBotSige
@@ -14,7 +15,8 @@ class AlternadorDeTelas:
             'telas_bot': TelaBot,
             'consulta': TelaConsulta,
             'telas_bot sige' : TelaBotSige,
-            'telas_bot google' : TelaBotCredenciais
+            'telas_bot google' : TelaBotCredenciais,
+            'tela estatísticas' : TelaEstatísticas
         }
 
 
