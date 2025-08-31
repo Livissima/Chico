@@ -7,8 +7,8 @@ class Botão(CTkFrame) :
     def __init__(
             self,
             classe,
-            texto: str,
             função,
+            texto: str = 'Botão',
             condição: bool = True,
             fonte: tuple[str, int] = ('Arial', 16),
             formato: Literal['bold', 'italic', 'underline', 'overstrike'] | list[

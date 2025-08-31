@@ -5,15 +5,21 @@ from app.ui.utils.prévias import Prévias
 
 class Parâmetros:
     def __init__(self):
+        self._séries_selecionadas = None
+        self._turmas_selecionadas_por_série = None
         self.novo_diretório = DIRETÓRIO_BASE_PADRÃO
 
         self.turmas_disponíveis = Prévias(self.novo_diretório).turmas
-        self.séries_disponíveis = self.seriar(self.turmas_disponíveis)
+        self.séries_disponíveis = self.obter_séries(self.turmas_disponíveis)
         self.turmas_disponíveis_por_série = self.gerar_turmas_por_serie(self.turmas_disponíveis)
 
         self._turmas_selecionadas = []
         # self.séries_selecionadas = self.seriar(self.turmas_selecionadas)
         # self.turmas_selecionadas_por_série = self.gerar_turmas_por_serie(self.turmas_selecionadas)
+    # @property
+    # def turmas_disponíveis(self):
+    #
+
 
     @property
     def turmas_selecionadas(self):
@@ -22,7 +28,7 @@ class Parâmetros:
     @turmas_selecionadas.setter
     def turmas_selecionadas(self, value):
         self._turmas_selecionadas = value
-        self._séries_selecionadas = self.seriar(value)
+        self._séries_selecionadas = self.obter_séries(value)
         self._turmas_selecionadas_por_série = self.gerar_turmas_por_serie(value)
 
     @property
@@ -32,14 +38,6 @@ class Parâmetros:
     @property
     def turmas_selecionadas_por_série(self):
         return self._turmas_selecionadas_por_série
-
-
-
-
-
-
-
-
 
     @staticmethod
     def gerar_turmas_por_serie(lista_turmas: list[str]) -> dict[str, list[str]] :
@@ -55,10 +53,10 @@ class Parâmetros:
         return {serie : sorted(turmas) for serie, turmas in sorted(turmas_por_serie.items())}
 
     @staticmethod
-    def seriar(lista_turmas) -> list[str] :
+    def obter_séries(lista_turmas) -> list[str] :
         lista_turmas
-        # Extrai o número da série de cada turma, remove duplicatas e ordena
-        series_unicas = sorted(set(turma[0] for turma in lista_turmas))  # Para séries de 1 dígito
+
+        series_unicas = sorted(set(turma[0] for turma in lista_turmas)) 
         return series_unicas
 
 parâmetros = Parâmetros()

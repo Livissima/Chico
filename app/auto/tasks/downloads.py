@@ -27,6 +27,7 @@ class Downloads:
 
         self.logon()
         self.baixar_alvos(*alvos)
+        self.master.quit()
 
     def logon(self):
         self.master.get(self.pp.url)

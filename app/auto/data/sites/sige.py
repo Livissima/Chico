@@ -37,7 +37,8 @@ class Sige :
                 'composição' : '/html/body/div[8]/form/table[1]/tbody/tr[1]/td[2]/select',
                 'série' : '/html/body/div[8]/form/table[1]/tbody/tr[2]/td[2]/select',
                 'turma' : '/html/body/div[8]/form/table[1]/tbody/tr[5]/td[2]/select',
-                'turno' : '/html/body/div[8]/form/table[1]/tbody/tr[3]/td[2]/select'
+                'turno' : '/html/body/div[8]/form/table[1]/tbody/tr[3]/td[2]/select',
+                'input data' : '/html/body/div[8]/form/table/tbody/tr[6]/td[2]/input'
             },
             'resumo' : {
                 'quantitativo' : {
