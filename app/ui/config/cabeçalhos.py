@@ -17,7 +17,8 @@ class Cabeçalhos:
             'telas_bot' : self.bot,
             'consulta' : self.consulta,
             'telas_bot sige' : self.bot_sige,
-            'telas_bot credenciais': self.bot_credenciais
+            'telas_bot credenciais': self.bot_credenciais,
+            'estatísticas' : self.estatísticas
         }
         setar = config[tela]
 
@@ -81,4 +82,12 @@ class Cabeçalhos:
             'título' : f'{PROJECT_NAME} - Bot Credenciais',
             'cabeçalho' : 'BOT Credenciais',
             'descrição' : 'Gerenciamento automático de credenciais'
+        }
+
+    @property
+    def estatísticas(self):
+        return {
+            'título' : f'{PROJECT_NAME} - Estatísticas',
+            'cabeçalho' : 'Estatísticas',
+            'descrição' : 'Estatísticas da UE'
         }

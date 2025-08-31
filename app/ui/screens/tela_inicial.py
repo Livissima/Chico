@@ -33,14 +33,13 @@ class TelaInicial(CTkFrame):
 
         self.__inserir_textos()
         self.__inserir_inputs()
-        self.__inserir_dropdowns()
 
         self.__inserir_botões()
 
     def __inserir_textos(self):
         self.tx_intro = Texto(
             self,
-            texto=f'Diretório base:\n{DIRETÓRIO_BASE_PADRÃO}',
+            texto=f'Texto vazio',
             fonte=('arial', 15),
             x='centro',
             y=80,
@@ -51,10 +50,12 @@ class TelaInicial(CTkFrame):
         self.tx_alterar_diretório = Texto(
             self,
             texto='Alterar diretório (opcional)',
+            fonte=('times new roman', 15),
             formato='bold',
             x=5,
-            y=self.primeira_linha-35,
-            largura=220
+            y=self.primeira_linha-20,
+            largura=180,
+            altura=20
         )
 
         self._tx_feedback = Texto(
@@ -75,7 +76,7 @@ class TelaInicial(CTkFrame):
             x=160,
             y=self.primeira_linha,
             altura=30,
-            largura=420
+            largura=435
         )
 
     def __inserir_botões(self):
@@ -85,7 +86,7 @@ class TelaInicial(CTkFrame):
             função= lambda: self.controller.alternador.abrir('telas_bot'),
             texto='BOT',
             formato='bold',
-            x=20+160,
+            x=120,
             y=self.segunda_linha,
             largura=100
         )
@@ -95,7 +96,17 @@ class TelaInicial(CTkFrame):
             função= lambda: self.controller.alternador.abrir('consulta'),
             texto='Consulta',
             formato='bold',
-            x=20+120+160,
+            x=120+120,
+            y=self.segunda_linha,
+            largura=100
+        )
+
+        self.bt_estatísticas = Botão(
+            self,
+            função=lambda: self.controller.alternador.abrir('tela estatísticas'),
+            texto='Estatísticas',
+            formato='bold',
+            x=120+120+120,
             y=self.segunda_linha,
             largura=100
         )
@@ -118,26 +129,15 @@ class TelaInicial(CTkFrame):
             condição=parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO,
             texto='↩',
             fonte=('arial', 25),
-            x=550
+            x=560,
+            y=self.primeira_linha+30
         )
 
-    def __inserir_dropdowns(self):
-        pass
-
-    def _pesquisar_diretório(self):
-        PesquisaDiretório(self, 'testando', self._in_diretório_base)
-
-    def aplicar_botão_de_desfazer(self):
-        if parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO:
-
-            self._tx_feedback.att(f'Diretório base atualizado!')
-
-        return None
 
     def _desfazer(self):
+        Desfazimento(self).desfazer()
         self._bt_desfazer.atualizar_visibilidade(
             parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO
         )
-        Desfazimento(self).desfazer()
 
 
