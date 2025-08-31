@@ -8,6 +8,7 @@ from app.auto.data.misc.parâmetroswebdriver import ParâmetrosWebdriver
 from app.auto.tasks.sondagem import Sondagem
 
 
+
 class Bot:
     def __init__(
             self,
@@ -42,8 +43,10 @@ class Bot:
             raise KeyError(f'Tarefa inválida para o navegador: {tarefa}')
 
         if tarefa == 'sondagem':
+            parâmetros = self._obter_parâmetros('sondagem')
+            path = parâmetros.get('path')
             self.navegador = webdriver.Chrome()
-            Sondagem(self.navegador, r'C:\Users\meren\PycharmProjects\Chico')
+            Sondagem(self.navegador, path)
 
         if tarefa == 'downloads':
             parâmetros = normalizar_dicionário(self._obter_parâmetros('downloads'))

@@ -3,7 +3,7 @@ from pathlib import Path
 from app.core import Consulta
 from app.core.export.exportações.exportaçãocsv import ExportaçãoCSV
 from app.core.export.exportações.exportaçãoxlsx import ExportaçãoXLSX
-from app.core.export.exportações.exportaçãoresumo import ExportaçãoResumo
+
 
 
 class Exportação:
@@ -23,5 +23,4 @@ class Exportação:
     def exportar_tudo(self):
         ExportaçãoXLSX(self.consulta, self.path)
         ExportaçãoCSV(self.consulta, self.path)
-        ExportaçãoResumo(self.consulta, self.path)
 
