@@ -16,7 +16,8 @@ class Botão(CTkFrame) :
             x: int | str = 'centro',
             y: int | str = 'centro',
             altura: int = 35,
-            largura: int = 35
+            largura: int = 35,
+            cor:  str | tuple[str, str] | None = None,
     ):
         self.master: CTkFrame = classe.master
         self.controller: CTk = classe.controller
@@ -31,16 +32,17 @@ class Botão(CTkFrame) :
 
 
 
-        self.botão = CTkButton(
+        self.widget_botão = CTkButton(
             self,
             text=texto,
             command=função,
             font=(fonte[0].title(), fonte[1], formato),
             width=largura,
-            height=altura
+            height=altura,
+            fg_color=cor
         )
 
-        self.botão.place(relx=0.5, rely=0.5, anchor='center')
+        self.widget_botão.place(relx=0.5, rely=0.5, anchor='center')
 
         self.atualizar_visibilidade(self.condição)
 
@@ -65,12 +67,21 @@ class Botão(CTkFrame) :
         self.place(x=_x, y=_y)
 
     def atualizar_visibilidade(self, condição):
-        self.condição = condição
 
-        if self.condição:
+        if condição is True:
             self.alocar(self._x, self._y)
-        else:
+        if condição is False:
             self.place_forget()
+
+    def mudar_cor(self, nova_cor):
+        self.widget_botão.configure(fg_color=nova_cor)
+        self.widget_botão.update()
+
+    def esconder(self):
+        if not self.condição :
+            self.place_forget()
+
+
 
     # def __getattr__(self, item):
     #     return getattr(self, item)
