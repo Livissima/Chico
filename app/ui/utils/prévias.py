@@ -1,11 +1,11 @@
+import json
 import os
-
-from pandas import read_csv, read_excel, DataFrame
+from pathlib import Path
 
 
 class Prévias:
     def __init__(self, path_resumo):
-        self.path = os.path.join(path_resumo, 'Resumo.csv')
+        self.path = Path(path_resumo, 'fonte', 'resumo.json')
 
         self.resumo = self.resumir(self.path)
         self.turmas = self.resumo['Turmas']
@@ -13,6 +13,12 @@ class Prévias:
 
     @staticmethod
     def resumir(path):
-        resumo = read_csv(path)
-        return resumo
+        if Path(path).exists():
+            with open(path, 'r', encoding='utf-8') as arquivo:
+                resumo = json.load(arquivo)
+            return resumo
+        else:
+            return {
+                "Turmas": []
+            }
 
