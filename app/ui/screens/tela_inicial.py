@@ -39,9 +39,9 @@ class TelaInicial(CTkFrame):
     def __inserir_textos(self):
         self.tx_intro = Texto(
             self,
-            texto=f'Texto vazio',
-            fonte=('arial', 15),
-            x='centro',
+            texto='Texto vazio',
+            fonte=('times new roman', 15),
+            # x='centro',
             y=80,
             largura=self.controller.largura-10,
             altura=40
@@ -103,7 +103,7 @@ class TelaInicial(CTkFrame):
 
         self.bt_estatísticas = Botão(
             self,
-            função=lambda: self.controller.alternador.abrir('tela estatísticas'),
+            função=lambda: self.controller.alternador.abrir('estatísticas'),
             texto='Estatísticas',
             formato='bold',
             x=120+120+120,

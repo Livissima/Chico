@@ -132,7 +132,8 @@ class TelaConsulta(CTkFrame):
 
         except FileNotFoundError: self._tx_feedback.att('Erro ao consultar')
 
-    def _obter_situação(self):
+    @staticmethod
+    def _obter_situação():
         def truncar_diretório(_dir: str) -> str:
             _diretório = _dir.split('\\')
             _diretório = os.path.join(*_diretório[0 :3], '...', '...', *_diretório[-2 :])

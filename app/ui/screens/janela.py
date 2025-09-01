@@ -6,10 +6,12 @@ from app.ui.utils.alternador_de_telas import AlternadorDeTelas
 class Janela(CTk):
     def __init__(self):
         super().__init__()
+        self.altura = None
+        self.largura = None
         self.container = CTkFrame(self)
         self.container.pack(expand=True, fill='both')
 
-        self._configurar_layout()
+        self.dimensionar()
 
         self.alternador: AlternadorDeTelas = AlternadorDeTelas(self.container, self)
         self.alternador.abrir('inicial')
@@ -21,10 +23,7 @@ class Janela(CTk):
         self.alternador = AlternadorDeTelas(self.container, self)
         self.alternador.abrir('inicial')
 
-    def _configurar_layout(self):
-        self._dimensionamento()
-
-    def _dimensionamento(self):
+    def dimensionar(self):
         Dimensionamento(self).posicionar()
         self.largura = Dimensionamento.largura
         self.altura = Dimensionamento.altura

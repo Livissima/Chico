@@ -16,7 +16,7 @@ class AlternadorDeTelas:
             'consulta': TelaConsulta,
             'telas_bot sige' : TelaBotSige,
             'telas_bot google' : TelaBotCredenciais,
-            'tela estatísticas' : TelaEstatísticas
+            'estatísticas' : TelaEstatísticas
         }
 
 
