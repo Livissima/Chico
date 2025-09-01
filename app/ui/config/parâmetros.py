@@ -7,18 +7,18 @@ class Parâmetros:
     def __init__(self):
         self._séries_selecionadas = None
         self._turmas_selecionadas_por_série = None
+        self._estado_turmas = {}
         self.novo_diretório = DIRETÓRIO_BASE_PADRÃO
 
         self.turmas_disponíveis = Prévias(self.novo_diretório).turmas
         self.séries_disponíveis = self.obter_séries(self.turmas_disponíveis)
         self.turmas_disponíveis_por_série = self.gerar_turmas_por_serie(self.turmas_disponíveis)
 
-        self._turmas_selecionadas = []
-        # self.séries_selecionadas = self.seriar(self.turmas_selecionadas)
-        # self.turmas_selecionadas_por_série = self.gerar_turmas_por_serie(self.turmas_selecionadas)
-    # @property
-    # def turmas_disponíveis(self):
-    #
+        for turma in self.turmas_disponíveis:
+            self._estado_turmas[turma] = True
+
+        self._turmas_selecionadas = self.turmas_disponíveis
+
 
 
     @property
