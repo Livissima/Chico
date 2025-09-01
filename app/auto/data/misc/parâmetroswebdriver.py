@@ -1,21 +1,24 @@
 import json
+import os
 
 from selenium.webdriver.chrome.options import Options
+
+from app.ui.config.parâmetros import parâmetros
 
 
 class ParâmetrosWebdriver:
 
     @property
     def impressão(self):
-        pasta_temporária = (r'C:\Users\meren\OneDrive - Secretaria de Estado da Educação\Secretaria\2025\Dados'
-                            r'\Estudantes\Base de dados\Temp')
+        pasta_temporária = os.path.join(parâmetros.novo_diretório)
+
         settings = {
             "recentDestinations" : [{"id" : "Save as PDF", "origin" : "local", "account" : ""}],
             "selectedDestinationId" : "Save as PDF",
             "version" : 2,
             "isHeaderFooterEnabled" : False,
             "scalingType" : 3,
-            "scaling" : "100",
+            "scaling" : "95",
             "mediaSize" : {"height_microns" : 297000,  # Paisagem: altura menor
                            "width_microns" : 420000,  # Paisagem: largura maior
                            "name" : "ISO_A3",
@@ -33,4 +36,5 @@ class ParâmetrosWebdriver:
         chrome_options.add_experimental_option("prefs", prefs)
         chrome_options.add_argument("--kiosk-printing")  # imprime sem abrir diálogo
         return chrome_options
+
 
