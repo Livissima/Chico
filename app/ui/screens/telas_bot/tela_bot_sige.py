@@ -33,7 +33,7 @@ class TelaBotSige(CTkFrame):
         alvos = self.ck_alvos.valor()
         alvos = [chave.lower() for chave, valor in alvos.items() if valor]
         return {
-            'destino' : Path(user_documents_dir()) / 'SIGE' / 'fonte',
+            'destino' : os.path.join(parâmetros.novo_diretório, 'fonte'),
             'alvos' : alvos
         }
 
@@ -41,11 +41,11 @@ class TelaBotSige(CTkFrame):
         Cabeçalhos(self, 'telas_bot sige')
 
     def _inserir_widgets(self):
-        self.__inserir_textos()
+        self.__inserir_checkboxes()
+        # self.__inserir_textos()
         self.__inserir_inputs()
         self.__inserir_botões()
-        self.__inserir_dropdowns()
-        self.__inserir_checkboxes()
+        # self.__inserir_dropdowns()
 
     def __inserir_textos(self):
         self._tx_intro = Texto(
@@ -78,9 +78,13 @@ class TelaBotSige(CTkFrame):
         )
 
     def __inserir_botões(self):
+        def back():
+            self.salvar_valores_checkboxes()
+            self.controller.alternador.abrir('telas_bot')
+
         self._bt_back = Botão(
             self,
-            função=lambda: self.controller.alternador.abrir('telas_bot'),
+            função=lambda: back(),
             texto='←',
             fonte=('Arial', 20),
             formato='bold',
@@ -143,12 +147,21 @@ class TelaBotSige(CTkFrame):
             y=200
         )
 
-        self.ck_turmas = CheckBox(
+        self._inserir_checkbox_turmas()
+
+    def _inserir_checkbox_turmas(self) :
+
+        estado_turmas = {}
+        for turma in parâmetros.turmas_disponíveis :
+            if hasattr(parâmetros, '_estado_turmas') and turma in parâmetros._estado_turmas :
+                estado_turmas[turma] = parâmetros._estado_turmas[turma]
+            else :
+                estado_turmas[turma] = True
+
+        self._ck_turmas = CheckBox(
             self,
             opções=parâmetros.turmas_disponíveis,
-            fonte=('arial', 13),
-            largura=20,
-            espaçamento=20
+            valores_iniciais=estado_turmas
         )
 
     def __inserir_dropdowns(self):
@@ -163,9 +176,7 @@ class TelaBotSige(CTkFrame):
         self.verificar_resumo()
 
     def iniciar_tarefa(self):
-        valores = self.ck_turmas.valor()
-        turmas_selecionadas = [turma for turma, selecionada in valores.items() if selecionada]
-        parâmetros.turmas_selecionadas = turmas_selecionadas
+        self.salvar_valores_checkboxes()
         Bot(tarefa='downloads', destino=self._kwargs['destino'], alvos=self._kwargs['alvos'])
 
     def verificar_resumo(self):
@@ -175,16 +186,19 @@ class TelaBotSige(CTkFrame):
         if len(parâmetros.turmas_disponíveis) > 0:
             self._bt_iniciar.mudar_cor('blue')
 
-
-
     def _desfazer(self):
         Desfazimento(self).desfazer()
         self._bt_desfazer.atualizar_visibilidade(
             parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO
         )
-
         self.verificar_resumo()
 
     def sondar(self):
         Bot(tarefa='sondagem', path=parâmetros.novo_diretório)
         self.verificar_resumo()
+
+    def salvar_valores_checkboxes(self):
+        valores = self._ck_turmas.valor()
+        parâmetros._estado_turmas = valores
+        turmas_selecionadas = [turma for turma, selecionada in valores.items() if selecionada]
+        parâmetros.turmas_selecionadas = turmas_selecionadas
