@@ -23,6 +23,7 @@ class Texto(CTkFrame):
             preenchimento_x: int = 0
     ):
 
+        self.altura_somada = None
         self.master: CTkFrame = classe.master
         self.controller: "Janela" = classe.controller
 
@@ -71,12 +72,12 @@ class Texto(CTkFrame):
 
     def criar_textos_empilhados(self, fonte, formato, cor, compound, anchor):
 
-        altura_somada = len(self.linhas_de_texto) * self.altura_widget + (len(self.linhas_de_texto) - 1) * self.espaçamento
-        self.configure(height=altura_somada)
+        self.altura_somada = len(self.linhas_de_texto) * self.altura_widget + (len(self.linhas_de_texto) - 1) * self.espaçamento
+        self.configure(height=self.altura_somada)
 
         for índice, linha in enumerate(self.linhas_de_texto):
             y = índice * (self.altura_widget + self.espaçamento) + self.altura_widget / 2
-            rely_pos = y / altura_somada
+            rely_pos = y / self.altura_somada
             widget = CTkLabel(
                 self,
                 text=linha,

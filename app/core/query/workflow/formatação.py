@@ -87,7 +87,7 @@ class Formatação:
         return df
 
     @staticmethod
-    def renomear_colunas(df: DataFrame, dicionário):
+    def renomear_colunas(df: DataFrame, dicionário: dict[str, str]) -> DataFrame:
         df.rename(columns = dicionário, inplace = True)
         return df
 

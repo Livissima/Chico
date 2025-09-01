@@ -39,14 +39,18 @@ class Bot:
 
         tarefa = self._tarefa
         tarefas_válidas = {'downloads', 'siap', 'gerenciar', 'sondagem'}
+
         if tarefa not in tarefas_válidas:
             raise KeyError(f'Tarefa inválida para o navegador: {tarefa}')
+
 
         if tarefa == 'sondagem':
             parâmetros = self._obter_parâmetros('sondagem')
             path = parâmetros.get('path')
             self.navegador = webdriver.Chrome()
             Sondagem(self.navegador, path)
+
+
 
         if tarefa == 'downloads':
             parâmetros = normalizar_dicionário(self._obter_parâmetros('downloads'))
@@ -76,7 +80,7 @@ class Bot:
             parâmetros = normalizar_dicionário(self._obter_parâmetros('gerenciar'))
             path_database = parâmetros.get('path_database')
             tipo = parâmetros.get('tipo')
-            turma = parâmetros.get('turma')
+            turmas = parâmetros.get('turmas')
 
             if not path_database or not tipo:
                 raise ValueError('Necessário informar `path_database` e `tipo`')
@@ -87,7 +91,7 @@ class Bot:
                 navegador=self.navegador,
                 path_database=path_database,
                 tipo=tipo,
-                turma=turma
+                turmas=turmas
             )
             return
 

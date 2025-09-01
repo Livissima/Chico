@@ -12,6 +12,7 @@ class Presenciamento:
         self.nv = Navegação(navegador, 'siap')
         self.pp = Propriedades(site='siap')
         self.executar()
+        self.master.quit()
 
     def executar(self):
         self.master.get(self.pp.url)
