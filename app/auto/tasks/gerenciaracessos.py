@@ -16,47 +16,52 @@ class GerenciarAcessos:
             navegador: Chrome,
             path_database: str,
             tipo: Literal['netescola', 'google'],
-            turma: list[str] = None,
+            turmas: list[str] = None
     ):
         print(f'class NetEscola instanciada.')
         self.master = navegador
         self.nv = Navegação(navegador, tipo)
         self.pp = Propriedades(site=tipo)
         self.path_db = path_database
-        self.df = self.dataframe(path_database)
+        self.turmas = turmas
 
+        self.df = self.dataframe()
         self.gerenciar(tipo)
+        self.master.quit()
 
-    def dataframe(self, path_db):
+
+    def dataframe(self):
         _df = pd.read_excel(self.path_db, 'Base Ativa')
         df: DataFrame = _df[
             ['Turma', 'Matrícula', 'Educacional', 'Estudante', 'Data de Nascimento', 'Senha padrão', 'Nova senha']
         ].copy()
+        df = df[df['Turma'].isin(self.turmas)]
+        print(f'turmas {df['Turma'].unique().tolist()}')
         return df
 
-    def gerenciar(self, tipo):
+    def gerenciar(self, plataforma):
         self.master.get(self.pp.url)
-        tipos = {
+        plataformas = {
             'netescola' : self.gerenciar_netescola,
             'google'    : self.gerenciar_google,
         }
-        return tipos[tipo]()
+        return plataformas[plataforma]()
 
     def gerenciar_netescola(self):
         def anunciar(ind, aluno: str, _turma: str, texto: str):
             sys.stdout.write(f'\r {ind} {aluno} - {_turma}: {texto}.')
             sys.stdout.flush()
-        início = 15
+        início = 0
 
-        for index, row in self.df.iloc[início:].iterrows():
-            estudante  = row['Estudante']
-            turma      = row['Turma']
-            matrícula  = str(row['Matrícula'])
-            email      = row['Educacional']
-            dn         = str(row['Data de Nascimento']).replace('/', '')
-            nova_senha = row['Nova senha']
+        for índice, linha in self.df.iloc[início:].iterrows():
+            estudante  = linha['Estudante']
+            turma      = linha['Turma']
+            matrícula  = str(linha['Matrícula'])
+            email      = linha['Educacional']
+            dn         = str(linha['Data de Nascimento']).replace('/', '')
+            nova_senha = linha['Nova senha']
             # print(f'Iniciado: {estudante}, {turma}, {matrícula}, {email}, {dn}, {nova_senha}')
-            anunciar(index, estudante, turma, 'iniciando')
+            anunciar(índice, estudante, turma, 'iniciando')
 
             self.nv.digitar_xpath('matrícula', string=matrícula)
             self.nv.digitar_xpath('nascimento', string=dn)
@@ -70,7 +75,7 @@ class GerenciarAcessos:
             self.nv.clicar('xpath', 'salvar')
             # sleep(60)
             self.nv.aguardar()
-            anunciar(index, estudante, turma, 'concluído.')
+            anunciar(índice, estudante, turma, 'concluído.')
             print('\r')
             # self.master.get(self.pm.url)
             self.master.refresh()
