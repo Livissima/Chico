@@ -30,13 +30,9 @@ class ExportaçãoCSV:
 
         colunas_dict: dict = {
 
-            # 'First Name'          : consulta.apply(
-            #     lambda row: f"{row['Estudante']} - Transferido" if row['Situação'] == '(transferido)'
-            #     else f"{row['Estudante']} - {row['Turma']}", axis=1
-            # ),
             'First Name'          : consulta.apply(
-                lambda row: f"{row['Estudante']} - Transferido" if row['Situação'] == '(transferido)'
-                else f"{row['Estudante']} - {row['Turma']}", axis=1
+                lambda linha: f"{linha['Estudante']} - Transferido" if linha['Situação'] == '(transferido)'
+                else f"{linha['Estudante']} - {linha['Turma']}", axis=1
             ),
             'Birthday'            : consulta['Data de Nascimento'],
             'Labels'              : consulta['Turma'] + ' ::: * myContacts',

@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 
 from customtkinter import CTkFrame, CTk
-from selenium.webdriver.support.expected_conditions import text_to_be_present_in_element
 
 from ..config.cabeçalhos import Cabeçalhos
 from ..config.parâmetros import parâmetros
@@ -11,7 +10,6 @@ from ...auto.bot import Bot
 
 if TYPE_CHECKING:
     from .janela import Janela
-
 
 class TelaEstatísticas(CTkFrame):
     def __init__(self, master, controller: "Janela"):
@@ -27,10 +25,10 @@ class TelaEstatísticas(CTkFrame):
         Cabeçalhos(self, 'estatísticas')
 
     def _inserir_widgets(self):
-        self.primeira_linha = 180
-        self.segunda_linha = 350
+        self.primeira_linha = 80
 
         self.__inserir_textos()
+        self.segunda_linha = self.primeira_linha + self.tx_valores.altura_somada + self.tx_valores.altura_widget + 5
         self.__inserir_botões()
         self.__inserir_inputs()
 
@@ -44,18 +42,21 @@ class TelaEstatísticas(CTkFrame):
             formato='bold',
             anchor='w',
             # compound='top',
-            x=10
+            x=10,
+            y=self.primeira_linha
         )
-        _x = 190
 
-        largura = self.controller.largura - _x - 1
+        _x = 190
+        largura = self.controller.largura - _x - 5
+
         self.tx_valores = Texto(
             self,
             textos_empilhados=['-' for chave in list(self.estatísticas().keys())],
             largura=largura,
             altura=20,
             x=_x,
-            anchor='w'
+            anchor='w',
+            y=self.primeira_linha
         )
 
         self.tx_valores = Texto(
@@ -64,10 +65,9 @@ class TelaEstatísticas(CTkFrame):
             largura=largura,
             altura=20,
             x=_x,
-            anchor='w'
+            anchor='w',
+            y=self.primeira_linha
         )
-
-
 
     def __inserir_inputs(self):
         pass
@@ -79,7 +79,7 @@ class TelaEstatísticas(CTkFrame):
             texto='Atualizar',
             fonte=('times new roman', 15),
             formato='bold',
-            y=420,
+            y=self.segunda_linha,
             largura=100
         )
 

@@ -9,24 +9,29 @@ class TratamentoContatos:
     colunas_para_dropar = [
         'Aluno', 'Data de Nascimento', 'Nome da Mãe', 'CPF do Responsável', 'Nome do Responsável', 'E-mail Institucional',
         'Ponto ID', 'Email alternativo']
+
     column_mapping = {
         'Telefone\rresidencial' : 'Telefone 1',
+        'Telefone residencial'  : 'Telefone 1',
         'Telefone\rresponsável' : 'Telefone 2',
+        'Telefone responsável'  : 'Telefone 2',
         'Telefone\rcelular'     : 'Telefone 3',
         'Telefone celular'      : 'Telefone 3',
         'E-mail Educacional'   : 'Educacional',
         'E-mail Alternativo'   : 'Email alternativo'
     }
+
     telefones = [
         'Telefone 1', 'Telefone 2', 'Telefone 3']
 
     def __init__(self, leitura: DataFrame):
 
         self.df = leitura
+        print(f'leitura:\n{leitura}')
         self.df_tratado = self.tratar(leitura)
-
-        # print(f'TratamentoContatos.df: {leitura.shape}. Colunas: {list(leitura.columns)}')
-        # print(f'TratamentoContatos.df_tratado: {self.df_tratado.shape}. Colunas: {list(self.df_tratado.columns)}\n')
+        # print(f'__TratamentoContatos.df_tratado: {self.df_tratado.shape}. Colunas: {list(self.df_tratado.columns)}\n')
+        # print(f'__TratamentoContatos.df: {leitura.shape}. Colunas: {list(leitura.columns)}')
+        # print(f'df_tratado:\n{self.df_tratado}')
 
 
     def tratar(self, leitura):
