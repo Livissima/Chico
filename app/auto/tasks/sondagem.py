@@ -27,7 +27,7 @@ class Sondagem:
         self.nv = Navegação(navegador, 'sige')
         self.pp = Propriedades('sige')
         self._logon()
-        self._resumo = self._resumir()
+        self._resumo = self._resumir
         self.exportar(self._resumo)
         self.master.quit()
 
@@ -91,24 +91,41 @@ class Sondagem:
 
         return tabela_turmas
 
+    @property
     def _resumir(self) -> dict[str, int | str]:
         resumo = {}
         elemento = self._gerar_elemento_tabela()
         tabela_completa = self._obter_tabela_do_elemento(elemento)
 
-        resumo["Turmas"]               = sorted(tabela_completa["Turma"])
-        resumo["Composições"]          = list(set(tabela_completa["Composição"]))
-        resumo["Turnos"]               = list(set(tabela_completa["Turno"]))
-        resumo["Tipos"]                = list(set(tabela_completa["Tipo Turma"]))
-        resumo["Excedente autorizado"] = sum([int(valor) for valor in tabela_completa["Excedente Autorizado"]])
-        resumo["Capacidade física"]    = sum([int(valor) for valor in tabela_completa["Capacidade física"]])
-        resumo["Capacidade legal"]     = sum([int(valor) for valor in tabela_completa["Capacidade legal"]])
-        resumo["Capacidade Total"]     = resumo["Capacidade física"] + resumo["Excedente autorizado"]
-        resumo["Efetivados"]           = sum([int(valor) for valor in tabela_completa["Efetivados"]])
-        resumo["Vagas disponíveis"]    = sum([int(valor) for valor in tabela_completa["Vagas"]])
-        resumo["Vagas absolutas"]      = resumo["Capacidade Total"] - resumo["Efetivados"]
-        resumo["Balanço Físico"]       = f'{(resumo["Efetivados"] / resumo["Capacidade física"])*100:.1f} %'
-        resumo["Balanço absoluto"]     = f'{(resumo["Efetivados"] / resumo["Capacidade Total"])*100:.1f} %'
+        def obter_o_que_der(operacao, default='Erro'):
+            try:
+                resultado = operacao()
+
+                if isinstance(resultado, list) and len(resultado) == 0:
+                    return default
+
+                return resultado
+            except (KeyError, ValueError, TypeError, ZeroDivisionError):
+                return default
+
+        resumo["Composições"] = obter_o_que_der(lambda: ', '.join(list(set(tabela_completa["Composição"]))))
+        resumo["Turnos"] = obter_o_que_der(lambda: list(set(tabela_completa["Turno"])))
+        resumo["Tipos"] = obter_o_que_der(lambda: list(set(tabela_completa["Tipo Turma"])))
+        resumo["Excedente autorizado"] = obter_o_que_der(lambda: sum([int(valor) for valor in tabela_completa["Excedente Autorizado"]]))
+        resumo["Excedente ocupado"] = obter_o_que_der(lambda: sum([valor for valor in map(int, tabela_completa["Vagas"]) if valor < 0]) * -1)
+        resumo["Capacidade física"] = obter_o_que_der(lambda: sum([int(valor) for valor in tabela_completa["Capacidade física"]]))
+        resumo["Capacidade legal"] = obter_o_que_der(lambda: sum([int(valor) for valor in tabela_completa["Capacidade legal"]]))
+
+        resumo["Capacidade Total"] = obter_o_que_der(lambda: resumo["Capacidade física"] + resumo["Excedente autorizado"])
+        resumo["Efetivados"] = obter_o_que_der(lambda: sum([int(valor) for valor in tabela_completa["Efetivados"]]))
+        resumo["Vagas disponíveis"] = obter_o_que_der(lambda: resumo["Capacidade legal"] - resumo["Efetivados"])
+        resumo["Vagas absolutas"] = obter_o_que_der(lambda: resumo["Capacidade Total"] - resumo["Efetivados"])
+
+        resumo["Balanço Físico"] = obter_o_que_der(lambda: f'{(resumo["Efetivados"] / resumo["Capacidade física"]) * 100:.1f} %' if resumo["Capacidade física"] != 0 else "0.0 %")
+        resumo["Balanço absoluto"] = obter_o_que_der(lambda: f'{(resumo["Efetivados"] / resumo["Capacidade Total"]) * 100:.1f} %' if resumo["Capacidade Total"] != 0 else "0.0 %")
+
+        resumo["Turmas Ativas"] = obter_o_que_der(lambda: ', '.join(sorted(tabela_completa["Turma"])))
+        resumo["Turmas"] = obter_o_que_der(lambda: sorted(tabela_completa["Turma"]))
 
         return resumo
 
