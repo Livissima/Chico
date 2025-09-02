@@ -1,3 +1,5 @@
+import json
+import os.path
 from typing import Literal
 
 from selenium.webdriver import Chrome
@@ -12,7 +14,11 @@ from app.ui.config.parâmetros import parâmetros
 
 
 class Navegação:
-    def __init__(self, master: Chrome, site: str):
+    def __init__(
+            self,
+            master: Chrome,
+            site: str
+    ):
         self._master = master
         self._pp = Propriedades(site)
         self._ue = Escola()
@@ -56,8 +62,6 @@ class Navegação:
 
     def caminhar(self, destino: str):
         # uma recursão seria melhor
-        # if destino not in ['fichas', 'contatos', 'situações', 'gêneros']:
-        #     raise KeyError(f"Tipo inválido chamado no método de ir para menu: '{destino}'")
 
         print(f'    Caminhando para {destino}')
         destinos = self._pp.caminhos
@@ -117,7 +121,125 @@ class Navegação:
             else:
                 raise f"Erro: {e}\nMétodo: `obter_valor`\nxpath: {xpath}"
 
+    def obter_tabelas(self, nome_arquivo, pasta_destino):
 
+        # elemento: tuple[str, str] = (By.CLASS_NAME, 'tabela')
+        elemento: tuple[str, str] = (By.CSS_SELECTOR, 'table.tabela')
+
+        try:
+            WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
+            WebDriverWait(**self._args_wait).until(visibility_of_element_located(elemento))
+
+            tabelas = self._master.find_elements(*elemento)
+
+            print(f'Localizadas {len(tabelas)} tabelas na página.')
+
+            dados_combinados = []
+            cabeçalhos = None
+
+            for índice, tabela in enumerate(tabelas):
+                print(f'Tratando tabela {índice+1}...')
+
+                if cabeçalhos is None:
+                    cabeçalhos = self.extrair_cabeçalhos(tabela)
+                    if not cabeçalhos:
+                        print(f'Não foi possível extrair cabeçalhos')
+                        continue
+
+                dados_tabela = self.extrair_dados_tabela(tabela, cabeçalhos)
+                dados_combinados.extend(dados_tabela)
+                print(f'{len(dados_combinados)} linhas extraídas')
+
+            if dados_combinados:
+                path_json = os.path.join(pasta_destino, f'{nome_arquivo}.json')
+                with open(path_json, 'w', encoding='utf-8') as arquivo:
+                    json.dump(dados_combinados, arquivo, ensure_ascii=False, indent=2)
+                print(f'Total de {len(dados_combinados)} linhas salvas em {path_json}')
+                return True
+            else:
+                print('nenhum dado extraído')
+                return False
+        except ValueError as e:
+            print(f'Erro ao extrair tabelas: {e}')
+            return False
+
+    @staticmethod
+    def extrair_cabeçalhos(tabela):
+
+        try:
+            cabeçalhos = []
+
+            try:
+                thead = tabela.find_element(By.CSS_SELECTOR, 'thead')
+                ths = thead.find_elements(By.CSS_SELECTOR, 'th')
+                cabeçalhos = [th.text.strip() for th in ths if th.text.strip()]
+            except:
+                pass
+
+            if not cabeçalhos:
+                try:
+                    primeira_linha = tabela.find_element(By.CSS_SELECTOR, 'tbody tr')
+                    tds = primeira_linha.find_elements(By.CSS_SELECTOR, 'td')
+                    cabeçalhos = [td.text.strip() for td in tds if td.text.strip()]
+                except:
+                    pass
+
+            if not cabeçalhos:
+                cabecalhos = [
+                    "Matrícula", "Aluno", "Data de Nascimento", "Nome da Mãe",
+                    "CPF do Responsável", "Nome do Responsável", "Telefone residencial",
+                    "Telefone responsável", "Telefone celular", "E-mail Alternativo",
+                    "E-mail Institucional", "E-mail Educacional", "Ponto ID"
+                ]
+
+
+            return cabeçalhos
+        except Exception as e:
+            print(f'Erro ao extrair cabeçalhos: {e}')
+
+    @staticmethod
+    def extrair_dados_tabela(tabela, cabeçalhos):
+        dados = []
+
+        try:
+            linhas = tabela.find_elements(By.CSS_SELECTOR, 'tbody tr')
+
+            for linha in linhas:
+                try:
+                    ths = linha.find_elements(By.CSS_SELECTOR, 'th')
+                    if ths:
+                        continue
+
+                    texto_linha = linha.text.lower()
+                    texto_cabeçalhos = ' '.join(cabeçalhos).lower()
+
+                    correspondências = sum(1 for cabeçalho in cabeçalhos if cabeçalho.lower() in texto_linha)
+                    if correspondências > 3:
+                        continue
+                except:
+                    pass
+
+                células = linha.find_elements(By.CSS_SELECTOR, 'td')
+                if not células:
+                    continue
+
+                linha_dados = {}
+
+                for índice, célula in enumerate(células):
+                    if índice < len(cabeçalhos):
+                        nome_coluna = cabeçalhos[índice]
+                        linha_dados[nome_coluna] = célula.text.strip()
+
+                    else:
+                        linha_dados[f'Coluna_extra_{índice}'] = célula.text.strip()
+
+                if any(linha_dados.values()):
+                    dados.append(linha_dados)
+
+        except Exception as e:
+            print(f'Erro ao extrair dados da tabela: {e}')
+
+        return dados
 
     def aguardar(self):
         elemento = (By.TAG_NAME, 'body')
@@ -173,5 +295,5 @@ class Navegação:
         if texto:
             selecionar.select_by_visible_text(texto)
 
-    def __getattr__(self, item):
-        return getattr(self._master, item)
+    # def __getattr__(self, item):
+    #     return getattr(self._master, item)
