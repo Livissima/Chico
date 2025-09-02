@@ -1,6 +1,7 @@
 import os.path
 import shutil
 import time
+from os import PathLike
 from typing import Callable
 from selenium.webdriver import Chrome
 import tempfile
@@ -9,6 +10,8 @@ import subprocess
 from app.auto.data.sites.propriedades import Propriedades
 from app.auto.functions.impressão import Impressão
 from app.auto.functions.navegação import Navegação
+
+
 
 class Downloads:
 
@@ -20,12 +23,13 @@ class Downloads:
     ):
         print(f'class Downloads instanciada.')
         self.master = navegador
-        self.destino_comum = destino
+        self.destino = destino
 
         self.nv = Navegação(navegador, 'sige')
         self.pp = Propriedades('sige')
 
         self.logon()
+
         self.baixar_alvos(*alvos)
         self.master.quit()
 
@@ -55,7 +59,9 @@ class Downloads:
             início_sessão = time.time()
             sessão = str(função.__name__.split('_')[1]).title()
             print(f'Iniciando Downloads {sessão}.')
+
             função()
+
             fim_sessão = time.time()
             print(f'Sessão {sessão} concluída em {fim_sessão - início_sessão:.3f} segundos')
 
@@ -67,42 +73,44 @@ class Downloads:
         for série, turma in self.nv.iterar_turmas():
             self.nv.clicar('xpath', 'misc', 'marcar todos')
             self.nv.clicar('id', 'gerar')
+            self._imprimir('fichas', turma)
 
-            self.printar_e_voltar('fichas', turma)
+            self.nv.clicar('css', 'voltar')
+
 
     def baixar_contatos(self):
         self.nv.caminhar('contatos')
         for série, turma in self.nv.iterar_turmas():
-            self.nv.clicar('id', 'gerar')
 
-            self.printar_e_voltar('contatos', turma)
+            self.gerar_obter_sair('contatos', turma)
+
 
     def baixar_situações(self):
         self.nv.caminhar('situações')
         for série, turma in self.nv.iterar_turmas():
-            self.nv.clicar('id', 'gerar')
 
-            self.printar_e_voltar('situações', turma)
+            self.gerar_obter_sair('situações', turma)
 
     def baixar_gêneros(self):
         self.nv.caminhar('gêneros')
         for série, turma in self.nv.iterar_turmas():
+
             self.nv.digitar_xpath('misc', 'input data', string=self.pp.hoje)
-            self.nv.clicar('id', 'gerar')
+            self.gerar_obter_sair('gêneros', turma)
 
-            self.printar_e_voltar('gêneros', turma)
 
-    def printar_e_voltar(self, tipo, turma):
-        self._imprimir(tipo, turma)
+    def gerar_obter_sair(self, tipo, turma):
+        self.nv.clicar('id', 'gerar')
+        self.nv.obter_tabelas(turma, self._map_pastas_por_tipo[str(tipo)])
         self.nv.clicar('css', 'voltar')
 
     @property
-    def _map_pastas_por_tipo(self):
+    def _map_pastas_por_tipo(self) -> dict [str, str]:
         return {
-            'fichas' : os.path.join(self.destino_comum, 'Fichas'),
-            'contatos' : os.path.join(self.destino_comum, 'Contatos'),
-            'situações' : os.path.join(self.destino_comum, 'Situações'),
-            'gêneros' : os.path.join(self.destino_comum, 'Gêneros')
+            'fichas'    : os.path.join(self.destino, 'fonte', 'Fichas'),
+            'contatos'  : os.path.join(self.destino, 'fonte', 'Contatos'),
+            'situações' : os.path.join(self.destino, 'fonte', 'Situações'),
+            'gêneros'   : os.path.join(self.destino, 'fonte', 'Gêneros')
         }
 
 

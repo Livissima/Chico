@@ -33,7 +33,7 @@ class TelaBotSige(CTkFrame):
         alvos = self.ck_alvos.valor()
         alvos = [chave.lower() for chave, valor in alvos.items() if valor]
         return {
-            'destino' : os.path.join(parâmetros.novo_diretório, 'fonte'),
+            'destino' : parâmetros.novo_diretório,
             'alvos' : alvos
         }
 
