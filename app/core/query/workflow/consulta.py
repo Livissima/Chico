@@ -35,7 +35,7 @@ class Consulta:
 
     def _ler(self) -> dict[str, Leitura]:
         return {
-            tipo: Leitura(path_pdfs=path, tipo_de_relatório=tipo)
+            tipo: Leitura(_path=path, tipo_de_relatório=tipo)
             for tipo, path in self.paths.items()
         }
 

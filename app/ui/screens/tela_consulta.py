@@ -33,9 +33,9 @@ class TelaConsulta(CTkFrame):
         Cabeçalhos(self, 'consulta')
 
     def _inserir_widgets(self):
+        self.__inserir_botões()
         self.__inserir_textos()
         self.__iserir_inputs()
-        self.__inserir_botões()
 
     def __inserir_textos(self):
 
@@ -76,7 +76,7 @@ class TelaConsulta(CTkFrame):
 
         self.botão_consultar = Botão(
             self,
-            função=self.consultar,
+            função=lambda: self.consultar(),
             texto='CONSULTAR',
             fonte=('times new roman', 20),
             formato='bold',
@@ -120,8 +120,8 @@ class TelaConsulta(CTkFrame):
         diretório_base = parâmetros.novo_diretório
         fonte = str(os.path.join(diretório_base, 'fonte'))
 
+        self._tx_feedback.att('Consultando')
         try:
-            self._tx_feedback.att('Consultando')
             consulta = Consulta(diretório_fonte=fonte)
 
             self._tx_feedback.att('Exportando')

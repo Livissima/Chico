@@ -4,14 +4,14 @@ from app.core.query.workflow.formatação import Formatação
 
 class TratamentoSituações:
 
-    colunas_drop: list[str] = ['Ord.', 'Aluno', 'Data\rNascimento', 'Data\rMatrícula']
+    colunas_drop: list[str] = ['Ord.', 'Aluno', 'Data Nascimento', 'Data Matrícula']
 
     def __init__(self, leitura: DataFrame):
         self.df = leitura
         self.df_tratado = self.tratar(leitura)
 
-        # print(f'TratamentoSituações.df: {leitura.shape}. Colunas: {list(leitura.columns)}')   ### DEBUG  ###
-        # print(f'TratamentoSituações.df_tratado: {self.df_tratado.shape}. Colunas: {list(self.df_tratado.columns)}\n')
+        print(f'TratamentoSituações.df: {leitura.shape}. Colunas: {list(leitura.columns)}')   ### DEBUG  ###
+        print(f'TratamentoSituações.df_tratado: {self.df_tratado.shape}. Colunas: {list(self.df_tratado.columns)}\n')
 
     def tratar(self, leitura):
         df_base = self._definir_df_base(leitura)
