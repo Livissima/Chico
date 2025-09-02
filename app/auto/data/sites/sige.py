@@ -7,7 +7,8 @@ class Sige :
     @property
     def credenciais(self) :
         return {
-            'id' : ID_SIGE, 'senha' : SENHA_SIGE
+            'id' : ID_SIGE,
+            'senha' : SENHA_SIGE
         }
 
     @property
@@ -40,15 +41,19 @@ class Sige :
                 'turno' : '/html/body/div[8]/form/table[1]/tbody/tr[3]/td[2]/select',
                 'input data' : '/html/body/div[8]/form/table/tbody/tr[6]/td[2]/input'
             },
+            'tabelas' : {
+                '' : ''
+            },
             'resumo' : {
                 'quantitativo' : {
-                    'total geral' : '/html/body/div[8]/form/table/tbody/tr[2]/td[2]/input[3]',
-                    'input data' : '/html/body/div[8]/form/table/tbody/tr[4]/td[2]/input',
-                    'total normal' : '/html/body/table[3]/tbody/tr[8]/td[6]/strong'},
-
+                    'total geral'  : '/html/body/div[8]/form/table/tbody/tr[2]/td[2]/input[3]',
+                    'input data'   : '/html/body/div[8]/form/table/tbody/tr[4]/td[2]/input',
+                    'total normal' : '/html/body/table[3]/tbody/tr[8]/td[6]/strong'
+                },
                 'turmas' : {
                     'ativas' : '/html/body/div[8]/form/table/tbody/tr/td/table/tbody/tr[6]/td[2]/input[1]',
-                    'input data' : '/html/body/div[8]/form/table/tbody/tr/td/table/tbody/tr[7]/td[2]/input'}
+                    'input data' : '/html/body/div[8]/form/table/tbody/tr/td/table/tbody/tr[7]/td[2]/input'
+                }
             },
             'lápis' : {
                 'alunos' : '/html/body/div[7]/ul/li[1]/h4/a',
@@ -102,10 +107,13 @@ class Sige :
 
             'situações' : [docs, (*prefixo, '_xpath'), (*prefixo, 'alunos', '_xpath'),
                            (*prefixo, 'alunos', 'situação')],
+
             'gêneros' : [docs, (*prefixo, '_xpath'), (*prefixo, 'acomp. pedagógico', '_xpath'),
                          (*prefixo, 'acomp. pedagógico', 'alunos por idade')],
+
             'quantitativo' : [docs, (*prefixo, '_xpath'), (*prefixo, 'alunos', '_xpath'),
                               (*prefixo, 'alunos', 'quantitativo')],
+
             'turmas' : [docs, (*prefixo, '_xpath'), (*prefixo, 'dados cadastrais', '_xpath'),
                         (*prefixo, 'dados cadastrais', 'turmas')]
         }
