@@ -24,11 +24,16 @@ class TratamentoContatos:
     telefones = [
         'Telefone 1', 'Telefone 2', 'Telefone 3']
 
-    def __init__(self, leitura: DataFrame):
+    def __init__(self,
+                 leitura: DataFrame
+                 ):
 
         self.df = leitura
-        print(f'leitura:\n{leitura}')
+
+        # print(f'Leitura:\n{leitura}')
+
         self.df_tratado = self.tratar(leitura)
+
         # print(f'__TratamentoContatos.df_tratado: {self.df_tratado.shape}. Colunas: {list(self.df_tratado.columns)}\n')
         # print(f'__TratamentoContatos.df: {leitura.shape}. Colunas: {list(leitura.columns)}')
         # print(f'df_tratado:\n{self.df_tratado}')
@@ -47,9 +52,11 @@ class TratamentoContatos:
 
 
     def _definir_df_base(self, leitura):
-        df_base = Formatação.renomear_colunas(leitura, self.column_mapping)
+        df_base: DataFrame = Formatação.renomear_colunas(leitura, self.column_mapping)
         df_base = Formatação.remover_quebras_de_linhas(df_base)
         df_base = df_base.loc[:, ~df_base.columns.duplicated()]
+        df_base = df_base.drop_duplicates()
+        df_base = df_base[1:]
         # df_base = self.fm.renomear_colunas(df_integrado=df_base, dicionário=self.column_mapping)
         df_base = df_base.drop(columns=self.colunas_para_dropar)
         return df_base
