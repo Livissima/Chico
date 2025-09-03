@@ -39,26 +39,26 @@ class TelaConsulta(CTkFrame):
 
     def __inserir_textos(self):
 
-        self.tx_intro = Texto(
-            self,
-            texto=self._obter_situação()[0],
-            fonte=('arial', 15),
-            formato='bold',
-            cor=self._obter_situação()[1],
-            x=0+5,
-            y=150,
-            altura=100,
-            largura=self.controller.largura
-        )
+        # self.tx_intro = Texto(
+        #     self,
+        #     texto=self._obter_situação()[0],
+        #     fonte=('arial', 15),
+        #     formato='bold',
+        #     cor=self._obter_situação()[1],
+        #     x=0+5,
+        #     y=200,
+        #     altura=100,
+        #     largura=self.controller.largura
+        # )
 
         self._tx_feedback = Texto(
             self,
-            texto='',
+            texto=self._obter_situação()[0],
             fonte=('times new roman', 25),
-            x=0,
+            x='centro',
             y=370,
             altura=100,
-            largura=self.controller.largura,
+            largura=self.controller.largura-5,
         )
 
     def __inserir_botões(self):
@@ -159,8 +159,8 @@ class TelaConsulta(CTkFrame):
 
     def _pesquisar_diretório(self):
         PesquisaDiretório(self, 'Selecione o novo diretório', self._in_diretório_base)
-        self.tx_intro.att(self._obter_situação()[0], self._obter_situação()[1])
+        self._tx_feedback.att(self._obter_situação()[0], self._obter_situação()[1])
 
     def _desfazer(self):
         Desfazimento(self).desfazer()
-        self.tx_intro.att(self._obter_situação()[0], self._obter_situação()[1])
+        self._tx_feedback.att(self._obter_situação()[0], self._obter_situação()[1])
