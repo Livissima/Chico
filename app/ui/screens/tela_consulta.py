@@ -152,7 +152,7 @@ class TelaConsulta(CTkFrame):
             return (f'A consulta será realizada a partir do diretório:\n'
                     f'{diretório_display}'), 'white'
         else:
-            #todo: melhorar essa mensagem
+            #todo: rever a condição para considerar a existência dos jsons correspondentes, não do diretório
             return (f'Diretório não encontrado neste computador.\n'
                     f'{diretório_display}\n'
                     f'Você já executou o Bot de Downloads?'), 'orange'
