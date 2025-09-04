@@ -56,7 +56,7 @@ class TelaConsulta(CTkFrame):
             texto=self._obter_situação()[0],
             fonte=('times new roman', 25),
             x='centro',
-            y=370,
+            y=395,
             altura=100,
             largura=self.controller.largura-5,
         )

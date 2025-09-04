@@ -68,7 +68,7 @@ class TelaInicial(CTkFrame):
         )
 
     def __inserir_inputs(self):
-
+        #todo: Bloquear click
         self._in_diretório_base = Input(
             self,
             texto=parâmetros.novo_diretório,

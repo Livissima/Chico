@@ -3,7 +3,7 @@ import os.path
 from customtkinter import CTkFrame, CTk
 from app.auto.bot import Bot
 from app.ui.config.parâmetros import parâmetros
-from app.ui.widgets import Botão, CheckBox
+from app.ui.widgets import Botão, CheckBox, Texto
 from typing import TYPE_CHECKING
 
 from app.ui.config.cabeçalhos import Cabeçalhos
@@ -30,7 +30,15 @@ class TelaBotCredenciais(CTkFrame):
         self.__inserir_checkboxes()
 
     def __inserir_textos(self):
-        pass
+        self._tx_feedback = Texto(
+            self,
+            texto='',
+            fonte=('arial', 20),
+            y=400-5,
+            altura=100,
+            largura=self.controller.largura-10,
+        )
+
 
     def __inserir_inputs(self):
         pass
@@ -49,7 +57,7 @@ class TelaBotCredenciais(CTkFrame):
             x=10,
             y=10,
         )
-
+        y = 350
         self.bt_netescola = Botão(
             # todo: o feedback no console está inacurado.
             self,
@@ -62,7 +70,7 @@ class TelaBotCredenciais(CTkFrame):
             texto='Netescola',
             largura=100,
             x=150,
-            y=400
+            y=y
         )
 
         self.bt_google = Botão(
@@ -71,7 +79,7 @@ class TelaBotCredenciais(CTkFrame):
             texto='Google',
             largura=100,
             x=350,
-            y=400
+            y=y
         )
 
     def __inserir_checkboxes(self):
