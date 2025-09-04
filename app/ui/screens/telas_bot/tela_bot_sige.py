@@ -30,7 +30,7 @@ class TelaBotSige(CTkFrame):
 
     @property
     def _kwargs(self):
-        alvos = self.ck_alvos.valor()
+        alvos = self._ck_alvos.valor()
         alvos = [chave.lower() for chave, valor in alvos.items() if valor]
         return {
             'destino' : parâmetros.novo_diretório,
@@ -42,20 +42,20 @@ class TelaBotSige(CTkFrame):
 
     def _inserir_widgets(self):
         self.__inserir_checkboxes()
-        # self.__inserir_textos()
+        self.__inserir_textos()
         self.__inserir_inputs()
         self.__inserir_botões()
         # self.__inserir_dropdowns()
 
     def __inserir_textos(self):
-        self._tx_intro = Texto(
-            self,
-            texto='Diretório selecionado:',
-            fonte=('arial', 15),
-            formato='bold',
-            y=200,
-            largura=self.controller.largura-5,
-        )
+        # self._tx_intro = Texto(
+        #     self,
+        #     texto='Diretório selecionado:',
+        #     fonte=('arial', 15),
+        #     formato='bold',
+        #     y=200,
+        #     largura=self.controller.largura-5,
+        # )
 
         self._tx_feedback = Texto(
             self,
@@ -110,11 +110,13 @@ class TelaBotSige(CTkFrame):
             fonte=('times new roman', 20),
             formato='bold',
             x='centro',
-            y=300,
+            y=350,
             largura=90,
             função=lambda: self.iniciar_tarefa(),
             condição=len(parâmetros.turmas_disponíveis) > 0
         )
+
+
         self._bt_desfazer = Botão(
             self,
             função=lambda: self._desfazer(),
@@ -138,13 +140,14 @@ class TelaBotSige(CTkFrame):
         )
 
     def __inserir_checkboxes(self):
-        self.ck_alvos = CheckBox(
+        self._ck_alvos = CheckBox(
             self,
             opções=['Fichas', 'Contatos', 'Situações', 'Gêneros'],
+            valor_exclusivo='Fotos',
             altura=30,
-            largura=100,
-            x='centro',
-            y=200
+            largura=80,
+            x=0,
+            y=200, espaçamento=5
         )
 
         self._inserir_checkbox_turmas()
@@ -173,13 +176,25 @@ class TelaBotSige(CTkFrame):
             título_janela='Selecione a pasta onde serão armazenados os relatórios',
             widget_input=self._in_diretório_base
         )
-        self.verificar_resumo()
+        self._verificar_estatística()
 
     def iniciar_tarefa(self):
         self.salvar_valores_checkboxes()
-        Bot(tarefa='downloads', destino=self._kwargs['destino'], alvos=self._kwargs['alvos'])
 
-    def verificar_resumo(self):
+        if self._ck_alvos.valores_true == []:
+            self._tx_feedback.att('Selecione ao menos um conteúdo alvo.')
+            print(f'selecione ao menos um conteúdo alvo')
+
+        if any(alvo in self._ck_alvos.valores_true for alvo in ['Fichas', 'Contatos', 'Situações', 'Gêneros']):
+            print(f'____Downloads: {self._ck_alvos.valores_true}')
+            Bot(tarefa='downloads', destino=self._kwargs['destino'], alvos=self._kwargs['alvos'])
+
+        if self._ck_alvos.valores_true == ['Fotos']:
+            print(f'____Fotos')
+            Bot(tarefa='fotos', turmas=parâmetros.turmas_selecionadas)
+
+
+    def _verificar_estatística(self):
         self.bt_sondagem_emergencial.atualizar_visibilidade(len(parâmetros.turmas_disponíveis) == 0)
         if len(parâmetros.turmas_disponíveis) == 0:
             self._bt_iniciar.mudar_cor('grey')
@@ -191,14 +206,16 @@ class TelaBotSige(CTkFrame):
         self._bt_desfazer.atualizar_visibilidade(
             parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO
         )
-        self.verificar_resumo()
+        self._verificar_estatística()
 
     def sondar(self):
         Bot(tarefa='sondagem', path=parâmetros.novo_diretório)
-        self.verificar_resumo()
+        self._verificar_estatística()
 
     def salvar_valores_checkboxes(self):
         valores = self._ck_turmas.valor()
         parâmetros._estado_turmas = valores
         turmas_selecionadas = [turma for turma, selecionada in valores.items() if selecionada]
         parâmetros.turmas_selecionadas = turmas_selecionadas
+
+
