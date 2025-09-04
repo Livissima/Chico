@@ -2,7 +2,7 @@ import json
 import os.path
 import time
 from typing import Literal
-
+from selenium.common import ElementClickInterceptedException, StaleElementReferenceException
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
@@ -39,14 +39,19 @@ class Navegação :
         }
 
         _BY = by_dict[by.lower()]
-
         elemento: tuple[str, str] = (_BY, tag)
 
         try :
-            WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
+            elemento_web = WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
+
+            self._master.execute_script(
+                "arguments[0].scrollIntoView({block: 'center', behavior: 'smooth'});",
+                elemento_web
+            )
+
             WebDriverWait(**self._args_wait).until(visibility_of_element_located(elemento))
             WebDriverWait(**self._args_wait).until(element_to_be_clickable(elemento)).click()
-            # print(f'Click em: {str(*chaves[-1:])}')
+
             self.aguardar()
 
         except KeyError as e :
@@ -56,6 +61,14 @@ class Navegação :
                 raise f"Erro: {e}\nMétodo: `clicar`\nitem: '{caminho_str}'\n"
             else :
                 raise f"Erro: {e}\nMétodo: `clicar`\ntag: '{tag}'"
+
+        except ElementClickInterceptedException:
+            try :
+                self._master.execute_script("arguments[0].click();", elemento_web)
+                print(f"Clique via JavaScript em: {str(*chaves[-1 :])}")
+                self.aguardar()
+            except Exception as js_error :
+                raise f"Falha no clique via JavaScript: {js_error}"
 
     def caminhar(self, destino: str) :
         # uma recursão seria melhor
@@ -331,10 +344,23 @@ class Navegação :
 
         return dados
 
-    def aguardar(self) :
+    def aguardar(self, tempo: float | None = None) :
         elemento = (By.TAG_NAME, 'body')
         WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
         WebDriverWait(**self._args_wait).until(visibility_of_element_located(elemento))
+        if tempo:
+            time.sleep(tempo)
+
+    def aguardar_preenchimento(self, elemento: str) :
+        def _predicate(driver) :
+            try :
+                elem = driver.find_element(By.ID, elemento)
+                value = elem.get_attribute("value")
+                return value.strip() != ""
+            except StaleElementReferenceException:
+                return False
+
+        WebDriverWait(**self._args_wait).until(_predicate)
 
     def iterar_turmas(self) :
         for série in parâmetros.séries_selecionadas :
@@ -379,3 +405,4 @@ class Navegação :
             selecionar.select_by_value(valor)
         if texto :
             selecionar.select_by_visible_text(texto)
+
