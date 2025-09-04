@@ -1,6 +1,7 @@
 from customtkinter import CTkFrame
 
 from app.__metadata__ import PROJECT_NAME, PROJECT_VERSION
+from app.ui.config.parâmetros import parâmetros
 from app.ui.widgets import Texto
 
 class Cabeçalhos:
@@ -89,5 +90,5 @@ class Cabeçalhos:
         return {
             'título' : f'{PROJECT_NAME} - Estatísticas',
             'cabeçalho' : 'Estatísticas',
-            'descrição' : 'Estatísticas da UE'
+            'descrição' : parâmetros.nome_ue
         }
