@@ -9,6 +9,7 @@ class Prévias:
 
         self.resumo = self.resumir(self.path)
         self.turmas = self.resumo['Turmas']
+        self.nome_ue = self.resumo['Nome UE']
 
 
     @staticmethod

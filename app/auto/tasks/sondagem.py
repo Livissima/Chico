@@ -1,14 +1,11 @@
 import json
 import os.path
-from pathlib import Path
 from typing import Any
-from pandas import DataFrame
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
 from app.auto.data.sites.propriedades import Propriedades
-from app.auto.functions.impressão import Impressão
 from app.auto.functions.navegação import Navegação
 from app.ui.config.parâmetros import parâmetros
 
@@ -31,6 +28,7 @@ class Sondagem:
         self.exportar(self._resumo)
         self.master.quit()
 
+
         print(json.dumps(self._resumo, indent=4, ensure_ascii=False))
 
     def _logon(self):
@@ -40,6 +38,9 @@ class Sondagem:
         self.nv.digitar_xpath('misc', 'input senha', string=self.pp.credenciais['senha'])
         self.nv.clicar('xpath', 'misc', 'entrar')
         self.nv.clicar('xpath', 'misc', 'alerta')
+        self.nome_ue = self.obter_nome_ue()
+
+        # parâmetros.nome_ue = self.master.find_element(By.CSS_SELECTOR, '#topo > div.topo-logo > div > h3:nth-child(2)').text.split(" - ")[0]
 
     def _gerar_elemento_tabela(self):
 
@@ -55,6 +56,8 @@ class Sondagem:
 
     @staticmethod
     def _obter_tabela_do_elemento(elemento: WebElement) -> dict[str | Any, list[Any]]:
+
+
 
         cabeçalhos = ['Composição', 'Série', 'Turno', 'Código', 'Turma', 'Horário', 'Funcionamento', 'Sala',
                       'Tipo Turma', 'Tipo Atendimento', 'Local Diferenciado', 'Data Criação', 'Situação',
@@ -108,6 +111,7 @@ class Sondagem:
             except (KeyError, ValueError, TypeError, ZeroDivisionError):
                 return default
 
+        resumo["Nome UE"] = obter_o_que_der(self.nome_ue)
         resumo["Composições"] = obter_o_que_der(lambda: ', '.join(list(set(tabela_completa["Composição"]))))
         resumo["Turnos"] = obter_o_que_der(lambda: list(set(tabela_completa["Turno"])))
         resumo["Tipos"] = obter_o_que_der(lambda: list(set(tabela_completa["Tipo Turma"])))
@@ -135,3 +139,7 @@ class Sondagem:
         with open(path, 'w', encoding='utf-8') as arquivo:
             json.dump(resumo, arquivo, ensure_ascii=False, indent=2)
         return arquivo
+
+    def obter_nome_ue(self) -> str:
+        nome_ue = self.master.find_element(By.CSS_SELECTOR, '#topo > div.topo-logo > div > h3:nth-child(2)').text.split(" - ")[0]
+        return nome_ue

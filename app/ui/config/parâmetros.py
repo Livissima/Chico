@@ -5,10 +5,12 @@ from app.ui.utils.prévias import Prévias
 
 class Parâmetros:
     def __init__(self):
+        self.nome_ue = ''
         self._séries_selecionadas = None
         self._turmas_selecionadas_por_série = None
         self._estado_turmas = {}
         self.novo_diretório = DIRETÓRIO_BASE_PADRÃO
+
 
         self.turmas_disponíveis = Prévias(self.novo_diretório).turmas
         self.séries_disponíveis = self.obter_séries(self.turmas_disponíveis)
