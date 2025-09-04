@@ -1,5 +1,6 @@
 from typing import Literal
 from app.auto.functions.normalizar import remover_acentos, normalizar_dicionário
+from app.auto.tasks import ScrapingSige
 from app.auto.tasks.downloads import Downloads
 from app.auto.tasks.gerenciaracessos import GerenciarAcessos
 from app.auto.tasks.presenciamento import Presenciamento
@@ -12,7 +13,7 @@ from app.auto.tasks.sondagem import Sondagem
 class Bot:
     def __init__(
             self,
-            tarefa: Literal['downloads', 'siap', 'gerenciar', 'sondagem'],
+            tarefa: Literal['downloads', 'siap', 'gerenciar', 'sondagem', 'fotos'],
             kwargs_tarefa: dict | None = None,
             **kwargs
     ):
@@ -38,10 +39,17 @@ class Bot:
         #todo: Botar esses ifs em dicionário
 
         tarefa = self._tarefa
-        tarefas_válidas = {'downloads', 'siap', 'gerenciar', 'sondagem'}
+        tarefas_válidas = {'downloads', 'siap', 'gerenciar', 'sondagem', 'fotos'}
 
         if tarefa not in tarefas_válidas:
             raise KeyError(f'Tarefa inválida para o navegador: {tarefa}')
+
+        if tarefa == 'fotos':
+            parâmetros = self._obter_parâmetros('fotos')
+            path = parâmetros.get('path')
+            turmas = parâmetros.get('turmas')
+            self.navegador = webdriver.Chrome()
+            ScrapingSige(self.navegador, turmas)
 
 
         if tarefa == 'sondagem':
@@ -49,8 +57,6 @@ class Bot:
             path = parâmetros.get('path')
             self.navegador = webdriver.Chrome()
             Sondagem(self.navegador, path)
-
-
 
         if tarefa == 'downloads':
             parâmetros = normalizar_dicionário(self._obter_parâmetros('downloads'))

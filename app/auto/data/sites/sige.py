@@ -41,8 +41,12 @@ class Sige :
                 'turno' : '/html/body/div[8]/form/table[1]/tbody/tr[3]/td[2]/select',
                 'input data' : '/html/body/div[8]/form/table/tbody/tr[6]/td[2]/input'
             },
-            'tabelas' : {
-                '' : ''
+            'ficha aluno' : {
+                'matrícula' : '/html/body/div[8]/form/table[1]/tbody/tr[2]/td/table/tbody/tr[2]/td[2]/input[1]',
+                'click fora' : '/html/body/div[8]/form/table[1]/tbody/tr[2]/td/table/tbody/tr[2]/td[2]',
+                'foto' : '/html/body/div[8]/form/table[1]/tbody/tr[2]/td/table/tbody/tr[1]/td/table/tbody/tr[1]/td/div/img',
+                'limpar' : '/html/body/div[8]/form/table[9]/tbody/tr/td/table/tbody/tr/td/input[4]'
+
             },
             'resumo' : {
                 'quantitativo' : {
@@ -115,5 +119,7 @@ class Sige :
                               (*prefixo, 'alunos', 'quantitativo')],
 
             'turmas' : [docs, (*prefixo, '_xpath'), (*prefixo, 'dados cadastrais', '_xpath'),
-                        (*prefixo, 'dados cadastrais', 'turmas')]
+                        (*prefixo, 'dados cadastrais', 'turmas')],
+
+            'ficha aluno' : [('lápis', 'alunos'),  ('alunos', 'ficha do aluno')]
         }
