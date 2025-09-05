@@ -34,7 +34,9 @@ class Input(CTkFrame):
             font=(fonte[0].title(), fonte[1], formato),
             height=altura,
             width=largura,
-
+            # state="disabled",
+            # placeholder_text_color='red',
+            # foreground_color='red'
         )
         # self.input.insert(0, texto)
         self.input.place(relx=0.5, rely=0.5, anchor='center')
