@@ -28,7 +28,7 @@ class TelaEstatísticas(CTkFrame):
         self.primeira_linha = 80
 
         self.__inserir_textos()
-        self.segunda_linha = self.primeira_linha + self.tx_valores.altura_somada + self.tx_valores.altura_widget + 5
+        self.segunda_linha = self.primeira_linha + self.tx_valores.altura_somada + self.tx_valores.altura_widget - 15
         self.__inserir_botões()
         self.__inserir_inputs()
 
@@ -77,7 +77,7 @@ class TelaEstatísticas(CTkFrame):
             self,
             função=lambda: self.sondar(),
             texto='Atualizar',
-            fonte=('times new roman', 15),
+            fonte=('times new roman', 20),
             formato='bold',
             y=self.segunda_linha,
             largura=100
