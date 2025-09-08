@@ -2,7 +2,7 @@ import os.path
 
 from customtkinter import CTkFrame, CTk
 from app.auto.bot import Bot
-from app.ui.config.parâmetros import parâmetros
+from app.config.parâmetros import parâmetros
 from app.ui.widgets import Botão, CheckBox, Texto
 from typing import TYPE_CHECKING
 

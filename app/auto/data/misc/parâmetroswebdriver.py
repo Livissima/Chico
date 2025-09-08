@@ -3,7 +3,7 @@ import os
 
 from selenium.webdriver.chrome.options import Options
 
-from app.ui.config.parâmetros import parâmetros
+from app.config.parâmetros import parâmetros
 
 
 class ParâmetrosWebdriver:

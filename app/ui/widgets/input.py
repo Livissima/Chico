@@ -2,7 +2,7 @@ from typing import Literal
 
 from customtkinter import CTkFrame, CTkEntry
 
-from app.ui.config.parâmetros import parâmetros
+from app.config.parâmetros import parâmetros
 
 
 class Input(CTkFrame):

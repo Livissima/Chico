@@ -1,15 +1,11 @@
-import concurrent.futures
 import os.path
-import threading
-from pathlib import Path
 
 from customtkinter import CTkFrame, CTk
-from platformdirs import user_documents_dir
 
 from app.auto.bot import Bot
 
 from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
-from app.ui.config.parâmetros import parâmetros
+from app.config.parâmetros import parâmetros
 from app.ui.functions.desfazimento import Desfazimento
 from app.ui.widgets import Botão, Input, CheckBox, Texto
 from typing import TYPE_CHECKING

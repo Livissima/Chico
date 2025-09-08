@@ -3,8 +3,8 @@ from typing import TYPE_CHECKING
 from customtkinter import CTkFrame, CTk
 
 from ..config.cabeçalhos import Cabeçalhos
-from ..config.parâmetros import parâmetros
-from ..utils.prévias import Prévias
+from app.config.parâmetros import parâmetros
+from app.config.prévias import Prévias
 from ..widgets import Texto, Botão
 from ...auto.bot import Bot
 
