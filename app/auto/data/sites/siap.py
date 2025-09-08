@@ -3,8 +3,6 @@ from app.config.env_config import ID_SIAP, SENHA_SIAP
 class Siap:
     url = 'https://siap.educacao.go.gov.br/'
 
-
-    #todo: Bolar uma classe de credenciais
     @property
     def credenciais(self):
         return {
@@ -14,9 +12,6 @@ class Siap:
 
     @property
     def xpaths(self) -> dict:
-        #TODO: Pensar em uma implementação para o futuro que consiga flexibilizar o sub dicionário de turmas.
-        # Mais uma vez, é preciso que uma automação faça a varredura de algum relatório de turmas.
-
         return {
             'input login' : '/html/body/form/div[3]/div/div/div/div[2]/div[2]/div[1]/div[1]/div[1]/input',
             'input senha' : '/html/body/form/div[3]/div/div/div/div[2]/div[2]/div[1]/div[1]/div[2]/div[1]/input',
@@ -28,16 +23,16 @@ class Siap:
             'menu frequência' : '/html/body/form/div[4]/div[1]/span/div/div[2]/li[7]/a',
             'salvar e próximo': '/html/body/form/div[4]/div[2]/div/p/input[1]',
             'data': '/html/body/form/div[4]/div[2]/div/div/div/div[4]/div[2]/div/div/div[1]/div',
-            'turmas' : {
-                '6A': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[1]/span',
-                '6B': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[2]/span',
-                '7A': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[3]/span',
-                '7B': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[4]/span',
-                '8A': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[5]/span',
-                '8B': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[6]/span',
-                '9A': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[7]/span',
-                '6C': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[8]/span'
-                }
+            # 'turmas' : { ## Estas referências hardcoded não são mais necessárias
+            #     '6A': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[1]/span',
+            #     '6B': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[2]/span',
+            #     '7A': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[3]/span',
+            #     '7B': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[4]/span',
+            #     '8A': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[5]/span',
+            #     '8B': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[6]/span',
+            #     '9A': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[7]/span',
+            #     '6C': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[8]/span'
+            #     }
             }
 
     @property

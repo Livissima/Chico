@@ -1,5 +1,4 @@
 from selenium.webdriver.common.by import By
-
 from app.auto.data.sites.propriedades import Propriedades
 from app.auto.functions.navegação import Navegação
 from selenium.webdriver import Chrome
@@ -27,7 +26,7 @@ class Presenciamento:
         self.nv.digitar_xpath('input senha', string=credenciais['senha'])
         self._passar_captcha()
         self.nv.clicar('xpath', 'botão login')
-        self.nv.aguardar()
+        self.nv.aguardar_página()
 
     def _passar_captcha(self):
         captcha = self.master.find_element(By.XPATH, self.pp.xpaths['captcha'])
@@ -36,18 +35,12 @@ class Presenciamento:
     def _ir_painel_frequência(self):
         self.nv.clicar('xpath', 'menu sistema')
         self.nv.clicar('xpath', 'menu frequência')
-        self.nv.aguardar()
+        self.nv.aguardar_página()
 
     def presenciar_todos(self):
-
-        turmas = list(self.pp.xpaths['turmas'].keys())
+        turmas = self.nv.obter_turmas_siap()
 
         for turma in turmas:
-            self.nv.clicar('xpath', 'turmas', turma)
-            self.nv.aguardar()
+            self.nv.clicar('css livre', turma)
+            self.nv.aguardar_página()
             self.nv.clicar('xpath', 'salvar e próximo')
-
-
-
-
-

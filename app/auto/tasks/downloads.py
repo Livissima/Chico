@@ -69,7 +69,7 @@ class Downloads:
 
     def baixar_fichas(self):
         self.nv.caminhar('fichas')
-        for série, turma in self.nv.iterar_turmas():
+        for série, turma in self.nv._iterar_turmas_sige():
             self.nv.clicar('xpath', 'misc', 'marcar todos')
             self.nv.clicar('id', 'gerar')
             self._imprimir('fichas', turma)
@@ -79,20 +79,20 @@ class Downloads:
 
     def baixar_contatos(self):
         self.nv.caminhar('contatos')
-        for série, turma in self.nv.iterar_turmas():
+        for série, turma in self.nv._iterar_turmas_sige():
 
             self.gerar_obter_sair('contatos', turma)
 
 
     def baixar_situações(self):
         self.nv.caminhar('situações')
-        for série, turma in self.nv.iterar_turmas():
+        for série, turma in self.nv._iterar_turmas_sige():
 
             self.gerar_obter_sair('situações', turma)
 
     def baixar_gêneros(self):
         self.nv.caminhar('gêneros')
-        for série, turma in self.nv.iterar_turmas():
+        for série, turma in self.nv._iterar_turmas_sige():
 
             self.nv.digitar_xpath('misc', 'input data', string=self.pp.hoje)
             self.gerar_obter_sair('gêneros', turma)
