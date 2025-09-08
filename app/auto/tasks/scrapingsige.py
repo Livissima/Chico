@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 
 from app.auto.data.sites.propriedades import Propriedades
 from app.auto.functions.navegação import Navegação
-from app.ui.config.parâmetros import parâmetros
+from app.config.parâmetros import parâmetros
 
 
 class ScrapingSige:
@@ -54,10 +54,10 @@ class ScrapingSige:
             estudante = linha.Estudante
 
 
-            self.nv.aguardar()
+            self.nv.aguardar_página()
             self.nv.digitar_xpath('ficha aluno', 'matrícula', string=matrícula)
             self.nv.clicar('xpath', 'ficha aluno', 'click fora')
-            self.nv.aguardar()
+            self.nv.aguardar_página()
             # input_nome = self.master.find_elements('ID', 'txtNome')
             self.nv.aguardar_preenchimento('txtNome')
 
@@ -65,11 +65,11 @@ class ScrapingSige:
                 estudante=estudante,
                 path_destino=os.path.join(self.path, f'{turma}')
             )
-            self.nv.aguardar()
+            self.nv.aguardar_página()
             # self.nv.caminhar('ficha aluno')
             # self.master.
             self.nv.clicar('xpath', 'ficha aluno', 'limpar')
-            self.nv.aguardar(1)
+            self.nv.aguardar_página(1)
             # self.master.find_element(By.XPATH, '/html/body/div[8]/form/table[1]/tbody/tr[2]/td/table/tbody/tr[2]/td[2]/input[1]').clear()
             # self.nv.clicar('xpath', 'ficha aluno', 'click fora')
             # self.master.refresh()

@@ -75,12 +75,12 @@ class GerenciarAcessos:
             self.nv.clicar('xpath', 'concordo')
             self.nv.clicar('xpath', 'salvar')
             # sleep(60)
-            self.nv.aguardar()
+            self.nv.aguardar_página()
             anunciar(índice, estudante, turma, 'concluído.')
             print('\r')
             # self.master.get(self.pm.url)
             self.master.refresh()
-            self.nv.aguardar()
+            self.nv.aguardar_página()
 
     def gerenciar_google(self):
         print('GOOGLE')

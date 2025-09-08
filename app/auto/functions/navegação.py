@@ -11,31 +11,36 @@ from selenium.webdriver.support.expected_conditions import presence_of_element_l
     element_to_be_clickable
 
 from app.auto.data.sites.propriedades import Propriedades
-from app.auto.data.misc.escola import Escola
-from app.ui.config.parâmetros import parâmetros
+# from app.auto.data.misc.escola import Escola
+from app.config.parâmetros import parâmetros
 
 
 class Navegação :
     def __init__(self, master: Chrome, site: str) :
-        self._master = master
+        self.master = master
         self._pp = Propriedades(site)
-        self._ue = Escola()
         self._timeout = 15
-        self._args_wait = {'driver' : self._master, 'timeout' : self._timeout}
+        self._args_wait = {'driver' : self.master, 'timeout' : self._timeout}
 
-    def clicar(self, by: Literal['xpath', 'id', 'css'], *chaves: str) :
-        by_dict_de_dicts = {
-            'xpath' : self._pp.xpaths, 'id' : self._pp.ids, 'css' : self._pp.css_selectors
-        }
+    def clicar(self, by: Literal['xpath', 'id', 'css', 'css livre', 'xpath livre', 'id livre'] = 'xpath', *chaves: str) :
+        tag = None
+        if 'livre' not in by:
+            by_dict_de_dicts = {
+                'xpath' : self._pp.xpaths, 'id' : self._pp.ids, 'css' : self._pp.css_selectors
+            }
 
-        tags = by_dict_de_dicts[by.lower()]
+            tags = by_dict_de_dicts[by.lower()]
 
-        for chave in chaves :
-            tags = tags[chave]
-        tag = tags
+            for chave in chaves :
+                tags = tags[chave]
+            tag = tags
+
+        if 'livre' in by:
+            tag = chaves[0]
 
         by_dict = {
-            'xpath' : By.XPATH, 'id' : By.ID, 'css' : By.CSS_SELECTOR
+            'xpath'       : By.XPATH, 'id'       : By.ID, 'css'       : By.CSS_SELECTOR,
+            'xpath livre' : By.XPATH, 'id livre' : By.ID, 'css livre' : By.CSS_SELECTOR
         }
 
         _BY = by_dict[by.lower()]
@@ -44,7 +49,7 @@ class Navegação :
         try :
             elemento_web = WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
 
-            self._master.execute_script(
+            self.master.execute_script(
                 "arguments[0].scrollIntoView({block: 'center', behavior: 'smooth'});",
                 elemento_web
             )
@@ -52,10 +57,10 @@ class Navegação :
             WebDriverWait(**self._args_wait).until(visibility_of_element_located(elemento))
             WebDriverWait(**self._args_wait).until(element_to_be_clickable(elemento)).click()
 
-            self.aguardar()
+            self.aguardar_página()
 
         except KeyError as e :
-            caminho = self._obter_chave_por_valor(tags, tag)
+            caminho = self.__obter_chave_por_valor(tags, tag)
             if caminho :
                 caminho_str = " > ".join(caminho)
                 raise f"Erro: {e}\nMétodo: `clicar`\nitem: '{caminho_str}'\n"
@@ -64,9 +69,9 @@ class Navegação :
 
         except ElementClickInterceptedException:
             try :
-                self._master.execute_script("arguments[0].click();", elemento_web)
+                self.master.execute_script("arguments[0].click();", elemento_web)
                 print(f"Clique via JavaScript em: {str(*chaves[-1 :])}")
-                self.aguardar()
+                self.aguardar_página()
             except Exception as js_error :
                 raise f"Falha no clique via JavaScript: {js_error}"
 
@@ -95,10 +100,10 @@ class Navegação :
             el = WebDriverWait(**self._args_wait).until(element_to_be_clickable(elemento))
             el.clear()  # limpa antes de digitar
             el.send_keys(string)
-            self.aguardar()
+            self.aguardar_página()
 
         except ValueError as e :
-            caminho = self._obter_chave_por_valor(self.xpaths, xpath)
+            caminho = self.__obter_chave_por_valor(self.xpaths, xpath)
             if caminho :
                 caminho_str = " > ".join(caminho)
                 raise f"Erro: {e}\nMétodo: `digitar_xpath`\nstring: {string}'\nitem: {caminho_str}\n"
@@ -120,16 +125,34 @@ class Navegação :
             _elemento = WebDriverWait(**self._args_wait).until(element_to_be_clickable(elemento))
             valor = _elemento.text
 
-            self.aguardar()
+            self.aguardar_página()
             return valor
 
         except ValueError as e :
-            caminho = self._obter_chave_por_valor(self.xpaths, xpath)
+            caminho = self.__obter_chave_por_valor(self.xpaths, xpath)
             if caminho :
                 caminho_str = " > ".join(caminho)
                 raise f"Erro: {e}\nMétodo: `obter_valor`\nitem: {caminho_str}\n"
             else :
                 raise f"Erro: {e}\nMétodo: `obter_valor`\nxpath: {xpath}"
+
+    def aguardar_página(self, tempo: float | None = None) :
+        elemento = (By.TAG_NAME, 'body')
+        WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
+        WebDriverWait(**self._args_wait).until(visibility_of_element_located(elemento))
+        if tempo:
+            time.sleep(tempo)
+
+    def aguardar_preenchimento(self, elemento: str) :
+        def _predicate(driver) :
+            try :
+                elem = driver.find_element(By.ID, elemento)
+                value = elem.get_attribute("value")
+                return value.strip() != ""
+            except StaleElementReferenceException:
+                return False
+
+        WebDriverWait(**self._args_wait).until(_predicate)
 
     def obter_tabelas(self, nome_arquivo, pasta_destino) :
         #todo: A classe ficou gigante com esses novos métodos, acumulando múltiplas responsdabilidades
@@ -210,7 +233,7 @@ class Navegação :
             return extrairTabelas();
             """
 
-            dados_combinados = self._master.execute_script(script)
+            dados_combinados = self.master.execute_script(script)
 
             if dados_combinados :
                 path_json = os.path.join(pasta_destino, f'{nome_arquivo}.json')
@@ -231,6 +254,14 @@ class Navegação :
             # Fallback
             return self._obter_tabelas_fallback(nome_arquivo, pasta_destino)
 
+    def obter_turmas_siap(self) -> list[str]:
+        elementos = self.master.find_elements(By.CSS_SELECTOR, '.listaTurmas.dentroPrazo')
+        lista_css = []
+        for índice, elemento in enumerate(elementos, start=2) :
+            css_elemento = f'#cphFuncionalidade_ControleFrequencia > div > div.containerTurmaTurno > div:nth-child({índice})'
+            lista_css.append(css_elemento)
+        return lista_css
+
     def _obter_tabelas_fallback(self, nome_arquivo, pasta_destino) :
         #Fallback
         elemento = (By.CSS_SELECTOR, 'table.tabela')
@@ -239,7 +270,7 @@ class Navegação :
             WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
             WebDriverWait(**self._args_wait).until(visibility_of_element_located(elemento))
 
-            tabelas = self._master.find_elements(*elemento)
+            tabelas = self.master.find_elements(*elemento)
             print(f'Localizadas {len(tabelas)} tabelas na página.')
 
             dados_combinados = []
@@ -249,12 +280,12 @@ class Navegação :
                 print(f'Tratando tabela {índice + 1}...')
 
                 if cabeçalhos is None :
-                    cabeçalhos = self.extrair_cabeçalhos(tabela)
+                    cabeçalhos = self.__extrair_cabeçalhos(tabela)
                     if not cabeçalhos :
                         print(f'Não foi possível extrair cabeçalhos')
                         continue
 
-                dados_tabela = self.extrair_dados_tabela(tabela, cabeçalhos)
+                dados_tabela = self.__extrair_dados_tabela(tabela, cabeçalhos)
                 dados_combinados.extend(dados_tabela)
                 print(f'{len(dados_combinados)} linhas extraídas')
 
@@ -271,8 +302,40 @@ class Navegação :
             print(f'Erro ao extrair tabelas (fallback): {e}')
             return False
 
+    def _iterar_turmas_sige(self) :
+        for série in parâmetros.séries_selecionadas :
+            self._selecionar_série(série)
+            turmas_correspoentes = parâmetros.turmas_selecionadas_por_série[série]
+            for turma in turmas_correspoentes :
+                self._selecionar_turma_sige(turma)
+                yield série, turma
+
+    def _selecionar_turma_sige(self, turma) :
+        self._selecionar_opção('composição', valor='199')
+        self._selecionar_opção('turno', valor='1')
+        self._selecionar_opção('turma', texto=turma)
+
+    def _selecionar_série(self, série) :
+        self._selecionar_opção('composição', valor='199')
+        self._selecionar_opção('série', texto=f'{série}º Ano')
+        self._selecionar_opção('turno', valor='1')
+
+    def _selecionar_opção(self, arg, valor=None, texto=None) :
+        id_element = self._pp.ids[arg]
+
+        elemento: tuple[str, str] = (By.ID, id_element)
+
+        selecionar_elemento = WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
+        selecionar = Select(selecionar_elemento)
+        if valor is None and texto is None or valor is not None and texto is not None :
+            raise ValueError(f"Nenhum argumento inserido para preenchimento de '{arg}'")
+        if valor :
+            selecionar.select_by_value(valor)
+        if texto :
+            selecionar.select_by_visible_text(texto)
+
     @staticmethod
-    def extrair_cabeçalhos(tabela) :
+    def __extrair_cabeçalhos(tabela) :
         try :
             cabeçalhos = []
 
@@ -293,8 +356,8 @@ class Navegação :
 
             if not cabeçalhos :
                 cabeçalhos = ["Matrícula", "Aluno", "Data de Nascimento", "Nome da Mãe", "CPF do Responsável",
-                    "Nome do Responsável", "Telefone residencial", "Telefone responsável", "Telefone celular",
-                    "E-mail Alternativo", "E-mail Institucional", "E-mail Educacional", "Ponto ID"]
+                              "Nome do Responsável", "Telefone residencial", "Telefone responsável", "Telefone celular",
+                              "E-mail Alternativo", "E-mail Institucional", "E-mail Educacional", "Ponto ID"]
 
             return cabeçalhos
         except Exception as e :
@@ -302,7 +365,7 @@ class Navegação :
             return None
 
     @staticmethod
-    def extrair_dados_tabela(tabela, cabeçalhos) :
+    def __extrair_dados_tabela(tabela, cabeçalhos) :
         dados = []
 
         try :
@@ -344,65 +407,14 @@ class Navegação :
 
         return dados
 
-    def aguardar(self, tempo: float | None = None) :
-        elemento = (By.TAG_NAME, 'body')
-        WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
-        WebDriverWait(**self._args_wait).until(visibility_of_element_located(elemento))
-        if tempo:
-            time.sleep(tempo)
-
-    def aguardar_preenchimento(self, elemento: str) :
-        def _predicate(driver) :
-            try :
-                elem = driver.find_element(By.ID, elemento)
-                value = elem.get_attribute("value")
-                return value.strip() != ""
-            except StaleElementReferenceException:
-                return False
-
-        WebDriverWait(**self._args_wait).until(_predicate)
-
-    def iterar_turmas(self) :
-        for série in parâmetros.séries_selecionadas :
-            self._selecionar_série(série)
-            turmas_correspoentes = parâmetros.turmas_selecionadas_por_série[série]
-            for turma in turmas_correspoentes :
-                self._selecionar_turma(turma)
-                yield série, turma
-
-    def _selecionar_turma(self, turma) :
-        self.__selecionar_opção('composição', valor='199')
-        self.__selecionar_opção('turno', valor='1')
-        self.__selecionar_opção('turma', texto=turma)
-
-    def _obter_chave_por_valor(self, dicionário: dict, valor_procurado: str, caminho=None) :
+    def __obter_chave_por_valor(self, dicionário: dict, valor_procurado: str, caminho=None) :
         if caminho is None :
             caminho = []
         for chave, valor in dicionário.items() :
             if isinstance(valor, dict) :
-                resultado = self._obter_chave_por_valor(valor, valor_procurado, caminho + [chave])
+                resultado = self.__obter_chave_por_valor(valor, valor_procurado, caminho + [chave])
                 if resultado :
                     return resultado
             elif valor == valor_procurado :
                 return caminho + [chave]
         return None
-
-    def _selecionar_série(self, série) :
-        self.__selecionar_opção('composição', valor='199')
-        self.__selecionar_opção('série', texto=f'{série}º Ano')
-        self.__selecionar_opção('turno', valor='1')
-
-    def __selecionar_opção(self, arg, valor=None, texto=None) :
-        id_element = self._pp.ids[arg]
-
-        elemento: tuple[str, str] = (By.ID, id_element)
-
-        selecionar_elemento = WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
-        selecionar = Select(selecionar_elemento)
-        if valor is None and texto is None or valor is not None and texto is not None :
-            raise ValueError(f"Nenhum argumento inserido para preenchimento de '{arg}'")
-        if valor :
-            selecionar.select_by_value(valor)
-        if texto :
-            selecionar.select_by_visible_text(texto)
-
