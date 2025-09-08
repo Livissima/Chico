@@ -1,6 +1,9 @@
-#todo criar um app de vdd, onde eu vou poder armazenar informações de usos anteriores
-from app.ui.screens.janela import Janela as App
+import concurrent.futures
+from app.ui.screens.janela import Janela
 
 
-App()
+with concurrent.futures.ThreadPoolExecutor() as executor:
+    thread_janela = executor.submit(Janela)
+
+
 
