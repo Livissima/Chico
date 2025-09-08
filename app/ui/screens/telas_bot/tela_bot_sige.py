@@ -1,4 +1,6 @@
+import concurrent.futures
 import os.path
+import threading
 from pathlib import Path
 
 from customtkinter import CTkFrame, CTk
@@ -29,12 +31,10 @@ class TelaBotSige(CTkFrame):
         self._inserir_widgets()
 
     @property
-    def _kwargs(self):
-        alvos = self._ck_alvos.valor()
-        alvos = [chave.lower() for chave, valor in alvos.items() if valor]
+    def _kwargs(self) -> dict:
         return {
             'destino' : parâmetros.novo_diretório,
-            'alvos' : alvos
+            'alvos' : self._ck_alvos.valores_true
         }
 
     def _configurar_layout(self):
@@ -153,7 +153,6 @@ class TelaBotSige(CTkFrame):
         self._inserir_checkbox_turmas()
 
     def _inserir_checkbox_turmas(self) :
-
         estado_turmas = {}
         for turma in parâmetros.turmas_disponíveis :
             if hasattr(parâmetros, '_estado_turmas') and turma in parâmetros._estado_turmas :
@@ -181,13 +180,19 @@ class TelaBotSige(CTkFrame):
     def iniciar_tarefa(self):
         self.salvar_valores_checkboxes()
 
-        if self._ck_alvos.valores_true == []:
+        if not self._ck_alvos.valores_true:
             self._tx_feedback.att('Selecione ao menos um conteúdo alvo.')
             print(f'selecione ao menos um conteúdo alvo')
 
         if any(alvo in self._ck_alvos.valores_true for alvo in ['Fichas', 'Contatos', 'Situações', 'Gêneros']):
-            print(f'____Downloads: {self._ck_alvos.valores_true}')
-            Bot(tarefa='downloads', destino=self._kwargs['destino'], alvos=self._kwargs['alvos'])
+            # thread_downloads = threading.Thread(
+            #     target=lambda: Bot(tarefa='downloads', destino=parâmetros.novo_diretório, alvos=self._ck_alvos.valores_true),
+            #     daemon=True
+            # )
+            # thread_downloads.start()
+            # print(f'____Downloads: {self._ck_alvos.valores_true}')
+
+            Bot(tarefa='downloads', destino=self._kwargs['destino'], alvos=self._ck_alvos.valores_true)
 
         if self._ck_alvos.valores_true == ['Fotos']:
             print(f'____Fotos')
@@ -208,9 +213,11 @@ class TelaBotSige(CTkFrame):
         )
         self._verificar_estatística()
 
+
     def sondar(self):
         Bot(tarefa='sondagem', path=parâmetros.novo_diretório)
         self._verificar_estatística()
+
 
     def salvar_valores_checkboxes(self):
         valores = self._ck_turmas.valor()

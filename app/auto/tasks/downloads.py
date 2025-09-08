@@ -19,18 +19,17 @@ class Downloads:
             self,
             navegador: Chrome,
             destino: str,
-            *alvos
+            alvos: list[str],
+            **kwargs
     ):
         print(f'class Downloads instanciada.')
         self.master = navegador
         self.destino = destino
-
         self.nv = Navegação(navegador, 'sige')
         self.pp = Propriedades('sige')
-
         self.logon()
 
-        self.baixar_alvos(*alvos)
+        self.baixar_alvos(alvos)
         self.master.quit()
 
     def logon(self):
@@ -41,7 +40,7 @@ class Downloads:
         self.nv.clicar('xpath', 'misc', 'entrar')
         self.nv.clicar('xpath', 'misc', 'alerta')
 
-    def baixar_alvos(self, *sessões):
+    def baixar_alvos(self, sessões):
         início_geral = time.time()
 
         sessões_dict = {
@@ -51,7 +50,7 @@ class Downloads:
             'gêneros'   : self.baixar_gêneros
         }
 
-        funções: list[Callable[[], None]] = [sessões_dict[sessão] for sessão in sessões if sessão in sessões_dict]
+        funções: list[Callable[[], None]] = [sessões_dict[sessão.lower()] for sessão in sessões if sessão.lower() in sessões_dict]
 
         print(f'Iniciando downloads de relatórios: {sessões}')
 

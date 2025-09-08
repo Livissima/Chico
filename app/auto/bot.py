@@ -1,3 +1,4 @@
+import concurrent.futures
 from typing import Literal
 from app.auto.functions.normalizar import remover_acentos, normalizar_dicionário
 from app.auto.tasks import ScrapingSige
@@ -25,82 +26,46 @@ class Bot:
         self._kwargs_planos = normalizar_dicionário(kwargs)
         self.navegador = None
 
-        self._executar_tarefa()
-
-        print(f'Task {tarefa} finalizada')
+        self._executar_tarefa(tarefa)
 
     def _obter_parâmetros(self, chave: str) -> dict:
-
         _chave = remover_acentos(chave)
         return self._kwargs_tarefa.get(_chave) or self._kwargs_planos
 
 
-    def _executar_tarefa(self):
-        #todo: Botar esses ifs em dicionário
+    def _executar_tarefa(self, tarefa):
+        wd_settings = ParâmetrosWebdriver().impressão
+        self.navegador = webdriver.Chrome(wd_settings)
 
-        tarefa = self._tarefa
-        tarefas_válidas = {'downloads', 'siap', 'gerenciar', 'sondagem', 'fotos'}
+        def argumentos(_tarefa):
+            parâmetros = self._obter_parâmetros(_tarefa)
+            arg_path = parâmetros.get('path')
+            arg_turmas = parâmetros.get('turmas')
+            arg_destino = parâmetros.get('destino')
+            arg_alvos = parâmetros.get('alvos')
+            arg_path_database = parâmetros.get('path_database')
+            arg_tipo = parâmetros.get('tipo')
 
-        if tarefa not in tarefas_válidas:
-            raise KeyError(f'Tarefa inválida para o navegador: {tarefa}')
+            kwargs = {
+                'navegador': self.navegador,
+                'path' : arg_path,
+                'turmas' : arg_turmas,
+                'destino' : arg_destino,
+                'alvos' : arg_alvos,
+                'path_database' : arg_path_database,
+                'tipo' : arg_tipo
+            }
+            return kwargs
 
-        if tarefa == 'fotos':
-            parâmetros = self._obter_parâmetros('fotos')
-            path = parâmetros.get('path')
-            turmas = parâmetros.get('turmas')
-            self.navegador = webdriver.Chrome()
-            ScrapingSige(self.navegador, turmas)
+        tarefas = {
+            'fotos' : lambda: ScrapingSige(**argumentos(tarefa)),
+            'siap' : lambda: Presenciamento(**argumentos(tarefa)),
+            'sondagem' : lambda: Sondagem(**argumentos(tarefa)),
+            'downloads' : lambda: Downloads(**argumentos(tarefa)),
+            'gerenciar' : lambda: GerenciarAcessos(**argumentos(tarefa)),
+        }
 
-
-        if tarefa == 'sondagem':
-            parâmetros = self._obter_parâmetros('sondagem')
-            path = parâmetros.get('path')
-            self.navegador = webdriver.Chrome()
-            Sondagem(self.navegador, path)
-
-        if tarefa == 'downloads':
-            parâmetros = normalizar_dicionário(self._obter_parâmetros('downloads'))
-
-            pasta_destino = parâmetros.get('destino')
-            alvos = parâmetros.get('alvos')
-
-            if not pasta_destino or not alvos:
-                raise ValueError('Necessário informar destino e alvos')
-
-            if isinstance(alvos, str):
-                alvos = [alvo.strip() for alvo in alvos.split(',') if alvo.strip()]
-
-            wd_settings = parâmetros.get('webdriver_settings') or ParâmetrosWebdriver().impressão
-            self.navegador = webdriver.Chrome(wd_settings)
-            Downloads(self.navegador, pasta_destino, *alvos)
-            return
-
-        if tarefa == 'siap':
-            parâmetros = normalizar_dicionário(self._obter_parâmetros('siap'))
-            wd_settings = parâmetros.get('webdriver_settings') or ParâmetrosWebdriver().impressão
-            self.navegador = webdriver.Chrome(wd_settings)
-            Presenciamento(self.navegador)
-            return
-
-        if tarefa == 'gerenciar':
-            parâmetros = normalizar_dicionário(self._obter_parâmetros('gerenciar'))
-            path_database = parâmetros.get('path_database')
-            tipo = parâmetros.get('tipo')
-            turmas = parâmetros.get('turmas')
-
-            if not path_database or not tipo:
-                raise ValueError('Necessário informar `path_database` e `tipo`')
-
-            wd_settings = parâmetros.get('webdriver_settings') or ParâmetrosWebdriver().impressão
-            self.navegador = webdriver.Chrome(wd_settings)
-            GerenciarAcessos(
-                navegador=self.navegador,
-                path_database=path_database,
-                tipo=tipo,
-                turmas=turmas
-            )
-            return
-
+        return tarefas[tarefa]()
 
 
     def __getattr__(self, item):
