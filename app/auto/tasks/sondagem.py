@@ -7,7 +7,7 @@ from selenium.webdriver.remote.webelement import WebElement
 
 from app.auto.data.sites.propriedades import Propriedades
 from app.auto.functions.navegação import Navegação
-from app.ui.config.parâmetros import parâmetros
+from app.config.parâmetros import parâmetros
 
 
 class Sondagem:
@@ -49,9 +49,9 @@ class Sondagem:
         self.nv.clicar('xpath', 'resumo', 'turmas', 'ativas')
         self.nv.digitar_xpath('resumo', 'turmas', 'input data', string=self.pp.hoje)
         self.nv.clicar('id', 'gerar')
-        self.nv.aguardar()
+        self.nv.aguardar_página()
 
-        elemento_tabela = self.nv._master.find_element(By.CSS_SELECTOR, 'body > table.tabela')
+        elemento_tabela = self.nv.master.find_element(By.CSS_SELECTOR, 'body > table.tabela')
 
         return elemento_tabela
 
@@ -110,7 +110,14 @@ class Sondagem:
             except (KeyError, ValueError, TypeError, ZeroDivisionError):
                 return default
 
+
+        chaves  = list(obter_o_que_der(lambda: tabela_completa["Turma"]))
+        valores = list(obter_o_que_der(lambda: tabela_completa["Código"]))
+        turmas = dict(zip(chaves, valores))
+
+
         resumo["Nome UE"] = obter_o_que_der(lambda: self.obter_nome_ue())
+        resumo["Códigos Turmas"] = obter_o_que_der(lambda: list(turmas.values()))
         resumo["Composições"] = obter_o_que_der(lambda: ', '.join(list(set(tabela_completa["Composição"]))))
         resumo["Turnos"] = obter_o_que_der(lambda: list(set(tabela_completa["Turno"])))
         resumo["Tipos"] = obter_o_que_der(lambda: list(set(tabela_completa["Tipo Turma"])))
@@ -128,7 +135,7 @@ class Sondagem:
         resumo["Balanço absoluto"] = obter_o_que_der(lambda: f'{(resumo["Efetivados"] / resumo["Capacidade Total"]) * 100:.1f} %' if resumo["Capacidade Total"] != 0 else "0.0 %")
 
         resumo["Turmas Ativas"] = obter_o_que_der(lambda: ', '.join(sorted(tabela_completa["Turma"])))
-        resumo["Turmas"] = obter_o_que_der(lambda: sorted(tabela_completa["Turma"]))
+        resumo["Turmas"] = obter_o_que_der(lambda: sorted(turmas.keys()))
 
         return resumo
 
