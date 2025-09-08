@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from customtkinter import CTkFrame, CTk
 
-from app.ui.config.parâmetros import parâmetros
+from app.config.parâmetros import parâmetros
 from app.ui.widgets import Texto, Botão, Input
 from app.ui.config.cabeçalhos import Cabeçalhos
 from app.ui.functions.desfazimento import Desfazimento

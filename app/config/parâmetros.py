@@ -1,18 +1,23 @@
 from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
 from collections import defaultdict
-from app.ui.utils.prévias import Prévias
+from app.config.prévias import Prévias
 
 
 class Parâmetros:
     def __init__(self):
+
         self._séries_selecionadas = None
         self._turmas_selecionadas_por_série = None
         self._estado_turmas = {}
         self.novo_diretório = DIRETÓRIO_BASE_PADRÃO
 
+        prévias = Prévias(self.novo_diretório)
 
-        self.nome_ue = Prévias(self.novo_diretório).nome_ue
-        self.turmas_disponíveis = Prévias(self.novo_diretório).turmas
+        self.__resumo = prévias.resumo
+        self.__nome_ue = prévias.nome_ue
+        self.turmas_disponíveis = prévias.turmas
+
+
         self.séries_disponíveis = self.obter_séries(self.turmas_disponíveis)
         self.turmas_disponíveis_por_série = self.gerar_turmas_por_serie(self.turmas_disponíveis)
 
@@ -22,6 +27,13 @@ class Parâmetros:
         self._turmas_selecionadas = self.turmas_disponíveis
 
 
+    @property
+    def resumo(self):
+        return self.__resumo
+
+    @property
+    def nome_ue(self):
+        return self.__nome_ue
 
     @property
     def turmas_selecionadas(self):
