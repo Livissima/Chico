@@ -1,4 +1,5 @@
 import concurrent.futures
+import threading
 from typing import Literal
 from app.auto.functions.normalizar import remover_acentos, normalizar_dicionário
 from app.auto.tasks import ScrapingSige
@@ -26,7 +27,7 @@ class Bot:
         self._kwargs_planos = normalizar_dicionário(kwargs)
         self.navegador = None
 
-        self._executar_tarefa(tarefa)
+        self.thread_bot = threading.Thread(target=lambda: self._executar_tarefa(tarefa), daemon=False).start()
 
     def _obter_parâmetros(self, chave: str) -> dict:
         _chave = remover_acentos(chave)
