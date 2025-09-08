@@ -6,7 +6,7 @@ from selenium.webdriver import Chrome
 
 class Presenciamento:
 
-    def __init__(self, navegador: Chrome):
+    def __init__(self, navegador: Chrome, **kwargs):
 
         self.master = navegador
         self.nv = Navegação(navegador, 'siap')

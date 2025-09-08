@@ -16,6 +16,7 @@ class Sondagem:
             self,
             navegador: Chrome,
             destino: str,
+            **kwargs
     ):
         print(f'class Sondagem instanciada.')
         self.master = navegador

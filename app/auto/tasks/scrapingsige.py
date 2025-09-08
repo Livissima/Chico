@@ -18,7 +18,8 @@ class ScrapingSige:
     def __init__(
             self,
             navegador: Chrome,
-            turmas: list[str]
+            turmas: list[str],
+            **kwargs
     ):
         self.master = navegador
 

@@ -16,7 +16,8 @@ class GerenciarAcessos:
             navegador: Chrome,
             path_database: str,
             tipo: Literal['netescola', 'google'],
-            turmas: list[str] = None
+            turmas: list[str] = None,
+            **kwargs
     ):
         print(f'class NetEscola instanciada.')
         self.master = navegador
