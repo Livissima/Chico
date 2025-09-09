@@ -4,7 +4,6 @@ from customtkinter import CTkFrame, CTk
 
 from ..config.cabeçalhos import Cabeçalhos
 from app.config.parâmetros import parâmetros
-from app.config.prévias import Prévias
 from ..widgets import Texto, Botão
 from ...auto.bot import Bot
 
@@ -32,7 +31,6 @@ class TelaEstatísticas(CTkFrame):
         self.__inserir_botões()
         self.__inserir_inputs()
 
-
     def __inserir_textos(self):
         self.tx_chaves = Texto(
             self,
@@ -45,7 +43,6 @@ class TelaEstatísticas(CTkFrame):
             x=10,
             y=self.primeira_linha
         )
-
         _x = 190
         largura = self.controller.largura - _x - 5
 
@@ -68,6 +65,7 @@ class TelaEstatísticas(CTkFrame):
             anchor='w',
             y=self.primeira_linha
         )
+        self._condicionar_cores()
 
     def __inserir_inputs(self):
         pass
@@ -94,12 +92,14 @@ class TelaEstatísticas(CTkFrame):
         )
 
     def sondar(self):
+        #todo: definir locks para que a tela seja atualizada apropriadamente
         Bot(tarefa='sondagem', path=parâmetros.novo_diretório),
+        self.controller.alternador.abrir('inicial')
         self.controller.alternador.abrir('estatísticas')
 
     @staticmethod
     def estatísticas():
-        resumo = Prévias(parâmetros.novo_diretório).resumo
+        resumo = parâmetros.resumo
         chaves = [
             "Composições", "Turnos", "Tipos", "Excedente autorizado", "Excedente ocupado", "Capacidade física",
             "Capacidade legal", "Capacidade Total", "Efetivados", "Vagas disponíveis", "Vagas absolutas",
@@ -107,3 +107,14 @@ class TelaEstatísticas(CTkFrame):
         ]
 
         return {f"{chave}:" : resumo.get(chave, "__ERRO__") for chave in chaves}
+
+    def _condicionar_cores(self):
+        valores = list(self.estatísticas().values())
+
+        for índice, valor in enumerate(valores):
+            if valor == '__ERRO__':
+                self.tx_valores.att(
+                    novo_texto=valor,
+                    cor='red',
+                    índice=índice
+                )
