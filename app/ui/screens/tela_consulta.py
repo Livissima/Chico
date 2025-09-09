@@ -39,27 +39,16 @@ class TelaConsulta(CTkFrame):
 
     def __inserir_textos(self):
 
-        # self.tx_intro = Texto(
-        #     self,
-        #     texto=self._obter_situação()[0],
-        #     fonte=('arial', 15),
-        #     formato='bold',
-        #     cor=self._obter_situação()[1],
-        #     x=0+5,
-        #     y=200,
-        #     altura=100,
-        #     largura=self.controller.largura
-        # )
-
         self._tx_feedback = Texto(
             self,
-            texto=self._obter_situação()[0],
+            texto=self._obter_situação()['novo_texto'],
             fonte=('times new roman', 25),
             x='centro',
             y=395,
             altura=100,
             largura=self.controller.largura-5,
         )
+        self._tx_feedback.att(**self._obter_situação())
 
     def __inserir_botões(self):
         self.bt_localizar_diretório_base = Botão(
@@ -102,7 +91,8 @@ class TelaConsulta(CTkFrame):
             condição=parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO,
             texto='↩',
             fonte=('arial', 25),
-            x=550
+            x=550,
+            y=170
         )
 
     def __iserir_inputs(self):
@@ -147,20 +137,28 @@ class TelaConsulta(CTkFrame):
         else:
             diretório_display = diretório
 
-
         if Path(diretório).exists():
-            return (f'A consulta será realizada a partir do diretório:\n'
-                    f'{diretório_display}'), 'white'
+            return {
+                'novo_texto' : f'A consulta será realizada a partir do diretório:\n{diretório_display}',
+                'fonte' : ('arial', 20),
+                'cor' : 'light green',
+                'formato' : 'bold'
+            }
+
         else:
             #todo: rever a condição para considerar a existência dos jsons correspondentes, não do diretório
-            return (f'Diretório não encontrado neste computador.\n'
-                    f'{diretório_display}\n'
-                    f'Você já executou o Bot de Downloads?'), 'orange'
+            return {
+                'novo_texto' : f'Diretório não encontrado neste computador:\n'
+                               f''f'{diretório_display}\nVocê já executou o Bot de Downloads?',
+                'cor' : 'orange',
+                'fonte' : ('arial', 18)
+            }
+
 
     def _pesquisar_diretório(self):
         PesquisaDiretório(self, 'Selecione o novo diretório', self._in_diretório_base)
-        self._tx_feedback.att(self._obter_situação()[0], self._obter_situação()[1])
+        self._tx_feedback.att(**self._obter_situação())
 
     def _desfazer(self):
         Desfazimento(self).desfazer()
-        self._tx_feedback.att(self._obter_situação()[0], self._obter_situação()[1])
+        self._tx_feedback.att(**self._obter_situação())
