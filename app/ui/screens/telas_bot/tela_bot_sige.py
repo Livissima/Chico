@@ -37,6 +37,7 @@ class TelaBotSige(CTkFrame):
         Cabeçalhos(self, 'telas_bot sige')
 
     def _inserir_widgets(self):
+
         self.__inserir_checkboxes()
         self.__inserir_textos()
         self.__inserir_inputs()
@@ -44,22 +45,26 @@ class TelaBotSige(CTkFrame):
         # self.__inserir_dropdowns()
 
     def __inserir_textos(self):
-        # self._tx_intro = Texto(
-        #     self,
-        #     texto='Diretório selecionado:',
-        #     fonte=('arial', 15),
-        #     formato='bold',
-        #     y=200,
-        #     largura=self.controller.largura-5,
-        # )
+        feed_inicial = {'texto' : '', 'fonte' : ('arial', 20)}
+
+        if not parâmetros.turmas_disponíveis:
+            feed_inicial = {
+                'texto' : 'Turmas não encontradas. Faça o download do conteúdo de todas as turmas,\n' 
+                          'ou faça uma sondagem caso queira selecionar turmas específicas.',
+                'fonte' : ('arial', 16),
+                'cor' : 'orange',
+                'formato' : 'bold'
+            }
 
         self._tx_feedback = Texto(
             self,
-            texto='',
-            fonte=('arial', 20),
+            **feed_inicial,
+            # texto=feed_inicial[0],
+            # fonte=('arial', feed_inicial[1]),
             y=400-5,
             altura=100,
             largura=self.controller.largura-10,
+
         )
 
     def __inserir_inputs(self):
