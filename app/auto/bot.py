@@ -26,8 +26,9 @@ class Bot:
         self._kwargs_tarefa = normalizar_dicionário(kwargs_tarefa)
         self._kwargs_planos = normalizar_dicionário(kwargs)
         self.navegador = None
-
-        self.thread_bot = threading.Thread(target=lambda: self._executar_tarefa(tarefa), daemon=False).start()
+        #todo: Desativado temporariamente para testes.
+        self._executar_tarefa(tarefa)
+        # self.thread_bot = threading.Thread(target=lambda: self._executar_tarefa(tarefa), daemon=False).start()
 
     def _obter_parâmetros(self, chave: str) -> dict:
         _chave = remover_acentos(chave)
