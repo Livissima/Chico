@@ -27,6 +27,8 @@ class Sondagem:
         self._logon()
         self._resumo = self._resumir
         self.exportar(self._resumo)
+        parâmetros.resumo = self._resumo
+        parâmetros.nome_ue = self._resumo['Nome UE']
         self.master.quit()
 
 

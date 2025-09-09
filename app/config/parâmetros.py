@@ -17,7 +17,6 @@ class Parâmetros:
         self.__nome_ue = prévias.nome_ue
         self.turmas_disponíveis = prévias.turmas
 
-
         self.séries_disponíveis = self.obter_séries(self.turmas_disponíveis)
         self.turmas_disponíveis_por_série = self.gerar_turmas_por_serie(self.turmas_disponíveis)
 
@@ -31,9 +30,17 @@ class Parâmetros:
     def resumo(self):
         return self.__resumo
 
+    @resumo.setter
+    def resumo(self, valor):
+        self.__resumo = valor
+
     @property
     def nome_ue(self):
         return self.__nome_ue
+
+    @nome_ue.setter
+    def nome_ue(self, valor):
+        self.__nome_ue = valor
 
     @property
     def turmas_selecionadas(self):
