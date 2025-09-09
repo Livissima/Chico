@@ -45,7 +45,7 @@ class Texto(CTkFrame):
             self.criar_texto_único(fonte, formato, cor, compound, anchor)
         if self.linhas_de_texto and not self.texto:
             self.criar_textos_empilhados(fonte, formato, cor, compound, anchor)
-            
+
         self.alocar(x, y)
 
 
@@ -122,11 +122,22 @@ class Texto(CTkFrame):
         self.place(x=x_pos, y=y_pos)
 
 
-    def att(self, novo_texto: str, cor: str = 'white', índice: int = None):
-        if len(self.widgets_de_texto) == 1:
-            self.widgets_de_texto[0].configure(text=novo_texto, text_color=cor)
-        if índice is not None and 0 <= índice < len(self.widgets_de_texto):
-            self.widgets_de_texto[índice].configure(text=novo_texto, text_color=cor)
-        for widget in self.widgets_de_texto:
-            widget.update()
+    def att(
+            self,
+            novo_texto: str,
+            fonte: tuple[str, int] = ('Arial', 16),
+            formato: Literal['bold', 'italic', 'underline', 'overstrike'] | list[Literal['bold', 'italic', 'underline', 'overstrike']]  = 'normal',
+            cor: str = 'white',
+            índice: int = None
+    ):
+
+        if not índice:
+            for widget in self.widgets_de_texto:
+                widget.configure(text=novo_texto, text_color=cor, font=(fonte[0].title(), int(fonte[1]), formato))
+
+        if isinstance(índice, int) and 0 <= índice < len(self.widgets_de_texto):
+            self.widgets_de_texto[índice].configure(text=novo_texto, text_color=cor, font=(fonte[0].title(), int(fonte[1]), formato))
+
+
+
 
