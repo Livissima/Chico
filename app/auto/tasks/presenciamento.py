@@ -39,7 +39,7 @@ class Presenciamento:
 
     def presenciar_todos(self):
         turmas = self.nv.obter_turmas_siap()
-
+        print(turmas)
         for turma in turmas:
             self.nv.clicar('css livre', turma)
             self.nv.aguardar_página()
