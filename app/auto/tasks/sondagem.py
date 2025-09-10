@@ -58,8 +58,7 @@ class Sondagem:
         return elemento_tabela
 
     @staticmethod
-    def _obter_tabela_do_elemento(elemento: WebElement) -> dict[str | Any, list[Any]]:
-
+    def _obter_tabela_do_elemento(elemento: WebElement) -> dict[str | Any, list[Any]] :
         cabeçalhos = ['Composição', 'Série', 'Turno', 'Código', 'Turma', 'Horário', 'Funcionamento', 'Sala',
                       'Tipo Turma', 'Tipo Atendimento', 'Local Diferenciado', 'Data Criação', 'Situação',
                       'Capacidade legal', 'Capacidade física', 'Efetivados', 'Não Efetivados', 'Vagas',
@@ -69,29 +68,49 @@ class Sondagem:
 
         todas_linhas = elemento.find_elements(By.TAG_NAME, 'tr')
 
-        for linha in todas_linhas :
-            celulas = linha.find_elements(By.TAG_NAME, 'td')
+        # Debug: verificar todas as linhas
+        print(f"Total de linhas encontradas: {len(todas_linhas)}")
 
-            if not celulas or linha.get_attribute('onclick') is None :
+        for i, linha in enumerate(todas_linhas) :
+            celulas = linha.find_elements(By.TAG_NAME, 'td')
+            print(f"Linha {i}: {len(celulas)} células")
+
+            # Pular linhas de cabeçalho (com menos de 19 células)
+            if len(celulas) < 19 :
+                print(f"Pulando linha {i} (cabeçalho ou linha inválida)")
                 continue
 
+            # Processar linha de dados
             linha_dados = []
             for celula in celulas :
                 texto = celula.text.strip()
                 texto = texto.replace('&nbsp;', '').replace('\u00a0', '').strip()
-                if texto :
-                    linha_dados.append(texto)
+                linha_dados.append(texto if texto else "0")  # Usar "0" para valores vazios
 
-            if len(linha_dados) >= len(cabeçalhos) :
-                for i, cabecalho in enumerate(cabeçalhos) :
-                    if i < len(linha_dados) :
-                        tabela_turmas[cabecalho].append(linha_dados[i])
+            # Adicionar os dados à tabela
+            for j, cabecalho in enumerate(cabeçalhos) :
+                if j < len(linha_dados) :
+                    # Converter valores numéricos
+                    if cabecalho in ['Capacidade legal', 'Capacidade física', 'Efetivados', 'Não Efetivados', 'Vagas',
+                                     'Excedente Autorizado'] :
+                        try :
+                            valor = int(linha_dados[j]) if linha_dados[j] else 0
+                            tabela_turmas[cabecalho].append(valor)
+                        except ValueError :
+                            tabela_turmas[cabecalho].append(0)
                     else :
-                        tabela_turmas[cabecalho].append(None)
-            elif len(linha_dados) > 0 :
-                print(f"Linha ignorada com {len(linha_dados)} colunas")
+                        tabela_turmas[cabecalho].append(linha_dados[j])
+                else :
+                    tabela_turmas[cabecalho].append(None)
 
         print(f"Extraídas {len(tabela_turmas['Código'])} turmas")
+
+        # Debug: imprimir as turmas extraídas
+        if tabela_turmas['Turma'] :
+            print("Turmas extraídas:", tabela_turmas['Turma'])
+        else :
+            print("Nenhuma turma extraída - verificando estrutura da tabela:")
+            print(elemento.get_attribute('outerHTML'))
 
         return tabela_turmas
 

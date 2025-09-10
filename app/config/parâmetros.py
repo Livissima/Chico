@@ -6,12 +6,12 @@ from app.config.prévias import Prévias
 class Parâmetros:
     def __init__(self):
 
+        self.novo_diretório = DIRETÓRIO_BASE_PADRÃO
+        prévias = Prévias(self.novo_diretório)
+
         self._séries_selecionadas = None
         self._turmas_selecionadas_por_série = None
         self._estado_turmas = {}
-        self.novo_diretório = DIRETÓRIO_BASE_PADRÃO
-
-        prévias = Prévias(self.novo_diretório)
 
         self.__resumo = prévias.resumo
         self.__nome_ue = prévias.nome_ue
@@ -65,12 +65,11 @@ class Parâmetros:
         turmas_por_serie = defaultdict(list)
 
         for turma in lista_turmas :
-            # Extrai a série (todos os dígitos no início da string)
+
             serie = ''.join(filter(str.isdigit, turma))
             if serie :
                 turmas_por_serie[serie].append(turma)
 
-        # Converte para dict normal e ordena
         return {serie : sorted(turmas) for serie, turmas in sorted(turmas_por_serie.items())}
 
     @staticmethod
