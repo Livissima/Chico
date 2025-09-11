@@ -254,6 +254,19 @@ class Navegação :
             # Fallback
             return self._obter_tabelas_fallback(nome_arquivo, pasta_destino)
 
+    def obter_fichas(self):
+        body = self.master.find_element(By.TAG_NAME, 'body')
+        body_tabelas = body.find_elements(By.TAG_NAME, 'table')
+        páginas = [pag for pag in body_tabelas if pag.get_attribute('height') == '60%']
+
+        linhas = []
+        for página in páginas:
+            página.find_elements(By.TAG_NAME, 'tr')
+            página = página.text.replace(r"\n", '')
+            linhas.append(página)
+
+        print(linhas)
+
     def obter_turmas_siap(self) -> list[str]:
         elementos = self.master.find_elements(By.CSS_SELECTOR, '.listaTurmas.dentroPrazo')
         lista_css = []
