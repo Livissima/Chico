@@ -16,11 +16,11 @@ class Presenciamento:
     def executar(self):
         self.master.get(self.pp.url)
         self.master.maximize_window()
-        self.logon()
+        self._logon()
         self._ir_painel_frequência()
-        self.presenciar_todos()
+        self._presenciar_todos()
 
-    def logon(self):
+    def _logon(self):
         credenciais = self.pp.credenciais
         self.nv.digitar_xpath('input login', string=credenciais['id'])
         self.nv.digitar_xpath('input senha', string=credenciais['senha'])
@@ -37,7 +37,7 @@ class Presenciamento:
         self.nv.clicar('xpath', 'menu frequência')
         self.nv.aguardar_página()
 
-    def presenciar_todos(self):
+    def _presenciar_todos(self):
         turmas = self.nv.obter_turmas_siap()
         print(turmas)
         for turma in turmas:
