@@ -17,13 +17,13 @@ def dbg(self, tipo_de_relatório) :
 
 class Leitura :
     args_leitura: dict[str, dict[str, bool]] = {
-        'fichas' : {'guess' : False, 'lattice' : False, 'relative_columns' : True}, 'contatos' : {
-            'guess' : False, 'lattice' : True, 'relative_columns' : False, 'multiple_tables' : False
-        }, 'gêneros' : {'guess' : True, 'lattice' : True, 'relative_columns' : True},
-        'situações' : {'guess' : True, 'lattice' : True, 'relative_columns' : False},
-    }
+        'fichas' : {'guess' : False, 'lattice' : False, 'relative_columns' : True}}
 
-    def __init__(self, _path: str, tipo_de_relatório: Literal['fichas', 'contatos', 'gêneros', 'situações']) :
+    def __init__(
+            self,
+            _path: str,
+            tipo_de_relatório: Literal['fichas', 'contatos', 'gêneros', 'situações']
+    ) :
         print(f'Leitura: {tipo_de_relatório}')
         self._tipo_de_relatório = tipo_de_relatório
         self._path_dados = _path

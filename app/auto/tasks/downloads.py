@@ -1,7 +1,5 @@
 import os.path
-import shutil
 import time
-from os import PathLike
 from typing import Callable
 from selenium.webdriver import Chrome
 import tempfile
@@ -27,12 +25,12 @@ class Downloads:
         self.destino = destino
         self.nv = Navegação(navegador, 'sige')
         self.pp = Propriedades('sige')
-        self.logon()
+        self._logon()
 
-        self.baixar_alvos(alvos)
+        self._baixar_alvos(alvos)
         self.master.quit()
 
-    def logon(self):
+    def _logon(self):
         self.master.get(self.pp.url)
         self.master.maximize_window()
         self.nv.digitar_xpath('misc', 'input id', string=self.pp.credenciais['id'])
@@ -40,14 +38,14 @@ class Downloads:
         self.nv.clicar('xpath', 'misc', 'entrar')
         self.nv.clicar('xpath', 'misc', 'alerta')
 
-    def baixar_alvos(self, sessões):
+    def _baixar_alvos(self, sessões):
         início_geral = time.time()
 
         sessões_dict = {
-            'fichas'    : self.baixar_fichas,
-            'contatos'  : self.baixar_contatos,
-            'situações' : self.baixar_situações,
-            'gêneros'   : self.baixar_gêneros
+            'fichas'    : self._baixar_fichas,
+            'contatos'  : self._baixar_contatos,
+            'situações' : self._baixar_situações,
+            'gêneros'   : self._baixar_gêneros
         }
 
         funções: list[Callable[[], None]] = [sessões_dict[sessão.lower()] for sessão in sessões if sessão.lower() in sessões_dict]
@@ -67,38 +65,37 @@ class Downloads:
         fim_geral = time.time()
         print(f'Downloads de relatórios concluído em {fim_geral - início_geral:.3f}')
 
-    def baixar_fichas(self):
+    def _baixar_fichas(self):
         self.nv.caminhar('fichas')
         for série, turma in self.nv._iterar_turmas_sige():
             self.nv.clicar('xpath', 'misc', 'marcar todos')
             self.nv.clicar('id', 'gerar')
-            self._imprimir('fichas', turma)
 
+            # self.nv.obter_fichas()
+
+
+
+            self._imprimir('fichas', turma)
             self.nv.clicar('css', 'voltar')
 
-
-    def baixar_contatos(self):
+    def _baixar_contatos(self):
         self.nv.caminhar('contatos')
         for série, turma in self.nv._iterar_turmas_sige():
+            self._gerar_obter_sair('contatos', turma)
 
-            self.gerar_obter_sair('contatos', turma)
-
-
-    def baixar_situações(self):
+    def _baixar_situações(self):
         self.nv.caminhar('situações')
         for série, turma in self.nv._iterar_turmas_sige():
+            self._gerar_obter_sair('situações', turma)
 
-            self.gerar_obter_sair('situações', turma)
-
-    def baixar_gêneros(self):
+    def _baixar_gêneros(self):
         self.nv.caminhar('gêneros')
         for série, turma in self.nv._iterar_turmas_sige():
-
             self.nv.digitar_xpath('misc', 'input data', string=self.pp.hoje)
-            self.gerar_obter_sair('gêneros', turma)
+            self._gerar_obter_sair('gêneros', turma)
 
 
-    def gerar_obter_sair(self, tipo, turma):
+    def _gerar_obter_sair(self, tipo, turma):
         self.nv.clicar('id', 'gerar')
         self.nv.obter_tabelas(turma, self._map_pastas_por_tipo[str(tipo)])
         self.nv.clicar('css', 'voltar')
@@ -112,9 +109,8 @@ class Downloads:
             'gêneros'   : os.path.join(self.destino, 'fonte', 'Gêneros')
         }
 
-
     def _imprimir(self, tipo, nome):
-        temporária = self.abrir_temporária()
+        temporária = self._abrir_temporária()
         try:
             Impressão(
                 navegador=self.master,
@@ -122,15 +118,15 @@ class Downloads:
                 tipos_para_pastas=self._map_pastas_por_tipo
             ).imprimir_e_mover(tipo, nome)
         finally:
-            self.fechar_temporária(temporária)
+            self._fechar_temporária(temporária)
 
     @staticmethod
-    def abrir_temporária():
+    def _abrir_temporária():
         pasta_temporária = tempfile.TemporaryDirectory(prefix='.temp')
         if platform.system() == 'Windows':
             subprocess.call(['attrib', '+h', pasta_temporária.name])
         return pasta_temporária
 
     @staticmethod
-    def fechar_temporária(pasta):
+    def _fechar_temporária(pasta):
         pasta.cleanup()
