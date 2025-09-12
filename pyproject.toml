@@ -18,8 +18,6 @@ classifiers = [
 
 dependencies = [
     "customtkinter==5.2.2",
-    "JPype1==1.5.0",
-    "JPype1==1.6.0",
     "pandas==2.3.2",
     "platformdirs==4.3.8",
     "python-dotenv==1.1.1",
