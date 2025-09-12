@@ -154,118 +154,125 @@ class Navegação :
 
         WebDriverWait(**self._args_wait).until(_predicate)
 
-    def obter_tabelas(self, nome_arquivo, pasta_destino) :
-        #todo: A classe ficou gigante com esses novos métodos, acumulando múltiplas responsdabilidades
-        # Vou despedaçar depois.
+    def gerar_json(self, nome_arquivo, pasta_destino, tipo: Literal['fichas', 'contatos', 'gêneros', 'situações']) :
+        tipos = ['contatos', 'gêneros', 'situações']
         inicio = time.time()
+        dados = {}
+        # try :
+        if tipo == 'fichas':
+            dados = self.obter_fichas()
+        if tipo in tipos:
+            dados = self.obter_tabelas()
 
-        try :
+        # except Exception as e:
+        #     print(f'Erro na extração de dados do {nome_arquivo}, {tipo}: {e}')
 
-            elemento = (By.CSS_SELECTOR, 'table.tabela')
-            WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
+        if dados :
+            path_json = os.path.join(pasta_destino, f'{nome_arquivo}.json')
+            os.makedirs(os.path.dirname(path_json), exist_ok=True)
 
-            #SCRIPT FEITO PELO DEEPSEEK
-            script = """
-            function extrairTabelas() {
-                var tabelas = document.querySelectorAll('table.tabela');
-                var resultados = [];
+            with open(path_json, 'w', encoding='utf-8') as arquivo :
+                json.dump(dados, arquivo, ensure_ascii=False, indent=2)
 
-                for (var i = 0; i < tabelas.length; i++) {
-                    var tabela = tabelas[i];
-                    var dados = [];
-                    var cabecalhos = [];
+            tempo = time.time() - inicio
+            print(f'✓ {len(dados)} linhas extraídas em {tempo:.2f}s - {path_json}')
+            return True
+        else :
+            print('Nenhum dado extraído')
+            return False
 
-                    // Extrair cabeçalhos
-                    var ths = tabela.querySelectorAll('thead th');
-                    if (ths.length > 0) {
-                        for (var h = 0; h < ths.length; h++) {
-                            cabecalhos.push(ths[h].innerText.trim());
-                        }
-                    } else {
-                        // Tentar primeira linha como cabeçalho
-                        var primeiraLinha = tabela.querySelector('tbody tr');
-                        if (primeiraLinha) {
-                            var cells = primeiraLinha.querySelectorAll('td, th');
-                            for (var h = 0; h < cells.length; h++) {
-                                cabecalhos.push(cells[h].innerText.trim());
-                            }
-                        }
-                    }
-
-                    // Se ainda não tem cabeçalhos, usa padrão
-                    if (cabecalhos.length === 0) {
-                        cabecalhos = [
-                            "Matrícula", "Aluno", "Data de Nascimento", "Nome da Mãe",
-                            "CPF do Responsável", "Nome do Responsável", "Telefone residencial",
-                            "Telefone responsável", "Telefone celular", "E-mail Alternativo",
-                            "E-mail Institucional", "E-mail Educacional", "Ponto ID"
-                        ];
-                    }
-
-                    // Extrair dados
-                    var linhas = tabela.querySelectorAll('tbody tr');
-                    for (var r = 0; r < linhas.length; r++) {
-                        var linha = linhas[r];
-
-                        // Pular linhas que parecem ser cabeçalhos
-                        if (linha.querySelectorAll('th').length > 0) continue;
-
-                        var celulas = linha.querySelectorAll('td');
-                        var linhaDados = {};
-
-                        for (var c = 0; c < celulas.length; c++) {
-                            var nomeColuna = cabecalhos[c] || 'coluna_' + c;
-                            linhaDados[nomeColuna] = celulas[c].innerText.trim();
-                        }
-
-                        // Só adiciona se tiver dados
-                        if (Object.keys(linhaDados).length > 0) {
-                            dados.push(linhaDados);
-                        }
-                    }
-
-                    resultados.push(...dados);
-                }
-
-                return resultados;
-            }
-
-            return extrairTabelas();
-            """
-
-            dados_combinados = self.master.execute_script(script)
-
-            if dados_combinados :
-                path_json = os.path.join(pasta_destino, f'{nome_arquivo}.json')
-                os.makedirs(os.path.dirname(path_json), exist_ok=True)
-
-                with open(path_json, 'w', encoding='utf-8') as arquivo :
-                    json.dump(dados_combinados, arquivo, ensure_ascii=False, indent=2)
-
-                tempo = time.time() - inicio
-                print(f'✓ {len(dados_combinados)} linhas extraídas em {tempo:.2f}s - {path_json}')
-                return True
-            else :
-                print('Nenhum dado extraído')
-                return False
-
-        except Exception as e :
-            print(f'Erro ao extrair tabelas via JS: {e}')
             # Fallback
-            return self._obter_tabelas_fallback(nome_arquivo, pasta_destino)
+        # return self._obter_tabelas_fallback(nome_arquivo, pasta_destino)
+
+    def obter_tabelas(self):
+        elemento = (By.CSS_SELECTOR, 'table.tabela')
+        WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
+
+        script = """
+                        function extrairTabelas() {
+                            var tabelas = document.querySelectorAll('table.tabela');
+                            var resultados = [];
+
+                            for (var i = 0; i < tabelas.length; i++) {
+                                var tabela = tabelas[i];
+                                var dados = [];
+                                var cabecalhos = [];
+
+                                // Extrair cabeçalhos
+                                var ths = tabela.querySelectorAll('thead th');
+                                if (ths.length > 0) {
+                                    for (var h = 0; h < ths.length; h++) {
+                                        cabecalhos.push(ths[h].innerText.trim());
+                                    }
+                                } else {
+                                    // Tentar primeira linha como cabeçalho
+                                    var primeiraLinha = tabela.querySelector('tbody tr');
+                                    if (primeiraLinha) {
+                                        var cells = primeiraLinha.querySelectorAll('td, th');
+                                        for (var h = 0; h < cells.length; h++) {
+                                            cabecalhos.push(cells[h].innerText.trim());
+                                        }
+                                    }
+                                }
+
+                                // Se ainda não tem cabeçalhos, usa padrão
+                                if (cabecalhos.length === 0) {
+                                    cabecalhos = [
+                                        "Matrícula", "Aluno", "Data de Nascimento", "Nome da Mãe",
+                                        "CPF do Responsável", "Nome do Responsável", "Telefone residencial",
+                                        "Telefone responsável", "Telefone celular", "E-mail Alternativo",
+                                        "E-mail Institucional", "E-mail Educacional", "Ponto ID"
+                                    ];
+                                }
+
+                                // Extrair dados
+                                var linhas = tabela.querySelectorAll('tbody tr');
+                                for (var r = 0; r < linhas.length; r++) {
+                                    var linha = linhas[r];
+
+                                    // Pular linhas que parecem ser cabeçalhos
+                                    if (linha.querySelectorAll('th').length > 0) continue;
+
+                                    var celulas = linha.querySelectorAll('td');
+                                    var linhaDados = {};
+
+                                    for (var c = 0; c < celulas.length; c++) {
+                                        var nomeColuna = cabecalhos[c] || 'coluna_' + c;
+                                        linhaDados[nomeColuna] = celulas[c].innerText.trim();
+                                    }
+
+                                    // Só adiciona se tiver dados
+                                    if (Object.keys(linhaDados).length > 0) {
+                                        dados.push(linhaDados);
+                                    }
+                                }
+
+                                resultados.push(...dados);
+                            }
+
+                            return resultados;
+                        }
+
+                        return extrairTabelas();
+                        """  # SCRIPT FEITO PELO DEEPSEEK
+
+        dados = self.master.execute_script(script)
+        return dados
+
 
     def obter_fichas(self):
-        body = self.master.find_element(By.TAG_NAME, 'body')
-        body_tabelas = body.find_elements(By.TAG_NAME, 'table')
-        páginas = [pag for pag in body_tabelas if pag.get_attribute('height') == '60%']
+        tag_body = self.master.find_element(By.TAG_NAME, 'body')
+        tag_table = tag_body.find_elements(By.TAG_NAME, 'table')
+        páginas = [pag for pag in tag_table if pag.get_attribute('height') == '60%']
 
-        linhas = []
+        linhas_web = []
         for página in páginas:
             página.find_elements(By.TAG_NAME, 'tr')
-            página = página.text.replace(r"\n", '')
-            linhas.append(página)
+            linhas_web.append(página.text)
 
-        print(linhas)
+        dict_da_turma = dict(enumerate(linhas_web))
+        print(dict_da_turma)
+        return dict_da_turma
 
     def obter_turmas_siap(self) -> list[str]:
         elementos = self.master.find_elements(By.CSS_SELECTOR, '.listaTurmas.dentroPrazo')

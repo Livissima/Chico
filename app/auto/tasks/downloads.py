@@ -2,11 +2,7 @@ import os.path
 import time
 from typing import Callable
 from selenium.webdriver import Chrome
-import tempfile
-import platform
-import subprocess
 from app.auto.data.sites.propriedades import Propriedades
-from app.auto.functions.impressão import Impressão
 from app.auto.functions.navegação import Navegação
 
 
@@ -69,14 +65,7 @@ class Downloads:
         self.nv.caminhar('fichas')
         for série, turma in self.nv._iterar_turmas_sige():
             self.nv.clicar('xpath', 'misc', 'marcar todos')
-            self.nv.clicar('id', 'gerar')
-
-            # self.nv.obter_fichas()
-
-
-
-            self._imprimir('fichas', turma)
-            self.nv.clicar('css', 'voltar')
+            self._gerar_obter_sair('fichas', turma)
 
     def _baixar_contatos(self):
         self.nv.caminhar('contatos')
@@ -94,14 +83,14 @@ class Downloads:
             self.nv.digitar_xpath('misc', 'input data', string=self.pp.hoje)
             self._gerar_obter_sair('gêneros', turma)
 
-
     def _gerar_obter_sair(self, tipo, turma):
         self.nv.clicar('id', 'gerar')
-        self.nv.obter_tabelas(turma, self._map_pastas_por_tipo[str(tipo)])
+        self.nv.gerar_json(turma, self._map_pastas_por_tipo[str(tipo)], tipo)
         self.nv.clicar('css', 'voltar')
 
     @property
     def _map_pastas_por_tipo(self) -> dict [str, str]:
+        #todo dict compre
         return {
             'fichas'    : os.path.join(self.destino, 'fonte', 'Fichas'),
             'contatos'  : os.path.join(self.destino, 'fonte', 'Contatos'),
@@ -109,24 +98,3 @@ class Downloads:
             'gêneros'   : os.path.join(self.destino, 'fonte', 'Gêneros')
         }
 
-    def _imprimir(self, tipo, nome):
-        temporária = self._abrir_temporária()
-        try:
-            Impressão(
-                navegador=self.master,
-                pasta_temp=temporária.name,
-                tipos_para_pastas=self._map_pastas_por_tipo
-            ).imprimir_e_mover(tipo, nome)
-        finally:
-            self._fechar_temporária(temporária)
-
-    @staticmethod
-    def _abrir_temporária():
-        pasta_temporária = tempfile.TemporaryDirectory(prefix='.temp')
-        if platform.system() == 'Windows':
-            subprocess.call(['attrib', '+h', pasta_temporária.name])
-        return pasta_temporária
-
-    @staticmethod
-    def _fechar_temporária(pasta):
-        pasta.cleanup()
