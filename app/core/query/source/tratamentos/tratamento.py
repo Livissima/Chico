@@ -16,10 +16,14 @@ class Tratamento:
         'gêneros'   : TratamentoGêneros
     }
 
-    def __init__(self, df_leitura: DataFrame, tipo: Literal['fichas', 'contatos', 'gêneros', 'situações']):
+    def __init__(
+            self,
+            df_leitura: dict | DataFrame,
+            tipo: Literal['fichas', 'contatos', 'gêneros', 'situações']
+    ):
         self.tipo = tipo
 
-        print(f'\nTratamento{tipo.title()}: {df_leitura.shape}. Colunas iniciais: {list(df_leitura.columns)}')
+        # print(f'\nTratamento{tipo.title()}: {df_leitura.shape}. Colunas iniciais: {list(df_leitura.columns)}')
 
         classe_tratamento = self.tipos.get(tipo)
         if classe_tratamento is None:
@@ -27,7 +31,7 @@ class Tratamento:
 
         self.df_tratado = classe_tratamento(df_leitura).df_tratado
 
-        print(f'Tratamento{tipo.title()}.df_tratado: {df_leitura.shape}. Colunas: {list(df_leitura.columns)}')
+        # print(f'Tratamento{tipo.title()}.df_tratado: {df_leitura.shape}. Colunas: {list(df_leitura.columns)}')
 
     # @property
     # def dataframe(self):

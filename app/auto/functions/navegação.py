@@ -155,19 +155,10 @@ class Navegação :
         WebDriverWait(**self._args_wait).until(_predicate)
 
     def gerar_json(self, nome_arquivo, pasta_destino, tipo: Literal['fichas', 'contatos', 'gêneros', 'situações']) :
-        tipos = ['contatos', 'gêneros', 'situações']
         inicio = time.time()
-        dados = {}
-        # try :
-        if tipo == 'fichas':
-            dados = self.obter_fichas()
-        if tipo in tipos:
-            dados = self.obter_tabelas()
+        dados = self.obter_tabelas(tipo)
 
-        # except Exception as e:
-        #     print(f'Erro na extração de dados do {nome_arquivo}, {tipo}: {e}')
-
-        if dados :
+        if dados:
             path_json = os.path.join(pasta_destino, f'{nome_arquivo}.json')
             os.makedirs(os.path.dirname(path_json), exist_ok=True)
 
@@ -181,80 +172,121 @@ class Navegação :
             print('Nenhum dado extraído')
             return False
 
-            # Fallback
-        # return self._obter_tabelas_fallback(nome_arquivo, pasta_destino)
+    def obter_tabelas(self, tipo):
+        tipos_simples = {'contatos', 'situações', 'gêneros'}
+        script = """"""
+        # if tipo == 'fichas':
+        #     dados = self.obter_fichas()
 
-    def obter_tabelas(self):
-        elemento = (By.CSS_SELECTOR, 'table.tabela')
-        WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
+        if tipo in tipos_simples :
+            elemento = (By.CSS_SELECTOR, 'table.tabela')
+            WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
+            script = """
+                            function extrairTabelas() {
+                                var tabelas = document.querySelectorAll('table.tabela');
+                                var resultados = [];
 
-        script = """
-                        function extrairTabelas() {
-                            var tabelas = document.querySelectorAll('table.tabela');
-                            var resultados = [];
+                                for (var i = 0; i < tabelas.length; i++) {
+                                    var tabela = tabelas[i];
+                                    var dados = [];
+                                    var cabecalhos = [];
 
-                            for (var i = 0; i < tabelas.length; i++) {
-                                var tabela = tabelas[i];
-                                var dados = [];
-                                var cabecalhos = [];
-
-                                // Extrair cabeçalhos
-                                var ths = tabela.querySelectorAll('thead th');
-                                if (ths.length > 0) {
-                                    for (var h = 0; h < ths.length; h++) {
-                                        cabecalhos.push(ths[h].innerText.trim());
-                                    }
-                                } else {
-                                    // Tentar primeira linha como cabeçalho
-                                    var primeiraLinha = tabela.querySelector('tbody tr');
-                                    if (primeiraLinha) {
-                                        var cells = primeiraLinha.querySelectorAll('td, th');
-                                        for (var h = 0; h < cells.length; h++) {
-                                            cabecalhos.push(cells[h].innerText.trim());
+                                    // Extrair cabeçalhos
+                                    var ths = tabela.querySelectorAll('thead th');
+                                    if (ths.length > 0) {
+                                        for (var h = 0; h < ths.length; h++) {
+                                            cabecalhos.push(ths[h].innerText.trim());
+                                        }
+                                    } else {
+                                        // Tentar primeira linha como cabeçalho
+                                        var primeiraLinha = tabela.querySelector('tbody tr');
+                                        if (primeiraLinha) {
+                                            var cells = primeiraLinha.querySelectorAll('td, th');
+                                            for (var h = 0; h < cells.length; h++) {
+                                                cabecalhos.push(cells[h].innerText.trim());
+                                            }
                                         }
                                     }
-                                }
 
-                                // Se ainda não tem cabeçalhos, usa padrão
-                                if (cabecalhos.length === 0) {
-                                    cabecalhos = [
-                                        "Matrícula", "Aluno", "Data de Nascimento", "Nome da Mãe",
-                                        "CPF do Responsável", "Nome do Responsável", "Telefone residencial",
-                                        "Telefone responsável", "Telefone celular", "E-mail Alternativo",
-                                        "E-mail Institucional", "E-mail Educacional", "Ponto ID"
-                                    ];
-                                }
-
-                                // Extrair dados
-                                var linhas = tabela.querySelectorAll('tbody tr');
-                                for (var r = 0; r < linhas.length; r++) {
-                                    var linha = linhas[r];
-
-                                    // Pular linhas que parecem ser cabeçalhos
-                                    if (linha.querySelectorAll('th').length > 0) continue;
-
-                                    var celulas = linha.querySelectorAll('td');
-                                    var linhaDados = {};
-
-                                    for (var c = 0; c < celulas.length; c++) {
-                                        var nomeColuna = cabecalhos[c] || 'coluna_' + c;
-                                        linhaDados[nomeColuna] = celulas[c].innerText.trim();
+                                    // Se ainda não tem cabeçalhos, usa padrão
+                                    if (cabecalhos.length === 0) {
+                                        cabecalhos = [
+                                            "Matrícula", "Aluno", "Data de Nascimento", "Nome da Mãe",
+                                            "CPF do Responsável", "Nome do Responsável", "Telefone residencial",
+                                            "Telefone responsável", "Telefone celular", "E-mail Alternativo",
+                                            "E-mail Institucional", "E-mail Educacional", "Ponto ID"
+                                        ];
                                     }
 
-                                    // Só adiciona se tiver dados
-                                    if (Object.keys(linhaDados).length > 0) {
-                                        dados.push(linhaDados);
+                                    // Extrair dados
+                                    var linhas = tabela.querySelectorAll('tbody tr');
+                                    for (var r = 0; r < linhas.length; r++) {
+                                        var linha = linhas[r];
+
+                                        // Pular linhas que parecem ser cabeçalhos
+                                        if (linha.querySelectorAll('th').length > 0) continue;
+
+                                        var celulas = linha.querySelectorAll('td');
+                                        var linhaDados = {};
+
+                                        for (var c = 0; c < celulas.length; c++) {
+                                            var nomeColuna = cabecalhos[c] || 'coluna_' + c;
+                                            linhaDados[nomeColuna] = celulas[c].innerText.trim();
+                                        }
+
+                                        // Só adiciona se tiver dados
+                                        if (Object.keys(linhaDados).length > 0) {
+                                            dados.push(linhaDados);
+                                        }
                                     }
+
+                                    resultados.push(...dados);
                                 }
 
-                                resultados.push(...dados);
+                                return resultados;
                             }
 
-                            return resultados;
+                            return extrairTabelas();
+                            """
+
+        if tipo == 'fichas' :
+            script = """
+                    function extrairFichas() {
+                        // Função para obter texto limpo com quebras de linha estratégicas
+                        function getCleanText(element) {
+                            let text = element.innerText;
+
+                            // Preservar quebras de linha estratégicas
+                            text = text.replace(/Dados Pessoais/g, '\\nDados Pessoais\\n');
+                            text = text.replace(/Filiação/g, '\\n\\nFiliação\\n');
+                            text = text.replace(/Endereço Residencial/g, '\\n\\nEndereço Residencial\\n');
+                            text = text.replace(/Dados Escolares/g, '\\n\\nDados Escolares\\n');
+
+                            // Remover múltiplas quebras de linha consecutivas
+                            text = text.replace(/\\n{3,}/g, '\\n\\n');
+
+                            // Remover espaços em excesso
+                            text = text.replace(/[\\s]{2,}/g, ' ');
+
+                            return text.trim();
                         }
 
-                        return extrairTabelas();
-                        """  # SCRIPT FEITO PELO DEEPSEEK
+                        var body = document.querySelector('body');
+                        var todasTabelas = body.querySelectorAll('table');
+                        var resultado = [];
+
+                        // Filtrar tabelas com height='60%' e adicionar à lista
+                        for (var i = 0; i < todasTabelas.length; i++) {
+                            var tabela = todasTabelas[i];
+                            if (tabela.getAttribute('height') === '60%') {
+                                resultado.push(getCleanText(tabela));
+                            }
+                        }
+
+                        return resultado;
+                    }
+                    return extrairFichas();
+                    """
 
         dados = self.master.execute_script(script)
         return dados
