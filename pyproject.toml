@@ -24,7 +24,6 @@ dependencies = [
     "python_dateutil==2.9.0.post0",
     "screeninfo==0.8.1",
     "selenium==4.35.0",
-    "tabula_py==2.10.0"
 
     # Adicione outras dependências aqui
 ]
