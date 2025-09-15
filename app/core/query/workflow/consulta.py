@@ -29,6 +29,7 @@ class Consulta:
 
         self.dfs_leitura   = self._ler()
         self.dfs_tratados  = self._tratar(self.dfs_leitura)
+        # print(self.dfs_tratados)
         self.df_integrado  = self._integrar(self.dfs_tratados)
         self.dataframe     = self._formatar(self.df_integrado)
 

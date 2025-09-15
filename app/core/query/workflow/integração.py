@@ -68,9 +68,10 @@ class Integração:
 
     @staticmethod
     def _integrar_idade(df_base: DataFrame):
+        # df_base['Data de Nascimento'] = df_base['Data de Nascimento'].str.strip()
         df_base['Data de Nascimento'] = pd.to_datetime(df_base['Data de Nascimento'], format='%d/%m/%Y')
-        idade = Idade.calcular_idade(df_base['Data de Nascimento'])
-        return idade
+        _idade = Idade.calcular_idade(df_base['Data de Nascimento'])
+        return _idade
 
     @staticmethod
     def _integrar_nome_social(df_base: DataFrame) -> Series:

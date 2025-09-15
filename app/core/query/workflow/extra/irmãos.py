@@ -26,33 +26,10 @@ class Irmão:
                 nomes_irmãos.remove(row['Estudante'])
                 consulta.at[índice, 'Irmão 1'] = nomes_irmãos[0]
 
-        consulta['Irmão 1'] = consulta['Irmão 1'].fillna('')
+        irmão = None
+        try:
+            irmão = consulta['Irmão 1'] = consulta['Irmão 1'].fillna('')
+        except KeyError as e:
+            print(f'erro com irmão: {e}')
 
-        return consulta['Irmão 1']
-
-
-
-
-#versão anterior
-# Iterar sobre cada estudante
-# consulta['Irmão 1'] = None
-# consulta['Irmão 2'] = None
-#
-# for index, row in consulta.iterrows():
-#     CPF_mãe = row['Filiação 1 - CPF']
-#
-#     # Filtrar estudantes com o mesmo nome de mãe
-#     irmãos = consulta[consulta['Filiação 1 - CPF'] == CPF_mãe]
-#
-#     # Verificar quantos irmãos existem
-#     if len(irmãos) == 2:
-#         # Se houver um irmão, atribuir o nome do irmão
-#         irmãos_nomes = irmãos['Estudante'].tolist()
-#         irmãos_nomes.remove(row['Estudante'])  # Remove o próprio estudante
-#         consulta.at[index, 'Irmão 1'] = irmãos_nomes[0]  # Atribui o irmão
-#     elif len(irmãos) == 3:
-#         # Se houver dois irmãos, atribuir os nomes dos irmãos
-#         irmãos_nomes = irmãos['Estudante'].tolist()
-#         irmãos_nomes.remove(row['Estudante'])  # Remove o próprio estudante
-#         consulta.at[index, 'Irmão 1'] = irmãos_nomes[0]  # Atribui o primeiro irmão
-#         consulta.at[index, 'Irmão 2'] = irmãos_nomes[1]  # Atribui o segundo irmão
+        return irmão
