@@ -13,46 +13,38 @@ class Leitura :
             tipo_de_relatório: Literal['fichas', 'contatos', 'gêneros', 'situações']
     ) :
         print(f'Leitura: {tipo_de_relatório}')
+
         self._tipo_de_relatório = tipo_de_relatório
         self._path_dados = _path
-        self.df_leitura = self._ler(_path, tipo_de_relatório)
-
-    @staticmethod
-    def _ler(_path, tipo) -> list | DataFrame :
-        #todo: talvez usar método de leitura de json do pandas.
-        tipos = {'fichas', 'contatos', 'situações', 'gêneros'}
-        tipos_simples = {'contatos', 'situações', 'gêneros'}
-        leitura = None
-
-        for nome_arquivo in listdir(_path):
-
-            if not nome_arquivo.endswith('.json'):
-                continue
-
-            caminho_completo = path.join(_path, nome_arquivo)
-
-            try:
-                with open(caminho_completo, 'r', encoding='utf-8') as arquivo:
-                    dados = json.load(arquivo)
-            except Exception as e:
-                print(f'Erro ao ler {nome_arquivo}: {e}')
-
-            if tipo == 'fichas':
-                if dados:
-                    leitura = dados
-                    print(f'✓ {len(dados)} linhas de {nome_arquivo}')
+        self.df_leitura = self._ler(_path)
 
 
-            if tipo in tipos_simples:
-                leitura = DataFrame()
-                if dados :
-                    df_arquivo = pd.DataFrame(dados)
-                    leitura = concat([leitura, df_arquivo], ignore_index=True)
-                    print(f'✓ {len(dados)} linhas de {nome_arquivo}')
+    def _ler(self, _path) -> list[str | dict] :
+        lista_dirs = listdir(_path)
+        # print(f'___________LISTA_DIRS{lista_dirs}')
+        leitura = []
+        for nome_arquivo in lista_dirs:
+            dados = self.ler_json(nome_arquivo, _path)
+            leitura.extend(dados)
 
+        # print(f'_________Leitura:{len(leitura)}\n{leitura}')
+        # for c, v in dict(enumerate(leitura)).items() :
+        #     print(c, v)
         return leitura
 
     @property
     def dataframe(self) :
         return self.df_leitura
+
+    @staticmethod
+    def ler_json(_nome_arquivo: str, _path):
+
+        caminho_completo = path.join(_path, _nome_arquivo)
+        try :
+            with open(caminho_completo, 'r', encoding='utf-8') as arquivo :
+                return json.load(arquivo)
+        except Exception as e :
+            print(f'Erro ao ler {_nome_arquivo}: {e}')
+            return []
+
 
