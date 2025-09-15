@@ -1,4 +1,3 @@
-
 import pandas as pd
 from .leitura import Leitura
 from .tratamentos import *

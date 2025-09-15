@@ -1,7 +1,5 @@
 from typing import Literal
-
 from pandas import DataFrame
-
 from .fichas import TratamentoFichas
 from .contatos import TratamentoContatos
 from .situações import TratamentoSituações

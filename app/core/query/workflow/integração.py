@@ -20,7 +20,6 @@ class Integração:
 
         df_base['Irmão 1']   = self._integrar_irmão(df_base)
         df_base['Idade']     = self._integrar_idade(df_base)
-        df_base['Estudante'] = self._integrar_nome_social(df_base)
         df_base['Senha padrão'] = self._integrar_senha_padrão(df_base)
         df_base['Nova senha'] = self._integrar_nova_senha(df_base)
 
@@ -68,17 +67,10 @@ class Integração:
 
     @staticmethod
     def _integrar_idade(df_base: DataFrame):
-        # df_base['Data de Nascimento'] = df_base['Data de Nascimento'].str.strip()
         df_base['Data de Nascimento'] = pd.to_datetime(df_base['Data de Nascimento'], format='%d/%m/%Y')
         _idade = Idade.calcular_idade(df_base['Data de Nascimento'])
         return _idade
 
-    @staticmethod
-    def _integrar_nome_social(df_base: DataFrame) -> Series:
-        nomes: dict[str, str] = NomeSocial().nomes
-        nomes_maiúsculos = df_base['Estudante'].str.upper()
-        nomes_sociais = nomes_maiúsculos.replace(nomes)
-        return nomes_sociais
 
     @staticmethod
     def _integrar_sociais(df_base: DataFrame, path_df_social: str) -> DataFrame:

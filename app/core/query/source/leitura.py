@@ -25,9 +25,6 @@ class Leitura :
             dados = self.ler_json(nome_arquivo, _path)
             leitura.extend(dados)
 
-        # print(f'_________Leitura:{len(leitura)}\n{leitura}')
-        # for c, v in dict(enumerate(leitura)).items() :
-        #     print(c, v)
         return leitura
 
     @property

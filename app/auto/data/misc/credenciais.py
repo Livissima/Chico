@@ -1,3 +1,3 @@
-class Credenciais:
-    pass
-
+# class Credenciais:
+#     pass
+#

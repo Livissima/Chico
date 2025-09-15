@@ -1,8 +1,5 @@
-import os.path
-import time
 from os import PathLike
 from pathlib import Path
-from typing import Callable
 from selenium.webdriver import Chrome
 from app.auto.data.sites.propriedades import Propriedades
 from app.auto.functions.navegação import Navegação

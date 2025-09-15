@@ -1,8 +1,6 @@
 import sys
 from pandas import DataFrame
-
 from selenium.webdriver import Chrome
-
 from app.auto.functions.navegação import Navegação
 from app.auto.data.sites.propriedades import Propriedades
 from typing import Literal
@@ -61,7 +59,7 @@ class GerenciarAcessos:
             email      = str(linha['Educacional'])
             dn         = str(linha['Data de Nascimento']).replace('/', '')
             nova_senha = str(linha['Nova senha'])
-            # print(f'Iniciado: {estudante}, {turma}, {matrícula}, {email}, {dn}, {nova_senha}')
+
             anunciar(índice, estudante, turma, 'iniciando')
 
             self.nv.digitar_xpath('matrícula', string=matrícula)
@@ -74,11 +72,9 @@ class GerenciarAcessos:
             self.nv.digitar_xpath('senha2', string=nova_senha)
             self.nv.clicar('xpath', 'concordo')
             self.nv.clicar('xpath', 'salvar')
-            # sleep(60)
             self.nv.aguardar_página()
             anunciar(índice, estudante, turma, 'concluído.')
             print('\r')
-            # self.master.get(self.pm.url)
             self.master.refresh()
             self.nv.aguardar_página()
 

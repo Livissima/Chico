@@ -41,9 +41,7 @@ class Sondagem:
         self.nv.digitar_xpath('misc', 'input senha', string=self.pp.credenciais['senha'])
         self.nv.clicar('xpath', 'misc', 'entrar')
         self.nv.clicar('xpath', 'misc', 'alerta')
-        # self.nome_ue = self.obter_nome_ue()
 
-        # parâmetros.nome_ue = self.master.find_element(By.CSS_SELECTOR, '#topo > div.topo-logo > div > h3:nth-child(2)').text.split(" - ")[0]
 
     def _gerar_elemento_tabela(self):
 
@@ -68,29 +66,24 @@ class Sondagem:
 
         todas_linhas = elemento.find_elements(By.TAG_NAME, 'tr')
 
-        # Debug: verificar todas as linhas
         print(f"Total de linhas encontradas: {len(todas_linhas)}")
 
         for i, linha in enumerate(todas_linhas) :
             celulas = linha.find_elements(By.TAG_NAME, 'td')
             print(f"Linha {i}: {len(celulas)} células")
 
-            # Pular linhas de cabeçalho (com menos de 19 células)
             if len(celulas) < 19 :
                 print(f"Pulando linha {i} (cabeçalho ou linha inválida)")
                 continue
 
-            # Processar linha de dados
             linha_dados = []
             for celula in celulas :
                 texto = celula.text.strip()
                 texto = texto.replace('&nbsp;', '').replace('\u00a0', '').strip()
                 linha_dados.append(texto if texto else "0")  # Usar "0" para valores vazios
 
-            # Adicionar os dados à tabela
             for j, cabecalho in enumerate(cabeçalhos) :
                 if j < len(linha_dados) :
-                    # Converter valores numéricos
                     if cabecalho in ['Capacidade legal', 'Capacidade física', 'Efetivados', 'Não Efetivados', 'Vagas',
                                      'Excedente Autorizado'] :
                         try :
@@ -105,7 +98,6 @@ class Sondagem:
 
         print(f"Extraídas {len(tabela_turmas['Código'])} turmas")
 
-        # Debug: imprimir as turmas extraídas
         if tabela_turmas['Turma'] :
             print("Turmas extraídas:", tabela_turmas['Turma'])
         else :
