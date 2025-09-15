@@ -11,7 +11,6 @@ from selenium.webdriver.support.expected_conditions import presence_of_element_l
     element_to_be_clickable
 
 from app.auto.data.sites.propriedades import Propriedades
-# from app.auto.data.misc.escola import Escola
 from app.config.parâmetros import parâmetros
 
 
@@ -81,8 +80,7 @@ class Navegação :
         print(f'    Caminhando para {destino}')
         destinos = self._pp.caminhos
         for tupla in destinos[destino] :
-            # print('Click em: ', end='')
-            # print(f'{str(tupla[-1:])}', end=', ')
+
             self.clicar('xpath', *tupla)
 
     def digitar_xpath(self, *chaves, string: str) :
@@ -154,7 +152,7 @@ class Navegação :
 
         WebDriverWait(**self._args_wait).until(_predicate)
 
-    def gerar_json(self, nome_arquivo, pasta_destino, tipo: Literal['fichas', 'contatos', 'gêneros', 'situações']) :
+    def gerar_json(self, nome_arquivo, pasta_destino, tipo: Literal['fichas', 'contatos', 'gêneros', 'situações', 'sondagem']) :
         inicio = time.time()
         dados = self.obter_tabelas(tipo)
 
@@ -172,11 +170,10 @@ class Navegação :
             print('Nenhum dado extraído')
             return False
 
-    def obter_tabelas(self, tipo):
+    def obter_tabelas(self, tipo) -> list[str] | list[dict[str, str]]:
         tipos_simples = {'contatos', 'situações', 'gêneros'}
         script = """"""
-        # if tipo == 'fichas':
-        #     dados = self.obter_fichas()
+
 
         if tipo in tipos_simples :
             elemento = (By.CSS_SELECTOR, 'table.tabela')
@@ -292,20 +289,6 @@ class Navegação :
         return dados
 
 
-    def obter_fichas(self):
-        tag_body = self.master.find_element(By.TAG_NAME, 'body')
-        tag_table = tag_body.find_elements(By.TAG_NAME, 'table')
-        páginas = [pag for pag in tag_table if pag.get_attribute('height') == '60%']
-
-        linhas_web = []
-        for página in páginas:
-            página.find_elements(By.TAG_NAME, 'tr')
-            linhas_web.append(página.text)
-
-        dict_da_turma = dict(enumerate(linhas_web))
-        print(dict_da_turma)
-        return dict_da_turma
-
     def obter_turmas_siap(self) -> list[str]:
         elementos = self.master.find_elements(By.CSS_SELECTOR, '.listaTurmas.dentroPrazo')
         lista_css = []
@@ -354,7 +337,7 @@ class Navegação :
             print(f'Erro ao extrair tabelas (fallback): {e}')
             return False
 
-    def _iterar_turmas_sige(self) :
+    def iterar_turmas_sige(self) :
         for série in parâmetros.séries_selecionadas :
             self._selecionar_série(série)
             turmas_correspoentes = parâmetros.turmas_selecionadas_por_série[série]

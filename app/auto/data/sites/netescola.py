@@ -19,7 +19,6 @@ class NetEscola:
     @property
     def caminhos(self) -> dict[str, list[tuple]]:
         xpaths = self.xpaths
-
         caminhos = {
             '' : [()]
         }

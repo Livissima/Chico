@@ -54,12 +54,12 @@ class TelaConsulta(CTkFrame):
         self.bt_localizar_diretório_base = Botão(
             self,
             texto='Localizar',
-            fonte=('times new roman', 15),
+            fonte=('times new roman', 18),
             formato='bold',
             x=5,
             y=136,
             função=lambda: self._pesquisar_diretório(),
-            altura=25,
+
             largura=100
         )
 
@@ -99,10 +99,8 @@ class TelaConsulta(CTkFrame):
         self._in_diretório_base = Input(
             self,
             texto=fr'{os.path.join(parâmetros.novo_diretório, 'fonte')}',
-            fonte=('arial', 12),
             x=120,
             y=135,
-            altura=28,
             largura=420+55
         )
 
@@ -118,7 +116,7 @@ class TelaConsulta(CTkFrame):
 
             Exportação(consulta=consulta, path_destino=diretório_base)
 
-            self._tx_feedback.att(f'Planilhas geradas e exportadas para\n{diretório_base}')
+            self._tx_feedback.att(f'Planilhas geradas e exportadas para\n{diretório_base}', ('Arial', 20), 'bold', 'light green')
 
         except FileNotFoundError: self._tx_feedback.att('Erro ao consultar')
 

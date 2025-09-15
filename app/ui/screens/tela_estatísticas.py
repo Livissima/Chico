@@ -48,7 +48,7 @@ class TelaEstatísticas(CTkFrame):
 
         self.tx_valores = Texto(
             self,
-            textos_empilhados=['-' for chave in list(self.estatísticas().keys())],
+            textos_empilhados=['-' for _ in list(self.estatísticas().keys())],
             largura=largura,
             altura=20,
             x=_x,

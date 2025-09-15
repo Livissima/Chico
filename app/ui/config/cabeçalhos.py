@@ -35,7 +35,7 @@ class Cabeçalhos:
         self.master.título = Texto(
             self.master,
             texto=setar['descrição'],
-            fonte=('Arial', 15),
+            fonte=('Arial', 17),
             x='centro',
             y=40,
             altura=30,

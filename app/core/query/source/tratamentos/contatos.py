@@ -31,7 +31,7 @@ class TratamentoContatos:
             return re.sub('[^0-9]+', '', str(x)) if isinstance(x, str) else x
 
         df = df_base
-        df[self.colunas_telefone] = df[self.colunas_telefone].applymap(clean_phone_number)
+        df[self.colunas_telefone] = df[self.colunas_telefone].map(clean_phone_number)
         return df
 
     def _aplicar_funções_telefones(self, df_limpo: DataFrame) -> Series:

@@ -75,5 +75,3 @@ class Bot:
             return getattr(self.navegador, item)
         raise AttributeError(f"'{self.__class__.__name__}' não contém atributo '{item}' (navegador não inicializado).")
 
-if __name__ == '__main__':
-    Bot(tarefa='sondagem')

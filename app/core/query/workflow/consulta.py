@@ -53,7 +53,7 @@ class Consulta:
         return df.integração
 
     @staticmethod
-    def _formatar(df_integrado: DataFrame) -> DataFrame:
+    def _formatar(df_integrado: DataFrame) -> Formatação:
         df_formatado = Formatação(df_integrado)
         return df_formatado
 

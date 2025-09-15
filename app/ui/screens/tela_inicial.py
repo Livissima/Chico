@@ -75,7 +75,6 @@ class TelaInicial(CTkFrame):
             fonte=('arial', 15),
             x=160,
             y=self.primeira_linha,
-            altura=30,
             largura=435
         )
 
@@ -119,7 +118,6 @@ class TelaInicial(CTkFrame):
             formato='bold',
             x=5,
             y=self.primeira_linha,
-            altura=30,
             largura=150
         )
 

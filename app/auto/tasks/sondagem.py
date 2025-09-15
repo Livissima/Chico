@@ -47,7 +47,7 @@ class Sondagem:
 
     def _gerar_elemento_tabela(self):
 
-        self.nv.caminhar('turmas')
+        self.nv.caminhar('sondagem')
         self.nv.clicar('xpath', 'resumo', 'turmas', 'ativas')
         self.nv.digitar_xpath('resumo', 'turmas', 'input data', string=self.pp.hoje)
         self.nv.clicar('id', 'gerar')
