@@ -29,6 +29,4 @@ class Propriedades:
     def __getattr__(self, item):
         return getattr(self.site, item)
 
-if __name__ == '__main__':
-    instância = Propriedades('sige')
-    print(instância.url)
+

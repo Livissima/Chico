@@ -118,8 +118,8 @@ class Sige :
             'quantitativo' : [docs, (*prefixo, '_xpath'), (*prefixo, 'alunos', '_xpath'),
                               (*prefixo, 'alunos', 'quantitativo')],
 
-            'turmas' : [docs, (*prefixo, '_xpath'), (*prefixo, 'dados cadastrais', '_xpath'),
-                        (*prefixo, 'dados cadastrais', 'turmas')],
+            'sondagem' : [docs, (*prefixo, '_xpath'), (*prefixo, 'dados cadastrais', '_xpath'),
+                          (*prefixo, 'dados cadastrais', 'turmas')],
 
             'ficha aluno' : [('lápis', 'alunos'),  ('alunos', 'ficha do aluno')]
         }

@@ -55,12 +55,12 @@ class GerenciarAcessos:
         início = 0
 
         for índice, linha in self.df.iloc[início:].iterrows():
-            estudante  = linha['Estudante']
-            turma      = linha['Turma']
+            estudante  = str(linha['Estudante'])
+            turma      = str(linha['Turma'])
             matrícula  = str(linha['Matrícula'])
-            email      = linha['Educacional']
+            email      = str(linha['Educacional'])
             dn         = str(linha['Data de Nascimento']).replace('/', '')
-            nova_senha = linha['Nova senha']
+            nova_senha = str(linha['Nova senha'])
             # print(f'Iniciado: {estudante}, {turma}, {matrícula}, {email}, {dn}, {nova_senha}')
             anunciar(índice, estudante, turma, 'iniciando')
 
@@ -82,6 +82,7 @@ class GerenciarAcessos:
             self.master.refresh()
             self.nv.aguardar_página()
 
-    def gerenciar_google(self):
+    @staticmethod
+    def gerenciar_google():
         print('GOOGLE')
         pass

@@ -10,12 +10,12 @@ class Input(CTkFrame):
             self,
             classe,
             texto: str,
-            fonte: tuple[str, int] = ('Arial', 12),
+            fonte: tuple[str, int] = ('Arial', 14),
             formato: Literal['bold', 'italic', 'underline', 'overstrike'] | list[
                 Literal['bold', 'italic', 'underline', 'overstrike']] = 'normal',
             x: int = 0,
             y: int = 0,
-            altura: int = 35,
+            altura: int = 30,
             largura: int = 35,
     ):
         self.master = classe.master

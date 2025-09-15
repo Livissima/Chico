@@ -5,4 +5,3 @@ from .utils import *
 from .export import *
 #
 #
-warnings.simplefilter(action='ignore', category=FutureWarning)

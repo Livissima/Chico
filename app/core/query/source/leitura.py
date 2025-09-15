@@ -1,9 +1,7 @@
 from os import listdir, path
 from pandas import DataFrame, concat
-from tabula import read_pdf
 from typing import Literal
 import json
-import pandas as pd
 
 class Leitura :
 

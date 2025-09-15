@@ -15,7 +15,7 @@ class Botão(CTkFrame) :
                 Literal['bold', 'italic', 'underline', 'overstrike']] = 'normal',
             x: int | str = 'centro',
             y: int | str = 'centro',
-            altura: int = 35,
+            altura: int = 30,
             largura: int = 35,
             cor:  str | tuple[str, str] | None = None,
     ):

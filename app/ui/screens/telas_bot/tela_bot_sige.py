@@ -71,10 +71,8 @@ class TelaBotSige(CTkFrame):
         self._in_diretório_base = Input(
             self,
             texto=str(os.path.join(parâmetros.novo_diretório, 'fonte')),
-            fonte=('arial', 15),
             x=120,
             y=135,
-            altura=28,
             largura=420+55
         )
 
@@ -186,12 +184,6 @@ class TelaBotSige(CTkFrame):
             print(f'selecione ao menos um conteúdo alvo')
 
         if any(alvo in self._ck_alvos.valores_true for alvo in ['Fichas', 'Contatos', 'Situações', 'Gêneros']):
-            # thread_downloads = threading.Thread(
-            #     target=lambda: Bot(tarefa='downloads', destino=parâmetros.novo_diretório, alvos=self._ck_alvos.valores_true),
-            #     daemon=True
-            # )
-            # thread_downloads.start()
-            # print(f'____Downloads: {self._ck_alvos.valores_true}')
 
             Bot(tarefa='downloads', destino=self._kwargs['destino'], alvos=self._ck_alvos.valores_true)
 
