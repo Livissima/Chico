@@ -1,5 +1,4 @@
 from pathlib import Path
-
 from app.core import Consulta
 from app.core.export.exportações.exportaçãocsv import ExportaçãoCSV
 from app.core.export.exportações.exportaçãoxlsx import ExportaçãoXLSX

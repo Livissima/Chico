@@ -1,7 +1,5 @@
 # class Escola:
-#
-#     # todo: Criar métodos que consigam modificar os dicionários e listas de séries e turmas, para flexibilizar por escola.
-#     #  Para viabilizar isso, eu precisaria rodar uma automação que fizesse uma varredura em algum relatório de turmas do sige.
+
 #     @property
 #     def turmas(self) -> list[str]:
 #         return ['6A', '6B', '6C', '7A', '7B', '8A', '8B', '9A']

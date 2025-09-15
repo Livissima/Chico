@@ -58,7 +58,7 @@ class ScrapingSige:
             self.nv.digitar_xpath('ficha aluno', 'matrícula', string=matrícula)
             self.nv.clicar('xpath', 'ficha aluno', 'click fora')
             self.nv.aguardar_página()
-            # input_nome = self.master.find_elements('ID', 'txtNome')
+
             self.nv.aguardar_preenchimento('txtNome')
 
             self.download_foto(
@@ -66,14 +66,10 @@ class ScrapingSige:
                 path_destino=os.path.join(self.path, f'{turma}')
             )
             self.nv.aguardar_página()
-            # self.nv.caminhar('ficha aluno')
-            # self.master.
+
             self.nv.clicar('xpath', 'ficha aluno', 'limpar')
             self.nv.aguardar_página(1)
-            # self.master.find_element(By.XPATH, '/html/body/div[8]/form/table[1]/tbody/tr[2]/td/table/tbody/tr[2]/td[2]/input[1]').clear()
-            # self.nv.clicar('xpath', 'ficha aluno', 'click fora')
-            # self.master.refresh()
-            # self.nv.aguardar(1)
+
 
 
     def download_foto(self, estudante, path_destino) :

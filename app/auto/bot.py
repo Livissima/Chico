@@ -1,5 +1,3 @@
-import concurrent.futures
-import threading
 from typing import Literal
 from app.auto.functions.normalizar import remover_acentos, normalizar_dicionário
 from app.auto.tasks import ScrapingSige
@@ -7,7 +5,6 @@ from app.auto.tasks.downloads import Downloads
 from app.auto.tasks.gerenciaracessos import GerenciarAcessos
 from app.auto.tasks.presenciamento import Presenciamento
 from selenium import webdriver
-from app.auto.data.misc.parâmetroswebdriver import ParâmetrosWebdriver
 from app.auto.tasks.sondagem import Sondagem
 
 
@@ -36,8 +33,7 @@ class Bot:
 
 
     def _executar_tarefa(self, tarefa):
-        wd_settings = ParâmetrosWebdriver().impressão
-        self.navegador = webdriver.Chrome(wd_settings)
+        self.navegador = webdriver.Chrome()
 
         def argumentos(_tarefa):
             parâmetros = self._obter_parâmetros(_tarefa)

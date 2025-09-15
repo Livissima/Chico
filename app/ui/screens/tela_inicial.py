@@ -19,7 +19,6 @@ class TelaInicial(CTkFrame):
         self._bt_desfazer = None
         self.master: CTk = master
         self.controller = controller
-        # self.controller.novo_diretório = self._in_diretório_base.valor
 
         self._configurar_layout()
         self._inserir_widgets()

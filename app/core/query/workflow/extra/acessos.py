@@ -1,7 +1,5 @@
 import unicodedata
 
-
-
 class Acessos:
 
     @staticmethod

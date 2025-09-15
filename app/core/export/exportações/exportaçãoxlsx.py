@@ -1,7 +1,5 @@
 import os
 from typing import Literal
-
-from app.core.query.workflow.variáveis import Variáveis
 from pandas import DataFrame, ExcelWriter
 
 #todo: Adicionar método para definir diretório_fonte de output pela UI
@@ -29,21 +27,14 @@ class ExportaçãoXLSX:
 
         if situação is None:
             df: DataFrame = self.consulta
-            # df_integrado = df_integrado.reset_index(drop=True)
-            # df_integrado.index = df_integrado.index + 1
             df.to_excel(self.writer, sheet_name=nome)
 
         elif situação == 'Cursando':
             df: DataFrame = self.consulta[self.consulta['Situação'] == 'Cursando']
-            # df: DataFrame = df[~df['Matrícula'].isin(Variáveis().excl)]
-#             df_integrado = df_integrado.reset_index(drop=True)
-#             df_integrado.index = df_integrado.index + 1
             df.to_excel(self.writer, sheet_name=nome)
 
         elif situação == '(transferido)':
             df: DataFrame = self.consulta[self.consulta['Situação'] == '(transferido)']
-#             df_integrado = df_integrado.reset_index(drop=True)
-#             df_integrado.index = df_integrado.index + 1
             df.to_excel(self.writer, sheet_name=nome)
 
 

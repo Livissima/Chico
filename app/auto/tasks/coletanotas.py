@@ -1,2 +1,2 @@
-class ColetaNotas:
-    pass
+# class ColetaNotas:
+#     pass
