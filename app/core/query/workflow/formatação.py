@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from pandas import DataFrame
 
@@ -16,7 +17,7 @@ class Formatação:
         'Certidão de Nascimento: Folha', 'Certidão de Nascimento: Livro', 'Certidão de Nascimento: Termo'
     ]
     colunas_num_string: list[str] = [
-        'Matrícula', 'CPF Aluno', 'Filiação 1 - CPF', 'Filiação 2 - CPF', 'INEP', 'Certidão de Nascimento - Modelo novo'
+        'Matrícula', 'CPF Aluno', 'Filiação 1 - CPF', 'Filiação 2 - CPF', 'INEP'
     ]
 
     def __init__(self, df_integrado: DataFrame):
@@ -48,13 +49,16 @@ class Formatação:
             continue
         return dataframe
 
-    def _numerizar(self, df):
-        dataframe = df
-        for coluna in self.colunas_num:
-            dataframe[coluna] = dataframe[coluna].astype(str).str.extract(r'(\d+)')[0]
-            dataframe[coluna] = pd.to_numeric(self.df[coluna], errors = 'coerce')
-            dataframe[coluna] = dataframe[coluna].astype('Int64')
-            continue
+    def _numerizar(self, df) :
+        dataframe = df.copy()
+        for coluna in self.colunas_num :
+            extracted = dataframe[coluna].astype(str).str.extract(r'(\d+)')[0]
+            numeric_series = pd.to_numeric(extracted, errors='coerce')
+            numeric_series = numeric_series.replace([np.inf, -np.inf], np.nan)
+            mask = numeric_series.notna()
+            dataframe[coluna] = pd.Series([pd.NA] * len(numeric_series), dtype='Int64')
+            dataframe.loc[mask, coluna] = numeric_series[mask].astype(np.int64)
+
         return dataframe
 
     def _datar(self, df):
@@ -82,8 +86,9 @@ class Formatação:
 
     @staticmethod
     def remover_quebras_de_linhas(df: DataFrame) -> DataFrame:
-        df = df.replace(to_replace = ['\r', '\n'], value = [' ', ' '], regex = True)
-        df.columns = [coluna.replace('\r', ' ').replace('\n', ' ') for coluna in df.columns]
+
+        df = df.replace(to_replace = ['\r', '\n', '\t', '\xa0'], value = [' ', ' ', ' ', ' '], regex = True)
+        df.columns = [str(coluna).replace('\r', ' ').replace('\n', ' ') for coluna in df.columns]
         return df
 
     @staticmethod
