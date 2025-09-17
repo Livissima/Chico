@@ -1,7 +1,7 @@
 import json
 import os.path
 import time
-from typing import Literal
+from typing import Literal, Generator, Any
 from selenium.common import ElementClickInterceptedException, StaleElementReferenceException
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
@@ -21,7 +21,7 @@ class Navegação :
         self._timeout = 15
         self._args_wait = {'driver' : self.master, 'timeout' : self._timeout}
 
-    def clicar(self, by: Literal['xpath', 'id', 'css', 'css livre', 'xpath livre', 'id livre'] = 'xpath', *chaves: str) :
+    def clicar(self, by: Literal['xpath', 'id', 'css', 'css livre', 'xpath livre', 'id livre'] = 'xpath', *chaves: str) -> None :
         tag = None
         if 'livre' not in by:
             by_dict_de_dicts = {
@@ -74,7 +74,7 @@ class Navegação :
             except Exception as js_error :
                 raise f"Falha no clique via JavaScript: {js_error}"
 
-    def caminhar(self, destino: str) :
+    def caminhar(self, destino: str) -> None :
         # uma recursão seria melhor
 
         print(f'    Caminhando para {destino}')
@@ -83,7 +83,7 @@ class Navegação :
 
             self.clicar('xpath', *tupla)
 
-    def digitar_xpath(self, *chaves, string: str) :
+    def digitar_xpath(self, *chaves, string: str) -> None:
         xpaths = self._pp.xpaths
 
         for chave in chaves :
@@ -134,14 +134,14 @@ class Navegação :
             else :
                 raise f"Erro: {e}\nMétodo: `obter_valor`\nxpath: {xpath}"
 
-    def aguardar_página(self, tempo: float | None = None) :
+    def aguardar_página(self, tempo: float | None = None) -> None :
         elemento = (By.TAG_NAME, 'body')
         WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
         WebDriverWait(**self._args_wait).until(visibility_of_element_located(elemento))
         if tempo:
             time.sleep(tempo)
 
-    def aguardar_preenchimento(self, elemento: str) :
+    def aguardar_preenchimento(self, elemento: str) -> None:
         def _predicate(driver) :
             try :
                 elem = driver.find_element(By.ID, elemento)
@@ -152,9 +152,9 @@ class Navegação :
 
         WebDriverWait(**self._args_wait).until(_predicate)
 
-    def gerar_json(self, nome_arquivo, pasta_destino, tipo: Literal['fichas', 'contatos', 'gêneros', 'situações', 'sondagem']) :
+    def download_json(self, nome_arquivo, pasta_destino, tipo: Literal['fichas', 'contatos', 'gêneros', 'situações', 'sondagem'] | str) -> bool:
         inicio = time.time()
-        dados = self.obter_tabelas(tipo)
+        dados = self.__obter_tabelas(tipo)
 
         if dados:
             path_json = os.path.join(pasta_destino, f'{nome_arquivo}.json')
@@ -170,7 +170,7 @@ class Navegação :
             print('Nenhum dado extraído')
             return False
 
-    def obter_tabelas(self, tipo) -> list[str] | list[dict[str, str]]:
+    def __obter_tabelas(self, tipo: str) -> list[str] | list[dict[str, str]]:
         tipos_simples = {'contatos', 'situações', 'gêneros'}
         script = """"""
 
@@ -297,7 +297,7 @@ class Navegação :
             lista_css.append(css_elemento)
         return lista_css
 
-    def _obter_tabelas_fallback(self, nome_arquivo, pasta_destino) :
+    def _obter_tabelas_fallback(self, nome_arquivo, pasta_destino) -> bool:
         #Fallback
         elemento = (By.CSS_SELECTOR, 'table.tabela')
 
@@ -337,7 +337,7 @@ class Navegação :
             print(f'Erro ao extrair tabelas (fallback): {e}')
             return False
 
-    def iterar_turmas_sige(self) :
+    def iterar_turmas_sige(self) -> Generator[tuple[Any, Any], Any, None]:
         for série in parâmetros.séries_selecionadas :
             self._selecionar_série(série)
             turmas_correspoentes = parâmetros.turmas_selecionadas_por_série[série]
@@ -345,17 +345,17 @@ class Navegação :
                 self._selecionar_turma_sige(turma)
                 yield série, turma
 
-    def _selecionar_turma_sige(self, turma) :
+    def _selecionar_turma_sige(self, turma) -> None :
         self._selecionar_opção('composição', valor='199')
         self._selecionar_opção('turno', valor='1')
         self._selecionar_opção('turma', texto=turma)
 
-    def _selecionar_série(self, série) :
+    def _selecionar_série(self, série) -> None :
         self._selecionar_opção('composição', valor='199')
         self._selecionar_opção('série', texto=f'{série}º Ano')
         self._selecionar_opção('turno', valor='1')
 
-    def _selecionar_opção(self, arg, valor=None, texto=None) :
+    def _selecionar_opção(self, arg, valor=None, texto=None) -> None:
         id_element = self._pp.ids[arg]
 
         elemento: tuple[str, str] = (By.ID, id_element)

@@ -22,10 +22,10 @@ class Downloads:
         self.pp = Propriedades('sige')
         self._logon()
 
-        self.executar(alvos)
+        self._executar(alvos)
         self.master.quit()
 
-    def _logon(self):
+    def _logon(self) -> None:
         self.master.get(self.pp.url)
         self.master.maximize_window()
         self.nv.digitar_xpath('misc', 'input id', string=self.pp.credenciais['id'])
@@ -33,26 +33,26 @@ class Downloads:
         self.nv.clicar('xpath', 'misc', 'entrar')
         self.nv.clicar('xpath', 'misc', 'alerta')
 
-    def executar(self, alvos):
+    def _executar(self, alvos: list[str]) -> None:
         for alvo in alvos:
             self.nv.clicar
-            self._baixar_alvo(alvo.lower())
+            self.__baixar_alvo(alvo.lower())
 
-    def _baixar_alvo(self, alvo):
+    def __baixar_alvo(self, alvo: str) -> None:
         self.nv.caminhar(alvo.lower())
 
         for série, turma in self.nv.iterar_turmas_sige():
-            self._gerar_obter_sair(alvo.lower(), turma)
+            self.__capturar(alvo.lower(), turma)
 
-    def _gerar_obter_sair(self, tipo, turma):
-        self.__clicar_gerar(tipo)
-        self.nv.gerar_json(turma, self._mapear_diretório(tipo), tipo)
+    def __capturar(self, tipo: str, turma: str) -> None:
+        self.__gerar_relatório(tipo)
+        self.nv.download_json(turma, self.__mapear_diretório(tipo), tipo)
         self.__voltar()
 
-    def _mapear_diretório(self, tipo: str) -> PathLike:
+    def __mapear_diretório(self, tipo: str) -> PathLike:
         return Path(self.destino, 'fonte', tipo.title())
 
-    def __clicar_gerar(self, tipo):
+    def __gerar_relatório(self, tipo) -> None:
         if tipo == 'fichas':
             self.nv.clicar('xpath', 'misc', 'marcar todos')
         if tipo == 'gêneros':
@@ -60,6 +60,6 @@ class Downloads:
             self.nv.digitar_xpath('resumo', 'turmas', 'input data', string=self.pp.hoje)
         self.nv.clicar('id', 'gerar')
 
-    def __voltar(self):
+    def __voltar(self) -> None:
         self.nv.clicar('css', 'voltar')
 
