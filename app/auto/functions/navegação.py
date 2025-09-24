@@ -290,12 +290,17 @@ class Navegação :
 
 
     def obter_turmas_siap(self) -> list[str]:
-        elementos = self.master.find_elements(By.CSS_SELECTOR, '.listaTurmas.dentroPrazo')
-        lista_css = []
-        for índice, elemento in enumerate(elementos, start=2) :
-            css_elemento = f'#cphFuncionalidade_ControleFrequencia > div > div.containerTurmaTurno > div:nth-child({índice})'
-            lista_css.append(css_elemento)
-        return lista_css
+        container_turmas = self.master.find_element(By.CLASS_NAME, 'containerTurmaTurno')
+        # print(container_turmas)
+        lista_xpath = []
+        elementos_turmas = container_turmas.find_elements(By.CLASS_NAME, 'listaTurmas ')
+
+        for índice, elemento in enumerate(elementos_turmas, start=1) :
+            xpath_turma = f'/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[{índice}]'
+            lista_xpath.append(xpath_turma)
+
+        print(f'{lista_xpath = }')
+        return lista_xpath
 
     def _obter_tabelas_fallback(self, nome_arquivo, pasta_destino) -> bool:
         #Fallback

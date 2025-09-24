@@ -1,8 +1,10 @@
+import os.path
 from typing import TYPE_CHECKING
 
 from customtkinter import CTkFrame, CTk
 
 from app.auto.bot import Bot
+from app.config.parâmetros import parâmetros
 from app.ui.config.cabeçalhos import Cabeçalhos
 from app.ui.widgets import Botão, Texto
 
@@ -21,6 +23,8 @@ class TelaBot(CTkFrame):
         # self.pack(expand=True, fill='both')
         self._configurar_layout()
         self._inserir_widgets()
+        print(f'{parâmetros.novo_diretório = }')
+
 
     def _configurar_layout(self):
         Cabeçalhos(self, 'telas_bot')
@@ -50,7 +54,7 @@ class TelaBot(CTkFrame):
 
         self.bt_siap = Botão(
             self,
-            função=lambda: Bot(tarefa='siap'),
+            função=lambda: Bot(tarefa='siap', path=os.path.join(r'C:\Users\meren\OneDrive - Secretaria de Estado da Educação', 'Frequência Anual.xlsx')),
             texto='SIAP',
             fonte=('Arial', 20),
             formato='bold',
