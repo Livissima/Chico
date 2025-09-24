@@ -57,8 +57,8 @@ class Bot:
 
         tarefas = {
             'fotos' : lambda: ScrapingSige(**argumentos(tarefa)),
-            'siap' : lambda: Presenciamento(**argumentos(tarefa)),
-            'sondagem' : lambda: Sondagem(**argumentos(tarefa)),
+            'siap'  : lambda: Presenciamento(**argumentos(tarefa)),
+            'sondagem'  : lambda: Sondagem(**argumentos(tarefa)),
             'downloads' : lambda: Downloads(**argumentos(tarefa)),
             'gerenciar' : lambda: GerenciarAcessos(**argumentos(tarefa)),
         }

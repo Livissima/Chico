@@ -56,7 +56,7 @@ class Sige :
                 },
                 'turmas' : {
                     'ativas' : '/html/body/div[8]/form/table/tbody/tr/td/table/tbody/tr[6]/td[2]/input[1]',
-                    'input data' : '/html/body/div[8]/form/table/tbody/tr/td/table/tbody/tr[7]/td[2]/input'
+                    'input data' : '/html/body/div[8]/form/table/tbody/tr[6]/td[2]/input'
                 }
             },
             'lápis' : {

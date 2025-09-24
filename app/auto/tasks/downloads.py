@@ -56,7 +56,7 @@ class Downloads:
         if tipo == 'fichas':
             self.nv.clicar('xpath', 'misc', 'marcar todos')
         if tipo == 'gêneros':
-            self.nv.clicar('xpath', 'resumo', 'turmas', 'ativas')
+            # self.nv.clicar('xpath', 'resumo', 'turmas', 'ativas')
             self.nv.digitar_xpath('resumo', 'turmas', 'input data', string=self.pp.hoje)
         self.nv.clicar('id', 'gerar')
 
