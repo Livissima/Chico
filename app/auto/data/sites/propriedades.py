@@ -1,5 +1,6 @@
 import datetime
 
+from app.auto.data.sites.google import Google
 from app.auto.data.sites.netescola import NetEscola
 from app.auto.data.sites.siap import Siap
 from app.auto.data.sites.sige import Sige
@@ -14,7 +15,8 @@ class Propriedades:
     sites = {
         'sige' : Sige,
         'siap' : Siap,
-        'netescola' : NetEscola
+        'netescola' : NetEscola,
+        'google' : Google
     }
 
     def __init__(self, site: str | None = None) :
