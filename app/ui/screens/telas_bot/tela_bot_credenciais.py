@@ -24,10 +24,10 @@ class TelaBotCredenciais(CTkFrame):
         Cabeçalhos(self, 'telas_bot credenciais')
 
     def _inserir_widgets(self):
+        self.__inserir_checkboxes()
         self.__inserir_textos()
         self.__inserir_inputs()
         self.__inserir_botões()
-        self.__inserir_checkboxes()
 
     def __inserir_textos(self):
         self._tx_feedback = Texto(
@@ -58,12 +58,12 @@ class TelaBotCredenciais(CTkFrame):
             y=10,
         )
         y = 350
+        print(f'{self._ck_turmas.valores_true = }')
         self.bt_netescola = Botão(
             # todo: o feedback no console está inacurado.
             self,
             função=lambda: Bot(
                 tarefa='gerenciar',
-                path_database= os.path.join(parâmetros.novo_diretório, 'Database.xlsx'),
                 tipo='netescola',
                 turmas=self._ck_turmas.valores_true
             ),
@@ -75,7 +75,12 @@ class TelaBotCredenciais(CTkFrame):
 
         self.bt_google = Botão(
             self,
-            função=lambda: print('botão google'),
+            função=lambda: Bot(
+                tarefa='gerenciar',
+                path_database= os.path.join(parâmetros.novo_diretório, 'Database.xlsx'),
+                tipo='google',
+                turmas=self._ck_turmas.valores_true
+            ),
             texto='Google',
             largura=100,
             x=350,
@@ -93,11 +98,13 @@ class TelaBotCredenciais(CTkFrame):
                 estado_turmas[turma] = parâmetros._estado_turmas[turma]
             else:
                 estado_turmas[turma] = True
+
         self._ck_turmas = CheckBox(
             self,
             opções=parâmetros.turmas_disponíveis,
             valores_iniciais=estado_turmas
         )
+
 
     def salvar_valores_checkboxes(self):
         valores = self._ck_turmas.valor()
