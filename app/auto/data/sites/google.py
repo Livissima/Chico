@@ -1,6 +1,6 @@
 class Google:
 
-    url = 'https://accounts.google.com/v3/signin/identifier?dsh=S-719554540%3A1758746872244142&hl=pt-BR&ifkv=AfYwgwWqy-RvuM8GZs0ORmfb2WIShLGLLcCOg0um3ZyS9IziSl-uH-MEKU0Nu6Td1oiuw981XXUbiQ&service=mail&flowName=GlifWebSignIn&flowEntry=ServiceLogin'
+    url = 'https://accounts.google.com/'
 
     @property
     def xpaths(self):
@@ -9,7 +9,8 @@ class Google:
             'avançar email' : '//*[@id="identifierNext"]/div/button/span',
             'input senha': '//*[@id="password"]/div[1]/div/div[1]/input',
             'feedback': '//*[@id="c0"]',
-            'avançar senha' : '//*[@id="passwordNext"]/div/button/div[3]'
+            'avançar senha' : '//*[@id="passwordNext"]/div/button/div[3]',
+            'alerta' : '//*[@id="c0"]'
         }
 
     @property

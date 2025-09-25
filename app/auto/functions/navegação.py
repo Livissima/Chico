@@ -5,6 +5,7 @@ from typing import Literal, Generator, Any
 from selenium.common import ElementClickInterceptedException, StaleElementReferenceException
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.expected_conditions import presence_of_element_located, visibility_of_element_located, \
@@ -69,7 +70,7 @@ class Navegação :
         except ElementClickInterceptedException:
             try :
                 self.master.execute_script("arguments[0].click();", elemento_web)
-                print(f"Clique via JavaScript em: {str(*chaves[-1 :])}")
+                # print(f"Clique via JavaScript em: {str(*chaves[-1 :])}")
                 self.aguardar_página()
             except Exception as js_error :
                 raise f"Falha no clique via JavaScript: {js_error}"
@@ -134,12 +135,18 @@ class Navegação :
             else :
                 raise f"Erro: {e}\nMétodo: `obter_valor`\nxpath: {xpath}"
 
-    def aguardar_página(self, tempo: float | None = None) -> None :
+    def aguardar_página(self, tempo_adicional: float | None = None) -> None :
         elemento = (By.TAG_NAME, 'body')
         WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
         WebDriverWait(**self._args_wait).until(visibility_of_element_located(elemento))
-        if tempo:
-            time.sleep(tempo)
+
+
+
+
+
+        if tempo_adicional:
+            time.sleep(tempo_adicional)
+
 
     def aguardar_preenchimento(self, elemento: str) -> None:
         def _predicate(driver) :
@@ -287,7 +294,6 @@ class Navegação :
 
         dados = self.master.execute_script(script)
         return dados
-
 
     def obter_turmas_siap(self) -> list[str]:
         container_turmas = self.master.find_element(By.CLASS_NAME, 'containerTurmaTurno')
