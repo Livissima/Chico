@@ -3,7 +3,7 @@ from app.auto.functions.normalizar import remover_acentos, normalizar_dicionári
 from app.auto.tasks import ScrapingSige
 from app.auto.tasks.downloads import Downloads
 from app.auto.tasks.gerenciadordecredenciais import GerenciadorDeCredenciais
-from app.auto.tasks.presenciamento import Presenciamento
+from app.auto.tasks.gerenciadordefrequência import GerenciadorDeFrequência
 from selenium import webdriver
 from app.auto.tasks.sondagem import Sondagem
 
@@ -57,7 +57,7 @@ class Bot:
 
         tarefas = {
             'fotos' : lambda: ScrapingSige(**argumentos(tarefa)),
-            'siap'  : lambda: Presenciamento(**argumentos(tarefa)),
+            'siap'  : lambda: GerenciadorDeFrequência(**argumentos(tarefa)),
             'sondagem'  : lambda: Sondagem(**argumentos(tarefa)),
             'downloads' : lambda: Downloads(**argumentos(tarefa)),
             'gerenciar' : lambda: GerenciadorDeCredenciais(**argumentos(tarefa)),

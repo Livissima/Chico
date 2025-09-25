@@ -54,6 +54,7 @@ class TelaBot(CTkFrame):
 
         self.bt_siap = Botão(
             self,
+            #todo flexibilizar esse path
             função=lambda: Bot(tarefa='siap', path=os.path.join(r'C:\Users\meren\OneDrive - Secretaria de Estado da Educação', 'Frequência Anual.xlsx')),
             texto='SIAP',
             fonte=('Arial', 20),
