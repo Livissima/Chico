@@ -366,19 +366,34 @@ class Navegação :
         self._selecionar_opção('série', texto=f'{série}º Ano')
         self._selecionar_opção('turno', valor='1')
 
-    def _selecionar_opção(self, arg, valor=None, texto=None) -> None:
-        id_element = self._pp.ids[arg]
+    def _selecionar_opção(self, alvo, valor=None, texto=None) -> None:
+        #todo aprimorar os dependentes deste método para que consigam lidar com outras composições e turnos.
+
+        id_element = self._pp.ids[alvo]
 
         elemento: tuple[str, str] = (By.ID, id_element)
 
         selecionar_elemento = WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
         selecionar = Select(selecionar_elemento)
         if valor is None and texto is None or valor is not None and texto is not None :
-            raise ValueError(f"Nenhum argumento inserido para preenchimento de '{arg}'")
+            raise ValueError(f"Nenhum argumento inserido para preenchimento de '{alvo}'")
         if valor :
             selecionar.select_by_value(valor)
         if texto :
             selecionar.select_by_visible_text(texto)
+
+    def selecionar(self, div, valor = '1'):
+
+        selecionar_elemento = WebDriverWait(**self._args_wait).until(presence_of_element_located(div))
+        selecionar = Select(selecionar_elemento)
+        selecionar.select_by_value(valor)
+
+
+
+
+
+
+
 
     @staticmethod
     def __extrair_cabeçalhos(tabela) :

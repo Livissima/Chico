@@ -5,15 +5,14 @@ from app.auto.data.sites.propriedades import Propriedades
 from app.auto.functions.navegação import Navegação
 from selenium.webdriver import Chrome
 
-class Presenciamento:
+class GerenciadorDeFrequência:
 
     def __init__(self, navegador: Chrome, path, **kwargs):
         self.path_xlsx = path
         self.master = navegador
         self.nv = Navegação(navegador, 'siap')
         self.pp = Propriedades(site='siap')
-        self.faltosos_de_hoje
-        # self.executar()
+        self.executar()
         # self.master.quit()
 
     def executar(self):
@@ -42,24 +41,52 @@ class Presenciamento:
 
     def _presenciar_todos(self):
         turmas = self.nv.obter_turmas_siap()
-        # print(turmas)
+
         for turma in turmas:
             self.nv.clicar('xpath livre', turma)
             self.nv.aguardar_página()
+
+
+            elemento_coluna_pontinhos = self.master.find_element(By.CLASS_NAME, 'listaDeFrequencias')
+            sub_elemento_pontinhos = elemento_coluna_pontinhos.find_element(By.CLASS_NAME, 'itens')
+            lista_pontinhos = sub_elemento_pontinhos.find_elements(By.CSS_SELECTOR, 'div[data-matricula]')
+            alvos = [alvo.click() for alvo in lista_pontinhos if alvo in self.faltosos_de_hoje]
+
+            elemento_coluna_justificativas = self.master.find_element(By.CLASS_NAME, 'listaMotivoAusencia')
+            sub_elemento_justificativas = elemento_coluna_justificativas.find_element(By.CLASS_NAME, 'itens')
+            lista_divs = sub_elemento_justificativas.find_elements(By.CSS_SELECTOR, )
+            justis = [div.find_element(By.TAG_NAME, 'select') for div in lista_divs if div.get_attribute('data-matrícula') in self.faltosos_de_hoje['Matrícula'] ]
+            #Não testado
+
+
+
+
+
+
             self.nv.clicar('xpath', 'salvar e próximo')
 
+
+
+
+
+
     @property
-    def faltosos_de_hoje(self) -> list:
+    def faltosos_de_hoje(self) -> DataFrame:
         df = pd.read_excel(self.path_xlsx, sheet_name='Compilado Faltas')
 
-        df = df[['Turma Real', 'Estudante', 'Data Falta', 'Lançado']]
+        df = df[['Turma Real', 'Estudante', 'Data Falta', 'Lançado', 'Matrícula']]
+
         df = df[df['Lançado'] == 'Lançado']
 
         df['Data Falta'] = df['Data Falta'].dt.strftime('%d/%m/%Y')
 
-        df_hoje = df[df['Data Falta'] == self.pp.hoje]
-        faltosos_de_hoje = list(df_hoje['Estudante'])
-        print(f'{faltosos_de_hoje = }')
+        faltosos_de_hoje = df[df['Data Falta'] == self.pp.hoje]
+
+        # faltosos_de_hoje = list(df_hoje['Estudante'])
+
+        print(f'{type(faltosos_de_hoje) = }')
+
         return faltosos_de_hoje
+
 
 
