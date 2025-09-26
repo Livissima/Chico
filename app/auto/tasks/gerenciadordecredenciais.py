@@ -34,10 +34,7 @@ class GerenciadorDeCredenciais:
         # self.master.quit()
 
 
-
-
     def gerenciar(self, tipo):
-
 
         início = 0
         if tipo not in ('netescola', 'google') :
@@ -66,74 +63,74 @@ class GerenciadorDeCredenciais:
             #     self.nv.aguardar_página()
 
             if tipo == 'google':
+                pass
+                # self.master.get(self.pp.url)
+#                 self.gerenciar_google(estudante, email, senha_padrão, senha_padrão2, dn, nova_senha)
+#
 
-                self.master.get(self.pp.url)
-                self.gerenciar_google(estudante, email, senha_padrão, senha_padrão2, dn, nova_senha)
-
-
-    # def gerenciar_netescola(self, matrícula, dn, email, nova_senha):
-    #     self.nv.digitar_xpath('matrícula', string=matrícula)
-    #     self.nv.digitar_xpath('nascimento', string=dn)
-    #     self.nv.clicar('xpath', 'pesquisar')
-    #     self.nv.digitar_xpath('email', string=email)
-    #     self.nv.digitar_xpath('email2', string=email)
-    #     self.nv.digitar_xpath('senha', string=nova_senha)
-    #     self.nv.digitar_xpath('senha2', string=nova_senha)
-    #     self.nv.clicar('xpath', 'concordo')
-    #     self.nv.clicar('xpath', 'salvar')
-    #     self.nv.aguardar_página()
-
-    def gerenciar_google(self, estudante, email, senha_padrão, senha_padrão2, senha_dn, senha_alt):
-        print(f'{estudante = }')
-
-        self.nv.digitar_xpath('input email', string=email)
-        self.nv.clicar('xpath', 'avançar email')
-
-#################################################
-
-        alerta = None
-        dict_senhas = dict(enumerate([senha_padrão, senha_padrão2, senha_dn, senha_alt]))
-
-        for índice, senha in dict_senhas.items() :
-            alerta = None
-            print(f'Tentando {senha}')
-
-            self._tentar_senha(senha)
-            self._checar_alerta(índice, dict_senhas)
-
-            print('O Loop ```for índice, senha in dict_senhas.items() :``` , do método `self.gerenciar_google()`, chegou ao fim')
-
-
-
-
-    def _decidir(self, alerta, índice, dict_senhas):
-
-        if alerta is not None:
-            if índice+1 in dict_senhas.keys() :
-                print(f'Erramos. tentando {dict_senhas[índice + 1]}')
-                self._tentar_senha(dict_senhas[índice + 1])
-                self._checar_alerta(índice, dict_senhas)
-            else:
-                print('Tentamos tudo e não deu. Seguindo.')
-        if alerta is None :
-            print('Acertamos. Seguindo.')
-
-
-
-    def _checar_alerta(self, i, _dict_senhas):
-        alerta = None
-
-        try :
-            alerta = self.master.find_element(By.XPATH, '//*[@id="c0"]/div[2]/span')
-        except NoSuchElementException :
-            pass
-
-        self._decidir(alerta, i, _dict_senhas)
-
-
-    def _tentar_senha(self, senha) :
-        self.nv.digitar_xpath('input senha', string=senha)
-        self.nv.clicar('xpath', 'avançar senha')
+    def gerenciar_netescola(self, matrícula, dn, email, nova_senha):
+        self.nv.digitar_xpath('matrícula', string=matrícula)
+        self.nv.digitar_xpath('nascimento', string=dn)
+        self.nv.clicar('xpath', 'pesquisar')
+        self.nv.digitar_xpath('email', string=email)
+        self.nv.digitar_xpath('email2', string=email)
+        self.nv.digitar_xpath('senha', string=nova_senha)
+        self.nv.digitar_xpath('senha2', string=nova_senha)
+        self.nv.clicar('xpath', 'concordo')
+        self.nv.clicar('xpath', 'salvar')
+        self.nv.aguardar_página()
+#
+#     def gerenciar_google(self, estudante, email, senha_padrão, senha_padrão2, senha_dn, senha_alt):
+#         print(f'{estudante = }')
+#
+#         self.nv.digitar_xpath('input email', string=email)
+#         self.nv.clicar('xpath', 'avançar email')
+#
+# #################################################
+#
+#         alerta = None
+#         dict_senhas = dict(enumerate([senha_padrão, senha_padrão2, senha_dn, senha_alt]))
+#
+#         for índice, senha in dict_senhas.items() :
+#             alerta = None
+#             print(f'Tentando {senha}')
+#
+#             self._tentar_senha(senha)
+#             self._checar_alerta(índice, dict_senhas)
+#
+#             print('O Loop ```for índice, senha in dict_senhas.items() :``` , do método `self.gerenciar_google()`, chegou ao fim')
+#
+#
+#
+#
+#     def _decidir(self, alerta, índice, dict_senhas):
+#
+#         if alerta is not None:
+#             if índice+1 in dict_senhas.keys() :
+#                 print(f'Erramos. tentando {dict_senhas[índice + 1]}')
+#                 self._tentar_senha(dict_senhas[índice + 1])
+#                 self._checar_alerta(índice, dict_senhas)
+#             else:
+#                 print('Tentamos tudo e não deu. Seguindo.')
+#         if alerta is None :
+#             print('Acertamos. Seguindo.')
+#
+#
+#
+#     def _checar_alerta(self, i, _dict_senhas):
+#         alerta = None
+#
+#         try :
+#             alerta = self.master.find_element(By.XPATH, '//*[@id="c0"]/div[2]/span')
+#         except NoSuchElementException :
+#             pass
+#
+#         self._decidir(alerta, i, _dict_senhas)
+#
+#
+#     def _tentar_senha(self, senha) :
+#         self.nv.digitar_xpath('input senha', string=senha)
+#         self.nv.clicar('xpath', 'avançar senha')
 
 #################################################################################
 
