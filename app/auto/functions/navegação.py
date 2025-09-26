@@ -19,8 +19,8 @@ class Navegação :
     def __init__(self, master: Chrome, site: str) :
         self.master = master
         self._pp = Propriedades(site)
-        self._timeout = 15
-        self._args_wait = {'driver' : self.master, 'timeout' : self._timeout}
+        self.__timeout = 15
+        self.__args_wait = {'driver' : self.master, 'timeout' : self.__timeout}
 
     def clicar(self, by: Literal['xpath', 'id', 'css', 'css livre', 'xpath livre', 'id livre'] = 'xpath', *chaves: str) -> None :
         tag = None
@@ -47,15 +47,15 @@ class Navegação :
         elemento: tuple[str, str] = (_BY, tag)
 
         try :
-            elemento_web = WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
+            elemento_web = WebDriverWait(**self.__args_wait).until(presence_of_element_located(elemento))
 
             self.master.execute_script(
                 "arguments[0].scrollIntoView({block: 'center', behavior: 'smooth'});",
                 elemento_web
             )
 
-            WebDriverWait(**self._args_wait).until(visibility_of_element_located(elemento))
-            WebDriverWait(**self._args_wait).until(element_to_be_clickable(elemento)).click()
+            WebDriverWait(**self.__args_wait).until(visibility_of_element_located(elemento))
+            WebDriverWait(**self.__args_wait).until(element_to_be_clickable(elemento)).click()
 
             self.aguardar_página()
 
@@ -94,9 +94,9 @@ class Navegação :
         elemento: tuple[str, str] = (By.XPATH, xpath)
 
         try :
-            WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
-            WebDriverWait(**self._args_wait).until(visibility_of_element_located(elemento))
-            el = WebDriverWait(**self._args_wait).until(element_to_be_clickable(elemento))
+            WebDriverWait(**self.__args_wait).until(presence_of_element_located(elemento))
+            WebDriverWait(**self.__args_wait).until(visibility_of_element_located(elemento))
+            el = WebDriverWait(**self.__args_wait).until(element_to_be_clickable(elemento))
             el.clear()  # limpa antes de digitar
             el.send_keys(string)
             self.aguardar_página()
@@ -119,9 +119,9 @@ class Navegação :
         elemento: tuple[str, str] = (By.XPATH, xpath)
 
         try :
-            WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
-            WebDriverWait(**self._args_wait).until(visibility_of_element_located(elemento))
-            _elemento = WebDriverWait(**self._args_wait).until(element_to_be_clickable(elemento))
+            WebDriverWait(**self.__args_wait).until(presence_of_element_located(elemento))
+            WebDriverWait(**self.__args_wait).until(visibility_of_element_located(elemento))
+            _elemento = WebDriverWait(**self.__args_wait).until(element_to_be_clickable(elemento))
             valor = _elemento.text
 
             self.aguardar_página()
@@ -137,8 +137,8 @@ class Navegação :
 
     def aguardar_página(self, tempo_adicional: float | None = None) -> None :
         elemento = (By.TAG_NAME, 'body')
-        WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
-        WebDriverWait(**self._args_wait).until(visibility_of_element_located(elemento))
+        WebDriverWait(**self.__args_wait).until(presence_of_element_located(elemento))
+        WebDriverWait(**self.__args_wait).until(visibility_of_element_located(elemento))
 
 
 
@@ -157,7 +157,7 @@ class Navegação :
             except StaleElementReferenceException:
                 return False
 
-        WebDriverWait(**self._args_wait).until(_predicate)
+        WebDriverWait(**self.__args_wait).until(_predicate)
 
     def download_json(self, nome_arquivo, pasta_destino, tipo: Literal['fichas', 'contatos', 'gêneros', 'situações', 'sondagem'] | str) -> bool:
         inicio = time.time()
@@ -184,7 +184,7 @@ class Navegação :
 
         if tipo in tipos_simples :
             elemento = (By.CSS_SELECTOR, 'table.tabela')
-            WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
+            WebDriverWait(**self.__args_wait).until(presence_of_element_located(elemento))
             script = """
                             function extrairTabelas() {
                                 var tabelas = document.querySelectorAll('table.tabela');
@@ -313,8 +313,8 @@ class Navegação :
         elemento = (By.CSS_SELECTOR, 'table.tabela')
 
         try :
-            WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
-            WebDriverWait(**self._args_wait).until(visibility_of_element_located(elemento))
+            WebDriverWait(**self.__args_wait).until(presence_of_element_located(elemento))
+            WebDriverWait(**self.__args_wait).until(visibility_of_element_located(elemento))
 
             tabelas = self.master.find_elements(*elemento)
             print(f'Localizadas {len(tabelas)} tabelas na página.')
@@ -373,7 +373,7 @@ class Navegação :
 
         elemento: tuple[str, str] = (By.ID, id_element)
 
-        selecionar_elemento = WebDriverWait(**self._args_wait).until(presence_of_element_located(elemento))
+        selecionar_elemento = WebDriverWait(**self.__args_wait).until(presence_of_element_located(elemento))
         selecionar = Select(selecionar_elemento)
         if valor is None and texto is None or valor is not None and texto is not None :
             raise ValueError(f"Nenhum argumento inserido para preenchimento de '{alvo}'")
@@ -384,7 +384,7 @@ class Navegação :
 
     def selecionar(self, div, valor = '1'):
 
-        selecionar_elemento = WebDriverWait(**self._args_wait).until(presence_of_element_located(div))
+        selecionar_elemento = WebDriverWait(**self.__args_wait).until(presence_of_element_located(div))
         selecionar = Select(selecionar_elemento)
         selecionar.select_by_value(valor)
 
