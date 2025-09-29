@@ -1,3 +1,4 @@
+import json
 import os
 import time
 from os import PathLike
@@ -5,9 +6,11 @@ from os import PathLike
 import pandas as pd
 from selenium.webdriver.common.by import By
 from app.auto.data.sites.propriedades import Propriedades
-from app.auto.functions.javascript import SCRIPT_MARCAR_FALTA, SCRIPT_JUSTIFICAR, SCRIPT_IR_PARA_DATA
+from app.auto.functions.javascript import SCRIPT_MARCAR_FALTA_COMO_ADM, SCRIPT_JUSTIFICAR, SCRIPT_IR_PARA_DATA
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
+
+from app.config.parâmetros import parâmetros
 
 
 class GerenciadorDeFrequência :
@@ -16,31 +19,44 @@ class GerenciadorDeFrequência :
             self,
             navegador: Chrome,
             path: PathLike,
-            data,
+            data = None,
             **kwargs
     ):
-        _path = os.path.join(path, 'fonte', 'Compilado Faltas.xlsx')
-        self.df = self.__obter_df(_path)
-        self.data = data
-        self.master = navegador
-        self.nv = NavegaçãoWeb(navegador, 'siap')
-        self.pp = Propriedades(site='siap')
+        self._obter_modulações()
+        # _path = os.path.join(path, 'fonte', 'Compilado Faltas.xlsx')
+        # self.df = self.__obter_df_faltas(_path)
+        # self.data = data
+        # self.master = navegador
+        # self.nv = NavegaçãoWeb(navegador, 'siap')
+        # self.pp = Propriedades(site='siap')
+        # self._executar()
 
-        self.executar()
+
+    def _executar(self):
+        for usuário, credenciais in self.pp.credenciais.items():
+            _id = credenciais['id']
+            senha = credenciais['senha']
+            tipo = credenciais['tipo']
+            self._execução_por_usuário(usuário, _id, senha, tipo)
+            time.sleep(5)
 
 
-    def executar(self) :
+    def _execução_por_usuário(self, usuário, _id, senha, tipo) :
         self.master.get(self.pp.url)
         self.master.maximize_window()
-        self._logon()
-        self._acessar_painel_frequência()
+
+        self._logon(usuário, _id, senha)
+        self.nv.aguardar_página()
+
+        self._acessar_painel_frequência(tipo)
         self._lançar_faltas()
         self.master.quit()
 
-    def _logon(self) :
-        credenciais = self.pp.credenciais
-        self.nv.digitar_xpath('input login', string=credenciais['id'])
-        self.nv.digitar_xpath('input senha', string=credenciais['senha'])
+    def _logon(self, usuário, _id, senha) :
+        #credenciais = self.pp.credenciais
+        print(f'Fazendo login para: {usuário}')
+        self.nv.digitar_xpath('input login', string=_id)
+        self.nv.digitar_xpath('input senha', string=senha)
         self._resolver_captcha()
         self.nv.clicar('xpath', 'botão login')
         self.nv.aguardar_página()
@@ -49,9 +65,13 @@ class GerenciadorDeFrequência :
         captcha = self.master.find_element(By.XPATH, self.pp.xpaths['captcha'])
         self.nv.digitar_xpath('input captcha', string=captcha.text)
 
-    def _acessar_painel_frequência(self) :
-        self.nv.clicar('xpath', 'menu sistema')
-        self.nv.clicar('xpath', 'menu frequência')
+    def _acessar_painel_frequência(self, tipo) :
+        if tipo == 'Professor':
+            self.nv.clicar('xpath', 'menu sistema')
+            self.nv.clicar('xpath', 'menu frequência')
+        if tipo == 'ADM':
+            self.nv.clicar('xpath', 'menu sistema')
+            # self.nv.clicar('xpath', 'menu frequência')
         self.nv.aguardar_página()
 
     def _lançar_faltas(self) :
@@ -78,7 +98,7 @@ class GerenciadorDeFrequência :
 
     def __marcar_falta_individual(self):
         ausentes = list(self._ausentes_na_data.keys())
-        return self.master.execute_script(SCRIPT_MARCAR_FALTA, ausentes)
+        return self.master.execute_script(SCRIPT_MARCAR_FALTA_COMO_ADM, ausentes)
 
     def __anunciar_faltas_lançadas(self, matrículas_clicadas, nome_turma):
         for matrícula in matrículas_clicadas:
@@ -112,9 +132,35 @@ class GerenciadorDeFrequência :
         self.nv.clicar('xpath', 'salvar e próximo')
 
     @staticmethod
-    def __obter_df(path):
+    def __obter_df_faltas(path):
         try:
             df = pd.read_excel(path, sheet_name='Compilado Faltas', dtype={'Matrícula' : str})
             return df
         except (FileNotFoundError, KeyError):
             return None
+
+    def _obter_modulações(self):
+        dados = []
+        lista_jsons = os.listdir(os.path.join(parâmetros.novo_diretório, 'fonte', 'modulações'))
+        print(f'{lista_jsons = }')
+        lista_dicionarios = []
+
+
+        for arquivo in lista_jsons :
+            if arquivo.endswith('.json') :
+                caminho = os.path.join(parâmetros.novo_diretório, 'fonte', 'modulações', arquivo)
+                with open(caminho, 'r', encoding='utf-8') as f :
+                    lista_dicionarios.append(json.load(f))
+
+        for i in lista_dicionarios:
+            cpf = i[1]['coluna_1']
+            nome = i[1]['coluna_3']
+            print(cpf, nome)
+            print(f'{i[3:] = }')
+
+
+
+
+        # return df_final
+
+        pass

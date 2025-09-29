@@ -5,6 +5,8 @@ from app.auto.tasks.downloads import Downloads
 from app.auto.tasks.gerenciadordecredenciais import GerenciadorDeCredenciais
 from app.auto.tasks.gerenciadordefrequência import GerenciadorDeFrequência
 from selenium import webdriver
+
+from app.auto.tasks.obtençãodemodulação import ObtençãoDeModulação
 from app.auto.tasks.sondagem import Sondagem
 
 
@@ -13,7 +15,8 @@ class Bot:
     def __init__(
             self,
             tarefa: Literal[
-                'downloads', 'siap', 'gerenciar', 'sondagem', 'fotos', 'consultar dias letivos'
+                'downloads', 'siap', 'gerenciar', 'sondagem', 'fotos', 'consultar dias letivos',
+                'obter modulações'
             ],
             kwargs_tarefa: dict | None = None,
             **kwargs
@@ -45,7 +48,8 @@ class Bot:
             'sondagem'  : lambda: Sondagem(**argumentos(tarefa)),
             'downloads' : lambda: Downloads(**argumentos(tarefa)),
             'gerenciar' : lambda: GerenciadorDeCredenciais(**argumentos(tarefa)),
-            'consultar dias letivos' : lambda: ConsultaDiasLetivos(**argumentos(tarefa))
+            'consultar dias letivos' : lambda: ConsultaDiasLetivos(**argumentos(tarefa)),
+            'obter modulações' : lambda: ObtençãoDeModulação(**argumentos(tarefa))
         }
 
         return tarefas[tarefa]()

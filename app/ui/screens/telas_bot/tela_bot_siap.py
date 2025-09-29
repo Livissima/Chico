@@ -126,18 +126,24 @@ class TelaBotSiap(CTkFrame) :
             y=10,
         )
 
+        self.bt_modulação = Botão(
+            self,
+            função= lambda: Bot(tarefa='obter modulações', path=parâmetros.novo_diretório),
+            largura=100
+        )
+
     def _inserir_botão_de_obter_dias_letivos(self):
 
         if len(parâmetros.lista_dias_letivos) == 0:
             self.bt_obter_dias_letivos = Botão(
                 self,
-                função=lambda: self.função_botão_obter(),
+                função=lambda: self._função_botão_obter(),
                 texto='Obter dias letivos',
                 largura=150,
                 y=300
             )
 
-    def função_botão_obter(self):
+    def _função_botão_obter(self):
         self._tx_feedback.att(f'Consultando dias letivos para o ano de {ANO}', ('arial', 20))
         print('clicado')
         time.sleep(1)

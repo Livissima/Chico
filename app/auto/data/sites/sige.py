@@ -93,6 +93,12 @@ class Sige :
                     'acomp. pedagógico' : {
                         '_xpath' : '/html/body/div[7]/ul/li[4]/ul/li[2]/ul/li[3]/a',
                         'alunos por idade' : '/html/body/div[7]/ul/li[4]/ul/li[2]/ul/li[3]/ul/li[6]/a'
+                    },
+                    'dossiê do servidor' : {
+                        '_xpath' : '/html/body/div[7]/ul/li[4]/ul/li[2]/ul/li[5]/a',
+                        'modulação' : '/html/body/div[7]/ul/li[4]/ul/li[2]/ul/li[5]/ul/li[2]/a',
+                        'geral' : '/html/body/div[7]/ul/li[4]/ul/li[2]/ul/li[5]/ul/li[2]/ul/li[2]/a',
+                        'cpf' : '//*[@id="txtCPF"]'
                     }
                 }
             }
@@ -121,5 +127,9 @@ class Sige :
             'sondagem' : [docs, (*prefixo, '_xpath'), (*prefixo, 'dados cadastrais', '_xpath'),
                           (*prefixo, 'dados cadastrais', 'turmas')],
 
-            'ficha aluno' : [('lápis', 'alunos'),  ('alunos', 'ficha do aluno')]
+            'ficha aluno' : [('lápis', 'alunos'),  ('alunos', 'ficha do aluno')],
+
+            'modulações' : [docs, (*prefixo, '_xpath'), (*prefixo, 'dossiê do servidor', '_xpath'),
+                            (*prefixo, 'dossiê do servidor', 'modulação'),
+                            (*prefixo, 'dossiê do servidor', 'geral')]
         }

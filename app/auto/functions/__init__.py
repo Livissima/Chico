@@ -1,3 +1,3 @@
-from .javascript import SCRIPT_JUSTIFICAR, SCRIPT_MARCAR_FALTA, SCRIPT_OBTER_TABELAS_SIMPLES, SCRIPT_OBTER_TABELAS_FICHAS
+from .javascript import SCRIPT_JUSTIFICAR, SCRIPT_MARCAR_FALTA_COMO_ADM, SCRIPT_OBTER_TABELAS_SIMPLES, SCRIPT_OBTER_TABELAS_FICHAS
 from .navegaçãoweb import NavegaçãoWeb
 from .normalizar import normalizar_unicode, normalizar_dicionário

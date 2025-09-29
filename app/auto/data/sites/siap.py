@@ -1,6 +1,5 @@
-from datetime import datetime
+from app.config.env_config import USUÁRIOS_SIAP, IDS_SIAP, SENHAS_SIAP, TIPOS_SIAP
 
-from app.config.env_config import ID_SIAP, SENHA_SIAP
 
 class Siap:
     url = 'https://siap.educacao.go.gov.br/'
@@ -8,8 +7,8 @@ class Siap:
     @property
     def credenciais(self):
         return {
-            'id':    ID_SIAP,
-            'senha': SENHA_SIAP
+            usuário : {'id' : _id, 'senha': senha, 'tipo' : tipo}
+            for usuário, _id, senha , tipo in zip(USUÁRIOS_SIAP, IDS_SIAP, SENHAS_SIAP, TIPOS_SIAP)
         }
 
     @property
@@ -22,6 +21,7 @@ class Siap:
             'fail captcha'  : '/html/body/form/div[3]/div/div/div/div[2]/div[2]/span[1]',
             'botão login' : '/html/body/form/div[3]/div/div/div/div[2]/div[2]/div[1]/div[2]/input',
             'menu sistema' : '/html/body/form/div[3]/div/div[2]',
+
             'menu frequência' : '/html/body/form/div[4]/div[1]/span/div/div[2]/li[7]/a',
             'salvar e próximo': '/html/body/form/div[4]/div[2]/div/p/input[1]',
             'data': '/html/body/form/div[4]/div[2]/div/div/div/div[4]/div[2]/div/div/div[1]/div'
