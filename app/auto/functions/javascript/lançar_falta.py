@@ -1,4 +1,4 @@
-SCRIPT_MARCAR_FALTA = """
+SCRIPT_MARCAR_FALTA_COMO_ADM = """
     const matriculasNecessarias = new Set(arguments[0]);
     const elementos = document.querySelectorAll('.listaDeFrequencias .itens div[data-matricula]');
     const matriculasClicadas = [];

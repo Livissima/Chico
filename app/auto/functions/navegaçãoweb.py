@@ -111,7 +111,7 @@ class NavegaçãoWeb :
             else :
                 raise f"Erro: {e}\nMétodo: `digitar_xpath`\nstring: '{string}'\nxpath: {xpath}"
 
-    def obter_valor(self, *chaves) -> str :
+    def _obter_valor(self, *chaves) -> str :
         xpaths = self._pp.xpaths
 
         for chave in chaves :
@@ -202,7 +202,7 @@ class NavegaçãoWeb :
         return lista_xpath
 
     def __obter_tabelas(self, tipo: str) -> list[str] | list[dict[str, str]]:
-        tipos_simples = {'contatos', 'situações', 'gêneros'}
+        tipos_simples = {'contatos', 'situações', 'gêneros', 'sondagem'}
         script = """"""
 
         if tipo in tipos_simples :
