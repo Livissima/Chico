@@ -1,6 +1,6 @@
 import unicodedata
 
-def remover_acentos(texto: str) -> str:
+def normalizar_unicode(texto: str) -> str:
     if texto is None:
         return ''
     nfkd = unicodedata.normalize('NFKD', str(texto))
@@ -10,5 +10,5 @@ def remover_acentos(texto: str) -> str:
 def normalizar_dicionário(dicionário: dict | None):
     if not dicionário:
         return {}
-    return {remover_acentos(chave): valor for chave, valor in dicionário.items()}
+    return {normalizar_unicode(chave): valor for chave, valor in dicionário.items()}
 

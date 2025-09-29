@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
 from app.auto.data.sites.propriedades import Propriedades
-from app.auto.functions.navegação import Navegação
+from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from app.config.parâmetros import parâmetros
 
 
@@ -22,7 +22,7 @@ class Sondagem:
         self.master = navegador
         self.destino_comum = destino
 
-        self.nv = Navegação(navegador, 'sige')
+        self.nv = NavegaçãoWeb(navegador, 'sige')
         self.pp = Propriedades('sige')
         self._logon()
         self._resumo = self._resumir

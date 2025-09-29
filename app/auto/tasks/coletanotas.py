@@ -1,2 +1,3 @@
-# class ColetaNotas:
-#     pass
+class ColetaNotas:
+    raise NotImplemented
+
