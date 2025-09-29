@@ -6,9 +6,7 @@ class Cabeçalhos:
     def __init__(self, master_tela, tela: str):
         self.master = master_tela
         self.tela = tela
-
         self.cabeçalhar(tela)
-
 
     def cabeçalhar(self, tela):
         config = {
@@ -17,7 +15,8 @@ class Cabeçalhos:
             'consulta' : self.consulta,
             'telas_bot sige' : self.bot_sige,
             'telas_bot credenciais': self.bot_credenciais,
-            'estatísticas' : self.estatísticas
+            'estatísticas' : self.estatísticas,
+            'telas_bot siap' : self.bot_siap
         }
         setar = config[tela]
 
@@ -81,6 +80,14 @@ class Cabeçalhos:
             'título' : f'{PROJECT_NAME} - Bot Credenciais',
             'cabeçalho' : 'BOT Credenciais',
             'descrição' : 'Gerenciamento automático de credenciais'
+        }
+
+    @property
+    def bot_siap(self):
+        return {
+            'título' : f'{PROJECT_NAME} - Bot SIAP',
+            'cabeçalho' : 'BOT SIAP',
+            'descrição' : parâmetros.nome_ue
         }
 
     @property

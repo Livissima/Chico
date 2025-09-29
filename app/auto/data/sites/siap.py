@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from app.config.env_config import ID_SIAP, SENHA_SIAP
 
 class Siap:
@@ -22,17 +24,7 @@ class Siap:
             'menu sistema' : '/html/body/form/div[3]/div/div[2]',
             'menu frequência' : '/html/body/form/div[4]/div[1]/span/div/div[2]/li[7]/a',
             'salvar e próximo': '/html/body/form/div[4]/div[2]/div/p/input[1]',
-            'data': '/html/body/form/div[4]/div[2]/div/div/div/div[4]/div[2]/div/div/div[1]/div',
-            # 'turmas' : { ## Estas referências hardcoded não são mais necessárias
-            #     '6A': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[1]/span',
-            #     '6B': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[2]/span',
-            #     '7A': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[3]/span',
-            #     '7B': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[4]/span',
-            #     '8A': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[5]/span',
-            #     '8B': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[6]/span',
-            #     '9A': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[7]/span',
-            #     '6C': '/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[8]/span'
-            #     }
+            'data': '/html/body/form/div[4]/div[2]/div/div/div/div[4]/div[2]/div/div/div[1]/div'
             }
 
     @property
@@ -54,6 +46,7 @@ class Siap:
         return {
             '' : ''
         }
+
 
 
 
