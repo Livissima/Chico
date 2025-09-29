@@ -1,8 +1,6 @@
 import os.path
 from typing import TYPE_CHECKING
-
 from customtkinter import CTkFrame, CTk
-
 from app.auto.bot import Bot
 from app.config.parâmetros import parâmetros
 from app.ui.config.cabeçalhos import Cabeçalhos
@@ -55,7 +53,7 @@ class TelaBot(CTkFrame):
         self.bt_siap = Botão(
             self,
             #todo flexibilizar esse path
-            função=lambda: Bot(tarefa='siap', path=os.path.join(r'C:\Users\livia\OneDrive - Secretaria de Estado da Educação', 'Frequência Anual.xlsx')),
+            função=lambda: self.controller.alternador.abrir('telas_bot siap'),
             texto='SIAP',
             fonte=('Arial', 20),
             formato='bold',
