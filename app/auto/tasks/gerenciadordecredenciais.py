@@ -5,7 +5,7 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
-from app.auto.functions.navegação import Navegação
+from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from app.auto.data.sites.propriedades import Propriedades
 from typing import Literal
 import pandas as pd
@@ -24,7 +24,7 @@ class GerenciadorDeCredenciais:
         print(f'class GerenciadorDeCredenciais instanciada.')
 
         self.master = navegador
-        self.nv = Navegação(navegador, tipo)
+        self.nv = NavegaçãoWeb(navegador, tipo)
         self.pp = Propriedades(site=tipo)
         self.turmas = turmas
         print(f'{self.turmas = }')

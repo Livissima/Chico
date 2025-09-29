@@ -7,7 +7,7 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 
 from app.auto.data.sites.propriedades import Propriedades
-from app.auto.functions.navegação import Navegação
+from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from app.config.parâmetros import parâmetros
 
 
@@ -23,7 +23,7 @@ class ScrapingSige:
     ):
         self.master = navegador
 
-        self.nv = Navegação(navegador, 'sige')
+        self.nv = NavegaçãoWeb(navegador, 'sige')
         self.pp = Propriedades('sige')
         self.path = os.path.join(parâmetros.novo_diretório, 'fonte', 'fotos')
         self.leitura_df = read_excel(

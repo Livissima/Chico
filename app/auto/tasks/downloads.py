@@ -2,7 +2,7 @@ from os import PathLike
 from pathlib import Path
 from selenium.webdriver import Chrome
 from app.auto.data.sites.propriedades import Propriedades
-from app.auto.functions.navegação import Navegação
+from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 
 
 
@@ -18,7 +18,7 @@ class Downloads:
         print(f'class Downloads instanciada.')
         self.master = navegador
         self.destino = destino
-        self.nv = Navegação(navegador, 'sige')
+        self.nv = NavegaçãoWeb(navegador, 'sige')
         self.pp = Propriedades('sige')
         self._logon()
 

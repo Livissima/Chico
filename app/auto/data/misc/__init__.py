@@ -1,2 +1,0 @@
-
-# from .parâmetroswebdriver import ParâmetrosWebdriver

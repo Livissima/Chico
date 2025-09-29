@@ -5,17 +5,19 @@ from typing import Literal, Generator, Any
 from selenium.common import ElementClickInterceptedException, StaleElementReferenceException
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.expected_conditions import presence_of_element_located, visibility_of_element_located, \
     element_to_be_clickable
 
 from app.auto.data.sites.propriedades import Propriedades
+from app.auto.functions.javascript import SCRIPT_OBTER_TABELAS_SIMPLES, SCRIPT_OBTER_TABELAS_FICHAS
 from app.config.parâmetros import parâmetros
 
 
-class Navegação :
+class NavegaçãoWeb :
+    #todo distribuir responsabilidades para sub módulos
+
     def __init__(self, master: Chrome, site: str) :
         self.master = master
         self._pp = Propriedades(site)
@@ -140,13 +142,8 @@ class Navegação :
         WebDriverWait(**self.__args_wait).until(presence_of_element_located(elemento))
         WebDriverWait(**self.__args_wait).until(visibility_of_element_located(elemento))
 
-
-
-
-
         if tempo_adicional:
             time.sleep(tempo_adicional)
-
 
     def aguardar_preenchimento(self, elemento: str) -> None:
         def _predicate(driver) :
@@ -159,7 +156,13 @@ class Navegação :
 
         WebDriverWait(**self.__args_wait).until(_predicate)
 
-    def download_json(self, nome_arquivo, pasta_destino, tipo: Literal['fichas', 'contatos', 'gêneros', 'situações', 'sondagem'] | str) -> bool:
+    def download_json(
+            self,
+            nome_arquivo,
+            pasta_destino,
+            tipo: Literal['fichas', 'contatos', 'gêneros', 'situações', 'sondagem'] | str
+    ) -> bool:
+
         inicio = time.time()
         dados = self.__obter_tabelas(tipo)
 
@@ -177,123 +180,13 @@ class Navegação :
             print('Nenhum dado extraído')
             return False
 
-    def __obter_tabelas(self, tipo: str) -> list[str] | list[dict[str, str]]:
-        tipos_simples = {'contatos', 'situações', 'gêneros'}
-        script = """"""
-
-
-        if tipo in tipos_simples :
-            elemento = (By.CSS_SELECTOR, 'table.tabela')
-            WebDriverWait(**self.__args_wait).until(presence_of_element_located(elemento))
-            script = """
-                            function extrairTabelas() {
-                                var tabelas = document.querySelectorAll('table.tabela');
-                                var resultados = [];
-
-                                for (var i = 0; i < tabelas.length; i++) {
-                                    var tabela = tabelas[i];
-                                    var dados = [];
-                                    var cabecalhos = [];
-
-                                    // Extrair cabeçalhos
-                                    var ths = tabela.querySelectorAll('thead th');
-                                    if (ths.length > 0) {
-                                        for (var h = 0; h < ths.length; h++) {
-                                            cabecalhos.push(ths[h].innerText.trim());
-                                        }
-                                    } else {
-                                        // Tentar primeira linha como cabeçalho
-                                        var primeiraLinha = tabela.querySelector('tbody tr');
-                                        if (primeiraLinha) {
-                                            var cells = primeiraLinha.querySelectorAll('td, th');
-                                            for (var h = 0; h < cells.length; h++) {
-                                                cabecalhos.push(cells[h].innerText.trim());
-                                            }
-                                        }
-                                    }
-
-                                    // Se ainda não tem cabeçalhos, usa padrão
-                                    if (cabecalhos.length === 0) {
-                                        cabecalhos = [
-                                            "Matrícula", "Aluno", "Data de Nascimento", "Nome da Mãe",
-                                            "CPF do Responsável", "Nome do Responsável", "Telefone residencial",
-                                            "Telefone responsável", "Telefone celular", "E-mail Alternativo",
-                                            "E-mail Institucional", "E-mail Educacional", "Ponto ID"
-                                        ];
-                                    }
-
-                                    // Extrair dados
-                                    var linhas = tabela.querySelectorAll('tbody tr');
-                                    for (var r = 0; r < linhas.length; r++) {
-                                        var linha = linhas[r];
-
-                                        // Pular linhas que parecem ser cabeçalhos
-                                        if (linha.querySelectorAll('th').length > 0) continue;
-
-                                        var celulas = linha.querySelectorAll('td');
-                                        var linhaDados = {};
-
-                                        for (var c = 0; c < celulas.length; c++) {
-                                            var nomeColuna = cabecalhos[c] || 'coluna_' + c;
-                                            linhaDados[nomeColuna] = celulas[c].innerText.trim();
-                                        }
-
-                                        // Só adiciona se tiver dados
-                                        if (Object.keys(linhaDados).length > 0) {
-                                            dados.push(linhaDados);
-                                        }
-                                    }
-
-                                    resultados.push(...dados);
-                                }
-
-                                return resultados;
-                            }
-
-                            return extrairTabelas();
-                            """
-
-        if tipo == 'fichas' :
-            script = """
-                    function extrairFichas() {
-                        // Função para obter texto limpo com quebras de linha estratégicas
-                        function getCleanText(element) {
-                            let text = element.innerText;
-
-                            // Preservar quebras de linha estratégicas
-                            text = text.replace(/Dados Pessoais/g, '\\nDados Pessoais\\n');
-                            text = text.replace(/Filiação/g, '\\n\\nFiliação\\n');
-                            text = text.replace(/Endereço Residencial/g, '\\n\\nEndereço Residencial\\n');
-                            text = text.replace(/Dados Escolares/g, '\\n\\nDados Escolares\\n');
-
-                            // Remover múltiplas quebras de linha consecutivas
-                            text = text.replace(/\\n{3,}/g, '\\n\\n');
-
-                            // Remover espaços em excesso
-                            text = text.replace(/[\\s]{2,}/g, ' ');
-
-                            return text.trim();
-                        }
-
-                        var body = document.querySelector('body');
-                        var todasTabelas = body.querySelectorAll('table');
-                        var resultado = [];
-
-                        // Filtrar tabelas com height='60%' e adicionar à lista
-                        for (var i = 0; i < todasTabelas.length; i++) {
-                            var tabela = todasTabelas[i];
-                            if (tabela.getAttribute('height') === '60%') {
-                                resultado.push(getCleanText(tabela));
-                            }
-                        }
-
-                        return resultado;
-                    }
-                    return extrairFichas();
-                    """
-
-        dados = self.master.execute_script(script)
-        return dados
+    def iterar_turmas_sige(self) -> Generator[tuple[Any, Any], Any, None]:
+        for série in parâmetros.séries_selecionadas :
+            self._selecionar_série(série)
+            turmas_correspoentes = parâmetros.turmas_selecionadas_por_série[série]
+            for turma in turmas_correspoentes :
+                self._selecionar_turma_sige(turma)
+                yield série, turma
 
     def obter_turmas_siap(self) -> list[str]:
         container_turmas = self.master.find_element(By.CLASS_NAME, 'containerTurmaTurno')
@@ -307,6 +200,21 @@ class Navegação :
 
         print(f'{lista_xpath = }')
         return lista_xpath
+
+    def __obter_tabelas(self, tipo: str) -> list[str] | list[dict[str, str]]:
+        tipos_simples = {'contatos', 'situações', 'gêneros'}
+        script = """"""
+
+        if tipo in tipos_simples :
+            elemento = (By.CSS_SELECTOR, 'table.tabela')
+            WebDriverWait(**self.__args_wait).until(presence_of_element_located(elemento))
+            script = SCRIPT_OBTER_TABELAS_SIMPLES
+
+        if tipo == 'fichas' :
+            script = SCRIPT_OBTER_TABELAS_FICHAS
+
+        dados = self.master.execute_script(script)
+        return dados
 
     def _obter_tabelas_fallback(self, nome_arquivo, pasta_destino) -> bool:
         #Fallback
@@ -348,14 +256,6 @@ class Navegação :
             print(f'Erro ao extrair tabelas (fallback): {e}')
             return False
 
-    def iterar_turmas_sige(self) -> Generator[tuple[Any, Any], Any, None]:
-        for série in parâmetros.séries_selecionadas :
-            self._selecionar_série(série)
-            turmas_correspoentes = parâmetros.turmas_selecionadas_por_série[série]
-            for turma in turmas_correspoentes :
-                self._selecionar_turma_sige(turma)
-                yield série, turma
-
     def _selecionar_turma_sige(self, turma) -> None :
         self._selecionar_opção('composição', valor='199')
         self._selecionar_opção('turno', valor='1')
@@ -382,18 +282,11 @@ class Navegação :
         if texto :
             selecionar.select_by_visible_text(texto)
 
-    def selecionar(self, div, valor = '1'):
-
-        selecionar_elemento = WebDriverWait(**self.__args_wait).until(presence_of_element_located(div))
-        selecionar = Select(selecionar_elemento)
-        selecionar.select_by_value(valor)
-
-
-
-
-
-
-
+    # def selecionar(self, div, valor = '1'):
+    #
+    #     selecionar_elemento = WebDriverWait(**self.__args_wait).until(presence_of_element_located(div))
+    #     selecionar = Select(selecionar_elemento)
+    #     selecionar.select_by_value(valor)
 
     @staticmethod
     def __extrair_cabeçalhos(tabela) :

@@ -3,9 +3,7 @@ from pandas import DataFrame
 from selenium.common import NoSuchElementException
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webelement import WebElement
-
-from app.auto.functions.navegação import Navegação
+from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from app.auto.data.sites.propriedades import Propriedades
 from typing import Literal
 import pandas as pd
@@ -15,11 +13,11 @@ import unicodedata
 class GerenciadorDeCredenciais :
 
     def __init__(self, navegador: Chrome, path_database: str, tipo: Literal['netescola', 'google'],
-            turmas: list[str] = None, **kwargs) :
+                 turmas: list[str] = None, **kwargs) :
         print(f'class NetEscola instanciada.')
 
         self.master = navegador
-        self.nv = Navegação(navegador, tipo)
+        self.nv = NavegaçãoWeb(navegador, tipo)
         self.pp = Propriedades(site=tipo)
         self.turmas = turmas
         print(f'{self.turmas = }')

@@ -1,3 +1,6 @@
-# from .tasks import *
-# from .auto import *
-# from .functions import *
+from .bot import Bot
+from .tasks import GerenciadorDeFrequência, GerenciadorDeCredenciais, Sondagem, ScrapingSige, Downloads
+from .functions import NavegaçãoWeb
+from .functions import javascript
+from .data.sites import Google, Sige, Siap, Propriedades, NetEscola
+

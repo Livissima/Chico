@@ -1,4 +1,6 @@
-
-from app.auto.tasks.scrapingsige import ScrapingSige
-# from app.auto.tasks.presenciamento import Presenciamento
-# from app.auto.tasks.gerenciaracessos import GerenciarAcessos
+from .sondagem import Sondagem
+from .downloads import Downloads
+from .gerenciadordefrequência import GerenciadorDeFrequência
+from .gerenciadordecredenciais import GerenciadorDeCredenciais
+from .scrapingsige import ScrapingSige
+from .consultadiasletivos import ConsultaDiasLetivos
