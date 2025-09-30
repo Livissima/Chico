@@ -2,8 +2,8 @@ from typing import Literal
 from app.auto.functions.normalizar import normalizar_unicode, normalizar_dicionário
 from app.auto.tasks import ScrapingSige, ConsultaDiasLetivos
 from app.auto.tasks.downloads import Downloads
-from app.auto.tasks.gerenciadordecredenciais import GerenciadorDeCredenciais
-from app.auto.tasks.gerenciadordefrequência import GerenciadorDeFrequência
+from app.auto.tasks.credenciador import Credenciador
+from app.auto.tasks.frequenciador import Frequenciador
 from selenium import webdriver
 
 from app.auto.tasks.obtençãodemodulação import ObtençãoDeModulação
@@ -44,10 +44,10 @@ class Bot:
 
         tarefas = {
             'fotos' : lambda: ScrapingSige(**argumentos(tarefa)),
-            'siap'  : lambda: GerenciadorDeFrequência(**argumentos(tarefa)),
+            'siap'  : lambda: Frequenciador(**argumentos(tarefa)),
             'sondagem'  : lambda: Sondagem(**argumentos(tarefa)),
             'downloads' : lambda: Downloads(**argumentos(tarefa)),
-            'gerenciar' : lambda: GerenciadorDeCredenciais(**argumentos(tarefa)),
+            'gerenciar' : lambda: Credenciador(**argumentos(tarefa)),
             'consultar dias letivos' : lambda: ConsultaDiasLetivos(**argumentos(tarefa)),
             'obter modulações' : lambda: ObtençãoDeModulação(**argumentos(tarefa))
         }

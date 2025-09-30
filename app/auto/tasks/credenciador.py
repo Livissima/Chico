@@ -11,7 +11,7 @@ from typing import Literal
 import pandas as pd
 import unicodedata
 
-class GerenciadorDeCredenciais:
+class Credenciador:
 
     def __init__(
             self,

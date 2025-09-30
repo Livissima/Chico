@@ -23,6 +23,6 @@ print({
 
 
 
-print(USUÁRIOS_SIAP)
-print(IDS_SIAP)
-print(SENHAS_SIAP)
+# print(USUÁRIOS_SIAP)
+# print(IDS_SIAP)
+# print(SENHAS_SIAP)
