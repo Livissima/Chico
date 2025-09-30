@@ -5,13 +5,15 @@ from typing import Literal, Generator, Any
 from selenium.common import ElementClickInterceptedException, StaleElementReferenceException
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.expected_conditions import presence_of_element_located, visibility_of_element_located, \
-    element_to_be_clickable
+    element_to_be_clickable, staleness_of
 
 from app.auto.data.sites.propriedades import Propriedades
-from app.auto.functions.javascript import SCRIPT_OBTER_TABELAS_SIMPLES, SCRIPT_OBTER_TABELAS_FICHAS
+from app.auto.functions.javascript import SCRIPT_OBTER_TABELAS_SIMPLES, SCRIPT_OBTER_TABELAS_FICHAS, \
+    SCRIPT_SELECIONAR_DISPARANDO_EVENTO
 from app.config.parâmetros import parâmetros
 
 
@@ -104,7 +106,7 @@ class NavegaçãoWeb :
             self.aguardar_página()
 
         except ValueError as e :
-            caminho = self.__obter_chave_por_valor(self.xpaths, xpath)
+            caminho = self.__obter_chave_por_valor(self._pp.xpaths, xpath)
             if caminho :
                 caminho_str = " > ".join(caminho)
                 raise f"Erro: {e}\nMétodo: `digitar_xpath`\nstring: {string}'\nitem: {caminho_str}\n"
@@ -201,6 +203,81 @@ class NavegaçãoWeb :
         print(f'{lista_xpath = }')
         return lista_xpath
 
+    def selecionar_dropdown(self, *chaves, valor, elemento_espera = None) :
+        script = SCRIPT_SELECIONAR_DISPARANDO_EVENTO
+        xpaths = self._pp.xpaths
+
+        for chave in chaves :
+            xpaths = xpaths[chave]
+        xpath = xpaths
+
+        seletor: tuple[str, str] = (By.XPATH, xpath)
+
+        try :
+            WebDriverWait(**self.__args_wait).until(presence_of_element_located(seletor))
+            WebDriverWait(**self.__args_wait).until(visibility_of_element_located(seletor))
+            WebDriverWait(**self.__args_wait).until(element_to_be_clickable(seletor))
+            elemento = self.master.find_element(*seletor)
+            self.master.execute_script(script, elemento, valor)
+
+            try:
+                WebDriverWait(self.master, 2).until(staleness_of(elemento))
+            except:
+                pass
+
+            self._esperar_por_carregamento()
+
+            if elemento_espera:
+                self._esperar_por_elemento_dependente(elemento_espera, 10)
+
+            self.aguardar_página()
+
+        except Exception as e:
+            print(f'Problema na seleção disparando evento: {e}')
+
+    def _esperar_por_carregamento(self, timeout=30) :
+
+        try :
+
+            WebDriverWait(**self.__args_wait).until(lambda driver : len(
+                driver.find_elements(By.CSS_SELECTOR, ".loading, .spinner, [aria-busy='true']")) == 0)
+        except :
+            pass
+
+        try :
+
+            WebDriverWait(**self.__args_wait).until(
+                lambda driver : driver.execute_script("return jQuery.active == 0"))
+        except :
+            pass
+
+        try :
+
+            WebDriverWait(**self.__args_wait).until(
+                lambda driver : driver.execute_script("return document.readyState") == "complete")
+        except :
+            pass
+
+    def _esperar_por_elemento_dependente(self, elemento_espera) :
+
+        try :
+
+            if isinstance(elemento_espera, tuple) :
+                WebDriverWait(**self.__args_wait).until(element_to_be_clickable(elemento_espera))
+
+            else :
+                WebDriverWait(**self.__args_wait).until(element_to_be_clickable(elemento_espera))
+        except Exception as e :
+            print(f"Elemento dependente não carregou: {e}")
+
+    def _esperar_por_mudanca_estado(self, elemento, atributo, valor_antigo, timeout=10) :
+
+        WebDriverWait(**self.__args_wait).until(lambda driver : elemento.get_attribute(atributo) != valor_antigo)
+
+
+
+
+
     def __obter_tabelas(self, tipo: str) -> list[str] | list[dict[str, str]]:
         tipos_simples = {'contatos', 'situações', 'gêneros', 'sondagem'}
         script = """"""
@@ -215,6 +292,9 @@ class NavegaçãoWeb :
 
         dados = self.master.execute_script(script)
         return dados
+
+
+
 
     def _obter_tabelas_fallback(self, nome_arquivo, pasta_destino) -> bool:
         #Fallback
