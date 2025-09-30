@@ -19,19 +19,21 @@ def _obter_modulações() :
         cpf = lista[1]['coluna_1']
         nome = lista[1]['coluna_3']
         vínculo = lista[3]['coluna_1']
-        série0 = lista[6]['coluna_3']
-        turma0 = lista[6]['coluna_4']
-        disciplina0 = lista[6]['coluna_8']
-        qntd0 = lista[6]['coluna_9']
 
-        série1 = lista[7]['coluna_3']
-        turma1 = lista[7]['coluna_4']
-        disciplina1 = lista[7]['coluna_8']
-        qntd1 = lista[7]['coluna_9']
+        # Filtra apenas os dicionários que têm todas as colunas necessárias
+        disciplinas = {f"disciplina_{i - 6}" : {
+            'série' : dicionario['coluna_3'], 'turma' : dicionario['coluna_4'], 'disciplina' : dicionario['coluna_8'],
+            'quantidade' : dicionario['coluna_9']
+        } for i, dicionario in enumerate(lista[6 :], start=6) if all(key in dicionario for key in [
+            'coluna_3', 'coluna_4', 'coluna_8', 'coluna_9'
+        ])}
 
-        print(f"{lista = }")
-
-
+        # Agora você tem um dicionário organizado com todas as disciplinas
+        print(f"CPF: {cpf}")
+        print(f"Nome: {nome}")
+        print(f"Vínculo: {vínculo}")
+        for key, disc in disciplinas.items() :
+            print(f"{key}: {disc}")
         # dicts_regencia = {prof :
         #                       {'série' : serie, 'turma' : turma, 'disciplina' : disciplina}
         #                   for prof, serie, turma, disciplina in zip(series, turmas, disciplinas)}
