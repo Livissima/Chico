@@ -23,10 +23,16 @@ class NavegaçãoWeb :
     def __init__(self, master: Chrome, site: str) :
         self.master = master
         self._pp = Propriedades(site)
-        self.__timeout = 15
+        self.__timeout = 10
         self.__args_wait = {'driver' : self.master, 'timeout' : self.__timeout}
 
-    def clicar(self, by: Literal['xpath', 'id', 'css', 'css livre', 'xpath livre', 'id livre'] = 'xpath', *chaves: str) -> None :
+    def clicar(
+            self,
+            by: Literal['xpath', 'id', 'css', 'css livre', 'xpath livre', 'id livre'] = 'xpath',
+            *chaves: str,
+            elemento_espera = None
+    ) -> None :
+
         tag = None
         if 'livre' not in by:
             by_dict_de_dicts = {
@@ -57,9 +63,13 @@ class NavegaçãoWeb :
                 "arguments[0].scrollIntoView({block: 'center', behavior: 'smooth'});",
                 elemento_web
             )
-
             WebDriverWait(**self.__args_wait).until(visibility_of_element_located(elemento))
             WebDriverWait(**self.__args_wait).until(element_to_be_clickable(elemento)).click()
+
+            self._esperar_por_carregamento()
+
+            if elemento_espera:
+                self._esperar_por_elemento_dependente(elemento_espera)
 
             self.aguardar_página()
 
@@ -80,12 +90,9 @@ class NavegaçãoWeb :
                 raise f"Falha no clique via JavaScript: {js_error}"
 
     def caminhar(self, destino: str) -> None :
-        # uma recursão seria melhor
-
         print(f'    Caminhando para {destino}')
         destinos = self._pp.caminhos
         for tupla in destinos[destino] :
-
             self.clicar('xpath', *tupla)
 
     def digitar_xpath(self, *chaves, string: str) -> None:
@@ -112,6 +119,15 @@ class NavegaçãoWeb :
                 raise f"Erro: {e}\nMétodo: `digitar_xpath`\nstring: {string}'\nitem: {caminho_str}\n"
             else :
                 raise f"Erro: {e}\nMétodo: `digitar_xpath`\nstring: '{string}'\nxpath: {xpath}"
+
+    def obter_elemento(self, by, tag):
+        seletor: tuple[str, str] = (by, tag)
+        try :
+            elemento_web = WebDriverWait(**self.__args_wait).until(presence_of_element_located(seletor))
+            return elemento_web
+        except Exception as e:
+            print(f'Erro na obtenção de elemento: {seletor}\n{e}')
+
 
     def _obter_valor(self, *chaves) -> str :
         xpaths = self._pp.xpaths
@@ -222,61 +238,45 @@ class NavegaçãoWeb :
 
             try:
                 WebDriverWait(self.master, 2).until(staleness_of(elemento))
-            except:
+            except Exception():
                 pass
 
             self._esperar_por_carregamento()
 
             if elemento_espera:
-                self._esperar_por_elemento_dependente(elemento_espera, 10)
+                self._esperar_por_elemento_dependente(elemento_espera)
 
             self.aguardar_página()
 
         except Exception as e:
             print(f'Problema na seleção disparando evento: {e}')
 
-    def _esperar_por_carregamento(self, timeout=30) :
-
-        try :
-
+    def _esperar_por_carregamento(self) :
+        try:
             WebDriverWait(**self.__args_wait).until(lambda driver : len(
                 driver.find_elements(By.CSS_SELECTOR, ".loading, .spinner, [aria-busy='true']")) == 0)
-        except :
+        except:
             pass
-
-        try :
-
+        try:
             WebDriverWait(**self.__args_wait).until(
                 lambda driver : driver.execute_script("return jQuery.active == 0"))
-        except :
+        except:
             pass
 
-        try :
-
+        try:
             WebDriverWait(**self.__args_wait).until(
                 lambda driver : driver.execute_script("return document.readyState") == "complete")
-        except :
+        except:
             pass
 
-    def _esperar_por_elemento_dependente(self, elemento_espera) :
-
-        try :
-
-            if isinstance(elemento_espera, tuple) :
-                WebDriverWait(**self.__args_wait).until(element_to_be_clickable(elemento_espera))
-
-            else :
-                WebDriverWait(**self.__args_wait).until(element_to_be_clickable(elemento_espera))
-        except Exception as e :
+    def _esperar_por_elemento_dependente(self, elemento_espera: tuple[str, str]) :
+        try:
+            WebDriverWait(**self.__args_wait).until(element_to_be_clickable(elemento_espera))
+        except:
             print(f"Elemento dependente não carregou: {e}")
 
-    def _esperar_por_mudanca_estado(self, elemento, atributo, valor_antigo, timeout=10) :
-
+    def _esperar_por_mudanca_estado(self, elemento, atributo, valor_antigo) :
         WebDriverWait(**self.__args_wait).until(lambda driver : elemento.get_attribute(atributo) != valor_antigo)
-
-
-
-
 
     def __obter_tabelas(self, tipo: str) -> list[str] | list[dict[str, str]]:
         tipos_simples = {'contatos', 'situações', 'gêneros', 'sondagem'}
@@ -294,10 +294,7 @@ class NavegaçãoWeb :
         return dados
 
 
-
-
-    def _obter_tabelas_fallback(self, nome_arquivo, pasta_destino) -> bool:
-        #Fallback
+    def __obter_tabelas_fallback(self, nome_arquivo, pasta_destino) -> bool:
         elemento = (By.CSS_SELECTOR, 'table.tabela')
 
         try :

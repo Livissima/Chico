@@ -4,6 +4,7 @@ import time
 from os import PathLike
 
 import pandas as pd
+from pandas import DataFrame
 from selenium.webdriver.common.by import By
 from app.auto.data.sites.propriedades import Propriedades
 from app.auto.functions.javascript import SCRIPT_MARCAR_FALTA_COMO_ADM, SCRIPT_JUSTIFICAR, SCRIPT_IR_PARA_DATA
@@ -32,7 +33,6 @@ class Frequenciador :
         self._executar()
 
     def _logon(self, usuário, _id, senha) :
-        #credenciais = self.pp.credenciais
         print(f'Fazendo login para: {usuário}')
         self.nv.digitar_xpath('input login', string=_id)
         self.nv.digitar_xpath('input senha', string=senha)
@@ -65,23 +65,24 @@ class Frequenciador :
             FrequenciadorProf(self.master, cpf_prof, self.ausentes_na_data)
 
     @property
-    def ausentes_na_data(self) -> dict :
+    def ausentes_na_data(self) -> dict | DataFrame:
         if self.df is None:
             ausentes = {'Matrícula': None, 'Estudante' : None}
             return ausentes
 
         else:
             df = self.df.copy()
-            df = df[['Turma Real', 'Estudante', 'Data Falta', 'Lançado', 'Matrícula']]
+            df = df[['Estudante', 'Data Falta', 'Matrícula']]
             df['Data Falta'] = df['Data Falta'].dt.strftime('%d/%m/%Y')
-            df = df[df['Data Falta'] == self.data]
-            ausentes = dict(zip(df['Matrícula'], df['Estudante']))
-            return ausentes
+            # # df = df[df['Data Falta'] == self.data] #todo desativar para a versão prof, mas é importante para a versão adm
+            # ausentes = dict(zip(df['Matrícula'], df['Estudante']))
+            return df
 
     @staticmethod
     def __obter_df_faltas(path):
+        print(f'{path = }')
         try:
-            df = pd.read_excel(path, sheet_name='Compilado Faltas', dtype={'Matrícula' : str})
+            df = pd.read_excel(path, sheet_name='Compilado_Faltas', dtype={'Matrícula' : str})
             return df
         except (FileNotFoundError, KeyError):
             return None
