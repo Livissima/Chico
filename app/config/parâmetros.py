@@ -18,6 +18,7 @@ class Parâmetros:
 
         self.__lista_dias_letivos = self.__importar_dias_letivos(self.novo_diretório, ANO)
         self.__dicio_dias_letivos = self._gerar_dict_dias_letivos(self.lista_dias_letivos)
+        self.__modulações = self._obter_modulações
         self.__resumo = prévias.resumo
         self.__nome_ue = prévias.nome_ue
         self.turmas_disponíveis = prévias.turmas
@@ -32,7 +33,7 @@ class Parâmetros:
 
 
     @property
-    def resumo(self):
+    def resumo(self) -> dict :
         return self.__resumo
 
     @resumo.setter
@@ -40,7 +41,7 @@ class Parâmetros:
         self.__resumo = valor
 
     @property
-    def lista_dias_letivos(self):
+    def lista_dias_letivos(self) -> list:
         return self.__lista_dias_letivos
 
     @lista_dias_letivos.setter
@@ -48,7 +49,7 @@ class Parâmetros:
         self.__lista_dias_letivos = valor
 
     @property
-    def dicionário_dias_letivos(self):
+    def dicionário_dias_letivos(self)  -> dict:
         return self.__dicio_dias_letivos
 
     @dicionário_dias_letivos.setter
@@ -56,12 +57,21 @@ class Parâmetros:
         self.__dicio_dias_letivos = valor
 
     @property
-    def nome_ue(self):
+    def nome_ue(self) -> str:
         return self.__nome_ue
 
     @nome_ue.setter
     def nome_ue(self, valor):
         self.__nome_ue = valor
+
+    @property
+    def modulações(self) -> dict:
+        return self.__modulações
+
+    @modulações.setter
+    def modulações(self, valor):
+        self.__modulações = valor
+
 
     @property
     def turmas_selecionadas(self):
@@ -74,7 +84,7 @@ class Parâmetros:
         self._turmas_selecionadas_por_série = self.__gerar_turmas_por_serie(value)
 
     @property
-    def séries_selecionadas(self):
+    def séries_selecionadas(self) -> list:
         return self._séries_selecionadas
 
     @property
@@ -119,11 +129,49 @@ class Parâmetros:
         meses_letivos = list(sorted(set(lista_meses)))
 
         dicionário = {chave : [dia[0] for dia in dias_splitados if dia[1] == chave] for chave in meses_letivos}
-
-        for chave, índice in dicionário.items() :
-            print(f'{chave} : {índice}')
-
         return dicionário
 
 
+    @property
+    def _obter_modulações(self) :
+        professores = {}
+        disciplinas = {}
+        lista_jsons = os.listdir(os.path.join(self.novo_diretório, 'fonte', 'modulações'))
+        print(f'{lista_jsons = }')
+        lista_de_listas_de_dicionários = []
+
+        for arquivo in lista_jsons :
+            if arquivo.endswith('.json') :
+                caminho = os.path.join(self.novo_diretório, 'fonte', 'modulações', arquivo)
+                with open(caminho, 'r', encoding='utf-8') as f :
+                    lista_de_listas_de_dicionários.append(json.load(f))
+
+        mapeamento_series = {'6º Ano' : '1996', '7º Ano' : '1997', '8º Ano' : '1998', '9º Ano' : '1999'}
+
+
+        for lista in lista_de_listas_de_dicionários :
+            cpf = lista[1]['coluna_1']
+            cpf = cpf.replace('.', '').replace('-', '')
+            nome = lista[1]['coluna_3']
+            vínculo = lista[3]['coluna_1']
+
+            disciplinas = {f"disciplina_{i - 6}" : {
+                'série' : mapeamento_series.get(dicionario['coluna_3'], dicionario['coluna_3']),
+                'turma' : dicionario['coluna_4'],
+                'disciplina' : dicionario['coluna_8'],
+                'quantidade' : dicionario['coluna_9']
+            } for i, dicionario in enumerate(lista[6 :], start=6) if
+                all(key in dicionario for key in ['coluna_3', 'coluna_4', 'coluna_8', 'coluna_9'])}
+
+
+            professores[cpf] = {
+                'nome' : nome, 'vínculo' : vínculo, 'disciplinas' : disciplinas
+            }
+        return professores
+
+
+        # print(f'{professores = }')
+        # for prof in professores.items():
+        #     print(f'{prof = }')
 parâmetros = Parâmetros()
+print(f'{parâmetros.modulações = }')
