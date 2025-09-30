@@ -23,6 +23,19 @@ class Siap:
             'menu sistema' : '/html/body/form/div[3]/div/div[2]',
 
             'menu frequência' : '/html/body/form/div[4]/div[1]/span/div/div[2]/li[7]/a',
+            'diário' : {
+                '_xpath' : '/html/body/form/div[4]/div[1]/span/div/div[2]/li[2]/a',
+                'ano' : '/html/body/form/div[4]/div[2]/div/div[1]/div/div[1]/p[2]/input',
+                'composição' : '/html/body/form/div[4]/div[2]/div/div[1]/div/div[2]/p[2]/select',
+                'série' : '/html/body/form/div[4]/div[2]/div/div[1]/div/div[3]/p[2]/select',
+                'bimestre' : '/html/body/form/div[4]/div[2]/div/div[1]/div/div[4]/p[2]/select',
+                'turno' : '/html/body/form/div[4]/div[2]/div/div[1]/div/div[5]/p[2]/select',
+                'disciplina' : '/html/body/form/div[4]/div[2]/div/div[1]/div/div[6]/p[2]/select',
+                'botão listar' : '/html/body/form/div[4]/div[2]/div/p[2]/input[2]',
+                'bloco resultados' : '/html/body/form/div[4]/div[2]/div/div[2]/div/div/div/div',
+
+
+            },
             'salvar e próximo': '/html/body/form/div[4]/div[2]/div/p/input[1]',
             'data': '/html/body/form/div[4]/div[2]/div/div/div/div[4]/div[2]/div/div/div[1]/div'
             }
