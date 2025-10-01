@@ -33,9 +33,8 @@ class Siap:
                 'disciplina' : '/html/body/form/div[4]/div[2]/div/div[1]/div/div[6]/p[2]/select',
                 'botão listar' : '/html/body/form/div[4]/div[2]/div/p[2]/input[2]',
                 'bloco resultados' : '/html/body/form/div[4]/div[2]/div/div[2]/div/div/div/div',
-                'frequência' : '/html/body/form/div[4]/div[2]/div/p[3]/input[2]'
-
-
+                'frequência' : '/html/body/form/div[4]/div[2]/div/p[3]/input[2]',
+                'salvar' : '/html/body/form/div[4]/div[2]/div/p[2]/input[1]',
 
             },
             'salvar e próximo': '/html/body/form/div[4]/div[2]/div/p/input[1]',

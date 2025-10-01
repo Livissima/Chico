@@ -74,7 +74,9 @@ class Frequenciador :
             df = self.df.copy()
             df = df[['Estudante', 'Data Falta', 'Matrícula']]
             df['Data Falta'] = df['Data Falta'].dt.strftime('%d/%m/%Y')
-            # # df = df[df['Data Falta'] == self.data] #todo desativar para a versão prof, mas é importante para a versão adm
+            # df['Data canonica'] = df['Data Falta'].dt.strftime('%Y/%m/%d')
+
+            # # df = df[df['Data Falta'] == self.data] #todo desativei para a versão prof, mas é importante para a versão adm
             # ausentes = dict(zip(df['Matrícula'], df['Estudante']))
             return df
 
