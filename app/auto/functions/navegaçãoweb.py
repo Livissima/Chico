@@ -273,7 +273,7 @@ class NavegaçãoWeb :
         try:
             WebDriverWait(**self.__args_wait).until(element_to_be_clickable(elemento_espera))
         except:
-            print(f"Elemento dependente não carregou: {e}")
+            print(f"Elemento dependente não carregou: {elemento_espera}")
 
     def _esperar_por_mudanca_estado(self, elemento, atributo, valor_antigo) :
         WebDriverWait(**self.__args_wait).until(lambda driver : elemento.get_attribute(atributo) != valor_antigo)
