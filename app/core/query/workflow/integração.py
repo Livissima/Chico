@@ -11,10 +11,13 @@ class Integração:
 
     def __init__(self, dfs_tratados: dict[str, DataFrame]):
         self.df = dfs_tratados
-        self.path_df_social: str = r'C:\Users\meren\OneDrive - Secretaria de Estado da Educação\Secretaria\2025\Dados\Estudantes\Base de dados\Etnia e religião.xlsx'  #temporário. Preciso que esta variável seja mais flexível e adiquirida dinamicamente.
+        # print(f'{dfs_tratados = }')
+        self.path_df_social: str = r'C:\Users\meren\OneDrive - Secretaria de Estado da Educação\Secretaria\2025\Dados\Estudantes\Base de dados\Etnia e religião.xlsx'  #todo: temporário. Preciso que esta variável seja mais flexível e adiquirida dinamicamente.
         self.integração = self.integrar(dfs_tratados)
 
     def integrar(self, dict_dfs):
+        # print(f'{dict_dfs = }')
+
         df_base = DataFrame()
         df_base = self._integrar_tratamentos(dict_dfs)
 
@@ -50,6 +53,7 @@ class Integração:
         gêneros = df['gêneros'].df_tratado
 
         for df_tratado in (fichas, contatos, situações, gêneros):
+            # print(f'{df_tratado = }')
             df_tratado['Matrícula'] = df_tratado['Matrícula'].astype(str).str.strip()
 
         eixo = 'Matrícula'

@@ -1,5 +1,4 @@
 from os import listdir, path
-from pandas import DataFrame, concat
 from typing import Literal
 import json
 
@@ -8,13 +7,14 @@ class Leitura :
     def __init__(
             self,
             _path: str,
-            tipo_de_relatório: Literal['fichas', 'contatos', 'gêneros', 'situações']
+            tipo_de_relatório: Literal['fichas', 'contatos', 'gêneros', 'situações'] | str
     ) :
         print(f'Leitura: {tipo_de_relatório}')
 
         self._tipo_de_relatório = tipo_de_relatório
         self._path_dados = _path
         self.df_leitura = self._ler(_path)
+        # print(f'{tipo_de_relatório = } : {len(self.df_leitura)}')
 
 
     def _ler(self, _path) -> list[str | dict] :
