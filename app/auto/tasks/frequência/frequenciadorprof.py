@@ -24,11 +24,10 @@ class FrequenciadorProf :
     def _executar(self) :
 
         linhas_resultado = self.obter_linhas_disciplinas()
-        #
+
         print(f'Encontradas {len(linhas_resultado)} linhas')
 
         for índice_linha in range(len(linhas_resultado)) :
-            # SEMPRE re-encontrar elementos antes de usar
             self._processar_linha(índice_linha, linhas_resultado)
 
     def _processar_linha(self, índice_linha, linhas) :
@@ -228,16 +227,17 @@ class FrequenciadorProf :
 
             print(f'{len(pontinhos) = }')
 
-            print(f'{[ponto.get_attribute('data-matricula') for ponto in pontinhos] = }')
+            pontinhos_alvos = [
+                ponto for ponto in pontinhos if ponto.get_attribute('data-matricula') in ausentes
+            ]
 
-            pontinhos_alvos = [ponto for ponto in pontinhos if
-                               ponto.get_attribute('data-matricula') in ausentes]
-
-            print(f'{len(pontinhos_alvos)}')
+            print(f'{len(pontinhos_alvos) = }')
             print(f'{pontinhos_alvos = }')
 
             for ponto_alvo in pontinhos_alvos :
-                ponto_alvo.click()
-                print(f'############ Clicando no pontinho de {ponto_alvo.get_attribute('data-matricula')}')
+                if ponto_alvo.get_attribute('data-ausente') == 'False':
+                    ponto_alvo.click()
+                    print(f'::::::::::: Clicando em {ponto_alvo.get_attribute('data-matricula')}')
 
-
+                if ponto_alvo.get_attribute('data-ausente') == 'True':
+                    print(f'::::::::::: O alvo {ponto_alvo.get_attribute('data-matricula')} já estava com falta nesta coluna e foi ignorado.')
