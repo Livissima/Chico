@@ -35,7 +35,8 @@ class Siap:
                 'bloco resultados' : '/html/body/form/div[4]/div[2]/div/div[2]/div/div/div/div',
                 'frequência' : '/html/body/form/div[4]/div[2]/div/p[3]/input[2]',
                 'salvar' : '/html/body/form/div[4]/div[2]/div/p[2]/input[1]',
-                'bt mês anterior' : '/html/body/form/div[4]/div[2]/div/div/div/div[4]/div[1]/div/div/div/div/div[1]'
+                'bt mês anterior' : '/html/body/form/div[4]/div[2]/div/div/div/div[4]/div[1]/div/div/div/div/div[1]',
+                'mês' : '/html/body/form/div[4]/div[2]/div/div/div/div[4]/div[1]/div/div/div/div/select'
 
             },
             'salvar e próximo': '/html/body/form/div[4]/div[2]/div/p/input[1]',
