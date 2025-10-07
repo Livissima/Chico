@@ -219,7 +219,7 @@ class NavegaçãoWeb :
         print(f'{lista_xpath = }')
         return lista_xpath
 
-    def selecionar_dropdown(self, *chaves, valor, elemento_espera = None) :
+    def selecionar_dropdown(self, *chaves, valor = None, texto = None, elemento_espera = None) :
         script = SCRIPT_SELECIONAR_DISPARANDO_EVENTO
         xpaths = self._pp.xpaths
 
@@ -234,7 +234,10 @@ class NavegaçãoWeb :
             WebDriverWait(**self.__args_wait).until(visibility_of_element_located(seletor))
             WebDriverWait(**self.__args_wait).until(element_to_be_clickable(seletor))
             elemento = self.master.find_element(*seletor)
-            self.master.execute_script(script, elemento, valor)
+            if valor:
+                self.master.execute_script(script, elemento, valor)
+            if texto:
+                Select(elemento).select_by_visible_text(texto)
 
             try:
                 WebDriverWait(self.master, 2).until(staleness_of(elemento))
