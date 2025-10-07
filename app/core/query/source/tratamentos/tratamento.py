@@ -22,13 +22,14 @@ class Tratamento:
         self.tipo = tipo
 
         classe_tratamento = self.tipos.get(tipo)
-        if classe_tratamento is None:
-            raise ValueError(f'Tipo de tratamento "{tipo}" não reconhecido')
 
         self.df_tratado = classe_tratamento(df_leitura).df_tratado
+        #print(f'{tipo = } : {len(self.df_tratado) = }')
 
     def __getattr__(self, item):
         return getattr(self.df_tratado, item)
+
+
 
 
 

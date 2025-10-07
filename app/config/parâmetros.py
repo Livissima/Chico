@@ -137,7 +137,7 @@ class Parâmetros:
         professores = {}
         disciplinas = {}
         lista_jsons = os.listdir(os.path.join(self.novo_diretório, 'fonte', 'modulações'))
-        print(f'{lista_jsons = }')
+        # print(f'{lista_jsons = }')
         lista_de_listas_de_dicionários = []
 
         for arquivo in lista_jsons :
@@ -174,4 +174,4 @@ class Parâmetros:
         # for prof in professores.items():
         #     print(f'{prof = }')
 parâmetros = Parâmetros()
-print(f'{parâmetros.modulações = }')
+# print(f'{parâmetros.modulações = }')
