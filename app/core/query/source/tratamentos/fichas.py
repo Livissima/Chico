@@ -5,7 +5,6 @@ from pandas import DataFrame, Series
 class TratamentoFichas:
 
     def __init__(self, leitura: list[str]):
-
         self.leitura = leitura
         self.df_tratado = self.gerar_df(leitura)
 
@@ -18,6 +17,19 @@ class TratamentoFichas:
         strings_separadas = self.gerar_separadores(strings)
         lista_de_listas_de_dados = self.converter_str_list(strings_separadas)
 
+        ###debug
+        # dicio_aluno = {}
+        # for aluno in lista_de_listas_de_dados:
+        #     if len(aluno) != 38:
+        #         print(f'{aluno = }')
+        #
+        #     for chave, índice in self.guia.items():
+        #         try:
+        #             dicio_aluno = {chave : aluno[índice]}
+        #
+        #         except Exception as e:
+        #             raise Exception(f'{aluno = }\n{índice = }\n{e = }')
+
         return [{chave: (aluno[índice]) for chave, índice in self.guia.items()} for aluno in lista_de_listas_de_dados]
 
     def gerar_separadores(self, linhas: list[str]) :
@@ -27,7 +39,6 @@ class TratamentoFichas:
             for troca in trocas :
                 linha = linha.replace(troca, ':::')
             linhas_limpas.append(linha)
-
         return linhas_limpas
 
     @staticmethod
@@ -46,7 +57,7 @@ class TratamentoFichas:
             'Matrícula SEE: ',
             'Número para chamada: ',
             'Nome do Aluno(a): ',
-            ' Nome Social: ',
+            ' Nome Social:',
             'Data Nascimento: ',
             ' Certidão nasc.: ',
             ' No Matrícula:',
@@ -75,8 +86,8 @@ class TratamentoFichas:
             'Série: ',
             'Ano',
             'Turma: ',
-            'Turno:',
-            'Data da matrícula: ',
+            ' Turno: ',
+            ' Data da matrícula: ',
             '\n',
             '::::::',
         ]
@@ -121,4 +132,3 @@ class TratamentoFichas:
             'Turno' : 36,
             'Data Matrícula' : 37
         }
-
