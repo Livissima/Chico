@@ -20,6 +20,8 @@ class FrequenciadorProf :
         self.nv = NavegaçãoWeb(navegador, 'siap')
         self.pp = Propriedades(site='siap')
         self._executar()
+        # self.master.quit()
+
 
     def _executar(self) :
 
@@ -50,7 +52,7 @@ class FrequenciadorProf :
                 time.sleep(1)
 
                 self.nv.clicar('xpath', 'diário', 'frequência')
-                print(f'Clicado em frequência na linha {índice_linha + 1}')
+                print(f'\n → → → em frequência na linha {índice_linha + 1}')
 
                 self._processar_dias_linha(índice_linha)
                 break
@@ -65,7 +67,7 @@ class FrequenciadorProf :
         self.nv.selecionar_dropdown('diário', 'mês', texto='Setembro')
         self.nv.aguardar_página(1)
 
-        dias_pendentes = self.obter_calendários_e_dias()
+        dias_pendentes = self.obter_calendários_e_dias(índice_linha)
 
         print(f'Dias pendentes: {[dia.text for dia in dias_pendentes]}')
 
@@ -77,11 +79,11 @@ class FrequenciadorProf :
             self._processar_dia_individual(índice_linha, índice_dia)
 
     def _processar_dia_individual(self, índice_linha, índice_dia) :
-        """Processa um dia individual com proteção contra stale elements"""
+
         tentativas = 0
         while tentativas < 3 :
             try :
-                dias_pendentes_atualizados = self.obter_calendários_e_dias()
+                dias_pendentes_atualizados = self.obter_calendários_e_dias(índice_linha)
 
                 if índice_dia >= len(dias_pendentes_atualizados) :
                     print(f"Índice de dia {índice_dia} fora do range")
@@ -89,8 +91,28 @@ class FrequenciadorProf :
 
                 dia_atual = dias_pendentes_atualizados[índice_dia]
                 print(f'Clicando no dia: {dia_atual.text}')
-                dia_atual.click()
+
+                self.master.execute_script("arguments[0].click();", dia_atual)
                 self.nv.aguardar_página()
+
+
+                erro = ''
+                body = self.master.find_element(By.TAG_NAME, 'body')
+                try:
+                    erro = body.find_element(By.TAG_NAME, 'h1').text
+                except:
+                    pass
+
+                finally:
+
+                    print(f'{erro = }')
+
+                if 'Server Error' in erro:
+                    self.master.back()
+                    time.sleep(3)
+                    tentativas += 1
+                    continue
+
 
                 elemento_maior = self.master.find_element(By.ID, 'cphFuncionalidade_cphCampos_ControleFrequenciaAluno')
 
@@ -107,9 +129,7 @@ class FrequenciadorProf :
 
                 _df = self.ausentes_na_data.copy()
                 df_ausentes_na_data = _df[_df['Data Falta'] == data_pacote]
-                print(f'{df_ausentes_na_data = }')
                 lista_matrículas_ausentes = df_ausentes_na_data['Matrícula'].tolist()
-                print(f'{lista_matrículas_ausentes = }')
 
 
                 self.agir_colunas(lista_coluna_pontinhos, lista_matrículas_ausentes)
@@ -123,100 +143,66 @@ class FrequenciadorProf :
                 print(f"Tentativa {tentativas} falhou para dia {índice_dia}")
                 time.sleep(2)
 
-    # def _voltar_e_selecionar_linha(self, índice_linha) :
-    #     """Volta e seleciona a linha novamente"""
-    #
-    #     linhas_resultado = self.obter_linhas_disciplinas()
-    #
-    #     if índice_linha < len(linhas_resultado) :
-    #         linha_atual = linhas_resultado[índice_linha]
-    #         linha_atual.click()
-    #         self.nv.clicar('xpath', 'diário', 'frequência')
-    #         self.nv.clicar('xpath', 'diário', 'bt mês anterior')
-    #         self.nv.aguardar_página()
 
-    def preencher_filtro_de_linhas(self) :
-        # self._acessar_painel_frequência()
+    def __preencher_filtro_de_linhas(self) :
+        seletor_tabela_update = (By.ID, 'cphFuncionalidade_UpdatePanel1')
+
         self.nv.digitar_xpath('diário', 'ano', string=self.pp.agora.year)
-        # self.nv.selecionar_dropdown('diário', 'composição', valor='199')
-        # self.nv.selecionar_dropdown('diário', 'série', valor=dados_disciplina['série'], elemento_espera=alvo)
         self.nv.clicar('xpath livre', '//*[@id="FormularioPrincipal"]/div[4]/div[2]/div/div[1]/div')  # clicar fora
         self.nv.selecionar_dropdown('diário', 'bimestre', valor='3')
-        # self.nv.selecionar_dropdown('diário', 'turno', valor='1')
-
-        seletor_tabela_update = (By.ID, 'cphFuncionalidade_UpdatePanel1')
         self.nv.clicar('xpath', 'diário', 'botão listar', elemento_espera=seletor_tabela_update)
 
 
-    # @staticmethod
-    # def modulação(cpf_prof) -> dict :
-    #     print(f'{parâmetros.modulações[cpf_prof]['disciplinas'].items() = }')
-    #     print(f'{parâmetros.modulações[cpf_prof]['disciplinas'] = }')
-    #     return parâmetros.modulações[cpf_prof]['disciplinas'].items()
-
-    def _acessar_painel_frequência(self) :
+    def __acessar_painel_frequência(self) :
         self.nv.clicar('xpath', 'menu sistema')
         self.nv.clicar('xpath', 'diário', '_xpath')
 
     @property
     def ausentes_na_data(self) :
         df = self.__ausentes_na_data
-
-        # print(f'{df.tail(1) = }')
         return df
 
-    @property
-    def _núcleo_diversificado(self) :
-        return ['PROTAGONISMO', 'ELETIVAS', 'INICIAÇÃO', 'ESTUDO', 'PRÁTICAS']
-
-    # def __marcar_falta_individual(self) :
-    #     ausentes = list(self.__ausentes_na_data.keys())
-    #     return self.master.execute_script(SCRIPT_MARCAR_FALTA_COMO_ADM, ausentes)
-    #
-    # def __anunciar_faltas_lançadas(self, matrículas_clicadas, nome_turma) :
-    #     for matrícula in matrículas_clicadas :
-    #         estudante = self.__ausentes_na_data.get(matrícula, 'Não identificado')
-    #         print(f'Falta lançada para: {estudante} - {matrícula}')
-    #     print(f'Faltas lançadas na turma {nome_turma}: {len(matrículas_clicadas)}')
 
     def obter_linhas_disciplinas(self):
         seletor_tabela_update = (By.ID, 'cphFuncionalidade_UpdatePanel1')
-        self._acessar_painel_frequência()
-        self.preencher_filtro_de_linhas()
+        self.__acessar_painel_frequência()
+        self.__preencher_filtro_de_linhas()
         tabela_linhas = self.master.find_element(*seletor_tabela_update)
         tabela_calendário = tabela_linhas.find_element(By.TAG_NAME, 'tbody')
         linhas_gerais = tabela_calendário.find_elements(By.TAG_NAME, 'tr')
         linhas_resultado = [linha for linha in linhas_gerais if linha.get_attribute('class') != 'topo']
+
         return linhas_resultado
 
-    def obter_calendários_e_dias(self):
-        seletor_calendário = (By.ID, 'cphFuncionalidade_cphCampos_CalendarioMensal')
 
-        div_calendário = self.nv.obter_elemento(*seletor_calendário)
-        # print(f'{div_calendário = }\n')
+    def obter_calendários_e_dias(self, índice_linha):
+        tentativas = 0
+        while tentativas < 4 :
+            try:
+                seletor_calendário = (By.ID, 'cphFuncionalidade_cphCampos_CalendarioMensal')
+                div_calendário = self.nv.obter_elemento(*seletor_calendário)
+                tabela_calendário = div_calendário.find_element(By.TAG_NAME, 'table')
+                corpo_tabela = tabela_calendário.find_element(By.TAG_NAME, 'tbody')
+                dias = corpo_tabela.find_elements(By.TAG_NAME, 'td')
+                dias_relevantes = [dia for dia in dias if dia.get_attribute('data-executado')]
+                dias_ok = [dia for dia in dias_relevantes if dia.get_attribute('data-executado') == 'True']
+                dias_pendentes = [dia for dia in dias_relevantes if dia.get_attribute('data-executado') == 'False']
 
-        tabela_calendário = div_calendário.find_element(By.TAG_NAME, 'table')
-        #                     print(f'{tabela_calendário = }\n')
+                return dias_relevantes
 
-        corpo_tabela = tabela_calendário.find_element(By.TAG_NAME, 'tbody')
-        #                     print(f'{corpo_tabela = }\n')
+            except Exception as e:
+                print(f'Erro na obtenção de calendário. Tentando novamente... {e}')
+                tentativas += 1
 
-        dias = corpo_tabela.find_elements(By.TAG_NAME, 'td')
-        # print(f'{[dia.text for dia in dias] = }\n')
-        # print(f'{len(dias) = }\n')
+                if tentativas >= 4:
+                    raise Exception('Não deu para obter o calendário.') from e
 
-        dias_relevantes = [dia for dia in dias if dia.get_attribute('data-executado')]
-        # print(f'{[dia.text for dia in dias_relevantes] = }')
-        # print(f'{len(dias_relevantes) = }\n')
 
-        dias_ok = [dia for dia in dias_relevantes if dia.get_attribute('data-executado') == 'True']
-        # print(f'{[dia.text for dia in dias_ok] = }')
-        # print(f'{len(dias_ok) = }\n')
+                linhas = self.obter_linhas_disciplinas()
+                self._processar_linha(índice_linha, linhas)
 
-        # esta é a variável real. Fiz a substituição por dias relevantes para facilitar os testes.
-        dias_pendentes = [dia for dia in dias_relevantes if dia.get_attribute('data-executado') == 'False']
-        # dias_pendentes = dias_relevantes
-        return dias_relevantes
+
+        return None
 
 
     @staticmethod
@@ -225,19 +211,21 @@ class FrequenciadorProf :
 
             pontinhos = coluna_pontinhos.find_elements(By.CLASS_NAME, 'item')
 
-            print(f'{len(pontinhos) = }')
+            # print(f'{len(pontinhos) = }')
 
             pontinhos_alvos = [
                 ponto for ponto in pontinhos if ponto.get_attribute('data-matricula') in ausentes
             ]
 
             print(f'{len(pontinhos_alvos) = }')
-            print(f'{pontinhos_alvos = }')
+            # print(f'{pontinhos_alvos = }')
 
             for ponto_alvo in pontinhos_alvos :
                 if ponto_alvo.get_attribute('data-ausente') == 'False':
                     ponto_alvo.click()
+                    time.sleep(0.7)
                     print(f'::::::::::: Clicando em {ponto_alvo.get_attribute('data-matricula')}')
 
                 if ponto_alvo.get_attribute('data-ausente') == 'True':
                     print(f'::::::::::: O alvo {ponto_alvo.get_attribute('data-matricula')} já estava com falta nesta coluna e foi ignorado.')
+
