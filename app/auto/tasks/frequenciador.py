@@ -45,7 +45,7 @@ class Frequenciador :
         self.master.maximize_window()
 
         for usuário, credenciais in self.pp.credenciais.items():
-            print(f'Iterando sobre {usuário}')
+            print(f'\n → Iterando sobre {usuário}')
             id_cpf_prof = credenciais['id']
             senha = credenciais['senha']
             tipo = credenciais['tipo']
@@ -53,6 +53,7 @@ class Frequenciador :
             self._logon(usuário, id_cpf_prof, senha)
 
             self._execução_por_usuário(tipo, id_cpf_prof)
+            print(f'Frequenciamento finalizado para {usuário}\n')
             self.master.delete_all_cookies()
             time.sleep(2)
             self.master.get(self.pp.url)
