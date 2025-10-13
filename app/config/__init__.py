@@ -1,2 +1,2 @@
-from .env_config import ID_SIGE, SENHA_SIGE, IDS_SIAP, SENHAS_SIAP, USUÁRIOS_SIAP
+from .env_config import ID_SIGE, SENHA_SIGE, __IDS_SIAP, __SENHAS_SIAP, __USUÁRIOS_SIAP
 
