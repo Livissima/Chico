@@ -11,7 +11,7 @@ from app.auto.functions.javascript import SCRIPT_MARCAR_FALTA_COMO_ADM, SCRIPT_J
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
 
-from app.auto.tasks.frequência import FrequenciadorAdm, FrequenciadorProf
+from app.auto.tasks.frequenciador import FrequenciadorAdm, FrequenciadorProf
 from app.config.parâmetros import parâmetros
 
 

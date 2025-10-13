@@ -25,6 +25,7 @@ class Integração:
         df_base['Idade']     = self._integrar_idade(df_base)
         df_base['Senha padrão'] = self._integrar_senha_padrão(df_base)
         df_base['Nova senha'] = self._integrar_nova_senha(df_base)
+        df_base['Senha educa'] = self._integrar_senha_educa(df_base)
 
         try:
             df_base = self._integrar_sociais(df_base, self.path_df_social)
@@ -44,6 +45,11 @@ class Integração:
     def _integrar_nova_senha(df_base: DataFrame) -> Series:
         acessos = Acessos()
         return df_base.apply(acessos.gerar_nova_senha, axis=1)
+
+    @staticmethod
+    def _integrar_senha_educa(df_base: DataFrame) -> Series:
+        acessos = Acessos()
+        return df_base.apply(acessos.gerar_senha_email, axis=1)
 
     @staticmethod
     def _integrar_tratamentos(df: dict[str, DataFrame]) -> DataFrame:

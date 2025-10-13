@@ -1,6 +1,8 @@
 class NetEscola:
 
-    url = 'https://netescola.educacao.go.gov.br/#PrimeiroAcesso'
+    @property
+    def url(self):
+        return 'https://netescola.educacao.go.gov.br/#PrimeiroAcesso'
 
     @property
     def xpaths(self):
@@ -18,7 +20,6 @@ class NetEscola:
 
     @property
     def caminhos(self) -> dict[str, list[tuple]]:
-        xpaths = self.xpaths
         caminhos = {
             '' : [()]
         }

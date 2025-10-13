@@ -30,3 +30,29 @@ class Acessos:
 
         return nome_final.lower()+'00'
 
+    def gerar_senha_email(self, linha):
+        nomes = [
+            self.normalizar_diacrítica(n) for n in linha['Estudante'].strip().split() if n.lower() not in ['das', 'dos', 'de', 'do', 'da']]
+
+
+
+        prenome = nomes[0].lower()
+        sobrenome = nomes[1].lower()
+        terceirome = ''
+
+        try:
+            terceirome = nomes[2].lower()
+        except IndexError:
+            pass
+
+
+        if len(prenome) >= 8 :
+            return prenome
+
+        elif len(prenome) + len(sobrenome) >= 8 :
+            return f'{prenome}{sobrenome}'
+
+        else:
+            return f'{prenome}{sobrenome}{terceirome}'
+
+

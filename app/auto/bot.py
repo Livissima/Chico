@@ -2,8 +2,8 @@ from typing import Literal
 from app.auto.functions.normalizar import normalizar_unicode, normalizar_dicionário
 from app.auto.tasks import ScrapingSige, ConsultaDiasLetivos
 from app.auto.tasks.downloads import Downloads
-from app.auto.tasks.credenciador import Credenciador
-from app.auto.tasks.frequenciador import Frequenciador
+from app.auto.tasks.credenciador.credenciador import Credenciador
+from app.auto.tasks.frequenciador.frequenciador import Frequenciador
 from selenium import webdriver
 
 from app.auto.tasks.obtençãodemodulação import ObtençãoDeModulação
@@ -15,7 +15,7 @@ class Bot:
     def __init__(
             self,
             tarefa: Literal[
-                'downloads', 'siap', 'gerenciar', 'sondagem', 'fotos', 'consultar dias letivos',
+                'downloads', 'siap', 'credenciar', 'sondagem', 'fotos', 'consultar dias letivos',
                 'obter modulações'
             ],
             kwargs_tarefa: dict | None = None,
@@ -38,7 +38,7 @@ class Bot:
 
 
     def _executar_tarefa(self, tarefa):
-        self.navegador = webdriver.Chrome()
+        self.navegador = webdriver.Edge()
 
         argumentos = self._argumentos
 
@@ -47,7 +47,7 @@ class Bot:
             'siap'  : lambda: Frequenciador(**argumentos(tarefa)),
             'sondagem'  : lambda: Sondagem(**argumentos(tarefa)),
             'downloads' : lambda: Downloads(**argumentos(tarefa)),
-            'gerenciar' : lambda: Credenciador(**argumentos(tarefa)),
+            'credenciar' : lambda: Credenciador(**argumentos(tarefa)),
             'consultar dias letivos' : lambda: ConsultaDiasLetivos(**argumentos(tarefa)),
             'obter modulações' : lambda: ObtençãoDeModulação(**argumentos(tarefa))
         }

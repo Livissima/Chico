@@ -6,7 +6,10 @@ from app.config.env_config import CREDENCIAIS_SIAP
 
 
 class Siap:
-    url = 'https://siap.educacao.go.gov.br/'
+
+    @property
+    def url(self):
+        return 'https://siap.educacao.go.gov.br/'
 
     @property
     def credenciais(self):

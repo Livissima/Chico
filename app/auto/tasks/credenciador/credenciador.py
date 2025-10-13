@@ -1,0 +1,95 @@
+import sys
+from pandas import DataFrame
+from selenium.common import NoSuchElementException
+from selenium.webdriver import Chrome
+from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webelement import WebElement
+
+from app.auto.functions.navegaçãoweb import NavegaçãoWeb
+from app.auto.data.sites.propriedades import Propriedades
+from typing import Literal
+import pandas as pd
+import unicodedata
+
+from app.auto.tasks.credenciador.credenciadorgoogle import CredenciadorGoogle
+from app.auto.tasks.credenciador.credenciadornetescola import CredenciadorNetescola
+
+
+class Credenciador:
+
+    def __init__(
+            self,
+            navegador,
+            path_database: str,
+            tipo: Literal['netescola', 'google'],
+            turmas: list[str] = None,
+            **kwargs
+    ):
+        print(f'class GerenciadorDeCredenciais instanciada.')
+
+        self.master = navegador
+        self.nv = NavegaçãoWeb(navegador, tipo)
+        self.pp = Propriedades(site=tipo)
+        self.turmas = turmas
+        print(f'{self.turmas = }')
+
+        self.df = self.dataframe(path_database)
+        self.gerenciar(tipo)
+        # self.master.quit()
+
+
+    def gerenciar(self, tipo):
+
+        início = 2
+        if tipo not in ('netescola', 'google') :
+            raise Exception(f'Tipo desconhecido: {tipo}')
+
+        for índice, linha in self.df.iloc[início:].iterrows():
+            estudante  = str(linha['Estudante'])
+            turma      = str(linha['Turma'])
+            matrícula  = str(linha['Matrícula'])
+            email      = str(linha['Educacional'])
+            dn         = str(linha['Data de Nascimento']).replace('/', '')
+            nova_senha = str(linha['Nova senha'])
+            senha_padrão = str(linha['Senha padrão'])
+            senha_padrão2 = str(f'go2025{linha['Estudante'].lower().split()[0]}')
+
+            print(estudante, turma, matrícula, email, dn, nova_senha, senha_padrão, senha_padrão2)
+
+            self.anunciar(índice, estudante, turma, 'iniciando')
+
+            if tipo == 'netescola':
+                CredenciadorNetescola()
+
+            if tipo == 'google':
+                CredenciadorGoogle(
+                    navegador=self.master,
+                    estudante=estudante,
+                    matrícula=matrícula,
+                    email=email,
+                    dn=dn,
+                    nova_senha=nova_senha
+                )
+#
+
+
+
+    def dataframe(self, path):
+        _df = pd.read_excel(path, 'Base Ativa')
+        colunas = ['Turma', 'Matrícula', 'Educacional', 'Estudante', 'Data de Nascimento', 'Senha padrão', 'Nova senha']
+        df: DataFrame = _df[colunas].copy()
+
+        df['Turma'] = df['Turma'].astype(str).str.strip()
+
+        df['Estudante'] = df['Estudante'].astype(str).str.normalize('NFKD').str.encode('ASCII', errors='ignore').str.decode('ASCII').str.strip()
+
+        print(f'{df['Turma'].unique().tolist() = }')
+        print(df.head())
+        df = df[df['Turma'].isin(self.turmas)]
+
+        return df
+
+    @staticmethod
+    def anunciar(ind, aluno: str, _turma: str, texto: str):
+        sys.stdout.write(f'\r {ind} {aluno} - {_turma}: {texto}.')
+        sys.stdout.flush()
