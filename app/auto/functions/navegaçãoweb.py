@@ -95,6 +95,11 @@ class NavegaçãoWeb :
         for tupla in destinos[destino] :
             self.clicar('xpath', *tupla)
 
+    def acessar_página(self, url):
+        self.master.get(url)
+        self.master.maximize_window()
+        self.aguardar_página()
+
     def digitar_xpath(self, *chaves, string: str) -> None:
         xpaths = self._pp.xpaths
 

@@ -7,7 +7,9 @@ from app.config.env_config import ID_SIGE, SENHA_SIGE
 
 class Sige :
 
-    url = 'https://sige.educacao.go.gov.br/sige/login.asp'
+    @property
+    def url(self):
+        return 'https://sige.educacao.go.gov.br/sige/login.asp'
 
     @property
     def credenciais(self) :

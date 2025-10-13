@@ -1,6 +1,8 @@
 class Google:
 
-    url = 'https://accounts.google.com/'
+    @property
+    def url(self):
+        return 'https://accounts.google.com/'
 
     @property
     def xpaths(self):
@@ -10,7 +12,10 @@ class Google:
             'input senha': '//*[@id="password"]/div[1]/div/div[1]/input',
             'feedback': '//*[@id="c0"]',
             'avançar senha' : '//*[@id="passwordNext"]/div/button/div[3]',
-            'alerta' : '//*[@id="c0"]'
+            'alerta' : '//*[@id="c0"]',
+            'input nova senha' : '//*[@id="passwd"]/div[1]/div/div[1]/input',
+            'input confirmar nova senha' : '//*[@id="confirm-passwd"]/div[1]/div/div[1]/input',
+            'avançar nova senha' : '//*[@id="changepasswordNext"]/div/button/span'
         }
 
     @property
