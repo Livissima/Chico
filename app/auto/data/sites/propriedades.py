@@ -28,6 +28,7 @@ class Propriedades:
 
         self.hoje = datetime.datetime.now().strftime('%d/%m/%Y')
         self.agora = datetime.datetime.now()
+
     def __getattr__(self, item):
         return getattr(self.site, item)
 

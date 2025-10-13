@@ -1,1 +1,1 @@
-from app.config.env_config import ID_SIGE, SENHA_SIGE, USUÁRIOS_SIAP, IDS_SIAP, SENHAS_SIAP
+from app.config.env_config import ID_SIGE, SENHA_SIGE, __USUÁRIOS_SIAP, __IDS_SIAP, __SENHAS_SIAP
