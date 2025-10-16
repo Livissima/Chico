@@ -16,21 +16,31 @@ from app.auto.functions.javascript import SCRIPT_OBTER_TABELAS_SIMPLES, SCRIPT_O
     SCRIPT_SELECIONAR_DISPARANDO_EVENTO
 from app.config.parâmetros import parâmetros
 
-class NavegaçãoWebSige:
-    def __init__(self, master: Chrome) :
+
+class NavegaçãoWebSige :
+    def __init__(self, master: Chrome = None) :
         self.master = master
         self._pp = Propriedades('sige')
-
         self.__timeout = 10
         self.__args_wait = {'driver' : self.master, 'timeout' : self.__timeout}
 
-    def iterar_turmas_sige(self) -> Generator[tuple[Any, Any], Any, None]:
-        for série in parâmetros.séries_selecionadas :
-            self._selecionar_série(série)
-            turmas_correspoentes = parâmetros.turmas_selecionadas_por_série[série]
-            for turma in turmas_correspoentes :
-                self._selecionar_turma_sige(turma)
-                yield série, turma
+    def iterar_turmas_sige(self) :
+        print("🎯 Iniciando iteração de turmas SIGE")
+        try :
+            for série in parâmetros.séries_selecionadas :
+                print(f"🎯 Processando série: {série}")
+                self._selecionar_série(série)
+                turmas_correspoentes = parâmetros.turmas_selecionadas_por_série.get(série, [])
+
+                for turma in turmas_correspoentes :
+                    print(f"🎯 Processando turma: {turma}")
+                    self._selecionar_turma_sige(turma)
+                    yield série, turma
+
+        except Exception as e :
+            print(f"❌ Erro em iterar_turmas_sige: {e}")
+            # Retorna um generator vazio em caso de erro
+            return
 
     def _selecionar_turma_sige(self, turma) -> None :
         self.__selecionar_opção('composição', valor='199')
@@ -60,3 +70,6 @@ class NavegaçãoWebSige:
 
         if texto :
             selecionar.select_by_visible_text(texto)
+
+    # def __getattr__(self, item):
+    #     return getattr(self.__mobilidade, item)

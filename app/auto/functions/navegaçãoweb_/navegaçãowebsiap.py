@@ -17,7 +17,12 @@ from app.auto.functions.javascript import SCRIPT_OBTER_TABELAS_SIMPLES, SCRIPT_O
 from app.config.parâmetros import parâmetros
 
 class NavegaçãoWebSiap:
-    def __init__(self, master: Chrome) :
+    def __init__(
+            self,
+            # mobilidade,
+            master: Chrome = None
+    ):
+        # self.__mobilidade = mobilidade
         self.master = master
         self._pp = Propriedades('siap')
 
@@ -36,3 +41,7 @@ class NavegaçãoWebSiap:
 
         print(f'{lista_xpath = }')
         return lista_xpath
+
+    # def __getattr__(self, item):
+    #     return getattr(self.__mobilidade, item)
+
