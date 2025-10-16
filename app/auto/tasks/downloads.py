@@ -38,10 +38,17 @@ class Downloads:
             self.nv.clicar
             self.__baixar_alvo(alvo.lower())
 
-    def __baixar_alvo(self, alvo: str) -> None:
-        self.nv.caminhar(alvo.lower())
+    def __baixar_alvo(self, alvo) :
+        print("🔄 Iniciando download para:", alvo)
 
-        for série, turma in self.nv.iterar_turmas_sige():
+        # Verifique se o método existe e retorna um iterável
+        turmas_generator = self.nv.iterar_turmas_sige()
+        if turmas_generator is None :
+            print("❌ iterar_turmas_sige retornou None!")
+            return
+
+        for série, turma in turmas_generator :
+            print(f"📚 Processando {série} - {turma}")
             self.__capturar(alvo.lower(), turma)
 
     def __capturar(self, tipo: str, turma: str) -> None:

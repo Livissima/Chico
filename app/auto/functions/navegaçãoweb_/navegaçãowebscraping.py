@@ -19,7 +19,13 @@ from app.config.parâmetros import parâmetros
 
 class NavegaçãoWebScraping :
 
-    def __init__(self, master: Chrome, site: str) :
+    def __init__(
+            self,
+            master: Chrome = None,
+            site: str = None
+    ):
+
+
         self.master = master
         self._pp = Propriedades(site)
         self.__timeout = 10
@@ -109,3 +115,6 @@ class NavegaçãoWebScraping :
             elif valor == valor_procurado :
                 return caminho + [chave]
         return None
+
+    def __getattr__(self, item):
+        return getattr(self.__mobilidade, item)

@@ -16,7 +16,7 @@ from app.auto.functions.javascript import SCRIPT_OBTER_TABELAS_SIMPLES, SCRIPT_O
     SCRIPT_SELECIONAR_DISPARANDO_EVENTO
 from app.config.parâmetros import parâmetros
 
-class Mobilidade:
+class NavegaçãoWebMobilidade:
     def __init__(self, master: Chrome, site: str) :
         self.master = master
         self._pp = Propriedades(site)
@@ -130,32 +130,6 @@ class Mobilidade:
         except Exception as e:
             print(f'Erro na obtenção de elemento: {seletor}\n{e}')
 
-    def _obter_valor(self, *chaves) -> str :
-        xpaths = self._pp.xpaths
-
-        for chave in chaves :
-            xpaths = xpaths[chave]
-        xpath = xpaths
-
-        elemento: tuple[str, str] = (By.XPATH, xpath)
-
-        try :
-            WebDriverWait(**self.__args_wait).until(presence_of_element_located(elemento))
-            WebDriverWait(**self.__args_wait).until(visibility_of_element_located(elemento))
-            _elemento = WebDriverWait(**self.__args_wait).until(element_to_be_clickable(elemento))
-            valor = _elemento.text
-
-            self.aguardar_página()
-            return valor
-
-        except ValueError as e :
-            caminho = self.__obter_chave_por_valor(self.xpaths, xpath)
-            if caminho :
-                caminho_str = " > ".join(caminho)
-                raise f"Erro: {e}\nMétodo: `obter_valor`\nitem: {caminho_str}\n"
-            else :
-                raise f"Erro: {e}\nMétodo: `obter_valor`\nxpath: {xpath}"
-
     def aguardar_página(self, tempo_adicional: float | None = None) -> None :
         elemento = (By.TAG_NAME, 'body')
         WebDriverWait(**self.__args_wait).until(presence_of_element_located(elemento))
@@ -174,31 +148,6 @@ class Mobilidade:
                 return False
 
         WebDriverWait(**self.__args_wait).until(_predicate)
-
-    def download_json(
-            self,
-            nome_arquivo,
-            pasta_destino,
-            tipo: Literal['fichas', 'contatos', 'gêneros', 'situações', 'sondagem'] | str
-    ) -> bool:
-
-        inicio = time.time()
-        dados = self.__obter_tabelas(tipo)
-
-        if dados:
-            path_json = os.path.join(pasta_destino, f'{nome_arquivo}.json')
-            os.makedirs(os.path.dirname(path_json), exist_ok=True)
-
-            with open(path_json, 'w', encoding='utf-8') as arquivo :
-                json.dump(dados, arquivo, ensure_ascii=False, indent=2)
-
-            tempo = time.time() - inicio
-            print(f'✓ {len(dados)} linhas extraídas em {tempo:.2f}s - {path_json}')
-            return True
-        else :
-            print('Nenhum dado extraído')
-            return False
-
 
     def selecionar_dropdown(self, *chaves, valor = None, texto = None, elemento_espera = None) :
         script = SCRIPT_SELECIONAR_DISPARANDO_EVENTO
@@ -234,6 +183,32 @@ class Mobilidade:
 
         except Exception as e:
             print(f'Problema na seleção disparando evento: {e}')
+
+    def _obter_valor(self, *chaves) -> str :
+        xpaths = self._pp.xpaths
+
+        for chave in chaves :
+            xpaths = xpaths[chave]
+        xpath = xpaths
+
+        elemento: tuple[str, str] = (By.XPATH, xpath)
+
+        try :
+            WebDriverWait(**self.__args_wait).until(presence_of_element_located(elemento))
+            WebDriverWait(**self.__args_wait).until(visibility_of_element_located(elemento))
+            _elemento = WebDriverWait(**self.__args_wait).until(element_to_be_clickable(elemento))
+            valor = _elemento.text
+
+            self.aguardar_página()
+            return valor
+
+        except ValueError as e :
+            caminho = self.__obter_chave_por_valor(self.xpaths, xpath)
+            if caminho :
+                caminho_str = " > ".join(caminho)
+                raise f"Erro: {e}\nMétodo: `obter_valor`\nitem: {caminho_str}\n"
+            else :
+                raise f"Erro: {e}\nMétodo: `obter_valor`\nxpath: {xpath}"
 
     def _esperar_por_carregamento(self) :
         try:

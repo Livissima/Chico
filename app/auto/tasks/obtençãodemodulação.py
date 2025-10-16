@@ -5,7 +5,8 @@ import pandas as pd
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 
-from app.auto.functions.navegaçãoweb import NavegaçãoWeb, Propriedades
+from app.auto.functions.navegaçãoweb import NavegaçãoWeb
+from app.auto.data.sites.propriedades import Propriedades
 from app.config.parâmetros import parâmetros
 
 
