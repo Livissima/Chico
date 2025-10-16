@@ -1,6 +1,7 @@
 from app.auto.data.sites.sige.caminhos import Caminhos
 from app.auto.data.sites.sige.css_selectors import CssSelectors
 from app.auto.data.sites.sige.ids import Ids
+from app.auto.data.sites.sige.urls import Urls
 from app.auto.data.sites.sige.xpaths import Xpaths
 from app.config.env_config import ID_SIGE, SENHA_SIGE
 
@@ -9,7 +10,7 @@ class Sige :
 
     @property
     def url(self):
-        return 'https://sige.educacao.go.gov.br/sige/login.asp'
+        return Urls().url_principal
 
     @property
     def credenciais(self) :
