@@ -1,6 +1,7 @@
 from app.auto.data.sites.siap.caminhos import Caminhos
 from app.auto.data.sites.siap.css_selectors import CssSelectors
 from app.auto.data.sites.siap.ids import Ids
+from app.auto.data.sites.siap.urls import Urls
 from app.auto.data.sites.siap.xpaths import Xpaths
 from app.config.env_config import CREDENCIAIS_SIAP
 
@@ -9,7 +10,7 @@ class Siap:
 
     @property
     def url(self):
-        return 'https://siap.educacao.go.gov.br/'
+        return Urls().url_principal
 
     @property
     def credenciais(self):
