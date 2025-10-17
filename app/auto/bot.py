@@ -38,7 +38,7 @@ class Bot:
 
 
     def _executar_tarefa(self, tarefa):
-        self.navegador = webdriver.Edge()
+        self.navegador = webdriver.Chrome()
 
         argumentos = self._argumentos
 
