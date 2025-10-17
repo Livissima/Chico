@@ -1,9 +1,11 @@
 import json
 import os
+from collections import defaultdict
 
 from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
-from collections import defaultdict
-from app.config.prévias import Prévias
+from app.config.getters.prévias import Prévias
+
+#todo dinamizar essa constante com algum getter
 ANO = 2025
 
 class Parâmetros:
@@ -16,11 +18,13 @@ class Parâmetros:
         self._turmas_selecionadas_por_série = None
         self._estado_turmas = {}
 
+
         self.__lista_dias_letivos = self.__importar_dias_letivos(self.novo_diretório, ANO)
         self.__dicio_dias_letivos = self._gerar_dict_dias_letivos(self.lista_dias_letivos)
         self.__modulações = self._obter_modulações
         self.__resumo = prévias.resumo
         self.__nome_ue = prévias.nome_ue
+
         self.turmas_disponíveis = prévias.turmas
 
         self.séries_disponíveis = self.__obter_séries(self.turmas_disponíveis)
@@ -71,7 +75,6 @@ class Parâmetros:
     @modulações.setter
     def modulações(self, valor):
         self.__modulações = valor
-
 
     @property
     def turmas_selecionadas(self):
