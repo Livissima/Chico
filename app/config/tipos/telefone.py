@@ -35,8 +35,6 @@ class Telefone :
         if not telefone :
             return None
 
-        # Remove zeros à esquerda que não façam sentido
-        telefone = telefone.lstrip('0')
 
         if len(telefone) == 10 :
             ddd = telefone[:2]
@@ -63,7 +61,6 @@ class Telefone :
     def é_valido(self) -> bool :
         return self._valor is not None and len(self._valor) in (10, 11)
 
-    # Métodos para compatibilidade com strings
     def __str__(self) -> str :
         return self._valor if self._valor else ""
 
@@ -96,12 +93,11 @@ class Telefone :
         return str(self)[index]
 
     def format(self, *args, **kwargs) :
-        """Suporta o método .format()"""
         return str(self).format(*args, **kwargs)
 
-    # Métodos adicionais úteis para pandas
     def __bool__(self) -> bool :
         return self.é_valido
 
     def __format__(self, format_spec) :
         return format(str(self), format_spec)
+
