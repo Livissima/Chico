@@ -31,8 +31,10 @@ class Acessos:
         return nome_final.lower()+'00'
 
     def gerar_senha_email(self, linha):
+        preposições = ['das', 'dos', 'de', 'do', 'da']
         nomes = [
-            self.normalizar_diacrítica(n) for n in linha['Estudante'].strip().split() if n.lower() not in ['das', 'dos', 'de', 'do', 'da']]
+            self.normalizar_diacrítica(n) for n in linha['Estudante'].strip().split() if n.lower() not in preposições
+        ]
 
 
 
