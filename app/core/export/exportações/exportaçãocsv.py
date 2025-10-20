@@ -19,14 +19,14 @@ class ExportaçãoCSV:
     ]
 
     def __init__(self, consulta, path: Path):
-        self.path = os.path.join(path, 'Contatos Google.csv')
-        self.consulta = consulta
+        self._path = os.path.join(path, 'Contatos Google.csv')
+        self._consulta = consulta
 
-        self.csv = self.atribuir(self.consulta)
+        self._csv = self._atribuir(self._consulta)
 
         self._exportar()
 
-    def atribuir(self, consulta):
+    def _atribuir(self, consulta):
 
         colunas_dict: dict = {
 
@@ -42,6 +42,7 @@ class ExportaçãoCSV:
         }
         return DataFrame(data=colunas_dict, columns=self.colunas_CSV)
 
+
     def _exportar(self):
-        self.csv.to_csv(self.path)
+        self._csv.to_csv(self._path)
 
