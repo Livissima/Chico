@@ -29,7 +29,7 @@ class TelaBotSige(CTkFrame):
     @property
     def _kwargs(self) -> dict:
         return {
-            'destino' : parâmetros.novo_diretório,
+            'destino' : parâmetros.diretório_base,
             'alvos' : self._ck_alvos.valores_true
         }
 
@@ -70,7 +70,7 @@ class TelaBotSige(CTkFrame):
     def __inserir_inputs(self):
         self._in_diretório_base = Input(
             self,
-            texto=str(os.path.join(parâmetros.novo_diretório, 'fonte')),
+            texto=str(os.path.join(parâmetros.diretório_base, 'fonte')),
             x=120,
             y=135,
             largura=420+55
@@ -119,7 +119,7 @@ class TelaBotSige(CTkFrame):
         self._bt_desfazer = Botão(
             self,
             função=lambda: self._desfazer(),
-            condição=parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO,
+            condição=parâmetros.diretório_base != DIRETÓRIO_BASE_PADRÃO,
             texto='↩',
             fonte=('arial', 25),
             x=560,
@@ -128,7 +128,7 @@ class TelaBotSige(CTkFrame):
 
         self.bt_sondagem_emergencial = Botão(
             self,
-            função=lambda: Bot(tarefa='sondagem', path=parâmetros.novo_diretório),
+            função=lambda: Bot(tarefa='sondagem', path=parâmetros.diretório_base),
             condição=len(parâmetros.turmas_disponíveis) == 0,
             texto='SONDAR',
             fonte=('arial', 15),
@@ -202,13 +202,13 @@ class TelaBotSige(CTkFrame):
     def _desfazer(self):
         Desfazimento(self).desfazer()
         self._bt_desfazer.atualizar_visibilidade(
-            parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO
+            parâmetros.diretório_base != DIRETÓRIO_BASE_PADRÃO
         )
         self._verificar_estatística()
 
 
     def sondar(self):
-        Bot(tarefa='sondagem', path=parâmetros.novo_diretório)
+        Bot(tarefa='sondagem', path=parâmetros.diretório_base)
         self._verificar_estatística()
 
 

@@ -7,8 +7,6 @@ class TurmasSéries:
         self.lista_séries = self.gerar_lista_de_séries(prévias.turmas)
         self.dicionário_turmas_por_série = self.gerar_dicionário_turmas_por_série(self.lista_séries)
 
-
-
     @staticmethod
     def gerar_dicionário_turmas_por_série(lista_turmas: list[str]) -> dict[str, list[str]] :
         turmas_por_serie = defaultdict(list)

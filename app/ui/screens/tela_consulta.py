@@ -88,7 +88,7 @@ class TelaConsulta(CTkFrame):
         self._bt_desfazer = Botão(
             self,
             função=lambda: self._desfazer(),
-            condição=parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO,
+            condição=parâmetros.diretório_base != DIRETÓRIO_BASE_PADRÃO,
             texto='↩',
             fonte=('arial', 25),
             x=550,
@@ -98,14 +98,14 @@ class TelaConsulta(CTkFrame):
     def __iserir_inputs(self):
         self._in_diretório_base = Input(
             self,
-            texto=fr'{os.path.join(parâmetros.novo_diretório, 'fonte')}',
+            texto=fr'{os.path.join(parâmetros.diretório_base, 'fonte')}',
             x=120,
             y=135,
             largura=420+55
         )
 
     def consultar(self):
-        diretório_base = parâmetros.novo_diretório
+        diretório_base = parâmetros.diretório_base
         fonte = str(os.path.join(diretório_base, 'fonte'))
 
         self._tx_feedback.att('Consultando')
@@ -128,7 +128,7 @@ class TelaConsulta(CTkFrame):
             _diretório = _diretório.replace(':', ':\\')
             return _diretório
 
-        diretório = str(os.path.join(parâmetros.novo_diretório, 'fonte'))
+        diretório = str(os.path.join(parâmetros.diretório_base, 'fonte'))
 
         if len(diretório) > 60:
             diretório_display = truncar_diretório(diretório)

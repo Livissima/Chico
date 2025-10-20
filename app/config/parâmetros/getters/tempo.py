@@ -11,3 +11,10 @@ class Tempo:
     def agora(self):
         return datetime.datetime.now()
 
+    @property
+    def ano_atual(self) -> int:
+        return datetime.datetime.now().year
+
+
+
+tempo = Tempo()

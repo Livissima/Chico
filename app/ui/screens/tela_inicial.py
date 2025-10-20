@@ -70,7 +70,7 @@ class TelaInicial(CTkFrame):
         #todo: Bloquear click
         self._in_diretório_base = Input(
             self,
-            texto=parâmetros.novo_diretório,
+            texto=parâmetros.diretório_base,
             fonte=('arial', 15),
             x=160,
             y=self.primeira_linha,
@@ -123,7 +123,7 @@ class TelaInicial(CTkFrame):
         self._bt_desfazer = Botão(
             self,
             função=lambda: self._desfazer(),
-            condição=parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO,
+            condição=parâmetros.diretório_base != DIRETÓRIO_BASE_PADRÃO,
             texto='↩',
             fonte=('arial', 25),
             x=560,
@@ -134,7 +134,7 @@ class TelaInicial(CTkFrame):
     def _desfazer(self):
         Desfazimento(self).desfazer()
         self._bt_desfazer.atualizar_visibilidade(
-            parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO
+            parâmetros.diretório_base != DIRETÓRIO_BASE_PADRÃO
         )
 
 

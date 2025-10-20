@@ -4,4 +4,4 @@ from platformdirs import user_documents_dir
 
 
 
-DIRETÓRIO_BASE_PADRÃO = str(os.path.join(Path(user_documents_dir()), 'SIGE'))
+DIRETÓRIO_BASE_PADRÃO = Path(str(os.path.join(Path(user_documents_dir()), 'SIGE')))

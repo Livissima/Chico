@@ -17,11 +17,11 @@ class NavegaçãoUi(CTkFrame):
         super().__init__(self.controller)
 
     def resetar_path(self):
-        parâmetros.novo_diretório = DIRETÓRIO_BASE_PADRÃO
+        parâmetros.diretório_base = DIRETÓRIO_BASE_PADRÃO
         self.classe._in_diretório_base.limpar()
         self.classe._tx_feedback.att('Diretório revertido para o padrão.')
 
-        print(f'Alteração de path reiniciada para: {parâmetros.novo_diretório}')
+        print(f'Alteração de path reiniciada para: {parâmetros.diretório_base}')
 
 
     def trocar_tela(self):

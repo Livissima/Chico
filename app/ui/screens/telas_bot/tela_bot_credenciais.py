@@ -77,7 +77,7 @@ class TelaBotCredenciais(CTkFrame):
             self,
             função=lambda: Bot(
                 tarefa='credenciar',
-                path_database= os.path.join(parâmetros.novo_diretório, 'Database.xlsx'),
+                path_database= os.path.join(parâmetros.diretório_base, 'Database.xlsx'),
                 tipo='google',
                 turmas=self._ck_turmas.valores_true
             ),

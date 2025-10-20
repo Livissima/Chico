@@ -2,6 +2,7 @@ import json
 import os
 import time
 from os import PathLike
+from pathlib import Path
 
 import pandas as pd
 from pandas import DataFrame
@@ -12,6 +13,7 @@ from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
 
 from app.auto.tasks.frequenciador import FrequenciadorAdm, FrequenciadorProf
+from app.auto.tasks.frequenciador.ausentes import AusênciasEstudantes
 from app.config.parâmetros import parâmetros
 
 
@@ -24,74 +26,55 @@ class Frequenciador :
             data = None,
             **kwargs
     ):
-        _path = os.path.join(path, 'fonte', 'Compilado Faltas.xlsx')
-        self.df = self.__obter_df_faltas(_path)
-        self.data = data
+        _path: PathLike = Path(path, 'fonte', 'Compilado Faltas.xlsx')
+        self.ausências = AusênciasEstudantes(path, data)
         self.master = navegador
         self.nv = NavegaçãoWeb(navegador, 'siap')
         self.pp = Propriedades(site='siap')
         self._executar()
 
-    def _logon(self, usuário, _id, senha) :
-        print(f'Fazendo login para: {usuário}')
-        self.nv.digitar_xpath('input login', string=_id)
-        self.nv.digitar_xpath('input senha', string=senha)
-        self.__resolver_captcha()
-        self.nv.clicar('xpath', 'botão login')
-        self.nv.aguardar_página()
+
 
     def _executar(self):
-        self.master.get(self.pp.url)
-        self.master.maximize_window()
+        self.nv.acessar_página(self.pp.url)
 
         for usuário, credenciais in self.pp.credenciais.items():
             print(f'\n → Iterando sobre {usuário}')
+
             id_cpf_prof = credenciais['id']
             senha = credenciais['senha']
             tipo = credenciais['tipo']
 
             self._logon(usuário, id_cpf_prof, senha)
+            self._executar_usuário(tipo, id_cpf_prof)
+            self.__recomeçar()
 
-            self._execução_por_usuário(tipo, id_cpf_prof)
             print(f'Frequenciamento finalizado para {usuário}\n')
-            self.master.delete_all_cookies()
-            time.sleep(2)
-            self.master.get(self.pp.url)
 
-    def _execução_por_usuário(self, tipo, cpf_prof) :
 
+    def _executar_usuário(self, tipo, cpf_prof) :
         if tipo == 'adm':
-            FrequenciadorAdm(self.master, self.ausentes_na_data)
+            FrequenciadorAdm(self.master, self.ausências.dicionário)
+
         if tipo == 'prof':
-            FrequenciadorProf(self.master, cpf_prof, self.ausentes_na_data)
+            FrequenciadorProf(self.master, cpf_prof, self.ausências.df)
 
-    @property
-    def ausentes_na_data(self) -> dict | DataFrame:
-        if self.df is None:
-            ausentes = {'Matrícula': None, 'Estudante' : None}
-            return ausentes
-
-        else:
-            df = self.df.copy()
-            df = df[['Estudante', 'Data Falta', 'Matrícula']]
-            df['Data Falta'] = df['Data Falta'].dt.strftime('%d/%m/%Y')
-            # df['Data canonica'] = df['Data Falta'].dt.strftime('%Y/%m/%d')
-
-            # # df = df[df['Data Falta'] == self.data] #todo desativei para a versão prof, mas é importante para a versão adm
-            # ausentes = dict(zip(df['Matrícula'], df['Estudante']))
-            return df
-
-    @staticmethod
-    def __obter_df_faltas(path):
-        print(f'{path = }')
-        try:
-            df = pd.read_excel(path, sheet_name='Compilado_Faltas', dtype={'Matrícula' : str})
-            return df
-        except (FileNotFoundError, KeyError):
-            return None
+    def _logon(self, usuário, _id, senha) :
+        print(f'Fazendo login para: {usuário}')
+        self.__inserir_credenciais(_id, senha)
+        self.__resolver_captcha()
+        self.nv.clicar('xpath', 'botão login')
+        self.nv.aguardar_página()
 
     def __resolver_captcha(self) :
         captcha = self.master.find_element(By.XPATH, self.pp.xpaths['captcha'])
         self.nv.digitar_xpath('input captcha', string=captcha.text)
 
+    def __inserir_credenciais(self, _id, senha):
+        self.nv.digitar_xpath('input login', string=_id)
+        self.nv.digitar_xpath('input senha', string=senha)
 
+    def __recomeçar(self):
+        self.master.delete_all_cookies()
+        time.sleep(2)
+        self.master.get(self.pp.url)
