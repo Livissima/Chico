@@ -1,0 +1,2 @@
+class DataReal:
+    pass

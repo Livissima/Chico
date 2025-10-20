@@ -1,11 +1,12 @@
 import json
-import os
+
 from json import JSONDecodeError
+from os import PathLike
 from pathlib import Path
 
 
 class Prévias:
-    def __init__(self, path_resumo):
+    def __init__(self, path_resumo: PathLike):
         self._path = Path(path_resumo, 'fonte', 'resumo.json')
 
         self.resumo = self._ler_resumo(self._path) or None
@@ -14,7 +15,7 @@ class Prévias:
 
 
     @staticmethod
-    def _ler_resumo(path):
+    def _ler_resumo(path: PathLike) -> dict[str, list | str]:
         try:
             if Path(path).exists():
                 with open(path, 'r', encoding='utf-8') as arquivo:

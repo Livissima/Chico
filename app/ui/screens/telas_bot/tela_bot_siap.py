@@ -108,7 +108,7 @@ class TelaBotSiap(CTkFrame) :
 
         self.bt_iniciar = Botão(
             self,
-            função=lambda: Bot(tarefa='siap', path=parâmetros.novo_diretório ),
+            função=lambda: Bot(tarefa='siap', path=parâmetros.diretório_base),
             # função=lambda: print(f'{self._dd_dia_inicial.valor_selecionado = }, {self._dd_mês_inicial.valor_selecionado = }'),
             texto='Iniciar',
             formato='bold',
@@ -128,7 +128,7 @@ class TelaBotSiap(CTkFrame) :
 
         self.bt_modulação = Botão(
             self,
-            função= lambda: Bot(tarefa='obter modulações', path=parâmetros.novo_diretório),
+            função= lambda: Bot(tarefa='obter modulações', path=parâmetros.diretório_base),
             largura=100
         )
 
@@ -148,7 +148,7 @@ class TelaBotSiap(CTkFrame) :
         print('clicado')
         time.sleep(1)
         try:
-            Bot(tarefa='consultar dias letivos', ano=ANO, path=parâmetros.novo_diretório)
+            Bot(tarefa='consultar dias letivos', ano=ANO, path=parâmetros.diretório_base)
             dias = parâmetros.lista_dias_letivos
             self._tx_feedback.att(f'Dias obtidos em {ANO}: {len(dias)}')
         except Exception as e:

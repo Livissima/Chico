@@ -43,7 +43,7 @@ class ObtençãoDeModulação:
             self.nv.aguardar_página()
             self.nv.download_json(
                 cpf,
-                os.path.join(parâmetros.novo_diretório, 'fonte', 'modulações'),
+                os.path.join(parâmetros.diretório_base, 'fonte', 'modulações'),
                 'sondagem'
             )
             self.nv.clicar('xpath livre', '//*[@id="barraImpressao"]/img[1]')
@@ -52,6 +52,6 @@ class ObtençãoDeModulação:
 
     @property
     def professores(self):
-        profs = pd.read_excel(os.path.join(parâmetros.novo_diretório, 'fonte', 'Profs.xlsx'), sheet_name='profs')
+        profs = pd.read_excel(os.path.join(parâmetros.diretório_base, 'fonte', 'Profs.xlsx'), sheet_name='profs')
         cpfs = profs['CPF'].tolist()
         return cpfs

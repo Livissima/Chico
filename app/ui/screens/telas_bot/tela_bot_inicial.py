@@ -21,7 +21,7 @@ class TelaBot(CTkFrame):
         # self.pack(expand=True, fill='both')
         self._configurar_layout()
         self._inserir_widgets()
-        print(f'{parâmetros.novo_diretório = }')
+        print(f'{parâmetros.diretório_base = }')
 
 
     def _configurar_layout(self):

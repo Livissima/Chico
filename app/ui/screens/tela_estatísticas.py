@@ -93,7 +93,7 @@ class TelaEstatísticas(CTkFrame):
 
     def sondar(self):
         #todo: definir locks para que a tela seja atualizada apropriadamente
-        Bot(tarefa='sondagem', path=parâmetros.novo_diretório),
+        Bot(tarefa='sondagem', path=parâmetros.diretório_base),
         self.controller.alternador.abrir('inicial')
         self.controller.alternador.abrir('estatísticas')
 

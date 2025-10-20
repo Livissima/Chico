@@ -154,7 +154,7 @@ class Sondagem:
 
     @staticmethod
     def exportar(resumo: dict):
-        path = os.path.join(parâmetros.novo_diretório, 'fonte', 'resumo.json')
+        path = os.path.join(parâmetros.diretório_base, 'fonte', 'resumo.json')
         with open(path, 'w', encoding='utf-8') as arquivo:
             json.dump(resumo, arquivo, ensure_ascii=False, indent=2)
         return arquivo

@@ -1,20 +1,21 @@
 import json
 import os
+from os import PathLike
+
 
 
 class ModulaçãoServidor:
 
-    def __init__(self, novo_diretório):
+    def __init__(self, novo_diretório: PathLike):
         self.modulações = self._obter_modulações(novo_diretório)
 
-
-    def _obter_modulações(self, novo_diretório) :
+    def _obter_modulações(self, novo_diretório: PathLike) :
         lista_de_listas = self._ler(novo_diretório)
         dicionário_modulações = self._tratar_modulações(lista_de_listas)
         return dicionário_modulações
 
     @staticmethod
-    def _ler(novo_diretório):
+    def _ler(novo_diretório: PathLike) -> list[list[dict[str, str]]]:
 
         lista_jsons = os.listdir(os.path.join(novo_diretório, 'fonte', 'modulações'))
 
@@ -30,7 +31,7 @@ class ModulaçãoServidor:
 
 
     @staticmethod
-    def _tratar_modulações(lista_de_listas_de_dicionários):
+    def _tratar_modulações(lista_de_listas_de_dicionários) -> dict :
         professores = {}
         disciplinas = {}
         mapeamento_series = {'6º Ano' : '1996', '7º Ano' : '1997', '8º Ano' : '1998', '9º Ano' : '1999'}

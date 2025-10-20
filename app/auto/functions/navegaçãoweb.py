@@ -133,7 +133,6 @@ class NavegaçãoWeb :
         except Exception as e:
             print(f'Erro na obtenção de elemento: {seletor}\n{e}')
 
-
     def _obter_valor(self, *chaves) -> str :
         xpaths = self._pp.xpaths
 
@@ -457,3 +456,22 @@ class NavegaçãoWeb :
             elif valor == valor_procurado :
                 return caminho + [chave]
         return None
+
+
+
+    #todo: método temporário. Preciso reorganizar junto com os demais métodos de navegação
+    def reiniciar_disciplinas_diário(self, ano):
+        self.__acessar_painel_frequência()
+        self.__preencher_filtro_de_linhas(ano)
+
+    def __acessar_painel_frequência(self) :
+        self.clicar('xpath', 'menu sistema')
+        self.clicar('xpath', 'diário', '_xpath')
+
+    def __preencher_filtro_de_linhas(self, ano) :
+        seletor_tabela_update = (By.ID, 'cphFuncionalidade_UpdatePanel1')
+
+        self.digitar_xpath('diário', 'ano', string=ano)
+        self.clicar('xpath livre', '//*[@id="FormularioPrincipal"]/div[4]/div[2]/div/div[1]/div')  # clicar fora
+        self.selecionar_dropdown('diário', 'bimestre', valor='3')
+        self.clicar('xpath', 'diário', 'botão listar', elemento_espera=seletor_tabela_update)

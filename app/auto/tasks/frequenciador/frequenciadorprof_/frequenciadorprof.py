@@ -1,0 +1,38 @@
+import time
+from typing import Literal
+
+from pandas import DataFrame
+from selenium.common import StaleElementReferenceException
+from selenium.webdriver.common.by import By
+
+from app.auto.data.sites.propriedades import Propriedades
+from app.auto.functions.navegaçãoweb import NavegaçãoWeb
+from selenium.webdriver import Chrome
+
+from app.auto.tasks.frequenciador.frequenciadorprof_.linhasdisciplinas import LinhasDisciplinas
+from app.auto.tasks.frequenciador.frequenciadorprof_.processadordisciplina import ProcessadorDisciplina
+
+from app.config.parâmetros.getters.tempo import tempo
+
+
+class FrequenciadorProf :
+
+    def __init__(self, navegador: Chrome, ausentes_na_data: DataFrame, **kwargs) :
+        self._ausentes_na_data = ausentes_na_data
+
+        self.master = navegador
+
+        self.nv = NavegaçãoWeb(navegador, 'siap')
+        self.pp = Propriedades(site='siap')
+        self._executar()
+        # self.master.quit()
+
+
+    def _executar(self) :
+        linhas_resultado = LinhasDisciplinas(self.master, self.nv).elemento
+        print(f'Encontradas {len(linhas_resultado)} linhas')
+
+        for índice_linha in range(len(linhas_resultado)) :
+            # self._processar_linha_disciplina(índice_linha, linhas_resultado)
+            ProcessadorDisciplina(self.master, self.pp, self.nv, índice_linha, linhas_resultado)
+

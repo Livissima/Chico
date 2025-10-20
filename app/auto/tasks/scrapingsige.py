@@ -25,9 +25,9 @@ class ScrapingSige:
 
         self.nv = NavegaçãoWeb(navegador, 'sige')
         self.pp = Propriedades('sige')
-        self.path = os.path.join(parâmetros.novo_diretório, 'fonte', 'fotos')
+        self.path = os.path.join(parâmetros.diretório_base, 'fonte', 'fotos')
         self.leitura_df = read_excel(
-            os.path.join(parâmetros.novo_diretório, 'Database.xlsx'), sheet_name='Base Ativa'
+            os.path.join(parâmetros.diretório_base, 'Database.xlsx'), sheet_name='Base Ativa'
         )
         self.logon()
 

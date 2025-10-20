@@ -77,5 +77,5 @@ class Input(CTkFrame):
 
     def limpar(self):
         self.input.delete(0, "end")
-        self.input.configure(placeholder_text=parâmetros.novo_diretório)
+        self.input.configure(placeholder_text=parâmetros.diretório_base)
 

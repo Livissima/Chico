@@ -1,20 +1,15 @@
 import json
 import os
-
+from os import PathLike
 
 class DiasLetivos:
 
-    def __init__(self, path, ano):
-        self.lista_dias_letivos = self._dias_letivos(path, ano)[0]
-        self.dicionário_dias_letivos = self._dias_letivos(path, ano)[1]
-
-    def _dias_letivos(self, path, ano):
-        lista_dias_letivos = self._ler_json_dias_letivos(path, ano)
-        dicionário_dias_letivos = self._gerar_dict_dias_letivos(lista_dias_letivos)
-        return lista_dias_letivos, dicionário_dias_letivos
+    def __init__(self, path: PathLike, ano: int):
+        self.lista_dias_letivos = self._gerar_lista_dias_letivos(path, ano)
+        self.dicionário_dias_letivos = self._gerar_dict_dias_letivos(self.lista_dias_letivos)
 
     @staticmethod
-    def _ler_json_dias_letivos(path, ano) :
+    def _gerar_lista_dias_letivos(path, ano) :
         _path = os.path.join(path, 'fonte', f'Dias Letivos {ano}.json')
         try :
             with open(_path, 'r', encoding='utf-8') as arquivo :
