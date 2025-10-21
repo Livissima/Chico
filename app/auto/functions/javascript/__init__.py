@@ -1,1 +1,1 @@
-from .js import JS
+from .javascript import Javascript

@@ -5,7 +5,6 @@ from selenium.common import StaleElementReferenceException
 from selenium.webdriver.common.by import By
 
 from app.auto.data.sites.propriedades import Propriedades
-from app.auto.functions.javascript import SCRIPT_MARCAR_FALTA_COMO_ADM
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
 

@@ -12,8 +12,7 @@ from selenium.webdriver.support.expected_conditions import presence_of_element_l
     element_to_be_clickable, staleness_of
 
 from app.auto.data.sites.propriedades import Propriedades
-from app.auto.functions.javascript import SCRIPT_OBTER_TABELAS_SIMPLES, SCRIPT_OBTER_TABELAS_FICHAS, \
-    SCRIPT_SELECIONAR_DISPARANDO_EVENTO
+from app.auto.functions.javascript import Javascript
 from app.config.parâmetros import parâmetros
 
 
@@ -224,7 +223,7 @@ class NavegaçãoWeb :
         return lista_xpath
 
     def selecionar_dropdown(self, *chaves, valor = None, texto = None, elemento_espera = None) :
-        script = SCRIPT_SELECIONAR_DISPARANDO_EVENTO
+        script = Javascript.selecionar
         xpaths = self._pp.xpaths
 
         for chave in chaves :
@@ -292,10 +291,10 @@ class NavegaçãoWeb :
         if tipo in tipos_simples :
             elemento = (By.CSS_SELECTOR, 'table.tabela')
             WebDriverWait(**self.__args_wait).until(presence_of_element_located(elemento))
-            script = SCRIPT_OBTER_TABELAS_SIMPLES
+            script = Javascript.obter_tabelas
 
         if tipo == 'fichas' :
-            script = SCRIPT_OBTER_TABELAS_FICHAS
+            script = Javascript.obter_fichas
 
         dados = self.master.execute_script(script)
         return dados

@@ -1,0 +1,6 @@
+from .obter_tabelas import SCRIPT_OBTER_TABELAS_SIMPLES
+from .obter_fichas import SCRIPT_OBTER_TABELAS_FICHAS
+from .script_selecionar import SCRIPT_SELECIONAR_DISPARANDO_EVENTO
+from .justificar import SCRIPT_JUSTIFICAR
+from .ir_para_data import SCRIPT_IR_PARA_DATA
+from .marcar_falta_como_adm import SCRIPT_MARCAR_FALTA_COMO_ADM
