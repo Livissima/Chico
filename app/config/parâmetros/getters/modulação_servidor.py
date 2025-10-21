@@ -1,30 +1,41 @@
 import json
 import os
 from os import PathLike
-
+from pathlib import Path
 
 
 class ModulaçãoServidor:
 
-    def __init__(self, novo_diretório: PathLike):
-        self.modulações = self._obter_modulações(novo_diretório)
+    def __init__(self, path: PathLike):
+        self._path = Path(path, 'fonte', 'modulações')
+        self.modulações = self._obter_modulações(self._path)
 
-    def _obter_modulações(self, novo_diretório: PathLike) :
-        lista_de_listas = self._ler(novo_diretório)
+    def _obter_modulações(self, path: Path) :
+        leitura = self.obter_lista_jsons(path)
+
+        if not leitura:
+            return {}
+
+        lista_de_listas = self._ler(path, leitura)
         dicionário_modulações = self._tratar_modulações(lista_de_listas)
         return dicionário_modulações
 
     @staticmethod
-    def _ler(novo_diretório: PathLike) -> list[list[dict[str, str]]]:
+    def obter_lista_jsons(path) -> list[str]:
+        if path.exists():
+            return os.listdir(path)
+        return []
 
-        lista_jsons = os.listdir(os.path.join(novo_diretório, 'fonte', 'modulações'))
+    @staticmethod
+    def _ler(path: PathLike, lista: list) :
 
+        lista_jsons = lista
         lista_de_listas_de_dicionários = []
 
         for arquivo in lista_jsons :
-            if arquivo.endswith('.json') :
-                caminho = os.path.join(novo_diretório, 'fonte', 'modulações', arquivo)
-                with open(caminho, 'r', encoding='utf-8') as f :
+            if arquivo.endswith('.json'):
+                caminho = Path(path, arquivo)
+                with open(caminho, 'r', encoding='utf-8') as f:
                     lista_de_listas_de_dicionários.append(json.load(f))
 
         return lista_de_listas_de_dicionários
