@@ -1,5 +1,6 @@
 #todo alocar este módulo de uma forma mais organizada
 from os import PathLike
+from pathlib import Path
 
 import pandas as pd
 from pandas import DataFrame
@@ -7,7 +8,8 @@ from pandas import DataFrame
 
 class AusênciasEstudantes:
 
-    def __init__(self, _path: PathLike, data):
+    def __init__(self, path: PathLike, data):
+        _path: PathLike = Path(path, 'fonte', 'Compilado Faltas.xlsx')
         self._leitura = self._obter_df_faltas(_path)
         self._data = data
 
