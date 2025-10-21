@@ -1,6 +1,1 @@
-from .justificar import SCRIPT_JUSTIFICAR
-from .lançar_falta import SCRIPT_MARCAR_FALTA_COMO_ADM
-from .obter_tabelas import SCRIPT_OBTER_TABELAS_SIMPLES
-from .obter_fichas import SCRIPT_OBTER_TABELAS_FICHAS
-from .ir_para_data import SCRIPT_IR_PARA_DATA
-from .script_selecionar import SCRIPT_SELECIONAR_DISPARANDO_EVENTO
+from .js import JS

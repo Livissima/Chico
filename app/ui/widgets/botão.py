@@ -2,8 +2,8 @@ from typing import Callable, Optional, Literal
 from customtkinter import CTkFrame, CTk, CTkButton
 
 
-#TODO: Formatação condicional
 class Botão(CTkFrame) :
+    #TODO: Formatação condicional
     def __init__(
             self,
             classe,
