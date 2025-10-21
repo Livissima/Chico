@@ -11,6 +11,9 @@ from selenium.webdriver import Chrome
 from app.config.parâmetros import parâmetros
 from selenium.webdriver.support.ui import Select
 
+from app.config.parâmetros.getters.tempo import tempo
+
+
 class FrequenciadorProf :
 
     def __init__(self, navegador: Chrome, professor: str, ausentes_na_data: DataFrame, **kwargs) :
@@ -63,7 +66,7 @@ class FrequenciadorProf :
 
     def _processar_dias_linha(self, índice_linha) :
         """Processa os dias pendentes de uma linha"""
-        self.nv.selecionar_dropdown('diário', 'mês', texto='Setembro')
+        self.nv.selecionar_dropdown('diário', 'mês', texto='Outubro')
         self.nv.aguardar_página(1)
 
         dias_pendentes = self.obter_calendários_e_dias(índice_linha)
@@ -187,7 +190,10 @@ class FrequenciadorProf :
                 dias_ok = [dia for dia in dias_relevantes if dia.get_attribute('data-executado') == 'True']
                 dias_pendentes = [dia for dia in dias_relevantes if dia.get_attribute('data-executado') == 'False']
 
-                return dias_relevantes
+                _dias = [dia for dia in dias_relevantes if int(dia.text) <= int(tempo.hoje_dia)]
+                print(f'{dias = }')
+                # dias = [dia for dia in dias_relevantes if ]
+                return _dias
 
             except Exception as e:
                 print(f'Erro na obtenção de calendário. Tentando novamente... {e}')

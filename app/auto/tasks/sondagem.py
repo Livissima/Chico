@@ -1,5 +1,6 @@
 import json
 import os.path
+from pathlib import Path
 from typing import Any
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
@@ -8,6 +9,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from app.auto.data.sites.propriedades import Propriedades
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from app.config.parâmetros import parâmetros
+from app.config.parâmetros.getters.tempo import tempo
 
 
 class Sondagem:
@@ -19,44 +21,64 @@ class Sondagem:
             **kwargs
     ):
         print(f'class Sondagem instanciada.')
+        _path = Path(parâmetros.diretório_base, 'fonte', 'resumo.json')
         self.master = navegador
-        self.destino_comum = destino
+        # self.destino_comum = destino
 
-        self.nv = NavegaçãoWeb(navegador, 'sige')
-        self.pp = Propriedades('sige')
+        self._nv = NavegaçãoWeb(navegador, 'sige')
+        self._pp = Propriedades('sige')
+
+        self._executar(_path)
+
+
+    def _executar(self, path: Path):
         self._logon()
-        self._resumo = self._resumir
-        self.exportar(self._resumo)
-        parâmetros.resumo = self._resumo
-        parâmetros.nome_ue = self._resumo['Nome UE']
+        elemento_base = self._obter_elemento_base()
+        tabela = self._extrair_tabela_do_elemento(elemento_base)
+        resumo = self._gerar_resumo(tabela)
+
+        self.exportar(path, resumo)
+
+        parâmetros.resumo = resumo
+        parâmetros.nome_ue = resumo['Nome UE']
+
         self.master.quit()
 
-
-        print(json.dumps(self._resumo, indent=4, ensure_ascii=False))
+        print(f'Sucesso!\n{json.dumps(resumo, indent=4, ensure_ascii=False)}')
 
     def _logon(self):
-        self.master.get(self.pp.url)
+        self.master.get(self._pp.url)
         self.master.maximize_window()
-        self.nv.digitar_xpath('misc', 'input id', string=self.pp.credenciais['id'])
-        self.nv.digitar_xpath('misc', 'input senha', string=self.pp.credenciais['senha'])
-        self.nv.clicar('xpath', 'misc', 'entrar')
-        self.nv.clicar('xpath', 'misc', 'alerta')
+        self._nv.digitar_xpath('misc', 'input id', string=self._pp.credenciais['id'])
+        self._nv.digitar_xpath('misc', 'input senha', string=self._pp.credenciais['senha'])
+        self._nv.clicar('xpath', 'misc', 'entrar')
+        self._nv.clicar('xpath', 'misc', 'alerta')
 
+    def _obter_elemento_base(self):
+        self._nv.caminhar('sondagem')
+        print(f'caminhado para sondagem')
 
-    def _gerar_elemento_tabela(self):
+        self._nv.clicar('xpath', 'resumo', 'turmas', 'ativas')
+        print(f'Clicado em turmas ativas')
 
-        self.nv.caminhar('sondagem')
-        self.nv.clicar('xpath', 'resumo', 'turmas', 'ativas')
-        self.nv.digitar_xpath('resumo', 'turmas', 'input data', string=self.pp.hoje)
-        self.nv.clicar('id', 'gerar')
-        self.nv.aguardar_página()
+        self._nv.digitar_xpath('resumo', 'turmas', 'input data', string=tempo.hoje)
+        print(f'xpath digitado')
 
-        elemento_tabela = self.nv.master.find_element(By.CSS_SELECTOR, 'body > table.tabela')
+        self._nv.clicar('id', 'gerar')
+        print(f'clicado em gerar')
 
-        return elemento_tabela
+        print(f'Aguardando')
+        self._nv.aguardar_página(1)
+
+        print(f'Localizando elemento')
+
+        elemento_base = self._nv.master.find_element(By.CSS_SELECTOR, 'body > table.tabela')
+        print(f'{elemento_base = }')
+
+        return elemento_base
 
     @staticmethod
-    def _obter_tabela_do_elemento(elemento: WebElement) -> dict[str | Any, list[Any]] :
+    def _extrair_tabela_do_elemento(elemento: WebElement) -> dict[str | Any, list[Any]] :
         cabeçalhos = ['Composição', 'Série', 'Turno', 'Código', 'Turma', 'Horário', 'Funcionamento', 'Sala',
                       'Tipo Turma', 'Tipo Atendimento', 'Local Diferenciado', 'Data Criação', 'Situação',
                       'Capacidade legal', 'Capacidade física', 'Efetivados', 'Não Efetivados', 'Vagas',
@@ -106,11 +128,10 @@ class Sondagem:
 
         return tabela_turmas
 
-    @property
-    def _resumir(self) -> dict[str, int | str]:
+    def _gerar_resumo(self, tabela) -> dict[str, int | str]:
         resumo = {}
-        elemento = self._gerar_elemento_tabela()
-        tabela_completa = self._obter_tabela_do_elemento(elemento)
+        # elemento = self._obter_elemento_base()
+        # tabela_completa = self._extrair_tabela_do_elemento(elemento)
 
         def obter_o_que_der(operacao, default='Erro'):
             try:
@@ -124,42 +145,42 @@ class Sondagem:
                 return default
 
 
-        chaves  = list(obter_o_que_der(lambda: tabela_completa["Turma"]))
-        valores = list(obter_o_que_der(lambda: tabela_completa["Código"]))
+        chaves  = list(obter_o_que_der(lambda: tabela["Turma"]))
+        valores = list(obter_o_que_der(lambda: tabela["Código"]))
         turmas = dict(zip(chaves, valores))
 
 
-        resumo["Nome UE"] = obter_o_que_der(lambda: self.obter_nome_ue())
+        resumo["Nome UE"] = obter_o_que_der(lambda: self.__obter_nome_ue())
         resumo["Códigos Turmas"] = obter_o_que_der(lambda: list(turmas.values()))
-        resumo["Composições"] = obter_o_que_der(lambda: ', '.join(list(set(tabela_completa["Composição"]))))
-        resumo["Turnos"] = obter_o_que_der(lambda: list(set(tabela_completa["Turno"])))
-        resumo["Tipos"] = obter_o_que_der(lambda: list(set(tabela_completa["Tipo Turma"])))
-        resumo["Excedente autorizado"] = obter_o_que_der(lambda: sum([int(valor) for valor in tabela_completa["Excedente Autorizado"]]))
-        resumo["Excedente ocupado"] = obter_o_que_der(lambda: sum([valor for valor in map(int, tabela_completa["Vagas"]) if valor < 0]) * -1)
-        resumo["Capacidade física"] = obter_o_que_der(lambda: sum([int(valor) for valor in tabela_completa["Capacidade física"]]))
-        resumo["Capacidade legal"] = obter_o_que_der(lambda: sum([int(valor) for valor in tabela_completa["Capacidade legal"]]))
+        resumo["Composições"] = obter_o_que_der(lambda: ', '.join(list(set(tabela["Composição"]))))
+        resumo["Turnos"] = obter_o_que_der(lambda: list(set(tabela["Turno"])))
+        resumo["Tipos"] = obter_o_que_der(lambda: list(set(tabela["Tipo Turma"])))
+        resumo["Excedente autorizado"] = obter_o_que_der(lambda: sum([int(valor) for valor in tabela["Excedente Autorizado"]]))
+        resumo["Excedente ocupado"] = obter_o_que_der(lambda: sum([valor for valor in map(int, tabela["Vagas"]) if valor < 0]) * -1)
+        resumo["Capacidade física"] = obter_o_que_der(lambda: sum([int(valor) for valor in tabela["Capacidade física"]]))
+        resumo["Capacidade legal"] = obter_o_que_der(lambda: sum([int(valor) for valor in tabela["Capacidade legal"]]))
 
         resumo["Capacidade Total"] = obter_o_que_der(lambda: resumo["Capacidade física"] + resumo["Excedente autorizado"])
-        resumo["Efetivados"] = obter_o_que_der(lambda: sum([int(valor) for valor in tabela_completa["Efetivados"]]))
+        resumo["Efetivados"] = obter_o_que_der(lambda: sum([int(valor) for valor in tabela["Efetivados"]]))
         resumo["Vagas disponíveis"] = obter_o_que_der(lambda: resumo["Capacidade legal"] - resumo["Efetivados"])
         resumo["Vagas absolutas"] = obter_o_que_der(lambda: resumo["Capacidade Total"] - resumo["Efetivados"])
 
         resumo["Balanço Físico"] = obter_o_que_der(lambda: f'{(resumo["Efetivados"] / resumo["Capacidade física"]) * 100:.1f} %' if resumo["Capacidade física"] != 0 else "0.0 %")
         resumo["Balanço absoluto"] = obter_o_que_der(lambda: f'{(resumo["Efetivados"] / resumo["Capacidade Total"]) * 100:.1f} %' if resumo["Capacidade Total"] != 0 else "0.0 %")
 
-        resumo["Turmas Ativas"] = obter_o_que_der(lambda: ', '.join(sorted(tabela_completa["Turma"])))
+        resumo["Turmas Ativas"] = obter_o_que_der(lambda: ', '.join(sorted(tabela["Turma"])))
         resumo["Turmas"] = obter_o_que_der(lambda: sorted(turmas.keys()))
 
         return resumo
 
     @staticmethod
-    def exportar(resumo: dict):
-        path = os.path.join(parâmetros.diretório_base, 'fonte', 'resumo.json')
-        with open(path, 'w', encoding='utf-8') as arquivo:
+    def exportar(path: Path, resumo: dict):
+
+        with open(path, 'x', encoding='utf-8') as arquivo:
             json.dump(resumo, arquivo, ensure_ascii=False, indent=2)
         return arquivo
 
-    def obter_nome_ue(self) -> str:
+    def __obter_nome_ue(self) -> str:
         nome_ue = self.master.find_element(By.XPATH, '/html/body/table[1]/tbody/tr[4]').text.split(" - ")[1]
         print(nome_ue)
         return nome_ue

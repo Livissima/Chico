@@ -1,5 +1,6 @@
 import os.path
 import time
+from pathlib import Path
 
 import pandas as pd
 from selenium.webdriver import Chrome
@@ -18,35 +19,35 @@ class ObtençãoDeModulação:
             **kwargs
     ):
         self.master = navegador
-        self.path = os.path.join(path, 'fonte', 'modulação.json')
+        self._path = Path(path, 'fonte', 'modulação.json')
 
-        self.nv = NavegaçãoWeb(navegador, 'sige')
-        self.pp = Propriedades('sige')
+        self._nv = NavegaçãoWeb(navegador, 'sige')
+        self._pp = Propriedades('sige')
 
         self.executar()
 
     def _logon(self) -> None:
-        self.master.get(self.pp.url)
+        self.master.get(self._pp.url)
         self.master.maximize_window()
-        self.nv.digitar_xpath('misc', 'input id', string=self.pp.credenciais['id'])
-        self.nv.digitar_xpath('misc', 'input senha', string=self.pp.credenciais['senha'])
-        self.nv.clicar('xpath', 'misc', 'entrar')
-        self.nv.clicar('xpath', 'misc', 'alerta')
+        self._nv.digitar_xpath('misc', 'input id', string=self._pp.credenciais['id'])
+        self._nv.digitar_xpath('misc', 'input senha', string=self._pp.credenciais['senha'])
+        self._nv.clicar('xpath', 'misc', 'entrar')
+        self._nv.clicar('xpath', 'misc', 'alerta')
 
     def executar(self):
         self._logon()
-        self.nv.caminhar('modulações')
+        self._nv.caminhar('modulações')
 
         for cpf in self.professores:
-            self.nv.digitar_xpath('lápis docs', 'relatórios', 'dossiê do servidor', 'cpf', string=cpf)
-            self.nv.clicar('xpath livre', '//*[@id="gerarRel"]')
-            self.nv.aguardar_página()
-            self.nv.download_json(
+            self._nv.digitar_xpath('lápis docs', 'relatórios', 'dossiê do servidor', 'cpf', string=cpf)
+            self._nv.clicar('xpath livre', '//*[@id="gerarRel"]')
+            self._nv.aguardar_página()
+            self._nv.download_json(
                 cpf,
                 os.path.join(parâmetros.diretório_base, 'fonte', 'modulações'),
                 'sondagem'
             )
-            self.nv.clicar('xpath livre', '//*[@id="barraImpressao"]/img[1]')
+            self._nv.clicar('xpath livre', '//*[@id="barraImpressao"]/img[1]')
 
         time.sleep(10)
 

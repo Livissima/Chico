@@ -44,7 +44,7 @@ class Xpaths:
         }
         turmas = {
             'ativas' : '/html/body/div[8]/form/table/tbody/tr/td/table/tbody/tr[6]/td[2]/input[1]',
-            'input data' : '/html/body/div[8]/form/table/tbody/tr[6]/td[2]/input'
+            'input data' : '//*[@id="txtDataBase"]'
         }
 
         return {
@@ -104,7 +104,8 @@ class Xpaths:
 
         acomp_pedagógico = {
             '_xpath' : '/html/body/div[7]/ul/li[4]/ul/li[2]/ul/li[3]/a',
-            'alunos por idade' : '/html/body/div[7]/ul/li[4]/ul/li[2]/ul/li[3]/ul/li[6]/a'
+            'alunos por idade' : '/html/body/div[7]/ul/li[4]/ul/li[2]/ul/li[3]/ul/li[6]/a',
+            'input data' : '//*[@id="frm"]/table/tbody/tr[6]/td[2]/input'
         }
 
         dossiê_do_servidor = {
