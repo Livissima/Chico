@@ -8,7 +8,6 @@ import pandas as pd
 from pandas import DataFrame
 from selenium.webdriver.common.by import By
 from app.auto.data.sites.propriedades import Propriedades
-from app.auto.functions.javascript import SCRIPT_MARCAR_FALTA_COMO_ADM, SCRIPT_JUSTIFICAR, SCRIPT_IR_PARA_DATA
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
 
@@ -26,7 +25,7 @@ class Frequenciador :
             data = None,
             **kwargs
     ):
-        _path: PathLike = Path(path, 'fonte', 'Compilado Faltas.xlsx')
+        # _path: PathLike = Path(path, 'fonte', 'Compilado Faltas.xlsx')
         self.ausências = AusênciasEstudantes(path, data)
         self.master = navegador
         self.nv = NavegaçãoWeb(navegador, 'siap')

@@ -1,7 +1,7 @@
 
 from selenium.webdriver.common.by import By
 from app.auto.data.sites.propriedades import Propriedades
-from app.auto.functions.javascript import SCRIPT_MARCAR_FALTA_COMO_ADM, SCRIPT_JUSTIFICAR, SCRIPT_IR_PARA_DATA
+from app.auto.functions.javascript import Javascript
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
 
@@ -35,10 +35,10 @@ class FrequenciadorAdm :
 
     def __justificar_falta(self):
         ausentes = list(self.ausentes_na_data.keys())
-        return self.master.execute_script(SCRIPT_JUSTIFICAR, ausentes)
+        return self.master.execute_script(Javascript.justificar, ausentes)
 
     def __trocar_data(self, data_desejada):
-        alteração_de_data = self.master.execute_script(SCRIPT_IR_PARA_DATA, data_desejada)
+        alteração_de_data = self.master.execute_script(Javascript.ir_para_data, data_desejada)
         print(f'{alteração_de_data = }')
         self.nv.aguardar_página()
 
@@ -47,7 +47,7 @@ class FrequenciadorAdm :
 
     def __marcar_falta_individual(self):
         ausentes = list(self.ausentes_na_data.keys())
-        return self.master.execute_script(SCRIPT_MARCAR_FALTA_COMO_ADM, ausentes)
+        return self.master.execute_script(Javascript.lançar_falta_adm, ausentes)
 
     def __resolver_captcha(self) :
         captcha = self.master.find_element(By.XPATH, self.pp.xpaths['captcha'])
