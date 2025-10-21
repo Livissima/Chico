@@ -8,6 +8,10 @@ class Tempo:
         return datetime.datetime.now().strftime('%d/%m/%Y')
 
     @property
+    def hoje_dia(self):
+        return datetime.datetime.now().strftime('%d')
+
+    @property
     def agora(self):
         return datetime.datetime.now()
 

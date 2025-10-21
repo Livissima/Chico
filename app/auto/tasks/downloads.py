@@ -3,7 +3,7 @@ from pathlib import Path
 from selenium.webdriver import Chrome
 from app.auto.data.sites.propriedades import Propriedades
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
-
+from app.config.parâmetros.getters.tempo import tempo
 
 
 class Downloads:
@@ -57,7 +57,7 @@ class Downloads:
             self.nv.clicar('xpath', 'misc', 'marcar todos')
         if tipo == 'gêneros':
             # self.nv.clicar('xpath', 'resumo', 'turmas', 'ativas')
-            self.nv.digitar_xpath('resumo', 'turmas', 'input data', string=self.pp.hoje)
+            self.nv.digitar_xpath('lápis docs', 'relatórios', 'acomp. pedagógico', 'input data', string=tempo.hoje)
         self.nv.clicar('id', 'gerar')
 
     def __voltar(self) -> None:
