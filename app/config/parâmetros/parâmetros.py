@@ -1,78 +1,102 @@
-from os import PathLike
-from typing import List, Dict, Optional
+import json
+import os
+from collections import defaultdict
 
 from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
-from app.config.parâmetros.gerenciadordeestado import GerenciadorEstado
-from app.config.parâmetros.iniciadorconfiguraçãobase import IniciadorConfiguraçãoBase
+from .getters.dias_letivos import DiasLetivos
+from .getters.modulação_servidor import ModulaçãoServidor
+from .getters.prévias import Prévias
+from .getters.turmasséries import TurmasSéries
 
+#todo dinamizar essa constante com algum getter
+ANO_ATUAL = 2025
 
-class Parâmetros :
-    _instancia = None
+class Parâmetros:
+    def __init__(self):
 
-    def __init__(self, novo_diretorio: Optional[str | PathLike] = None) :
-        if Parâmetros._instancia is not None :
-            raise Exception("Singleton! Use Parâmetros.obter()")
+        self.diretório_base = DIRETÓRIO_BASE_PADRÃO
+        self.prévias = Prévias(self.diretório_base)
 
-        self._diretório_base: PathLike = novo_diretorio or DIRETÓRIO_BASE_PADRÃO
+        self._séries_selecionadas = None
+        self._turmas_selecionadas_por_série = None
+        self._estado_turmas = {}
 
-        self._config_base = IniciadorConfiguraçãoBase.configuração(self._diretório_base)
-        self._estado = GerenciadorEstado(self._config_base)
+        self.__lista_dias_letivos = DiasLetivos(self.diretório_base, ANO_ATUAL).lista_dias_letivos
+        self.__dicio_dias_letivos = DiasLetivos(self.diretório_base, ANO_ATUAL).dicionário_dias_letivos
 
+        self.__modulações = ModulaçãoServidor(self.diretório_base).modulações
 
-    @classmethod
-    def obter(cls, novo_diretorio: Optional[str] = None) -> "Parâmetros" :
-        if cls._instancia is None :
-            # Primeira criação
-            diretorio = novo_diretorio or DIRETÓRIO_BASE_PADRÃO
-            cls._instancia = cls(diretorio)
-        elif novo_diretorio and novo_diretorio != cls._instancia._diretório_base :
+        self.__resumo = self.prévias.resumo
+        self.__nome_ue = self.prévias.nome_ue
 
-            cls._instancia = cls(novo_diretorio)
+        self.turmas_disponíveis = self.prévias.turmas
 
-        return cls._instancia
+        self.séries_disponíveis = TurmasSéries(self.prévias).lista_séries
+        self.turmas_disponíveis_por_série = TurmasSéries(self.prévias).dicionário_turmas_por_série
 
-    @property
-    def turmas_selecionadas(self) -> List[str] :
-        return self._estado.turmas_selecionadas
+        for turma in self.turmas_disponíveis:
+            self._estado_turmas[turma] = True
 
-    @turmas_selecionadas.setter
-    def turmas_selecionadas(self, value: List[str]) :
-        self._estado.selecionar_turmas(value)
+        self._turmas_selecionadas = self.turmas_disponíveis
 
-    @property
-    def séries_selecionadas(self) -> List[str] :
-        return self._estado.series_selecionadas
-
-    @property
-    def turmas_selecionadas_por_série(self) -> Dict[str, List[str]] :
-        return self._estado.turmas_selecionadas_por_serie
-
-    @property
-    def diretório_base(self) -> PathLike :
-        return self._diretório_base
-
-    @property
-    def turmas_disponíveis(self) -> tuple[str] :
-        return self._config_base.turmas_disponiveis
-
-    @property
-    def nome_ue(self) -> str :
-        return self._config_base.nome_ue
-
-    @property
-    def lista_dias_letivos(self) -> tuple :
-        return self._config_base.lista_dias_letivos
-
-    @property
-    def dicionário_dias_letivos(self) -> dict :
-        return self._config_base.dicionario_dias_letivos
-
-    @property
-    def modulações(self) -> dict :
-        return self._config_base.modulacoes
 
     @property
     def resumo(self) -> dict :
-        return self._config_base.resumo
+        return self.__resumo
 
-parâmetros = Parâmetros.obter()
+    @resumo.setter
+    def resumo(self, valor) -> None:
+        self.__resumo = valor
+
+    @property
+    def lista_dias_letivos(self) -> list:
+        return self.__lista_dias_letivos
+
+    @lista_dias_letivos.setter
+    def lista_dias_letivos(self, valor) -> None:
+        self.__lista_dias_letivos = valor
+
+    @property
+    def dicionário_dias_letivos(self)  -> dict:
+        return self.__dicio_dias_letivos
+
+    @dicionário_dias_letivos.setter
+    def dicionário_dias_letivos(self, valor) -> None:
+        self.__dicio_dias_letivos = valor
+
+    @property
+    def nome_ue(self) -> str:
+        return self.__nome_ue
+
+    @nome_ue.setter
+    def nome_ue(self, valor) -> None:
+        self.__nome_ue = valor
+
+    @property
+    def modulações(self) -> dict:
+        return self.__modulações
+
+    @modulações.setter
+    def modulações(self, valor) -> None:
+        self.__modulações = valor
+
+    @property
+    def turmas_selecionadas(self) -> list[str]:
+        return self._turmas_selecionadas
+
+    @turmas_selecionadas.setter
+    def turmas_selecionadas(self, value: list[str]) -> None:
+        self._turmas_selecionadas = value
+        self._séries_selecionadas = TurmasSéries.gerar_lista_de_séries(value)
+        self._turmas_selecionadas_por_série = TurmasSéries.gerar_dicionário_turmas_por_série(value)
+
+    @property
+    def séries_selecionadas(self) -> list:
+        return self._séries_selecionadas
+
+    @property
+    def turmas_selecionadas_por_série(self):
+        return self._turmas_selecionadas_por_série
+
+
+parâmetros = Parâmetros()
