@@ -209,9 +209,8 @@ class NavegaçãoWeb :
                 self._selecionar_turma_sige(turma)
                 yield série, turma
 
-    def obter_turmas_siap(self) -> list[str]:
+    def obter_xpaths_turmas_siap(self) -> list[str]:
         container_turmas = self.master.find_element(By.CLASS_NAME, 'containerTurmaTurno')
-        # print(container_turmas)
         lista_xpath = []
         elementos_turmas = container_turmas.find_elements(By.CLASS_NAME, 'listaTurmas ')
 
@@ -219,7 +218,6 @@ class NavegaçãoWeb :
             xpath_turma = f'/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[{índice}]'
             lista_xpath.append(xpath_turma)
 
-        print(f'{lista_xpath = }')
         return lista_xpath
 
     def selecionar_dropdown(self, *chaves, valor = None, texto = None, elemento_espera = None) :

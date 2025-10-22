@@ -1,4 +1,4 @@
-from app.config.tipos import CPF
+from app.config.tipos import cpf
 from app.config.tipos.telefone import Telefone
 
 # Telefone()

@@ -5,7 +5,7 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.remote.webelement import WebElement
 
 from app.auto import Propriedades, NavegaçãoWeb
-from app.auto.tasks.frequenciador.frequenciadorprof_ import ProcessadorDia
+from app.auto.tasks.siap.frequenciador import ProcessadorDia
 
 
 class ProcessadorDisciplina:

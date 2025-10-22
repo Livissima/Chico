@@ -1,18 +1,9 @@
-import time
-
-from selenium.common import StaleElementReferenceException
-from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webelement import WebElement
 
-from app.auto import NavegaçãoWeb
-
-
-from app.config.parâmetros.getters.tempo import tempo
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from app.auto.tasks.frequenciador.frequenciadorprof import ProcessadorDisciplina
-    from app.auto.tasks.frequenciador.frequenciadorprof_.linhasdisciplinas import LinhasDisciplinas
+    from app.auto.tasks.siap.frequenciador.frequenciadorprof import ProcessadorDisciplina
+    from app.auto.tasks.siap.frequenciador import LinhasDisciplinas
 
 
 
