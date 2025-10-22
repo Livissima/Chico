@@ -1,10 +1,16 @@
 import re
 from typing import Optional
 
+from app.config.app_config import obter_string_numérica
+
 
 class Telefone :
-    def __init__(self, número: str | int | float | None) -> None :
-        self._raw_value = número
+    def __init__(
+            self,
+            número: str | int | float | None
+    ) -> None :
+
+        self._entrada = número
         self._valor = self._validar(número)
 
     def _validar(self, número: str | int | float | None) -> Optional[str] :
@@ -17,13 +23,9 @@ class Telefone :
 
     @staticmethod
     def _stringzar(número) -> str:
-        if not número:
-            return '-'
-
-        _str_numérica = re.sub(r'\D', '', str(número))
-
-        if len(_str_numérica) in range(8, 13) :
-            return _str_numérica
+        str_numérica = obter_string_numérica(número)
+        if len(str_numérica) in range(8, 13) :
+            return str_numérica
 
         return '-'
 

@@ -1,13 +1,13 @@
 from typing import Literal
 from app.auto.functions.normalizar import normalizar_unicode, normalizar_dicionário
 from app.auto.tasks import ScrapingSige, ConsultaDiasLetivos
-from app.auto.tasks.downloads import Downloads
+from app.auto.tasks.sige.downloads import Downloads
 from app.auto.tasks.credenciador.credenciador import Credenciador
-from app.auto.tasks.frequenciador.frequenciador import Frequenciador
+from app.auto.tasks.siap.frequenciador.frequenciador import Frequenciador
 from selenium import webdriver
 
-from app.auto.tasks.obtençãodemodulação import ObtençãoDeModulação
-from app.auto.tasks.sondagem import Sondagem
+from app.auto.tasks.sige.obtençãodemodulação import ObtençãoDeModulação
+from app.auto.tasks.sige.sondagem import Sondagem
 
 
 
@@ -23,13 +23,16 @@ class Bot:
     ):
 
         print(f'Bot instanciado para a task "{tarefa}"')
+        print(f'Bot {kwargs = }')
+        print(f'Bot {kwargs_tarefa = }')
 
         self._tarefa = normalizar_unicode(tarefa)
         self._kwargs_tarefa = normalizar_dicionário(kwargs_tarefa)
         self._kwargs_planos = normalizar_dicionário(kwargs)
         self.navegador = None
-        #todo: Desativado temporariamente para testes.
         self._executar_tarefa(tarefa)
+
+        # todo: threading desativado temporariamente para testes.
         # self.thread_bot = threading.Thread(target=lambda: self._executar_tarefa(tarefa), daemon=False).start()
 
     def _obter_parâmetros(self, chave: str) -> dict:
@@ -70,7 +73,8 @@ class Bot:
             'tipo' : obter('tipo'),
             'ano' : obter('ano'),
             'data inicial' : obter('data_inicial'),
-            'data final' : obter('data final')
+            'data final' : obter('data final'),
+            'periodo' : obter('periodo')
         }
         return kwargs
 

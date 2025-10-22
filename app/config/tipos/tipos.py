@@ -1,2 +1,3 @@
 class Tipos:
+
     pass
