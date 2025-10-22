@@ -3,6 +3,7 @@ import os
 import time
 from os import PathLike
 from pathlib import Path
+from typing import Literal
 
 import pandas as pd
 from pandas import DataFrame
@@ -12,7 +13,7 @@ from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
 
 from app.auto.tasks.frequenciador import FrequenciadorAdm, FrequenciadorProf
-from app.auto.tasks.frequenciador.ausentes import AusênciasEstudantes
+from app.auto.tasks.frequenciador.relatóriodeausências import RelatórioDeAusências
 from app.config.parâmetros import parâmetros
 
 
@@ -26,7 +27,7 @@ class Frequenciador :
             **kwargs
     ):
         # _path: PathLike = Path(path, 'fonte', 'Compilado Faltas.xlsx')
-        self.ausências = AusênciasEstudantes(path, data)
+        self.ausências = RelatórioDeAusências(path, data)
         self.master = navegador
         self.nv = NavegaçãoWeb(navegador, 'siap')
         self.pp = Propriedades(site='siap')
@@ -51,12 +52,13 @@ class Frequenciador :
             print(f'Frequenciamento finalizado para {usuário}\n')
 
 
-    def _executar_usuário(self, tipo, cpf_prof) :
-        if tipo == 'adm':
-            FrequenciadorAdm(self.master, self.ausências.dicionário)
+    def _executar_usuário(self, tipo_de_usuário: Literal['adm', 'prof'], cpf_prof) :
+        executar = {
+            'adm' : lambda: FrequenciadorAdm(self.master, self.ausências.dicionário),
+            'prof' : lambda: FrequenciadorProf(self.master, cpf_prof, self.ausências.dataframe)
+        }
+        executar[tipo_de_usuário]()
 
-        if tipo == 'prof':
-            FrequenciadorProf(self.master, cpf_prof, self.ausências.df)
 
     def _logon(self, usuário, _id, senha) :
         print(f'Fazendo login para: {usuário}')

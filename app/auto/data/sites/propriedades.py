@@ -18,13 +18,14 @@ class Propriedades(TipagemPropriedades) :
         for attr in self.atributos :
             setattr(self, attr, getattr(_site, attr, None))
 
-        self.hoje = datetime.datetime.now().strftime('%d/%m/%Y')
-        self.agora = datetime.datetime.now()
 
     @property
     def __sites(self) :
         return {
-            'sige' : Sige, 'siap' : Siap, 'netescola' : NetEscola, 'google' : Google
+            'sige' : Sige,
+            'siap' : Siap,
+            'netescola' : NetEscola,
+            'google' : Google
         }
 
     @property

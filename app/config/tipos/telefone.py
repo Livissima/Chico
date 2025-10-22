@@ -3,55 +3,49 @@ from typing import Optional
 
 
 class Telefone :
-    def __init__(self, número: str | int | None) -> None :
+    def __init__(self, número: str | int | float | None) -> None :
         self._raw_value = número
-        self._valor = self._validar_e_normalizar(número)
+        self._valor = self._validar(número)
 
-    def _validar_e_normalizar(self, número: str | int | None) -> Optional[str] :
-        try :
-            if número is None :
-                return None
+    def _validar(self, número: str | int | float | None) -> Optional[str] :
+        _string = self._stringzar(número)
+        if _string == '-' :
+            return _string
+        string_normalizada = self._normalizar_comprimento(_string)
 
-            if isinstance(número, (int, float)) :
-                número = str(int(número))
-
-            if not isinstance(número, str) or número.strip() == '' :
-                return None
-
-            string_limpa = self._limpar(número.strip())
-            if not string_limpa :
-                return None
-
-            return self._normalizar_comprimento(string_limpa)
-        except Exception :
-            return None
+        return string_normalizada
 
     @staticmethod
-    def _limpar(número: str) -> str :
-        return re.sub(r'[^0-9]', '', número)
+    def _stringzar(número) -> str:
+        if not número:
+            return '-'
+
+        _str_numérica = re.sub(r'\D', '', str(número))
+
+        if len(_str_numérica) in range(8, 13) :
+            return _str_numérica
+
+        return '-'
 
     @staticmethod
     def _normalizar_comprimento(telefone: str) -> Optional[str] :
-        if not telefone :
-            return None
 
+        if len(telefone) in (8, 9) :
+            return telefone
 
         if len(telefone) == 10 :
             ddd = telefone[:2]
-            numero = telefone[2 :]
-            if numero[0] in '6789' :
-                return f"{ddd}9{numero}"
-            return telefone
+            número = telefone[2:]
+            if número[0] in '6789' :
+                return f"{ddd}9{número}"
 
-        elif len(telefone) == 11 :
+        if len(telefone) == 11 :
             ddd = telefone[:2]
-            numero = telefone[2 :]
-            if numero[0] in '6789' :
+            número = telefone[2:]
+            if número[0] in '6789' :
                 return telefone
-            return f"{ddd}9{numero}"
 
-        # Para números com mais dígitos, retorna como está (pode ser internacional)
-        return telefone if 10 <= len(telefone) <= 13 else None
+        return '-'
 
     @property
     def valor(self) -> Optional[str] :
@@ -59,13 +53,13 @@ class Telefone :
 
     @property
     def é_valido(self) -> bool :
-        return self._valor is not None and len(self._valor) in (10, 11)
+        return self._valor is not None and len(self._valor) in range(8, 11)
 
     def __str__(self) -> str :
         return self._valor if self._valor else ""
 
     def __repr__(self) -> str :
-        return f"Telefone('{self._raw_value}') -> '{self._valor}'"
+        return f"'{self._valor}'"
 
     def __add__(self, other) :
         """Suporta: telefone + string"""
@@ -100,4 +94,7 @@ class Telefone :
 
     def __format__(self, format_spec) :
         return format(str(self), format_spec)
+    #
+    # def __getattr__(self, item):
+    #     return getattr(self._valor, item)
 

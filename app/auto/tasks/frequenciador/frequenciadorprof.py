@@ -22,11 +22,8 @@ class FrequenciadorProf :
         self.nv = NavegaçãoWeb(navegador, 'siap')
         self.pp = Propriedades(site='siap')
         self._executar()
-        # self.master.quit()
-
 
     def _executar(self) :
-
         linhas_resultado = self.obter_linhas_disciplinas()
 
         print(f'Encontradas {len(linhas_resultado)} linhas')
@@ -149,7 +146,7 @@ class FrequenciadorProf :
     def __preencher_filtro_de_linhas(self) :
         seletor_tabela_update = (By.ID, 'cphFuncionalidade_UpdatePanel1')
 
-        self.nv.digitar_xpath('diário', 'ano', string=self.pp.agora.year)
+        self.nv.digitar_xpath('diário', 'ano', string=tempo.ano_atual)
         self.nv.clicar('xpath livre', '//*[@id="FormularioPrincipal"]/div[4]/div[2]/div/div[1]/div')  # clicar fora
         self.nv.selecionar_dropdown('diário', 'bimestre', valor='3')
         self.nv.clicar('xpath', 'diário', 'botão listar', elemento_espera=seletor_tabela_update)
@@ -206,7 +203,6 @@ class FrequenciadorProf :
                 linhas = self.obter_linhas_disciplinas()
                 self._processar_linha(índice_linha, linhas)
 
-
         return None
 
 
@@ -216,14 +212,11 @@ class FrequenciadorProf :
 
             pontinhos = coluna_pontinhos.find_elements(By.CLASS_NAME, 'item')
 
-            # print(f'{len(pontinhos) = }')
-
             pontinhos_alvos = [
                 ponto for ponto in pontinhos if ponto.get_attribute('data-matricula') in ausentes
             ]
 
             print(f'{len(pontinhos_alvos) = }')
-            # print(f'{pontinhos_alvos = }')
 
             for ponto_alvo in pontinhos_alvos :
                 if ponto_alvo.get_attribute('data-ausente') == 'False':
