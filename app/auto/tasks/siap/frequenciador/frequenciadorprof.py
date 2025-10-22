@@ -16,7 +16,13 @@ from app.config.parâmetros.getters.tempo import tempo
 
 class FrequenciadorProf :
 
-    def __init__(self, navegador: Chrome, professor: str, ausentes_na_data: DataFrame, **kwargs) :
+    def __init__(
+            self,
+            navegador: Chrome,
+            professor: str,
+            ausentes_na_data: DataFrame,
+            **kwargs
+    ):
         self.__ausentes_na_data = ausentes_na_data
         self.master = navegador
         self.nv = NavegaçãoWeb(navegador, 'siap')
