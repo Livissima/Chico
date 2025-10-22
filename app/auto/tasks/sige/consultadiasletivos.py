@@ -7,8 +7,8 @@ from pathlib import Path
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 
-from ..functions import NavegaçãoWeb
-from ...config.parâmetros import parâmetros
+from app.auto.functions import NavegaçãoWeb
+from app.config.parâmetros import parâmetros
 
 
 class ConsultaDiasLetivos:

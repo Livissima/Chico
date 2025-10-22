@@ -6,8 +6,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
 from app.auto import Propriedades, NavegaçãoWeb
-from app.auto.tasks.frequenciador.frequenciadorprof_.colunasaulas import ColunasAulas
-from app.auto.tasks.frequenciador.frequenciadorprof_.processadorcalendário import ProcessadorCalendário
+from app.auto.tasks.siap.frequenciador import ColunasAulas
+from app.auto.tasks.siap.frequenciador import ProcessadorCalendário
 
 
 class ProcessadorDia:

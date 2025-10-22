@@ -5,10 +5,12 @@ SCRIPT_MARCAR_FALTA_COMO_ADM = """
 
     elementos.forEach(elemento => {
         const matricula = elemento.getAttribute('data-matricula');
-        if (matriculasNecessarias.has(matricula)) {
+        const estaAusente = elemento.getAttribute('data-ausente');
+
+        if (matriculasNecessarias.has(matricula) && estaAusente === 'false') {
             elemento.click();
             matriculasClicadas.push(matricula);
-            }
-        });
+        }
+    });
     return matriculasClicadas;
-    """
+"""

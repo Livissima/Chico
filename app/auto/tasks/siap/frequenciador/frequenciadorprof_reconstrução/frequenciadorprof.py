@@ -1,18 +1,11 @@
-import time
-from typing import Literal
-
 from pandas import DataFrame
-from selenium.common import StaleElementReferenceException
-from selenium.webdriver.common.by import By
 
 from app.auto.data.sites.propriedades import Propriedades
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
 
-from app.auto.tasks.frequenciador.frequenciadorprof_.linhasdisciplinas import LinhasDisciplinas
-from app.auto.tasks.frequenciador.frequenciadorprof_.processadordisciplina import ProcessadorDisciplina
-
-from app.config.parâmetros.getters.tempo import tempo
+from app.auto.tasks.siap.frequenciador import LinhasDisciplinas
+from app.auto.tasks.siap.frequenciador import ProcessadorDisciplina
 
 
 class FrequenciadorProf :
