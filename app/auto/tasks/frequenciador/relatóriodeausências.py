@@ -6,7 +6,7 @@ import pandas as pd
 from pandas import DataFrame
 
 
-class AusênciasEstudantes:
+class RelatórioDeAusências:
 
     def __init__(self, path: PathLike, data):
         _path: PathLike = Path(path, 'fonte', 'Compilado Faltas.xlsx')
@@ -33,7 +33,7 @@ class AusênciasEstudantes:
 
 
     @property
-    def df(self) -> DataFrame:
+    def dataframe(self) -> DataFrame:
         if self._leitura is None:
             ausentes = DataFrame({'Matrícula' : None, 'Estudante' : None})
             return ausentes
