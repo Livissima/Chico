@@ -1,13 +1,18 @@
 import re
 from typing import Optional
 
+from app.config.app_config import obter_string_numérica
 from app.config.tipos.telefone import Telefone
 
 
 class CPF:
-    def __init__(self, valor_cpf: str | int | float | None) -> None :
-        self._valor_inserido = valor_cpf
-        print(f'{self._valor_inserido = }')
+    def __init__(
+            self,
+            valor_cpf: str | int | float | None
+    ) -> None :
+
+        self._entrada = valor_cpf
+        print(f'{self._entrada = }')
         self._valor = self._validar(valor_cpf)
 
     def _validar(self, número: str | int | float | None) -> Optional[str] :
@@ -21,13 +26,10 @@ class CPF:
 
     @staticmethod
     def _stringzar(número) -> str:
-        if not número:
-            return '-'
-
-        _str_numérica = re.sub(r'\D', '', str(número))
-        if len(_str_numérica) == 11 :
-            print(f'{_str_numérica = }')
-            return _str_numérica
+        str_numérica = obter_string_numérica(número)
+        if len(str_numérica) == 11 :
+            print(f'{str_numérica = }')
+            return str_numérica
 
         return '-'
 
