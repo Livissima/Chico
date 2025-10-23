@@ -3,7 +3,9 @@ from datetime import date
 
 from pandas import DataFrame, Series
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.expected_conditions import presence_of_element_located
 from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.wait import WebDriverWait
 
 from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.auto.functions.javascript import Javascript
@@ -76,18 +78,39 @@ class FrequenciadorAdm :
 
 
     def _justificar_falta(self, _alvos: DataFrame):
+
+
+
+
         coluna_justificativas = self._master.find_element(By.XPATH, '//*[@id="cphFuncionalidade_ControleFrequencia"]/div/div[4]/div[3]/div/div[2]')
         lista_justificativas = coluna_justificativas.find_elements(By.TAG_NAME, 'select')
-        for justificativa in lista_justificativas:
-            if justificativa.get_attribute('data-matricula') not in _alvos:
-                continue
 
-            print(f"Alvo para justificativa localizado localizado: {justificativa.get_attribute('data-matrícula')}")
+        lista_xpaths = []
+        for índice, justificativa in enumerate(lista_justificativas):
+            xpath = f'//*[@id="cphFuncionalidade_ControleFrequencia"]/div/div[4]/div[3]/div/div[2]/div[{índice+1}]'
+            lista_xpaths.append(xpath)
 
 
-            print(f'         → →  Justificando no ponto de {justificativa.get_attribute('data-matricula')}')
 
-            (Select(justificativa).select_by_value('1'))
+
+
+
+        # for justificativa in lista_justificativas:
+        #     if justificativa.get_attribute('data-matricula') not in _alvos:
+        #         continue
+        #
+        #     print(f"Alvo para justificativa localizado localizado: {justificativa.get_attribute('data-matrícula')}")
+        #
+        #
+        #     print(f'         → →  Justificando no ponto de {justificativa.get_attribute('data-matricula')}')
+        #
+        #     try:
+        #         (Select(justificativa).select_by_value('1'))
+        #     except Exception as e:
+        #         continue
+
+
+
 
 
 
