@@ -18,3 +18,9 @@ lista: list[str] = [
     # "22/10/2025"
 ]
 Bot(tarefa='siap', path=parâmetros.diretório_base, periodo=lista)
+"""
+//*[@id="cphFuncionalidade_ControleFrequencia"]/div/div[4]/div[3]/div/div[2]/div[1]
+//*[@id="cphFuncionalidade_ControleFrequencia"]/div/div[4]/div[3]/div/div[2]/div[2]
+//*[@id="cphFuncionalidade_ControleFrequencia"]/div/div[4]/div[3]/div/div[2]/div[38]
+
+"""
