@@ -5,7 +5,7 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
-from app.auto import Propriedades, NavegaçãoWeb
+from app.auto import PropriedadesWeb, NavegaçãoWeb
 from app.auto.tasks.siap.frequenciador import ColunasAulas
 from app.auto.tasks.siap.frequenciador import ProcessadorCalendário
 
@@ -15,7 +15,7 @@ class ProcessadorDia:
             self,
             master: Chrome,
             navegação: NavegaçãoWeb,
-            propriedades: Propriedades,
+            propriedades: PropriedadesWeb,
             índice_disciplina: int,
             elemento_disciplinas: list[WebElement]
     ):

@@ -7,7 +7,7 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
-from app.auto.data.sites.propriedades import Propriedades
+from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.config.parâmetros import parâmetros
 
 
@@ -22,7 +22,7 @@ class ObtençãoDeModulação:
         self._path = Path(path, 'fonte', 'modulação.json')
 
         self._nv = NavegaçãoWeb(navegador, 'sige')
-        self._pp = Propriedades('sige')
+        self._pp = PropriedadesWeb('sige')
 
         self.executar()
 
