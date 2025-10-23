@@ -6,7 +6,7 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
-from app.auto.data.sites.propriedades import Propriedades
+from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from app.config.parâmetros import parâmetros
 from app.config.parâmetros.getters.tempo import tempo
@@ -26,7 +26,7 @@ class Sondagem:
         # self.destino_comum = destino
 
         self._nv = NavegaçãoWeb(navegador, 'sige')
-        self._pp = Propriedades('sige')
+        self._pp = PropriedadesWeb('sige')
 
         self._executar(_path)
 

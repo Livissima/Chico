@@ -8,5 +8,4 @@ class TipagemPropriedades:
     credenciais: Optional[Dict[str, Any]] = None
     ids: Optional[Dict[str, Any]] = None
     css_selectors: Optional[Dict[str, Any]] = None
-    hoje: str
-    agora: datetime.datetime
+

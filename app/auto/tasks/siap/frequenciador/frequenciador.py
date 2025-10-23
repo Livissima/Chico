@@ -3,7 +3,7 @@ from os import PathLike
 from typing import Literal
 
 from selenium.webdriver.common.by import By
-from app.auto.data.sites.propriedades import Propriedades
+from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
 
@@ -29,7 +29,7 @@ class Frequenciador :
         self._ausências = RelatórioDeAusências(path)
         self._master = navegador
         self._nv = NavegaçãoWeb(navegador, 'siap')
-        self._pp = Propriedades(site='siap')
+        self._pp = PropriedadesWeb(site='siap')
         self._executar()
 
 

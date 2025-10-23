@@ -3,7 +3,9 @@ from datetime import date
 
 from pandas import DataFrame, Series
 from selenium.webdriver.common.by import By
-from app.auto.data.sites.propriedades import Propriedades
+from selenium.webdriver.support.select import Select
+
+from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.auto.functions.javascript import Javascript
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
@@ -24,7 +26,7 @@ class FrequenciadorAdm :
         self._relatório_de_ausências = relatório_de_ausências
         self._master = navegador
         self._nv = NavegaçãoWeb(navegador, 'siap')
-        self._pp = Propriedades(site='siap')
+        self._pp = PropriedadesWeb(site='siap')
         self._executar()
 
 
@@ -36,15 +38,18 @@ class FrequenciadorAdm :
         # print(f'{df_faltas_do_dia = }')
         matrículas_alvos = _df['Matrícula'].tolist()
         estudantes_alvos = _df['Estudante'].tolist()
+        print(f'{matrículas_alvos = }')
         print(f'{estudantes_alvos = }')
         return matrículas_alvos
 
     def _executar(self):
-        self._acessar_painel_de_frequência()
 
         for dia in self._período:
+            print(f'{dia = }')
+            self._acessar_painel_de_frequência()
             self._trocar_data(dia)
             alvos = self._faltas_do_dia(dia)
+            print(f'{alvos}')
             self._executar_turmas(alvos)
 
 
@@ -59,11 +64,11 @@ class FrequenciadorAdm :
             self._nv.clicar('xpath livre', turma)
 
             self._nv.aguardar_página()
-            faltas_marcadas = self._marcar_falta_individual(alvos)
-            print(f'>>>>>>>{faltas_marcadas = }')
+            self._marcar_faltas(alvos)
+            # print(f'>>>>>>> {faltas_marcadas = }')
             self._justificar_falta(alvos)
             # if not faltas_marcadas :
-            #     time.sleep(5)
+            # time.sleep(5)
             self._avançar_turma()
 
             # nome_turma = self._master.find_element(By.XPATH, turma).text
@@ -71,14 +76,41 @@ class FrequenciadorAdm :
 
 
     def _justificar_falta(self, _alvos: DataFrame):
+        coluna_justificativas = self._master.find_element(By.XPATH, '//*[@id="cphFuncionalidade_ControleFrequencia"]/div/div[4]/div[3]/div/div[2]')
+        lista_justificativas = coluna_justificativas.find_elements(By.TAG_NAME, 'select')
+        for justificativa in lista_justificativas:
+            if justificativa.get_attribute('data-matricula') not in _alvos:
+                continue
+
+            print(f"Alvo para justificativa localizado localizado: {justificativa.get_attribute('data-matrícula')}")
+
+
+            print(f'         → →  Justificando no ponto de {justificativa.get_attribute('data-matricula')}')
+
+            (Select(justificativa).select_by_value('1'))
+
+
+
+
         return self._master.execute_script(Javascript.justificar, _alvos)
 
-    def _marcar_falta_individual(self, _alvos):
+    def _marcar_faltas(self, _alvos):
+        self._nv.aguardar_página()
+        print(f'{len(self._master.find_elements(By.CLASS_NAME, 'itens')) = }')
+        coluna_pontinhos = self._master.find_element(By.XPATH, '//*[@id="cphFuncionalidade_ControleFrequencia"]/div/div[4]/div[2]/div/div/div[2]')
+        lista_pontinhos = coluna_pontinhos.find_elements(By.CLASS_NAME, 'item')
 
+        for ponto in lista_pontinhos:
+            if ponto.get_attribute('data-matricula') not in _alvos:
+                continue
 
+            print(f"Alvo localizado: {ponto.get_attribute('data-matrícula')}")
+            if ponto.get_attribute('data-ausente') != 'True':
+                print(f"Ponto {ponto.get_attribute('data-matricula')} já está com falta e foi ignorado.")
 
+            print(f'     → →  Clicando no ponto de {ponto.get_attribute('data-matricula')}')
+            ponto.click()
 
-        return self._master.execute_script(Javascript.lançar_falta_adm, _alvos)
 
 
 
