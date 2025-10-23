@@ -16,20 +16,6 @@ class TratamentoFichas:
         strings = self.normalizar_strings(leitura)
         strings_separadas = self.gerar_separadores(strings)
         lista_de_listas_de_dados = self.converter_str_list(strings_separadas)
-
-        ###debug
-        # dicio_aluno = {}
-        # for aluno in lista_de_listas_de_dados:
-        #     if len(aluno) != 38:
-        #         print(f'{aluno = }')
-        #
-        #     for chave, índice in self.guia.items():
-        #         try:
-        #             dicio_aluno = {chave : aluno[índice]}
-        #
-        #         except Exception as e:
-        #             raise Exception(f'{aluno = }\n{índice = }\n{e = }')
-
         return [{chave: (aluno[índice]) for chave, índice in self.guia.items()} for aluno in lista_de_listas_de_dados]
 
     def gerar_separadores(self, linhas: list[str]) :
