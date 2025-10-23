@@ -6,7 +6,7 @@ from pandas import read_excel
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 
-from app.auto.data.sites.propriedades import Propriedades
+from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from app.config.parâmetros import parâmetros
 
@@ -24,7 +24,7 @@ class ScrapingSige:
         self.master = navegador
 
         self._nv = NavegaçãoWeb(navegador, 'sige')
-        self._pp = Propriedades('sige')
+        self._pp = PropriedadesWeb('sige')
         self._path = os.path.join(parâmetros.diretório_base, 'fonte', 'fotos')
         self._leitura_df = read_excel(
             os.path.join(parâmetros.diretório_base, 'Database.xlsx'), sheet_name='Base Ativa'

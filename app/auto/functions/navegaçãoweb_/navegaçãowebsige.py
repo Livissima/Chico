@@ -11,7 +11,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.expected_conditions import presence_of_element_located, visibility_of_element_located, \
     element_to_be_clickable, staleness_of
 
-from app.auto.data.sites.propriedades import Propriedades
+from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.auto.functions.javascript import SCRIPT_OBTER_TABELAS_SIMPLES, SCRIPT_OBTER_TABELAS_FICHAS, \
     SCRIPT_SELECIONAR_DISPARANDO_EVENTO
 from app.config.parâmetros import parâmetros
@@ -20,7 +20,7 @@ from app.config.parâmetros import parâmetros
 class NavegaçãoWebSige :
     def __init__(self, master: Chrome = None) :
         self.master = master
-        self._pp = Propriedades('sige')
+        self._pp = PropriedadesWeb('sige')
         self.__timeout = 10
         self.__args_wait = {'driver' : self.master, 'timeout' : self.__timeout}
 

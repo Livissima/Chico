@@ -4,7 +4,7 @@ from selenium.common import NoSuchElementException
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
-from app.auto.data.sites.propriedades import Propriedades
+from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from typing import Literal
 import pandas as pd
 import unicodedata
@@ -18,7 +18,7 @@ class GerenciadorDeCredenciais :
 
         self.master = navegador
         self.nv = NavegaçãoWeb(navegador, tipo)
-        self.pp = Propriedades(site=tipo)
+        self.pp = PropriedadesWeb(site=tipo)
         self.turmas = turmas
         print(f'{self.turmas = }')
 

@@ -1,7 +1,7 @@
 from os import PathLike
 from pathlib import Path
 from selenium.webdriver import Chrome
-from app.auto.data.sites.propriedades import Propriedades
+from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from app.config.parâmetros.getters.tempo import tempo
 
@@ -19,7 +19,7 @@ class Downloads:
         self.master = navegador
         self.destino = destino
         self.nv = NavegaçãoWeb(navegador, 'sige')
-        self.pp = Propriedades('sige')
+        self.pp = PropriedadesWeb('sige')
         self._logon()
 
         self._executar(alvos)

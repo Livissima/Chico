@@ -1,6 +1,6 @@
 from pandas import DataFrame
 
-from app.auto.data.sites.propriedades import Propriedades
+from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
 
@@ -16,7 +16,7 @@ class FrequenciadorProf :
         self.master = navegador
 
         self.nv = NavegaçãoWeb(navegador, 'siap')
-        self.pp = Propriedades(site='siap')
+        self.pp = PropriedadesWeb(site='siap')
         self._executar()
         # self.master.quit()
 

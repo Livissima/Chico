@@ -1,5 +1,5 @@
 from .google import Google
 from .netescola import NetEscola
-from .propriedades import Propriedades
+from .propriedadesweb import PropriedadesWeb
 from .siap import Siap
 from .sige import Sige
