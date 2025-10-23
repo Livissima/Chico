@@ -4,7 +4,7 @@ from pandas import DataFrame
 from selenium.common import StaleElementReferenceException
 from selenium.webdriver.common.by import By
 
-from app.auto.data.sites.propriedades import Propriedades
+from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
 
@@ -17,7 +17,7 @@ class FrequenciadorProf :
         self.__ausentes_na_data = ausentes_na_data
         self.master = navegador
         self.nv = NavegaçãoWeb(navegador, 'siap')
-        self.pp = Propriedades(site='siap')
+        self.pp = PropriedadesWeb(site='siap')
         self._executar(professor)
 
     def _executar(self, professor) :

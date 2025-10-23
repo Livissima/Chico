@@ -4,7 +4,7 @@ from selenium.common import StaleElementReferenceException
 from selenium.webdriver import Chrome
 from selenium.webdriver.remote.webelement import WebElement
 
-from app.auto import Propriedades, NavegaçãoWeb
+from app.auto import PropriedadesWeb, NavegaçãoWeb
 from app.auto.tasks.siap.frequenciador import ProcessadorDia
 
 
@@ -12,7 +12,7 @@ class ProcessadorDisciplina:
     def __init__(
             self,
             master: Chrome,
-            propriedades: Propriedades,
+            propriedades: PropriedadesWeb,
             navegação: NavegaçãoWeb,
             índice_linha: int,
             lista_elementos_disciplinas: list[WebElement]
