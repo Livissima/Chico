@@ -73,19 +73,9 @@ class FrequenciadorAdm :
 
 
             self._justificar_falta(alvos)
-            # time.sleep(10000)
-            # if not faltas_marcadas :
-            # time.sleep(5)
+
             print('Avançando para a próxima turma.')
             self._avançar_turma()
-
-            # nome_turma = self._master.find_element(By.XPATH, turma).text
-            # self._anunciar_faltas_lançadas(faltas_marcadas, nome_turma)
-
-
-
-
-        # return self._master.execute_script(Javascript.justificar, _alvos)
 
     def _marcar_faltas(self, _alvos):
         self._nv.aguardar_página()
@@ -108,7 +98,6 @@ class FrequenciadorAdm :
             ponto.click()
             alvos_atingidos.append(ponto.get_attribute('data-matricula'))
 
-        # time.sleep(10)
         return alvos_atingidos
 
     def _justificar_falta(self, _alvos: list) :
@@ -121,24 +110,17 @@ class FrequenciadorAdm :
             lista_xpaths.append(xpath)
 
         dicionário = dict(zip(lista_xpaths, lista_elementos))
-        # print(f'{dicionário = }')
+
 
         for xpath, elemento in dicionário.items() :
-            # print(f'{xpath} :  {elemento}')
+
             if elemento.get_attribute('data-matricula') not in _alvos :
                 continue
 
-            # sub_elemento = elemento.find_element()
-
             print(f"Alvo para justificativa localizado localizado: {elemento.get_attribute('data-matricula')}")
-            print(f' → →  Justificando no ponto de {elemento.get_attribute('data-matricula') = }, {xpath = }')
-
-
+            print(f' → →  Justificando no ponto de {elemento.get_attribute('data-matricula')}')
 
             self._nv.selecionar_dropdown('xpath livre', xpath, valor='1')
-
-
-
 
     def _trocar_data(self, data_desejada):
         alteração_de_data = self._master.execute_script(Javascript.ir_para_data, data_desejada)
