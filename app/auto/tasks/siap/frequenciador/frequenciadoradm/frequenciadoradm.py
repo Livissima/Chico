@@ -64,13 +64,18 @@ class FrequenciadorAdm :
 
         for turma in turmas :
             self._nv.clicar('xpath livre', turma)
+            nome_turma = self._master.find_element(By.XPATH, turma).text
+            print(f'Processando turma {nome_turma}')
 
             self._nv.aguardar_página()
-            self._marcar_faltas(alvos)
-            # print(f'>>>>>>> {faltas_marcadas = }')
+            faltas_lançadas = self._marcar_faltas(alvos)
+            print(f'>>>>>>> Faltas lançadas na turma {nome_turma}:\n{faltas_lançadas}\n')
+
+
             self._justificar_falta(alvos)
             # if not faltas_marcadas :
             # time.sleep(5)
+            print('Avançando para a próxima turma.')
             self._avançar_turma()
 
             # nome_turma = self._master.find_element(By.XPATH, turma).text
@@ -78,61 +83,55 @@ class FrequenciadorAdm :
 
 
     def _justificar_falta(self, _alvos: DataFrame):
-
-
-
-
         coluna_justificativas = self._master.find_element(By.XPATH, '//*[@id="cphFuncionalidade_ControleFrequencia"]/div/div[4]/div[3]/div/div[2]')
-        lista_justificativas = coluna_justificativas.find_elements(By.TAG_NAME, 'select')
+        lista_elementos = coluna_justificativas.find_elements(By.TAG_NAME, 'select')
 
         lista_xpaths = []
-        for índice, justificativa in enumerate(lista_justificativas):
+        for índice, _ in enumerate(lista_elementos):
             xpath = f'//*[@id="cphFuncionalidade_ControleFrequencia"]/div/div[4]/div[3]/div/div[2]/div[{índice+1}]'
             lista_xpaths.append(xpath)
 
+        dicionário = dict(zip(lista_xpaths, lista_elementos))
 
 
+        for xpath, elemento in dicionário.items():
+            if elemento.get_attribute('data-matricula') not in _alvos:
+                continue
 
+            print(f"Alvo para justificativa localizado localizado: {elemento.get_attribute('data-matrícula')}")
 
+            try:
+                print(f' → →  Justificando no ponto de {elemento.get_attribute('data-matricula')}')
+                self._nv.selecionar_dropdown('xpath livre', xpath, '1')
 
-        # for justificativa in lista_justificativas:
-        #     if justificativa.get_attribute('data-matricula') not in _alvos:
-        #         continue
-        #
-        #     print(f"Alvo para justificativa localizado localizado: {justificativa.get_attribute('data-matrícula')}")
-        #
-        #
-        #     print(f'         → →  Justificando no ponto de {justificativa.get_attribute('data-matricula')}')
-        #
-        #     try:
-        #         (Select(justificativa).select_by_value('1'))
-        #     except Exception as e:
-        #         continue
+            except Exception as e:
+                print(f'{e = }')
+                continue
 
-
-
-
-
-
-
-        return self._master.execute_script(Javascript.justificar, _alvos)
+        # return self._master.execute_script(Javascript.justificar, _alvos)
 
     def _marcar_faltas(self, _alvos):
         self._nv.aguardar_página()
-        print(f'{len(self._master.find_elements(By.CLASS_NAME, 'itens')) = }')
         coluna_pontinhos = self._master.find_element(By.XPATH, '//*[@id="cphFuncionalidade_ControleFrequencia"]/div/div[4]/div[2]/div/div/div[2]')
         lista_pontinhos = coluna_pontinhos.find_elements(By.CLASS_NAME, 'item')
-
+        alvos_atingidos = []
         for ponto in lista_pontinhos:
             if ponto.get_attribute('data-matricula') not in _alvos:
                 continue
 
-            print(f"Alvo localizado: {ponto.get_attribute('data-matrícula')}")
-            if ponto.get_attribute('data-ausente') != 'True':
+            print(f"Alvo localizado: {ponto.get_attribute('data-matricula')}")
+
+            if ponto.get_attribute('data-ausente') == 'True':
                 print(f"Ponto {ponto.get_attribute('data-matricula')} já está com falta e foi ignorado.")
+                continue
+
 
             print(f'     → →  Clicando no ponto de {ponto.get_attribute('data-matricula')}')
             ponto.click()
+            alvos_atingidos.append(ponto.get_attribute('data-matricula'))
+
+        time.sleep(10)
+        return alvos_atingidos
 
 
 
