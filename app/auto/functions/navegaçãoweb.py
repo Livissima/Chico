@@ -22,7 +22,7 @@ class NavegaçãoWeb :
     def __init__(self, master: Chrome, site: str) :
         self.master = master
         self._pp = PropriedadesWeb(site)
-        self.__timeout = 10
+        self.__timeout = 30
         self.__args_wait = {'driver' : self.master, 'timeout' : self.__timeout}
 
     def clicar(
