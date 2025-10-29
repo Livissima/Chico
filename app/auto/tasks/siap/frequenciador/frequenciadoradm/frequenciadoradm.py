@@ -82,7 +82,7 @@ class FrequenciadorAdm :
             # self._anunciar_faltas_lançadas(faltas_marcadas, nome_turma)
 
 
-    def _justificar_falta(self, _alvos: DataFrame):
+    def _justificar_falta(self, _alvos: list):
         coluna_justificativas = self._master.find_element(By.XPATH, '//*[@id="cphFuncionalidade_ControleFrequencia"]/div/div[4]/div[3]/div/div[2]')
         lista_elementos = coluna_justificativas.find_elements(By.TAG_NAME, 'select')
 
@@ -92,9 +92,11 @@ class FrequenciadorAdm :
             lista_xpaths.append(xpath)
 
         dicionário = dict(zip(lista_xpaths, lista_elementos))
+        print(f'{dicionário = }')
 
 
         for xpath, elemento in dicionário.items():
+            print(f'{xpath}, {elemento}')
             if elemento.get_attribute('data-matricula') not in _alvos:
                 continue
 
@@ -130,7 +132,7 @@ class FrequenciadorAdm :
             ponto.click()
             alvos_atingidos.append(ponto.get_attribute('data-matricula'))
 
-        time.sleep(10)
+        # time.sleep(10)
         return alvos_atingidos
 
 
