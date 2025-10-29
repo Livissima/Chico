@@ -220,13 +220,19 @@ class NavegaçãoWeb :
 
         return lista_xpath
 
-    def selecionar_dropdown(self, *chaves, valor = None, texto = None, elemento_espera = None) :
+    def selecionar_dropdown(self, by: Literal['xpath', 'xpath livre'], *chaves: str, valor=None, texto=None, elemento_espera=None) :
         script = Javascript.selecionar
-        xpaths = self._pp.xpaths
+        xpath: str = ''
 
-        for chave in chaves :
-            xpaths = xpaths[chave]
-        xpath = xpaths
+        if by == 'xpath' :
+            xpaths = self._pp.xpaths
+
+            for chave in chaves :
+                xpaths = xpaths[chave]
+            xpath = xpaths
+
+        if by == 'xpath livre' :
+            xpath = chaves[0]
 
         seletor: tuple[str, str] = (By.XPATH, xpath)
 
@@ -470,5 +476,5 @@ class NavegaçãoWeb :
 
         self.digitar_xpath('diário', 'ano', string=ano)
         self.clicar('xpath livre', '//*[@id="FormularioPrincipal"]/div[4]/div[2]/div/div[1]/div')  # clicar fora
-        self.selecionar_dropdown('diário', 'bimestre', valor='3')
+        self.selecionar_dropdown('xpath', 'diário', 'bimestre', valor='3')
         self.clicar('xpath', 'diário', 'botão listar', elemento_espera=seletor_tabela_update)

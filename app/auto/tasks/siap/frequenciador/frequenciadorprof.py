@@ -69,7 +69,7 @@ class FrequenciadorProf :
 
     def _processar_dias_linha(self, índice_linha) :
         """Processa os dias pendentes de uma linha"""
-        self.nv.selecionar_dropdown('diário', 'mês', texto='Outubro')
+        self.nv.selecionar_dropdown('xpath', 'diário', 'mês', texto='Outubro')
         self.nv.aguardar_página(1)
 
         dias_pendentes = self.obter_calendários_e_dias(índice_linha)
@@ -154,7 +154,7 @@ class FrequenciadorProf :
 
         self.nv.digitar_xpath('diário', 'ano', string=tempo.ano_atual)
         self.nv.clicar('xpath livre', '//*[@id="FormularioPrincipal"]/div[4]/div[2]/div/div[1]/div')  # clicar fora
-        self.nv.selecionar_dropdown('diário', 'bimestre', valor='3')
+        self.nv.selecionar_dropdown('xpath', 'diário', 'bimestre', valor='3')
         self.nv.clicar('xpath', 'diário', 'botão listar', elemento_espera=seletor_tabela_update)
 
 
