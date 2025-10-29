@@ -25,7 +25,7 @@ class TelaBotSiap(CTkFrame) :
     def __init__(self, master, controller: "Janela") :
         super().__init__(master)
         self.master: CTk = master
-        self.controller = controller
+        self.controller  = controller
 
         self._configurar_layout()
         self._inserir_widgets()

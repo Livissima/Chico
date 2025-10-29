@@ -90,7 +90,7 @@ class CPF:
         return self._valor if self._valor else ""
 
     def __repr__(self) -> str :
-        return f"CPF(valor='{self._valor}' situação='{self._validez}')"
+        return f"CPF(valor='{self._valor}', situação='{self._validez}')"
 
     def __add__(self, other) :
         """Suporta: telefone + string"""

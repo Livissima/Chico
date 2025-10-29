@@ -221,7 +221,6 @@ class NavegaçãoWeb :
         return lista_xpath
 
     def selecionar_dropdown(self, by: Literal['xpath', 'xpath livre'], *chaves: str, valor=None, texto=None, elemento_espera=None) :
-        script = Javascript.selecionar
         xpath: str = ''
 
         if by == 'xpath' :
@@ -235,6 +234,7 @@ class NavegaçãoWeb :
             xpath = chaves[0]
 
         seletor: tuple[str, str] = (By.XPATH, xpath)
+        # print(f'{seletor = }')
 
         try :
             WebDriverWait(**self.__args_wait).until(presence_of_element_located(seletor))
@@ -242,13 +242,15 @@ class NavegaçãoWeb :
             WebDriverWait(**self.__args_wait).until(element_to_be_clickable(seletor))
             elemento = self.master.find_element(*seletor)
             if valor:
-                self.master.execute_script(script, elemento, valor)
+                Select(elemento).select_by_value(valor)
+                # self.master.execute_script(Javascript.selecionar, elemento, valor)
             if texto:
                 Select(elemento).select_by_visible_text(texto)
 
             try:
                 WebDriverWait(self.master, 2).until(staleness_of(elemento))
-            except Exception():
+
+            except Exception:
                 pass
 
             self._esperar_por_carregamento()
