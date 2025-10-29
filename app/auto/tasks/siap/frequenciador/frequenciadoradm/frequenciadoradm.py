@@ -73,6 +73,7 @@ class FrequenciadorAdm :
 
 
             self._justificar_falta(alvos)
+            # time.sleep(10000)
             # if not faltas_marcadas :
             # time.sleep(5)
             print('Avançando para a próxima turma.')
@@ -82,33 +83,7 @@ class FrequenciadorAdm :
             # self._anunciar_faltas_lançadas(faltas_marcadas, nome_turma)
 
 
-    def _justificar_falta(self, _alvos: list):
-        coluna_justificativas = self._master.find_element(By.XPATH, '//*[@id="cphFuncionalidade_ControleFrequencia"]/div/div[4]/div[3]/div/div[2]')
-        lista_elementos = coluna_justificativas.find_elements(By.TAG_NAME, 'select')
 
-        lista_xpaths = []
-        for índice, _ in enumerate(lista_elementos):
-            xpath = f'//*[@id="cphFuncionalidade_ControleFrequencia"]/div/div[4]/div[3]/div/div[2]/div[{índice+1}]'
-            lista_xpaths.append(xpath)
-
-        dicionário = dict(zip(lista_xpaths, lista_elementos))
-        print(f'{dicionário = }')
-
-
-        for xpath, elemento in dicionário.items():
-            print(f'{xpath}, {elemento}')
-            if elemento.get_attribute('data-matricula') not in _alvos:
-                continue
-
-            print(f"Alvo para justificativa localizado localizado: {elemento.get_attribute('data-matrícula')}")
-
-            try:
-                print(f' → →  Justificando no ponto de {elemento.get_attribute('data-matricula')}')
-                self._nv.selecionar_dropdown('xpath livre', xpath, '1')
-
-            except Exception as e:
-                print(f'{e = }')
-                continue
 
         # return self._master.execute_script(Javascript.justificar, _alvos)
 
@@ -117,6 +92,7 @@ class FrequenciadorAdm :
         coluna_pontinhos = self._master.find_element(By.XPATH, '//*[@id="cphFuncionalidade_ControleFrequencia"]/div/div[4]/div[2]/div/div/div[2]')
         lista_pontinhos = coluna_pontinhos.find_elements(By.CLASS_NAME, 'item')
         alvos_atingidos = []
+
         for ponto in lista_pontinhos:
             if ponto.get_attribute('data-matricula') not in _alvos:
                 continue
@@ -134,6 +110,32 @@ class FrequenciadorAdm :
 
         # time.sleep(10)
         return alvos_atingidos
+
+    def _justificar_falta(self, _alvos: list) :
+        coluna_justificativas = self._master.find_element(By.XPATH, '//*[@id="cphFuncionalidade_ControleFrequencia"]/div/div[4]/div[3]/div/div[2]')
+        lista_elementos = coluna_justificativas.find_elements(By.TAG_NAME, 'select')
+
+        lista_xpaths = []
+        for índice, _ in enumerate(lista_elementos) :
+            xpath = f'//*[@id="cphFuncionalidade_ControleFrequencia"]/div/div[4]/div[3]/div/div[2]/div[{índice + 1}]/select'
+            lista_xpaths.append(xpath)
+
+        dicionário = dict(zip(lista_xpaths, lista_elementos))
+        # print(f'{dicionário = }')
+
+        for xpath, elemento in dicionário.items() :
+            # print(f'{xpath} :  {elemento}')
+            if elemento.get_attribute('data-matricula') not in _alvos :
+                continue
+
+            # sub_elemento = elemento.find_element()
+
+            print(f"Alvo para justificativa localizado localizado: {elemento.get_attribute('data-matricula')}")
+            print(f' → →  Justificando no ponto de {elemento.get_attribute('data-matricula') = }, {xpath = }')
+
+
+
+            self._nv.selecionar_dropdown('xpath livre', xpath, valor='1')
 
 
 
