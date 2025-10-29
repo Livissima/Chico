@@ -162,7 +162,7 @@ class FrequenciadorProf :
         # self.nv.selecionar_dropdown('diário', 'composição', valor='199')
         # self.nv.selecionar_dropdown('diário', 'série', valor=dados_disciplina['série'], elemento_espera=alvo)
         self.nv.clicar('xpath livre', '//*[@id="FormularioPrincipal"]/div[4]/div[2]/div/div[1]/div')  # clicar fora
-        self.nv.selecionar_dropdown('diário', 'bimestre', valor='3')
+        self.nv.selecionar_dropdown('xpath', 'diário', 'bimestre', valor='3')
         # self.nv.selecionar_dropdown('diário', 'turno', valor='1')
 
         seletor_tabela_update = (By.ID, 'cphFuncionalidade_UpdatePanel1')
