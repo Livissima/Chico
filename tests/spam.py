@@ -18,5 +18,7 @@ lista: list[str] = [
     "22/10/2025",
     "23/10/2025",
     "29/10/2025",
+    "30/10/2025",
+    "31/10/2025"
 ]
 Bot(tarefa='siap', path=parâmetros.diretório_base, periodo=lista)
