@@ -35,8 +35,6 @@ class CPF:
         check_dois = self._gerar_verificador(estrutura_inicial, check_um)
         return check_um + check_dois
 
-
-
     @staticmethod
     def _gerar_verificador(estrutura: dict, check: str = None):
         multiplicadores: list[int] = []
@@ -77,8 +75,8 @@ class CPF:
     def _preparar_string(cpf) -> str:
         str_numérica = obter_string_numérica(cpf)
         if len(str_numérica) == 11 :
-            # print(f'{str_numérica = }')
             return str_numérica
+
         return '-'
 
 

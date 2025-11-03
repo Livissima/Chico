@@ -31,7 +31,7 @@ class Consulta:
         self.df_integrado  = self._integrar(self.dfs_tratados)
         # print(f'{self.df_integrado}')
         self.dataframe     = self._formatar(self.df_integrado)
-
+        # print(f'{self.dataframe}')
 
     def _ler(self) -> dict[str, Leitura]:
         return {
