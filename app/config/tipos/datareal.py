@@ -1,37 +1,68 @@
-import re
-from datetime import date
-
-from app.config.app_config import obter_string_numérica
-
-
-class DataReal:
-    #todo terminar de construir o tipo
-    def __init__(
-            self,
-            data: str | int | tuple | date
-    ):
-        self._entrada = data
-        self._valor = self._validar(self._entrada)
-
-    @staticmethod
-    def _validar(entrada) -> str:
-
-        if isinstance(entrada, (str, int)):
-            return obter_string_numérica(entrada)
-
-        # if isinstance(entrada, tuple):
-        #     return self._validar_tupla(entrada)
-
-        return ''
-
-    def _validar_tupla(self, tupla: tuple):
-        # if len(tupla) > 3 :
-        #     return ''
-        #
-        # if len(tupla[0]) == 2 and len(tupla[1]) == 2:
-        #
-        #     if tupla[0][0] in (1, 2, 3) and tupla[1] in list(range(1, 13))
-        raise NotImplemented
-
-
-
+#
+# from datetime import date
+# from typing import Optional, SupportsIndex
+#
+# from app.config.app_config import obter_string_numérica
+#
+#
+# class DataReal:
+#     #todo terminar de construir o tipo
+#     def __init__(
+#             self,
+#             data: str | int | tuple | date
+#     ):
+#         self._entrada = data
+#         self._validez = '-'
+#         self._valor = self._executar(self._entrada)
+#
+#
+#     def _executar(self, entrada: str | int | float | date | None) -> Optional[str] :
+#         data = self._preparar_data(entrada)
+#
+#
+#
+#
+#
+#
+#
+#         self._validez = 'Inválido'
+#         return f"'{data}'"
+#
+#     def _preparar_data(self, data: str | int | float | date | None):
+#         if isinstance(data, date) :
+#             return data
+#
+#         if isinstance(data, str):
+#             return self._preparar_string(data)
+#
+#
+#
+#
+#     def _preparar_string(self, data: str):
+#         if r'/' in data and len(data) == 10 :
+#             lista = data.split(r'/')
+#             dia = lista[0]
+#             mês = lista[1]
+#             ano = lista[2]
+#
+#             if (len(dia), len(mês), len(ano)) != (2, 2, 4) :
+#                 return '-'
+#
+#             return date(int(ano), int(mês), int(dia))
+#
+#         if len(data) == 8  and r'/' not in data :
+#             return obter_string_numérica(data)
+#
+#
+#
+#
+#
+# if __name__ == '__main__' :
+#     valor_str = '20/03/95'
+#     instância_data = DataReal(valor_str)._valor
+#
+#     print(instância_data)
+#
+#
+#
+#
