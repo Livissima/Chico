@@ -15,22 +15,19 @@ class Bot:
     def __init__(
             self,
             tarefa: Literal[
-                'downloads', 'siap', 'credenciar', 'sondagem', 'fotos', 'consultar dias letivos',
-                'obter modulações'
+                'downloads', 'siap', 'credenciar', 'sondagem', 'fotos', 'consultar dias letivos', 'obter modulações'
             ],
-            kwargs_tarefa: dict | None = None,
-            **kwargs
-    ):
+            parâmetros_web,
+            kwargs_tarefa: dict | None = None, **kwargs
+    ) :
 
         print(f'Bot instanciado para a task "{tarefa}"')
-        print(f'Bot {kwargs = }')
-        print(f'Bot {kwargs_tarefa = }')
 
-        self._tarefa = normalizar_unicode(tarefa)
         self._kwargs_tarefa = normalizar_dicionário(kwargs_tarefa)
         self._kwargs_planos = normalizar_dicionário(kwargs)
-        self.navegador = None
-        self._executar_tarefa(tarefa)
+        self._navegador = None
+
+        self._executar_tarefa(normalizar_unicode(tarefa))
 
         # todo: threading desativado temporariamente para testes.
         # self.thread_bot = threading.Thread(target=lambda: self._executar_tarefa(tarefa), daemon=False).start()
@@ -41,7 +38,7 @@ class Bot:
 
 
     def _executar_tarefa(self, tarefa):
-        self.navegador = webdriver.Chrome()
+        self._navegador = webdriver.Chrome()
 
         argumentos = self._argumentos
 
@@ -64,7 +61,7 @@ class Bot:
             return parâmetros.get(argumento)
 
         kwargs = {
-            'navegador': self.navegador,
+            'navegador': self._navegador,
             'path' : obter('path'),
             'turmas' : obter('turmas'),
             'destino' : obter('destino'),
@@ -79,7 +76,7 @@ class Bot:
         return kwargs
 
     def __getattr__(self, item):
-        if self.navegador:
-            return getattr(self.navegador, item)
+        if self._navegador:
+            return getattr(self._navegador, item)
         raise AttributeError(f"'{self.__class__.__name__}' não contém atributo '{item}' (navegador não inicializado).")
 
