@@ -21,4 +21,4 @@ lista: list[str] = [
     "30/10/2025",
     "31/10/2025"
 ]
-Bot(tarefa='siap', path=parâmetros.diretório_base, periodo=lista)
+Bot(tarefa='siap', parâmetros_web=None, path=parâmetros.diretório_base, periodo=lista)

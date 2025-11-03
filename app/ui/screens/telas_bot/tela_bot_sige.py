@@ -128,7 +128,7 @@ class TelaBotSige(CTkFrame):
 
         self.bt_sondagem_emergencial = Botão(
             self,
-            função=lambda: Bot(tarefa='sondagem', path=parâmetros.diretório_base),
+            função=lambda: Bot(tarefa='sondagem', parâmetros_web=None, path=parâmetros.diretório_base),
             condição=len(parâmetros.turmas_disponíveis) == 0,
             texto='SONDAR',
             fonte=('arial', 15),
@@ -184,12 +184,12 @@ class TelaBotSige(CTkFrame):
             print(f'selecione ao menos um conteúdo alvo')
 
         if any(alvo in self._ck_alvos.valores_true for alvo in ['Fichas', 'Contatos', 'Situações', 'Gêneros']):
-
-            Bot(tarefa='downloads', destino=self._kwargs['destino'], alvos=self._ck_alvos.valores_true)
+            Bot(tarefa='downloads', parâmetros_web=None, destino=self._kwargs['destino'],
+                alvos=self._ck_alvos.valores_true)
 
         if self._ck_alvos.valores_true == ['Fotos']:
             print(f'____Fotos')
-            Bot(tarefa='fotos', turmas=parâmetros.turmas_selecionadas)
+            Bot(tarefa='fotos', parâmetros_web=None, turmas=parâmetros.turmas_selecionadas)
 
 
     def _verificar_estatística(self):
@@ -208,7 +208,7 @@ class TelaBotSige(CTkFrame):
 
 
     def sondar(self):
-        Bot(tarefa='sondagem', path=parâmetros.diretório_base)
+        Bot(tarefa='sondagem', parâmetros_web=None, path=parâmetros.diretório_base)
         self._verificar_estatística()
 
 

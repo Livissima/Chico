@@ -62,11 +62,8 @@ class TelaBotCredenciais(CTkFrame):
         self.bt_netescola = Botão(
             # todo: o feedback no console está inacurado.
             self,
-            função=lambda: Bot(
-                tarefa='credenciar',
-                tipo='netescola',
-                turmas=self._ck_turmas.valores_true
-            ),
+            função=lambda: Bot(tarefa='credenciar', parâmetros_web=None, tipo='netescola',
+                               turmas=self._ck_turmas.valores_true),
             texto='Netescola',
             largura=100,
             x=150,
@@ -75,12 +72,9 @@ class TelaBotCredenciais(CTkFrame):
 
         self.bt_google = Botão(
             self,
-            função=lambda: Bot(
-                tarefa='credenciar',
-                path_database= os.path.join(parâmetros.diretório_base, 'Database.xlsx'),
-                tipo='google',
-                turmas=self._ck_turmas.valores_true
-            ),
+            função=lambda: Bot(tarefa='credenciar', parâmetros_web=None,
+                               path_database=os.path.join(parâmetros.diretório_base, 'Database.xlsx'), tipo='google',
+                               turmas=self._ck_turmas.valores_true),
             texto='Google',
             largura=100,
             x=350,
