@@ -28,7 +28,7 @@ class TelaInicial(CTkFrame):
 
     def _inserir_widgets(self):
         self.primeira_linha = 180
-        self.segunda_linha = 350
+
 
         self.__inserir_textos()
         self.__inserir_inputs()
@@ -78,14 +78,14 @@ class TelaInicial(CTkFrame):
         )
 
     def __inserir_botões(self):
-
+        segunda_linha = 350
         self.bt_bot = Botão(
             self,
             função= lambda: self.controller.alternador.abrir('telas_bot'),
             texto='BOT',
             formato='bold',
-            x=120,
-            y=self.segunda_linha,
+            x=80,
+            y=segunda_linha,
             largura=100
         )
 
@@ -94,8 +94,8 @@ class TelaInicial(CTkFrame):
             função= lambda: self.controller.alternador.abrir('consulta'),
             texto='Consulta',
             formato='bold',
-            x=120+120,
-            y=self.segunda_linha,
+            x=120+80,
+            y=segunda_linha,
             largura=100
         )
 
@@ -104,8 +104,18 @@ class TelaInicial(CTkFrame):
             função=lambda: self.controller.alternador.abrir('estatísticas'),
             texto='Estatísticas',
             formato='bold',
-            x=120+120+120,
-            y=self.segunda_linha,
+            x=120+120+80,
+            y=segunda_linha,
+            largura=100
+        )
+
+        self.bt_frequência = Botão(
+            self,
+            função=lambda: self.controller.alternador.abrir('frequência'),
+            texto='Frequência',
+            formato='bold',
+            x=120+120+120+80,
+            y=segunda_linha,
             largura=100
         )
 
@@ -119,6 +129,8 @@ class TelaInicial(CTkFrame):
             y=self.primeira_linha,
             largura=150
         )
+
+
 
         self._bt_desfazer = Botão(
             self,
