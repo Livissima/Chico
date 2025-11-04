@@ -12,6 +12,9 @@ from .getters.turmasséries import TurmasSéries
 ANO_ATUAL = 2025
 
 class Parâmetros:
+    #todo: refatorar essa bosta todinha. Provavelmente com uma dataclass. Só assim eu posos organizar o armazenamento
+    # de parâmetros persistentes ao longo dos usos.
+
     def __init__(self):
 
         self.diretório_base = DIRETÓRIO_BASE_PADRÃO
