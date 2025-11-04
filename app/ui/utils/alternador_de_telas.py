@@ -1,6 +1,7 @@
 from typing import Literal
 
 from app.ui.screens.tela_estatísticas import TelaEstatísticas
+from app.ui.screens.tela_frequência import Frequência
 from app.ui.screens.telas_bot.tela_bot_inicial import TelaBot
 from app.ui.screens.telas_bot.tela_bot_credenciais import TelaBotCredenciais
 from app.ui.screens.telas_bot.tela_bot_siap import TelaBotSiap
@@ -21,14 +22,17 @@ class AlternadorDeTelas:
             'telas_bot sige' : TelaBotSige,
             'telas_bot google' : TelaBotCredenciais,
             'telas_bot siap' : TelaBotSiap,
-            'estatísticas' : TelaEstatísticas
+            'estatísticas' : TelaEstatísticas,
+            'frequência' : Frequência,
         }
 
 
     def abrir(self, nome_tela: Literal[
-        'inicial', 'telas_bot', 'consulta', 'telas_bot sige', 'telas_bot google', 'telas_bot siap', 'estatísticas'
+        'inicial', 'telas_bot', 'consulta', 'telas_bot sige', 'telas_bot google', 'telas_bot siap', 'estatísticas',
+        'frequência'
     ]
               ):
+
         for widget in self.container.winfo_children():
             widget.destroy()
 
