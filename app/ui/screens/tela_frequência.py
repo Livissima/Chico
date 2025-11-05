@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 
 from ..config.cabeçalhos import Cabeçalhos
 from ..widgets import Botão, Input
+from ...core.frequency.compiladordefaltas import CompiladorDeFaltas
 
 if TYPE_CHECKING :
     from .janela import Janela
@@ -29,15 +30,21 @@ class Frequência(CTkFrame) :
         pass
 
     def __inserir_botões(self) :
-
-        
-        self.bt_back = Botão(
+        self._bt_back = Botão(
             self,
             função=lambda : self.controller.alternador.abrir('inicial'),
             texto='←',
             fonte=('Arial', 20),
             formato='bold', x=10, y=10
         )
+
+        self._bt_compilar_faltas = Botão(
+            self,
+            função=lambda: CompiladorDeFaltas
+        )
+
+
+
 
     def __inserir_inputs(self) :
         self.in_nome = Input(
