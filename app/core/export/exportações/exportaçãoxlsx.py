@@ -4,11 +4,13 @@ from pathlib import Path
 from typing import Literal, Any
 from pandas import DataFrame, ExcelWriter
 
+from app.core import Consulta
+
 
 class ExportaçãoXLSX :
     NOME_XLSX = 'Database'
 
-    def __init__(self, consulta: DataFrame, path: Path | PathLike) -> None :
+    def __init__(self, consulta: Consulta, path: Path | PathLike) -> None :
         self._consulta = consulta
         self._gerar_xlsx(path)
 
@@ -20,26 +22,23 @@ class ExportaçãoXLSX :
             self._gerar_planilha(writer, self._df_transferidos, 'Transferidos')
 
     def _gerar_planilha(self, writer: ExcelWriter, df: DataFrame, nome_planilha: str) :
-        # Salvar DataFrame sem incluir o índice como coluna normal
         df.to_excel(writer, sheet_name=nome_planilha, index=False)
         pasta_de_trabalho = writer.book
         planilha = writer.sheets[nome_planilha]
 
-        # Obter formatos
         formatos = self._formatos(pasta_de_trabalho)
         formato_fonte = formatos['fonte']
         formato_cabeçalho = formatos['cabeçalho']
 
-        # Formatar colunas
         planilha.set_column(0, df.shape[1] - 1, None, formato_fonte)
 
-        # Formatar cabeçalho
         for col_num, valor in enumerate(df.columns.values) :
             planilha.write(0, col_num, valor, formato_cabeçalho)
 
         self._gerar_tabela(df, pasta_de_trabalho, planilha, nome_planilha)
 
-    def _gerar_tabela(self, df, pasta, planilha, nome) -> None :
+    @staticmethod
+    def _gerar_tabela(df, pasta, planilha, nome) -> None :
         linhas = df.shape[0]
         colunas = df.shape[1]
 
