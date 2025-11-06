@@ -11,16 +11,10 @@ class RelatórioDeAusências:
     def __init__(
             self,
             path: PathLike,
-            # data,
-            # período: tuple
     ):
 
-        _path: PathLike = Path(path, 'fonte', 'Compilado Faltas.xlsx')
-
+        _path: PathLike = Path(path, 'fonte', 'Controle de Frequência', 'Compilado de Faltas.csv')
         self._leitura = self._obter_df_faltas(_path)
-        # self._data = data
-        # self._período = período
-
 
     @property
     def dicionário(self) -> DataFrame:
@@ -30,20 +24,9 @@ class RelatórioDeAusências:
 
         else:
             df = self._leitura.copy()
-            df = df[['Estudante', 'Data Falta', 'Matrícula']]
-            # df['Data Falta'] = df['Data Falta'].dt.strftime('%d/%m/%Y')
-            df['Data canonica'] = df['Data Falta'].dt.strftime('%Y/%m/%d')
-            #
-            # df = df[df['Data Falta'] == self._data]
-            # df = df[df['Data Falta'] in self._período        ]
-
-
-
-            # ausentes = dict(zip(df['Matrícula'], df['Estudante']))
-
+            df = df[['Estudante', 'Data', 'Matrícula']]
+            df['Data canonica'] = df['Data'].dt.strftime('%Y/%m/%d')
             return df
-
-
 
     @property
     def dataframe(self) -> DataFrame:
@@ -53,17 +36,20 @@ class RelatórioDeAusências:
 
         else:
             df = self._leitura.copy()
-            df = df[['Estudante', 'Data Falta', 'Matrícula']]
-            df['Data Falta'] = df['Data Falta'].dt.strftime('%d/%m/%Y')
+            df = df[['Estudante', 'Data', 'Matrícula']]
+            # df['Data'] = df['Data'].dt.strftime('%d/%m/%Y')
 
             return df
 
     @staticmethod
     def _obter_df_faltas(path):
-        # print(f'{path = }')
         try:
-            df = pd.read_excel(path, sheet_name='Compilado_Faltas', dtype={'Matrícula' : str})
+            df = pd.read_csv(
+                path,
+                dtype={'Matrícula' : str}
+            )
             return df
+
         except (FileNotFoundError, KeyError):
             return None
 
