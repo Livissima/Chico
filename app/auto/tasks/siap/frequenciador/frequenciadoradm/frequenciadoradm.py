@@ -36,7 +36,7 @@ class FrequenciadorAdm :
         print(f'{dia = }')
         _df = self._relatório_de_ausências
         print(f'{_df = }')
-        _df = _df[_df['Data Falta'] == dia]
+        _df = _df[_df['Data'] == dia]
         # print(f'{df_faltas_do_dia = }')
         matrículas_alvos = _df['Matrícula'].tolist()
         estudantes_alvos = _df['Estudante'].tolist()
