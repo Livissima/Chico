@@ -1,6 +1,8 @@
 import os
 from os import PathLike
 from pathlib import Path
+
+import numpy as np
 import pandas as pd
 from pandas import DataFrame
 from app.config.parâmetros import parâmetros
@@ -27,6 +29,7 @@ class CompiladorDeFaltas:
 
 
     def _compilar_faltas(self):
+        print(f'::::::: Compilando faltas ___________')
         df_inicial = self._ler_dfs()
         compilado = self._tratar(df_inicial)
         return compilado
@@ -36,7 +39,9 @@ class CompiladorDeFaltas:
     def _tratar(df_inicial: DataFrame):
         df = df_inicial.copy()
         df['Lançado'] = df['Lançado'].fillna('')
+        # df['Lançado'] = df['Lançado'].replace([np.True_, np.False_], ['True', 'False'])
         df['Data']    = df['Data'].dt.strftime('%d/%m/%Y')
+
         return df
 
 
