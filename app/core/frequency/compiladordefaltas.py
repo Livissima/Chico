@@ -11,19 +11,26 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.expand_frame_repr', False)  # Evita quebra do DataFrame em múltiplas linhas
 pd.set_option('display.width', None)  # Ajusta automaticamente à largura do terminal
 warnings.filterwarnings('ignore', category=UserWarning, module=openpyxl_name)
-PATH_TEST = R'C:\Users\meren\PycharmProjects\Chico\tests\Compilado Faltas.csv'
+PATH_TEST = R'C:\Users\meren\PycharmProjects\Chico\tests\Compilado de Faltas.csv'
 
 
 class CompiladorDeFaltas:
     def __init__(self, diretório_base: PathLike | Path):
-        self._path_pasta_registros = Path(diretório_base, 'fonte', 'Controle de Frequência', 'Registro de Faltas')
-        self.compilado_nominal_de_faltas = self._compilar_faltas()
-        print(f'{self.compilado_nominal_de_faltas}')
+        self._path = Path(diretório_base, 'fonte', 'Controle de Frequência')
+        self._compilado_nominal_de_faltas = self._compilar_faltas()
+        print(f'{self._compilado_nominal_de_faltas}')
+
+
+    def exportar_compilado(self):
+        destino = Path(self._path, 'Compilado de Faltas.csv')
+        self._compilado_nominal_de_faltas.to_csv(destino, sep=',', index=False)
+
 
     def _compilar_faltas(self):
         df_inicial = self._ler_dfs()
         compilado = self._tratar(df_inicial)
         return compilado
+
 
     @staticmethod
     def _tratar(df_inicial: DataFrame):
@@ -31,6 +38,7 @@ class CompiladorDeFaltas:
         df['Lançado'] = df['Lançado'].fillna('')
         df['Data']    = df['Data'].dt.strftime('%d/%m/%Y')
         return df
+
 
     def _ler_dfs(self):
         dataframe_total = pd.DataFrame()
@@ -56,11 +64,14 @@ class CompiladorDeFaltas:
 
         return dataframe_total
 
+
     @property
     def _diretórios_registros(self) -> list[Path]:
-        lista_itens = os.listdir(self._path_pasta_registros)
-        lista_diretórios = [Path(self._path_pasta_registros, item) for item in lista_itens]
+        path_pasta_registro_de_faltas = Path(self._path, 'Registro de Faltas')
+        lista_itens = os.listdir(path_pasta_registro_de_faltas)
+        lista_diretórios = [Path(path_pasta_registro_de_faltas, item) for item in lista_itens]
         return lista_diretórios
 
+
 if __name__ == '__main__' :
-    CompiladorDeFaltas(parâmetros.diretório_base)
+    CompiladorDeFaltas(parâmetros.diretório_base).exportar_compilado()
