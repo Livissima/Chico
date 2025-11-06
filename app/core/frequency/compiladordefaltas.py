@@ -8,6 +8,8 @@ import warnings
 from openpyxl import __name__ as openpyxl_name
 
 pd.set_option('display.max_columns', None)
+pd.set_option('display.expand_frame_repr', False)  # Evita quebra do DataFrame em múltiplas linhas
+pd.set_option('display.width', None)  # Ajusta automaticamente à largura do terminal
 warnings.filterwarnings('ignore', category=UserWarning, module=openpyxl_name)
 PATH_TEST = R'C:\Users\meren\PycharmProjects\Chico\tests\Compilado Faltas.csv'
 
@@ -16,9 +18,7 @@ class CompiladorDeFaltas:
     def __init__(self, diretório_base: PathLike | Path):
         self._path_pasta_registros = Path(diretório_base, 'fonte', 'Controle de Frequência', 'Registro de Faltas')
         self.compilado_nominal_de_faltas = self._compilar_faltas()
-
-
-
+        print(f'{self.compilado_nominal_de_faltas}')
 
     def _compilar_faltas(self):
         df_inicial = self._ler_dfs()
@@ -29,8 +29,7 @@ class CompiladorDeFaltas:
     def _tratar(df_inicial: DataFrame):
         df = df_inicial.copy()
         df['Lançado'] = df['Lançado'].fillna('')
-        df['Lançado'] = df['Lançado'].replace([0.0, '',  'Lançado'], ['False', 'False', 'True'])
-        df['Data'] = df['Data'].dt.strftime('%d/%m/%Y')
+        df['Data']    = df['Data'].dt.strftime('%d/%m/%Y')
         return df
 
     def _ler_dfs(self):
@@ -43,23 +42,19 @@ class CompiladorDeFaltas:
                 dicionário_dataframes = pd.read_excel(
                     diretório_arquivo, sheet_name=parâmetros.turmas_disponíveis, engine='openpyxl')
 
+                print(f'_________{diretório_arquivo = }')
                 for turma, dataframe in dicionário_dataframes.items() :
-                    dataframe = dataframe[['Estudante', 'Data', 'Lançado']].copy()
+                    # print(f'{turma}:\n{list(dataframe.columns)}')
+                    dataframe = dataframe[['Estudante', 'Data', 'Lançado', 'Matrícula']].copy()
                     dataframe = dataframe.dropna(axis=0)
                     dataframe['Turma'] = turma
+                    dataframe['Matrícula'] = dataframe['Matrícula'].astype(int).astype(str)
                     dataframe_total = dataframe_total._append(dataframe, ignore_index=True)
 
-            except ValueError as e:
+            except ValueError:
                 pass
 
         return dataframe_total
-
-    # def exportar(self):
-    #     self.compilado_nominal_de_faltas.
-
-
-
-
 
     @property
     def _diretórios_registros(self) -> list[Path]:
