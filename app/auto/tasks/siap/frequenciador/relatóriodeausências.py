@@ -17,22 +17,10 @@ class RelatórioDeAusências:
         _path: PathLike = Path(path, 'fonte', 'Controle de Frequência', 'Compilado de Faltas.csv')
         self._leitura = self._obter_df_faltas(_path)
 
-    # @property
-    # def dicionário(self) -> DataFrame:
-    #     if self._leitura is None:
-    #         ausentes = {'Matrícula': None, 'Estudante' : None}
-    #         return DataFrame(ausentes)
-    #
-    #     else:
-    #         df = self._leitura.copy()
-    #         df = df[['Estudante', 'Data', 'Matrícula', 'Lançado']]
-    #         df = df[df['Lançado'] == np.True_]
-    #         return df
-
     @property
     def dataframe(self) -> DataFrame:
         if self._leitura is None:
-            ausentes = DataFrame({'Matrícula' : None, 'Estudante' : None})
+            ausentes = DataFrame({'Estudante' : None, 'Data' : None, 'Matrícula' : None, 'Lançado': None})
             return ausentes
 
         else:

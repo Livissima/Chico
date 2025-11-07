@@ -69,7 +69,7 @@ class FrequenciadorProf :
 
     def _processar_dias_linha(self, índice_linha) :
         """Processa os dias pendentes de uma linha"""
-        self.nv.selecionar_dropdown('xpath', 'diário', 'mês', texto='Outubro')
+        self.nv.selecionar_dropdown('xpath', 'diário', 'mês', texto='Novembro')
         self.nv.aguardar_página(1)
 
         dias_pendentes = self.obter_calendários_e_dias(índice_linha)
@@ -133,7 +133,7 @@ class FrequenciadorProf :
 
 
                 _df = self.ausentes_na_data.copy()
-                df_ausentes_na_data = _df[_df['Data Falta'] == data_pacote]
+                df_ausentes_na_data = _df[_df['Data'] == data_pacote]
                 lista_matrículas_ausentes = df_ausentes_na_data['Matrícula'].tolist()
 
 
