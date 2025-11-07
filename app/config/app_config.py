@@ -11,7 +11,7 @@ import os
 # do armazenamento de parâmetros da sessão. Coloquei no OneDrive para facilitar os testes com as planilhas de frequência.
 DIRETÓRIO_BASE_PADRÃO = Path(os.getenv('OneDriveCommercial'), 'SIGE')
 
-def obter_string_numérica(número) -> str :
+def obter_string_numérica(número: str) -> str :
     if not número :
         return '-'
     return re.sub(r'\D', '', str(número))
