@@ -10,7 +10,8 @@ class Caminhos:
             'quantitativo' : self._quantitativo,
             'sondagem' : self._sondagem,
             'ficha aluno' : self._ficha_aluno,
-            'modulações' : self._modulações
+            'modulações' : self._modulações,
+            'uniformes' : self._uniformes
         }
 
     @property
@@ -90,3 +91,7 @@ class Caminhos:
             (*self._ir_relatórios, 'dossiê do servidor', 'modulação'),
             (*self._ir_relatórios, 'dossiê do servidor', 'geral')
         ]
+
+    @property
+    def _uniformes(self):
+        return 'lápis', 'uniformes'
