@@ -1,6 +1,7 @@
 from typing import Literal
 from app.auto.functions.normalizar import normalizar_unicode, normalizar_dicionário
 from app.auto.tasks import ScrapingSige, ConsultaDiasLetivos
+from app.auto.tasks.sige.uniformizador import Uniformizador
 from app.auto.tasks.sige.downloads import Downloads
 from app.auto.tasks.credenciador.credenciador import Credenciador
 from app.auto.tasks.siap.frequenciador.frequenciador import Frequenciador
@@ -15,9 +16,10 @@ class Bot:
     def __init__(
             self,
             tarefa: Literal[
-                'downloads', 'siap', 'credenciar', 'sondagem', 'fotos', 'consultar dias letivos', 'obter modulações'
+                'downloads', 'siap', 'credenciar', 'sondagem', 'fotos', 'consultar dias letivos', 'obter modulações',
+                'uniformizar'
             ],
-            parâmetros_web,
+            # parâmetros_web,
             kwargs_tarefa: dict | None = None, **kwargs
     ) :
 
@@ -49,9 +51,9 @@ class Bot:
             'downloads' : lambda: Downloads(**argumentos(tarefa)),
             'credenciar' : lambda: Credenciador(**argumentos(tarefa)),
             'consultar dias letivos' : lambda: ConsultaDiasLetivos(**argumentos(tarefa)),
-            'obter modulações' : lambda: ObtençãoDeModulação(**argumentos(tarefa))
+            'obter modulações' : lambda: ObtençãoDeModulação(**argumentos(tarefa)),
+            'uniformizar' : lambda: Uniformizador(**argumentos(tarefa))
         }
-
         return tarefas[tarefa]()
 
 
@@ -79,4 +81,3 @@ class Bot:
         if self._navegador:
             return getattr(self._navegador, item)
         raise AttributeError(f"'{self.__class__.__name__}' não contém atributo '{item}' (navegador não inicializado).")
-
