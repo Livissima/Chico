@@ -201,10 +201,15 @@ class NavegaçãoWeb :
             print('Nenhum dado extraído')
             return False
 
-    def iterar_turmas_sige(self) -> Generator[tuple[Any, Any], Any, None]:
-        for série in parâmetros.séries_selecionadas :
+    def iterar_turmas_sige(self, séries_opt = None, turmas_opt = None) -> Generator[tuple[Any, Any], Any, None]:
+        # for série in parâmetros.séries_selecionadas :
+        for série in séries_opt :
             self._selecionar_série(série)
-            turmas_correspoentes = parâmetros.turmas_selecionadas_por_série[série]
+
+            # turmas_correspoentes = parâmetros.turmas_selecionadas_por_série[série]
+            turmas_correspoentes = turmas_opt[série]
+
+
             for turma in turmas_correspoentes :
                 self._selecionar_turma_sige(turma)
                 yield série, turma
