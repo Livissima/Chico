@@ -77,7 +77,11 @@ class Integração:
 
     @staticmethod
     def _integrar_idade(df_base: DataFrame):
-        df_base['Data de Nascimento'] = pd.to_datetime(df_base['Data de Nascimento'], format='%d/%m/%Y')
+        df_base['Data de Nascimento'] = pd.to_datetime(
+            df_base['Data de Nascimento'],
+            # format='mixed',      #comentado para teste
+            # dayfirst=True
+        )
         _idade = Idade.calcular_idade(df_base['Data de Nascimento'])
         return _idade
 
