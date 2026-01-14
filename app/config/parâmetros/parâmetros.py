@@ -9,7 +9,7 @@ from .getters.prévias import Prévias
 from .getters.turmasséries import TurmasSéries
 
 #todo dinamizar essa constante com algum getter
-ANO_ATUAL = 2025
+ANO_ATUAL = 2026
 
 class Parâmetros:
     #todo: refatorar essa bosta todinha. Provavelmente com uma dataclass. Só assim eu posos organizar o armazenamento
