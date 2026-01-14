@@ -1,5 +1,5 @@
 import unicodedata
-from pandas import DataFrame, Series
+from pandas import DataFrame, Series, ExcelWriter
 
 
 class TratamentoFichas:
@@ -9,77 +9,82 @@ class TratamentoFichas:
         self.df_tratado = self.gerar_df(leitura)
 
     def gerar_df(self, leitura: list[str]) -> DataFrame:
-        tratado = self.tratar(leitura)
+        tratado = self._tratar(leitura)
         return DataFrame(data=tratado)
 
-    def tratar(self, leitura: list[str]) -> list[dict[str, str]]:
-        strings = self.normalizar_strings(leitura)
-        strings_separadas = self.gerar_separadores(strings)
-        lista_de_listas_de_dados = self.converter_str_list(strings_separadas)
-        return [{chave: (aluno[índice]) for chave, índice in self.guia.items()} for aluno in lista_de_listas_de_dados]
+    def _tratar(self, leitura: list[str]) -> list[dict[str, str]]:
+        strings = self._normalizar_strings(leitura)
+        strings_separadas = self._gerar_separadores(strings)
+        lista_de_listas_de_dados = self._splitar_linha(strings_separadas)
 
-    def gerar_separadores(self, linhas: list[str]) :
-        trocas: list[str] = self.map_trocas
-        linhas_limpas: list[str] = []
-        for linha in linhas :
-            for troca in trocas :
-                linha = linha.replace(troca, ':::')
-            linhas_limpas.append(linha)
-        return linhas_limpas
+        return [{chave: (aluno[índice]) for chave, índice in self._guia.items()} for aluno in lista_de_listas_de_dados]
+
 
     @staticmethod
-    def normalizar_strings(lista_strings: list[str]) -> list[str]:
+    def _normalizar_strings(lista_strings: list[str]) -> list[str]:
         return [unicodedata.normalize('NFKC', linha).replace('	', ' ') for linha in lista_strings]
 
+    def _gerar_separadores(self, linhas: list[str]) :
+        linhas_com_separadores: list[str] = []
+        for linha in linhas :
+
+            for troca in self._map_para_separadores :
+                linha = linha.replace(troca, ':::')
+
+            linhas_com_separadores.append(linha)
+
+        return linhas_com_separadores
+
     @staticmethod
-    def converter_str_list(linhas) -> list[str]:
+    def _splitar_linha(linhas) -> list[str]:
         return [linha.split(':::')[1:] for linha in linhas]
 
     @property
-    def map_trocas(self) -> list[str]:
+    def _map_para_separadores(self) -> list[str]:
         return [
-            'Dados Pessoais ',
-            'Profissão:',
-            'Matrícula SEE: ',
-            'Número para chamada: ',
-            'Nome do Aluno(a): ',
-            ' Nome Social:',
-            'Data Nascimento: ',
-            ' Certidão nasc.: ',
-            ' No Matrícula:',
-            ' No Certidão:',
+            'Dados Pessoais Matrícula SEE: ',
+            'Número para chamada:',
+            'Nome do Aluno(a):',
+            'Nome Social:',
+            'Data Nascimento:',
+            'No Certidão:',
+            'Certidão nasc.:',
             'Livro:',
             'Folha:',
-            'Naturalidade: ',
-            ' UF: ',
-            ' Nacionalidade: ',
-            ' País de origem: ',
+            'Naturalidade:',
+            'UF:',
+            'Nacionalidade:',
+            'País de origem:',
             'C.I:',
-            'Orgão Expedidor: ',
-            ' Data Expedição:',
-            ' Nome Responsável: ',
-            ' Filiação Filiação 1:',
-            'CPF: ',
+            'Orgão Expedidor:',
+            'Data Expedição:',
+            'CPF:',
+            'Nome Responsável:',
+            'Filiação Filiação 1:',
+            'Profissão:',
+            'RG:',
             'Filiação 2:',
-            ' Endereço Residencial Logradouro:',
+            'Endereço Residencial Logradouro:',
             'Número',
             'Complemento:',
-            'Município: ',
-            ' RG: ',
             'Bairro',
-            'CEP: ',
-            ' Dados Escolares Curso: ',
-            'Série: ',
+            'Município:',
+            'CEP:',
+            'Dados Escolares Curso:',
+            'Série:',
             'Ano',
-            'Turma: ',
-            ' Turno: ',
-            ' Data da matrícula: ',
+            'Turma:',
+            'Turno:',
+            'Data da matrícula:',
+            'No Matrícula:',
             '\n',
             '::::::',
         ]
 
+
+
     @property
-    def guia(self) -> dict[str, int]:
+    def _guia(self) -> dict[str, int]:
         return {
             'Matrícula' : 0,
             'Número pra chamada' : 1,
@@ -118,3 +123,48 @@ class TratamentoFichas:
             'Turno' : 36,
             'Data Matrícula' : 37
         }
+
+
+    # Backup
+    # @property
+    # def _map_para_separadores(self) -> list[str]:
+    #     return [
+    #         'Dados Pessoais ',
+    #         'Profissão:',
+    #         'Matrícula SEE: ',
+    #         'Número para chamada: ',
+    #         'Nome do Aluno(a): ',
+    #         ' Nome Social:',
+    #         'Data Nascimento: ',
+    #         ' Certidão nasc.: ',
+    #         ' No Matrícula:',
+    #         ' No Certidão:',
+    #         'Livro:',
+    #         'Folha:',
+    #         'Naturalidade: ',
+    #         ' UF: ',
+    #         ' Nacionalidade: ',
+    #         ' País de origem: ',
+    #         'C.I:',
+    #         'Orgão Expedidor: ',
+    #         ' Data Expedição:',
+    #         ' Nome Responsável: ',
+    #         ' Filiação Filiação 1:',
+    #         'CPF: ',
+    #         'Filiação 2:',
+    #         ' Endereço Residencial Logradouro:',
+    #         'Número',
+    #         'Complemento:',
+    #         'Município: ',
+    #         ' RG: ',
+    #         'Bairro',
+    #         'CEP: ',
+    #         ' Dados Escolares Curso: ',
+    #         'Série: ',
+    #         'Ano',
+    #         'Turma: ',
+    #         ' Turno: ',
+    #         ' Data da matrícula: ',
+    #         '\n',
+    #         '::::::',
+    #     ]
