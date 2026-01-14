@@ -64,7 +64,11 @@ class Formatação:
     def _datar(self, df):
         dataframe = df
         for coluna in self._colunas_datas:
-            dataframe[coluna] = pd.to_datetime(dataframe[coluna], format = '%d/%m/%Y')
+            dataframe[coluna] = pd.to_datetime(
+                dataframe[coluna],
+                format = 'mixed',
+                dayfirst=True
+            )
             dataframe[coluna] = dataframe[coluna].dt.strftime('%d/%m/%Y')
             continue
         return dataframe

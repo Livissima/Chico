@@ -69,7 +69,7 @@ class FrequenciadorProf :
 
     def _processar_dias_linha(self, índice_linha) :
         """Processa os dias pendentes de uma linha"""
-        self.nv.selecionar_dropdown('xpath', 'diário', 'mês', texto='Novembro')
+        self.nv.selecionar_dropdown('xpath', 'diário', 'mês', texto='Dezembro')
         self.nv.aguardar_página(1)
 
         dias_pendentes = self.obter_calendários_e_dias(índice_linha)
@@ -196,7 +196,7 @@ class FrequenciadorProf :
                 _dias = [dia for dia in dias_relevantes if int(dia.text) <= int(tempo.hoje_dia)]
                 print(f'{dias = }')
                 # dias = [dia for dia in dias_relevantes if ]
-                return _dias
+                return dias_pendentes
 
             except Exception as e:
                 print(f'Erro na obtenção de calendário. Tentando novamente... {e}')
