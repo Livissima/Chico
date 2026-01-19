@@ -19,7 +19,7 @@ from app.ui.widgets.caixa_data import CaixaData
 if TYPE_CHECKING :
     from app.ui.screens.janela import Janela
 
-ANO = 2025
+ANO = 2026
 
 class TelaBotSiap(CTkFrame) :
     def __init__(self, master, controller: "Janela") :
