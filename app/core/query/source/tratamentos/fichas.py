@@ -6,9 +6,9 @@ class TratamentoFichas:
 
     def __init__(self, leitura: list[str]):
         self.leitura = leitura
-        self.df_tratado = self.gerar_df(leitura)
+        self.df_tratado = self._gerar_df(leitura)
 
-    def gerar_df(self, leitura: list[str]) -> DataFrame:
+    def _gerar_df(self, leitura: list[str]) -> DataFrame:
         tratado = self._tratar(leitura)
         return DataFrame(data=tratado)
 
@@ -16,9 +16,8 @@ class TratamentoFichas:
         strings = self._normalizar_strings(leitura)
         strings_separadas = self._gerar_separadores(strings)
         lista_de_listas_de_dados = self._splitar_linha(strings_separadas)
-
-        return [{chave: (aluno[índice]) for chave, índice in self._guia.items()} for aluno in lista_de_listas_de_dados]
-
+        lista_de_listas_limpas = self._remover_espaços_sobressalentes(lista_de_listas_de_dados)
+        return [{chave: (aluno[índice]) for chave, índice in self._guia.items()} for aluno in lista_de_listas_limpas]
 
     @staticmethod
     def _normalizar_strings(lista_strings: list[str]) -> list[str]:
@@ -27,7 +26,6 @@ class TratamentoFichas:
     def _gerar_separadores(self, linhas: list[str]) :
         linhas_com_separadores: list[str] = []
         for linha in linhas :
-
             for troca in self._map_para_separadores :
                 linha = linha.replace(troca, ':::')
 
@@ -36,8 +34,18 @@ class TratamentoFichas:
         return linhas_com_separadores
 
     @staticmethod
-    def _splitar_linha(linhas) -> list[str]:
+    def _splitar_linha(linhas) -> list[list[str]]:
         return [linha.split(':::')[1:] for linha in linhas]
+
+    @staticmethod
+    def _remover_espaços_sobressalentes(lista_de_lista: list[list[str]]) -> list[list[str]] :
+        resultado = []
+        for lista in lista_de_lista :
+            nova_lista = [string.strip() for string in lista]
+            resultado.append(nova_lista)
+
+        return resultado
+
 
     @property
     def _map_para_separadores(self) -> list[str]:
@@ -123,48 +131,3 @@ class TratamentoFichas:
             'Turno' : 36,
             'Data Matrícula' : 37
         }
-
-
-    # Backup
-    # @property
-    # def _map_para_separadores(self) -> list[str]:
-    #     return [
-    #         'Dados Pessoais ',
-    #         'Profissão:',
-    #         'Matrícula SEE: ',
-    #         'Número para chamada: ',
-    #         'Nome do Aluno(a): ',
-    #         ' Nome Social:',
-    #         'Data Nascimento: ',
-    #         ' Certidão nasc.: ',
-    #         ' No Matrícula:',
-    #         ' No Certidão:',
-    #         'Livro:',
-    #         'Folha:',
-    #         'Naturalidade: ',
-    #         ' UF: ',
-    #         ' Nacionalidade: ',
-    #         ' País de origem: ',
-    #         'C.I:',
-    #         'Orgão Expedidor: ',
-    #         ' Data Expedição:',
-    #         ' Nome Responsável: ',
-    #         ' Filiação Filiação 1:',
-    #         'CPF: ',
-    #         'Filiação 2:',
-    #         ' Endereço Residencial Logradouro:',
-    #         'Número',
-    #         'Complemento:',
-    #         'Município: ',
-    #         ' RG: ',
-    #         'Bairro',
-    #         'CEP: ',
-    #         ' Dados Escolares Curso: ',
-    #         'Série: ',
-    #         'Ano',
-    #         'Turma: ',
-    #         ' Turno: ',
-    #         ' Data da matrícula: ',
-    #         '\n',
-    #         '::::::',
-    #     ]
