@@ -47,7 +47,7 @@ class NavegaçãoWeb(TipagemNavegação) :
         self._verificar_métodos()
 
     def _verificar_métodos(self) :
-        """Método de debug para verificar quais métodos estão disponíveis"""
+        """Méthodo de debug para verificar quais métodos estão disponíveis"""
         print("=== 🔍 MÉTODOS DISPONÍVEIS ===")
         for nome_módulo, módulo in self._módulos.items() :
             métodos = [m for m in dir(módulo) if not m.startswith('_') and callable(getattr(módulo, m))]
