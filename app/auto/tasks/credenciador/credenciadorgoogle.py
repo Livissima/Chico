@@ -80,7 +80,7 @@ class CredenciadorGoogle:
     #             self._tentar_senha(senha)
     #             self._checar_alerta(índice, dict_senhas)
     #
-    #             print('O Loop ```for índice, senha in dict_senhas.items() :``` , do método `self.gerenciar_google()`, chegou ao fim')
+    #             print('O Loop ```for índice, senha in dict_senhas.items() :``` , do méthodo `self.gerenciar_google()`, chegou ao fim')
     #
     #
     #
