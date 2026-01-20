@@ -1,7 +1,7 @@
 from typing import Literal
 from app.auto.functions.normalizar import normalizar_unicode, normalizar_dicionário
 from app.auto.tasks import ScrapingSige, ConsultaDiasLetivos
-from app.auto.tasks.sige.uniformizador import Uniformizador
+# from app.auto.tasks.sige.uniformizador import
 from app.auto.tasks.sige.downloads import Downloads
 from app.auto.tasks.credenciador.credenciador import Credenciador
 from app.auto.tasks.siap.frequenciador.frequenciador import Frequenciador
@@ -52,7 +52,7 @@ class Bot:
             'credenciar' : lambda: Credenciador(**argumentos(tarefa)),
             'consultar dias letivos' : lambda: ConsultaDiasLetivos(**argumentos(tarefa)),
             'obter modulações' : lambda: ObtençãoDeModulação(**argumentos(tarefa)),
-            'uniformizar' : lambda: Uniformizador(**argumentos(tarefa))
+            # 'uniformizar' : lambda: Uniformizador(**argumentos(tarefa))
         }
         return tarefas[tarefa]()
 
