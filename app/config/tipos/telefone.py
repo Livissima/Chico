@@ -1,7 +1,7 @@
 import re
 from typing import Optional
 
-from app.config.app_config import obter_string_numérica
+from app.config.functions import obter_string_numérica
 
 
 class Telefone :
