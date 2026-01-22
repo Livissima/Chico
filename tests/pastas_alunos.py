@@ -18,6 +18,7 @@ df_database = pd.read_excel(path_database, sheet_name='Base Ativa')
 
 
 def criar_pastas(df: DataFrame):
+
     for índice, linha in df.iterrows():
         matrícula = linha['Matrícula']
         estudante = linha['Estudante']
@@ -25,8 +26,10 @@ def criar_pastas(df: DataFrame):
 
         nome_pasta = f'{estudante}   ~   {matrícula}'
         pasta = Path(path_pasta_estudantes, nome_pasta)
-        print(pasta)
+
+        #NÃO MEXA NESSA LÓGICA
         if not pasta.exists():
+            print(pasta)
             pasta.mkdir(parents=True, exist_ok=True)
 
 
