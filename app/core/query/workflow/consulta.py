@@ -42,7 +42,7 @@ class Consulta:
     @staticmethod
     def _tratar(dfs_leituras: dict) -> dict:
         return {
-            tipo : Tratamento(leitura.dataframe, tipo)
+            tipo : Tratamento(leitura._dataframe, tipo)
             for tipo, leitura in dfs_leituras.items()
         }
 
