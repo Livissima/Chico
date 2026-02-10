@@ -1,9 +1,10 @@
 from typing import Literal
 from app.auto.functions.normalizar import normalizar_unicode, normalizar_dicionário
 from app.auto.tasks import ScrapingSige, ConsultaDiasLetivos
+from app.auto.tasks.credenciador.credenciador import Credenciador
 # from app.auto.tasks.sige.uniformizador import
 from app.auto.tasks.sige.downloads import Downloads
-from app.auto.tasks.credenciador.credenciador import Credenciador
+# from app.auto.tasks.credenciador.credenciador import Credenciador
 from app.auto.tasks.siap.frequenciador.frequenciador import Frequenciador
 from selenium import webdriver
 
