@@ -43,41 +43,40 @@ class TratamentoContatos:
         return df
 
     def _aplicar_funções_telefones(self, df_limpo: DataFrame) -> Series :
-        df = df_limpo
-        df = df.apply(self._remover_telefones_duplicados, axis=1)
-        df = df.apply(self._ordenar_por_coluna, axis=1)  # Ordenação por prioridade
+        df = df_limpo.apply(self._processar_linha_telefones, axis=1)
         return df
 
-    def _remover_telefones_duplicados(self, linha):
-        telephones = list(linha.loc[self._colunas_telefone])
-        unique_telephones = list(dict.fromkeys(filter(pd.notna, telephones)))
-        for i in range(3):
-            linha[f'Telefone {i + 1}'] = unique_telephones[i] if i < len(unique_telephones) else '-'
-        return linha
+    def _processar_linha_telefones(self, linha) :
+        # 1. Extração e Normalização imediata para comparação
+        telefones_brutos = []
+        for col in self._colunas_telefone :
+            valor = linha[col]
+            # Converte para string e limpa. Se for NaN, vira string vazia.
+            val_str = str(valor).strip() if pd.notna(valor) else ""
+            telefones_brutos.append(val_str)
 
-    def _ordenar_por_coluna(self, linha) :
-        colunas_telefone = self._colunas_telefone
+        # 2. Unicidade (Onde a mágica acontece)
+        # Filtramos strings vazias e duplicatas de uma vez
+        telefones_unicos = []
+        for t in telefones_brutos :
+            if t != "" and t not in telefones_unicos :
+                telefones_unicos.append(t)
 
-        telefones_info = []
-        for i, coluna in enumerate(colunas_telefone) :
-            valor = linha.get(coluna)
+        # 3. Ordenação
+        def definir_prioridade(valor_tel) :
+            instancia = Telefone(valor_tel)
+            if instancia.tipo == 'Móvel' : return 0
+            if instancia.tipo == 'Fixo' : return 1
+            return 2
 
-            if pd.isna(valor) or valor == '' :
-                # Vazio: prioridade baixa
-                prioridade = (1, 2, i)  # (não_preenchido, tipo_prioridade, ordem_original)
+        telefones_ordenados = sorted(telefones_unicos, key=definir_prioridade)
+
+        # 4. Escrita Limpa
+        for i, coluna in enumerate(self._colunas_telefone) :
+            if i < len(telefones_ordenados) :
+                linha[coluna] = telefones_ordenados[i]
             else :
-                instância_telefone = Telefone(valor)
-                tipo_prioridade = 0 if instância_telefone.tipo == 'Móvel' else 1 if instância_telefone.tipo == 'Fixo' else 2
-                prioridade = (0, tipo_prioridade, i)  # (preenchido, tipo_prioridade, ordem_original)
-
-            telefones_info.append((prioridade, valor))
-
-        # Ordenar e extrair valores
-        telefones_ordenados = [valor for _, valor in sorted(telefones_info, key=lambda x : x[0])]
-
-        # Atualizar linha
-        for i, coluna in enumerate(colunas_telefone) :
-            linha[coluna] = telefones_ordenados[i]
+                linha[coluna] = ""
 
         return linha
 
