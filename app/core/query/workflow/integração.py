@@ -12,12 +12,10 @@ class Integração:
     def __init__(self, dfs_tratados: dict[str, DataFrame]):
         self.df = dfs_tratados
         # print(f'{dfs_tratados = }')
-        self.path_df_social: str = r'C:\Users\meren\OneDrive - Secretaria de Estado da Educação\Secretaria\2025\Dados\Estudantes\Base de dados\Etnia e religião.xlsx'  #todo: temporário. Preciso que esta variável seja mais flexível e adiquirida dinamicamente.
-        self.integração = self.integrar(dfs_tratados)
+        self._path_df_social: str = r'C:\Users\meren\OneDrive - Secretaria de Estado da Educação\Secretaria\2025\Dados\Estudantes\Base de dados\Etnia e religião.xlsx'  #todo: temporário. Preciso que esta variável seja mais flexível e adiquirida dinamicamente.
+        self.df_integrado: DataFrame = self.integrar(dfs_tratados)
 
-    def integrar(self, dict_dfs):
-        # print(f'{dict_dfs = }')
-
+    def integrar(self, dict_dfs) -> DataFrame:
         df_base = DataFrame()
         df_base = self._integrar_tratamentos(dict_dfs)
 
@@ -28,7 +26,7 @@ class Integração:
         df_base['Senha educa'] = self._integrar_senha_educa(df_base)
 
         try:
-            df_base = self._integrar_sociais(df_base, self.path_df_social)
+            df_base = self._integrar_sociais(df_base, self._path_df_social)
         except FileNotFoundError as exception:
             print(f'Séries não puderam ser carregadas: {exception}')
 
@@ -97,8 +95,8 @@ class Integração:
         df_mergido_com_sociais = df_base.merge(df_social, on=['Matrícula'], how='left')
         return df_mergido_com_sociais
 
-    # def __getattr__(self, item):
-    #     return getattr(self.integração, item)
+    def __getattr__(self, item):
+        return getattr(self.df_integrado, item)
 
     def __getitem__(self, item):
         return self.df[item]
