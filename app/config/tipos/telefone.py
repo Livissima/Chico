@@ -15,7 +15,7 @@ class Telefone :
 
     def _validar(self, número: str | int | float | None) -> Optional[str] :
         _string = self._stringzar(número)
-        if _string == '-' :
+        if _string == '' :
             return _string
         string_normalizada = self._normalizar_comprimento(_string)
         return string_normalizada
@@ -26,7 +26,7 @@ class Telefone :
         if len(str_numérica) in range(8, 13) :
             return str_numérica
 
-        return '-'
+        return ''
 
     @staticmethod
     def _normalizar_comprimento(telefone: str) -> Optional[str] :
@@ -46,7 +46,7 @@ class Telefone :
             if número[0] in '6789' :
                 return telefone
 
-        return '-'
+        return ''
 
     @property
     def valor(self) -> Optional[str] :
@@ -58,12 +58,14 @@ class Telefone :
 
     @property
     def tipo(self) -> str :
+        if not self.valor:
+            return 'Inexistente'
         if len(self.valor) == 11 :
             return 'Móvel'
         if len(self.valor) == 10 :
             return 'Fixo'
 
-        return '-'
+        return ''
 
     def __str__(self) -> str :
         return self._valor if self._valor else ""
@@ -105,5 +107,3 @@ class Telefone :
     def __format__(self, format_spec) :
         return format(str(self), format_spec)
 
-if __name__ == '__main__':
-    print(Telefone('62998463692').tipo)

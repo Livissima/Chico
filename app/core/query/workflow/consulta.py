@@ -12,49 +12,35 @@ class Consulta:
             self,
             diretório_fonte: str
     ):
-        path_fichas: str = os.path.join(diretório_fonte, 'fichas')
-        path_contatos: str = os.path.join(diretório_fonte, 'contatos')
-        path_situações: str = os.path.join(diretório_fonte, 'situações')
-        path_gêneros: str = os.path.join(diretório_fonte, 'gêneros')
+        print(f'Class Consulta instanciada: {diretório_fonte = }\n')
 
-        print('class Consulta instanciada.\n')
-
-        self.paths = {
-            'fichas'   : path_fichas,
-            'contatos' : path_contatos,
-            'situações': path_situações,
-            'gêneros'  : path_gêneros
+        self._paths = {
+            tipo_de_relatorio : os.path.join(diretório_fonte, tipo_de_relatorio) for tipo_de_relatorio in
+            ("fichas", "contatos", "situações", "gêneros")
         }
+        self.dataframe = self._consultar(diretório_fonte)
 
-        self.dfs_leitura   = self._ler()
-        self.dfs_tratados  = self._tratar(self.dfs_leitura)
-        self.df_integrado  = self._integrar(self.dfs_tratados)
-        # print(f'{self.df_integrado}')
-        self.dataframe     = self._formatar(self.df_integrado)
-        # print(f'{self.dataframe}')
+    def _consultar(self, _path) -> DataFrame:
+        dfs_leitura = self._ler()
+        dfs_tratados = self._tratar(dfs_leitura)
+
+        df_integrado = Integração(dfs_tratados).df_integrado
+        df_formatado = Formatação(df_integrado).df_formatado
+        return df_formatado
 
     def _ler(self) -> dict[str, Leitura]:
         return {
             tipo: Leitura(_path=path, tipo_de_relatório=tipo)
-            for tipo, path in self.paths.items()
+            for tipo, path in self._paths.items()
         }
 
     @staticmethod
     def _tratar(dfs_leituras: dict) -> dict:
         return {
-            tipo : Tratamento(leitura._dataframe, tipo)
+            tipo : Tratamento(leitura.dataframe, tipo)
             for tipo, leitura in dfs_leituras.items()
         }
 
-    @staticmethod
-    def _integrar(dfs_tratados: dict) -> DataFrame:
-        df = Integração(dfs_tratados)
-        return df.integração
-
-    @staticmethod
-    def _formatar(df_integrado: DataFrame) -> Formatação:
-        df_formatado = Formatação(df_integrado)
-        return df_formatado
 
     def __str__(self):
         return f"{self.dataframe}"

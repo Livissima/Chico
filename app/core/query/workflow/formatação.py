@@ -20,6 +20,17 @@ class Formatação:
         'Matrícula', 'CPF Aluno', 'Filiação 1 - CPF', 'Filiação 2 - CPF', 'INEP'
     ]
 
+    _colunas_ordenadas = [
+        'Turma', 'Matrícula', 'Data Matrícula', 'Número pra chamada', 'Estudante', 'Nome Social', 'Gênero', 'Idade',
+        'Data de Nascimento', 'CPF Aluno', 'Nome Responsável', 'Município de Naturalidade', 'UF de Naturalidade',
+        'Nacionalidade', 'País de origem',  'Endereço: Logradouro', 'Endereço: Complemento', 'Endereço: Número',
+        'Endereço: Bairro', 'Endereço: Município', 'Endereço: CEP', 'Filiação 1', 'Filiação 1 - Prof', 'Filiação 1 - CPF',
+        'Filiação 1 - RG', 'Filiação 2', 'Filiação 2 - Prof', 'Filiação 2 - CPF', 'Filiação 2 - RG', 'Irmão 1',
+        'Certidão de Nascimento: Termo', 'Certidão de Nascimento: Livro', 'Certidão de Nascimento: Folha', 'RG',
+        'RG - Emissor', 'RG - Expedição', 'Telefone 1', 'Telefone 2', 'Telefone 3', 'Educacional', 'Senha padrão',
+        'Nova senha', 'Senha educa',  'Curso', 'Série', 'Turno', 'INEP', 'Situação', 'Data Situação'
+    ]
+
     def __init__(self, df_integrado: DataFrame):
         print(f'\nFormatação instanciada.\n')
         self._df = df_integrado
@@ -32,24 +43,24 @@ class Formatação:
 
     def _formatar(self, df_integrado: DataFrame) -> DataFrame:
         df_base = df_integrado
-        df = self._title(df_base)
-        df = self._numerizar(df_base)
-        df = self._datar(df_base)
-        df = self._stringzar_números(df_base)
+        df = self._formatar_case_title(df_base)
+        df = self._formatar_como_número(df_base)
+        df = self._formatar_como_data(df_base)
+        df = self._formatar_como_string(df_base)
 
-        df = df.drop_duplicates(subset= 'Matrícula', keep= 'first', ignore_index = True)
-
+        df = self._remover_duplicatas(df)
+        df = self._reordenar_colunas(df)
         return df
 
 
-    def _title(self, df):
+    def _formatar_case_title(self, df):
         dataframe = df
         for coluna in self._colunas_title:
             dataframe[coluna] = dataframe[coluna].astype(str).str.title()
             continue
         return dataframe
 
-    def _numerizar(self, df) :
+    def _formatar_como_número(self, df) :
         dataframe = df.copy()
         for coluna in self._colunas_num :
             extracted = dataframe[coluna].astype(str).str.extract(r'(\d+)')[0]
@@ -61,7 +72,7 @@ class Formatação:
 
         return dataframe
 
-    def _datar(self, df):
+    def _formatar_como_data(self, df):
         dataframe = df
         for coluna in self._colunas_datas:
             dataframe[coluna] = pd.to_datetime(
@@ -73,7 +84,7 @@ class Formatação:
             continue
         return dataframe
 
-    def _stringzar_números(self, df):
+    def _formatar_como_string(self, df):
         dataframe = df
         dataframe[self._colunas_num_string] = dataframe[self._colunas_num_string].astype(str)
         for coluna in self._colunas_num_string:
@@ -89,6 +100,14 @@ class Formatação:
         return dataframe
 
     @staticmethod
+    def _remover_duplicatas(df):
+        return df.drop_duplicates(subset= 'Matrícula', keep= 'first', ignore_index = True)
+
+    def _reordenar_colunas(self, dataframe: pd.DataFrame) -> pd.DataFrame :
+        return dataframe[self._colunas_ordenadas]
+
+    #todo repensar a relevância desta método
+    @staticmethod
     def remover_quebras_de_linhas(df: DataFrame) -> DataFrame:
 
         df = df.replace(to_replace = ['\r', '\n', '\t', '\xa0'], value = [' ', ' ', ' ', ' '], regex = True)
@@ -96,8 +115,8 @@ class Formatação:
         return df
 
 
-    def __getattr__(self, item):
-        return getattr(self.df_formatado, item)
+    # def __getattr__(self, item):
+    #     return getattr(self.df_formatado, item)
 
     def __getitem__(self, item):
         return self.df_formatado[item]
