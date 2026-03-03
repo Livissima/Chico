@@ -7,10 +7,10 @@ from app.ui.config.cabeçalhos import Cabeçalhos
 from app.ui.functions.desfazimento import Desfazimento
 
 from app.ui.functions.pesquisa_diretório import PesquisaDiretório
-from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
+from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
 
 if TYPE_CHECKING:
-    from .janela import Janela
+    pass
 
 
 class TelaInicial(CTkFrame):

@@ -1,7 +1,7 @@
 from typing import Optional
 
-from app.config.functions import obter_string_numérica
-from app.config.tipos.telefone import Telefone
+from app.config.settings.functions import obter_string_numérica
+from app.config.classes.telefone import Telefone
 
 
 class CPF:

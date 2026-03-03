@@ -176,7 +176,7 @@ class Sondagem:
     @staticmethod
     def exportar(path: Path, resumo: dict):
 
-        with open(path, 'x', encoding='utf-8') as arquivo:
+        with open(path, 'w', encoding='utf-8') as arquivo:
             json.dump(resumo, arquivo, ensure_ascii=False, indent=2)
         return arquivo
 
