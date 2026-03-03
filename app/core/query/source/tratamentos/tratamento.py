@@ -19,12 +19,9 @@ class Tratamento:
             df_leitura: dict | DataFrame,
             tipo: Literal['fichas', 'contatos', 'gêneros', 'situações']
     ):
-        self.tipo = tipo
-
         classe_tratamento = self.tipos.get(tipo)
 
-        self.df_tratado = classe_tratamento(df_leitura).df_tratado
-        #print(f'{tipo = } : {len(self.df_tratado) = }')
+        self.df_tratado: DataFrame = classe_tratamento(df_leitura).df_tratado
 
     def __getattr__(self, item):
         return getattr(self.df_tratado, item)

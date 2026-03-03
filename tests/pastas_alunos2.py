@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from app.config.app_config import DIRETÓRIO_BASE_PADRÃO, DIRETÓRIO_SECRETARIA
+from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO, DIRETÓRIO_SECRETARIA
 
 
 
@@ -34,7 +34,7 @@ pastas_de_iniciais = [pasta for pasta in pasta_de_pastas if len(pasta) == 1]
 
 
 import shutil
-from pathlib import Path
+
 
 def obter_inicial(_nome_pasta: str) -> str | None:
     nome_normalizado = normalizar_diacrítica(_nome_pasta).strip()

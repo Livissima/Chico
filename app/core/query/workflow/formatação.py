@@ -106,7 +106,7 @@ class Formatação:
     def _reordenar_colunas(self, dataframe: pd.DataFrame) -> pd.DataFrame :
         return dataframe[self._colunas_ordenadas]
 
-    #todo repensar a relevância desta método
+    #todo repensar a relevânciaw2q1  desta método
     @staticmethod
     def remover_quebras_de_linhas(df: DataFrame) -> DataFrame:
 

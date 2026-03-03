@@ -1,8 +1,4 @@
-import json
-import os
-from collections import defaultdict
-
-from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
+from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
 from .getters.dias_letivos import DiasLetivos
 from .getters.modulação_servidor import ModulaçãoServidor
 from .getters.prévias import Prévias

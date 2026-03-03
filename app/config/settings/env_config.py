@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 
-from app.config.tipos.cpf import CPF
+from app.config.classes.cpf import CPF
 
 load_dotenv()
 def obter(_constante: str):

@@ -1,8 +1,9 @@
 from customtkinter import CTkFrame
 
-from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
+from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
 from app.config.parâmetros import parâmetros
-from typing import TYPE_CHECKING
+
+
 # if TYPE_CHECKING:
 #     from app.ui.screens
 
