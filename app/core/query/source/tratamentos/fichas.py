@@ -5,7 +5,7 @@ from pandas import DataFrame, Series, ExcelWriter
 class TratamentoFichas:
 
     def __init__(self, leitura: list[str]):
-        self.leitura = leitura
+        self._leitura = leitura
         self.df_tratado = self._gerar_df(leitura)
 
     def _gerar_df(self, leitura: list[str]) -> DataFrame:

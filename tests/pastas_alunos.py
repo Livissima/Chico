@@ -6,22 +6,15 @@ from pathlib import Path
 import pandas as pd
 from pandas import DataFrame
 
-from app.config.app_config import DIRETÓRIO_BASE_PADRÃO, DIRETÓRIO_SECRETARIA
-from app.config.functions import normalizar_diacrítica
+from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO, DIRETÓRIO_SECRETARIA
+from app.config.settings.functions import normalizar_diacrítica
 
 path_pasta_estudantes = Path(DIRETÓRIO_SECRETARIA, 'Estudantes')
-
 path_database = Path(DIRETÓRIO_BASE_PADRÃO, 'Database.xlsx')
-path_cancelados = Path(DIRETÓRIO_SECRETARIA, 'Matrículas canceladas 2026.xlsx')
-
-df_cancelados = pd.read_excel(path_cancelados)
-df_cancelados['Matrícula'] = df_cancelados['Matrícula'].replace(['\xa0', '-'], ['', ''], regex=True)
-
 df_database = pd.read_excel(path_database, sheet_name='Base Ativa')
 
 def inicial_da_pasta(nome_pasta: str) -> str:
     return normalizar_diacrítica(nome_pasta).strip()[0].upper()
-
 
 def criar_pastas(df: DataFrame):
     for índice, linha in df.iterrows():

@@ -5,6 +5,7 @@ from screeninfo import get_monitors
 class Dimensionamento:
     largura: int = 600
     altura: int = 500
+
     def __init__(self, janela_ctk: CTk):
         self.janela = janela_ctk
         self.monitor_index = 0
@@ -12,7 +13,7 @@ class Dimensionamento:
     def posicionar(self):
         self.janela.geometry(f'{self.window_size}+{self.posição_central_tela}')
         self.janela.resizable(False, False)
-        # self.janela._set_appearance_mode('dark')
+        self.janela._set_appearance_mode('dark')
 
     @property
     def window_size(self):
