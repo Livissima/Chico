@@ -3,7 +3,7 @@ from app.auto.data.sites.sige.css_selectors import CssSelectors
 from app.auto.data.sites.sige.ids import Ids
 from app.auto.data.sites.sige.urls import Urls
 from app.auto.data.sites.sige.xpaths import Xpaths
-from app.config.env_config import ID_SIGE, SENHA_SIGE
+from app.config.settings.env_config import ID_SIGE, SENHA_SIGE
 
 
 class Sige :

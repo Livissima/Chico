@@ -4,7 +4,7 @@ from customtkinter import CTkFrame, CTk
 
 from app.auto.bot import Bot
 
-from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
+from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
 from app.config.parâmetros import parâmetros
 from app.ui.functions.desfazimento import Desfazimento
 from app.ui.widgets import Botão, Input, CheckBox, Texto
@@ -14,7 +14,7 @@ from app.ui.config.cabeçalhos import Cabeçalhos
 from app.ui.functions.pesquisa_diretório import PesquisaDiretório
 
 if TYPE_CHECKING:
-    from app.ui.screens.janela import Janela
+    pass
 
 
 class TelaBotSige(CTkFrame):

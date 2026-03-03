@@ -1,8 +1,6 @@
-from warnings import deprecated
-
 from customtkinter import CTkFrame
 
-from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
+from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
 from app.config.parâmetros import parâmetros
 
 

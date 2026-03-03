@@ -1,23 +1,17 @@
-import os.path
 import time
 
 from customtkinter import CTkFrame, CTk
 
 from app.auto.bot import Bot
-from app.auto.tasks import ConsultaDiasLetivos
 
-from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
 from app.config.parâmetros import parâmetros
-from app.ui.functions.desfazimento import Desfazimento
-from app.ui.widgets import Botão, Input, CheckBox, Texto, Dropdown
+from app.ui.widgets import Botão, CheckBox, Texto, Dropdown
 from typing import TYPE_CHECKING
 
 from app.ui.config.cabeçalhos import Cabeçalhos
-from app.ui.functions.pesquisa_diretório import PesquisaDiretório
-from app.ui.widgets.caixa_data import CaixaData
 
 if TYPE_CHECKING :
-    from app.ui.screens.janela import Janela
+    pass
 
 ANO = 2026
 
