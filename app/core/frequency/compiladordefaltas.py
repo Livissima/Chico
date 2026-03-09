@@ -13,7 +13,7 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.expand_frame_repr', False)  # Evita quebra do DataFrame em múltiplas linhas
 pd.set_option('display.width', None)  # Ajusta automaticamente à largura do terminal
 warnings.filterwarnings('ignore', category=UserWarning, module=openpyxl_name)
-PATH_TEST = R'C:\Users\meren\PycharmProjects\Chico\tests\Compilado de Faltas.csv'
+PATH_TEST = R'/tests/resultados/Compilado de Faltas.csv'
 
 
 class CompiladorDeFaltas:
