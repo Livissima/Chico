@@ -24,7 +24,9 @@ class Xpaths:
             'série' : '/html/body/div[8]/form/table[1]/tbody/tr[2]/td[2]/select',
             'turma' : '/html/body/div[8]/form/table[1]/tbody/tr[5]/td[2]/select',
             'turno' : '/html/body/div[8]/form/table[1]/tbody/tr[3]/td[2]/select',
-            'input data' : '/html/body/div[8]/form/table/tbody/tr[6]/td[2]/input'
+            'input data' : '/html/body/div[8]/form/table/tbody/tr[6]/td[2]/input',
+            'data eleição' : '/html/body/div[8]/form/table/tbody/tr/td/table/tbody/tr[7]/td/input',
+            'cpf servidor' : '//*[@id="txtCPF"]'
         }
 
     @property
@@ -116,6 +118,8 @@ class Xpaths:
             'geral' : '/html/body/div[7]/ul/li[4]/ul/li[2]/ul/li[5]/ul/li[2]/ul/li[2]/a',
             'cpf' : '//*[@id="txtCPF"]'
         }
+
+
 
         return {
             '_xpath' : xpath_relatórios,

@@ -2,6 +2,7 @@ from typing import Literal
 from app.auto.functions.normalizar import normalizar_unicode, normalizar_dicionário
 from app.auto.tasks import ScrapingSige, ConsultaDiasLetivos
 from app.auto.tasks.credenciador.credenciador import Credenciador
+from app.auto.tasks.sige.servidores import Servidores
 # from app.auto.tasks.sige.uniformizador import
 from app.auto.tasks.sige.downloads import Downloads
 # from app.auto.tasks.credenciador.credenciador import Credenciador
@@ -18,7 +19,7 @@ class Bot:
             self,
             tarefa: Literal[
                 'downloads', 'siap', 'credenciar', 'sondagem', 'fotos', 'consultar dias letivos', 'obter modulações',
-                'uniformizar'
+                'uniformizar', 'servidores'
             ],
             # parâmetros_web,
             kwargs_tarefa: dict | None = None, **kwargs
@@ -54,6 +55,7 @@ class Bot:
             'consultar dias letivos' : lambda: ConsultaDiasLetivos(**argumentos(tarefa)),
             'obter modulações' : lambda: ObtençãoDeModulação(**argumentos(tarefa)),
             # 'uniformizar' : lambda: Uniformizador(**argumentos(tarefa))
+            'servidores' : lambda: Servidores(**argumentos(tarefa))
         }
         return tarefas[tarefa]()
 
