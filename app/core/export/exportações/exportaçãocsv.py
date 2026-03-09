@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from pandas import DataFrame
 
-from app.core import Consulta
+from app.core import ConsultaEstudantes
 
 
 class ExportaçãoCSV:
@@ -20,7 +20,7 @@ class ExportaçãoCSV:
         'Estudante', 'Data de Nascimento', 'Turma', 'Telefone 1', 'Telefone 2', 'Telefone 3', 'Irmão 1', 'Irmão 2'
     ]
 
-    def __init__(self, consulta: Consulta, path: Path):
+    def __init__(self, consulta: ConsultaEstudantes, path: Path):
         self._exportar(consulta, path)
 
     def _adaptar_df(self, consulta):

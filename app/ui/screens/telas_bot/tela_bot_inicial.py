@@ -82,6 +82,18 @@ class TelaBot(CTkFrame):
             y=y,
             largura=largura,
         )
+        self.bt_servidores = Botão(
+            self,
+            # função=lambda: self.controller.alternador.abrir('telas_bot servidores'),
+            função=lambda: Bot(tarefa='servidores', parâmetros_web=None, path=parâmetros.diretório_base),
+            texto='Servidores',
+            fonte=('Arial', 20),
+            formato='bold',
+            x=10+80,
+            y=y+50,
+            largura=largura
+
+        )
 
         self.bt_back = Botão(
             self,

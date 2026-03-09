@@ -1,5 +1,5 @@
 from pathlib import Path
-from app.core import Consulta
+from app.core import ConsultaEstudantes
 from app.core.export.exportações.exportaçãocsv import ExportaçãoCSV
 from app.core.export.exportações.exportaçãoxlsx import ExportaçãoXLSX
 from app.core.export.exportações.exportaçãojson import ExportaçãoJSON
@@ -9,7 +9,7 @@ class Exportação:
     #todo exportar um ATALHO para área de trabalho. Path(user_desktop_dir())
     def __init__(
             self,
-            consulta: Consulta,
+            consulta: ConsultaEstudantes,
             path_destino: Path
     ):
 

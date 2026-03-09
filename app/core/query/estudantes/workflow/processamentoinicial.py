@@ -1,12 +1,12 @@
 from typing import Literal
 from pandas import DataFrame
-from .fichas import TratamentoFichas
-from .contatos import TratamentoContatos
-from .situações import TratamentoSituações
-from .gêneros import TratamentoGêneros
+from app.core.query.estudantes.tratamentos.fichas import TratamentoFichas
+from app.core.query.estudantes.tratamentos.contatos import TratamentoContatos
+from app.core.query.estudantes.tratamentos.situações import TratamentoSituações
+from app.core.query.estudantes.tratamentos.gêneros import TratamentoGêneros
 
 
-class Tratamento:
+class ProcessamentoInicial:
     tipos = {
         'fichas'    : TratamentoFichas,
         'contatos'  : TratamentoContatos,

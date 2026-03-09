@@ -2,7 +2,8 @@ import os.path
 from pathlib import Path
 from typing import TYPE_CHECKING
 from customtkinter import CTk, CTkFrame
-from app.core import Consulta, Exportação
+from app.core import ConsultaEstudantes, Exportação
+from app.core.query.servidores.consultaservidores import ConsultaServidores
 from app.core.utils.pastador import Pastador
 from app.ui.functions.pesquisa_diretório import PesquisaDiretório
 from app.config.parâmetros import parâmetros
@@ -61,10 +62,22 @@ class TelaConsulta(CTkFrame):
         #     largura=100
         # )
 
-        self._botão_consultar = Botão(
+        self._bt_consultar_estudantes = Botão(
             self,
-            função=lambda: self.consultar(),
-            texto='CONSULTAR',
+            função=lambda: self._consultar_estudantes(),
+            texto='ESTUDANTES',
+            fonte=('times new roman', 20),
+            formato='bold',
+            largura=(larg := 250),
+            x=(self.controller.largura - larg) // 2,
+            y=250,
+            altura=35
+        )
+
+        self._bt_consultar_servidores = Botão(
+            self,
+            função=lambda: self._consultar_servidores(),
+            texto='SERVIDORES',
             fonte=('times new roman', 20),
             formato='bold',
             largura=(larg := 250),
@@ -104,13 +117,13 @@ class TelaConsulta(CTkFrame):
         #     largura=420+55
         # )
 
-    def consultar(self):
+    def _consultar_estudantes(self):
         diretório_base = parâmetros.diretório_base
         fonte = str(os.path.join(diretório_base, 'fonte'))
 
-        self._tx_feedback.att('Consultando')
+        self._tx_feedback.att('Consultando estudantes')
         try:
-            consulta = Consulta(diretório_fonte=fonte)
+            consulta = ConsultaEstudantes(diretório_fonte=fonte)
 
             self._tx_feedback.att('Exportando')
 
@@ -118,12 +131,46 @@ class TelaConsulta(CTkFrame):
 
             Pastador(diretório_base=diretório_base)
 
-            self._tx_feedback.att(f'Planilhas geradas e exportadas para\n{diretório_base}', ('Arial', 20), 'bold', 'light green')
+            self._tx_feedback.att(
+                f'Planilhas geradas e exportadas para\n{diretório_base}',
+                ('Arial', 20),
+                'bold',
+                'light green'
+            )
 
         except Exception as e:
             print(f'Exception na consulta: {e}')
             self._tx_feedback.att(f'Erro ao consultar: {e}')
         # except FileNotFoundError: self._tx_feedback.att('Erro ao consultar')
+
+    def _consultar_servidores(self) :
+        diretório_base = parâmetros.diretório_base
+        fonte = str(Path(diretório_base, 'fonte', 'Servidores'))
+
+        self._tx_feedback.att('Consultando servidores')
+
+        try :
+            consulta = ConsultaServidores(diretório_fonte=fonte)
+
+            self._tx_feedback.att('Exportando')
+
+            # Exportação(consulta=consulta, path_destino=diretório_base)
+
+            # Pastador(diretório_base=diretório_base)
+
+            self._tx_feedback.att(
+                f'Planilhas geradas e exportadas para\n{diretório_base}',
+                ('Arial', 20),
+                'bold',
+                'light green'
+            )
+
+        except Exception as e :
+            print(f'Exception na consulta: {e}')
+            self._tx_feedback.att(
+                f'Erro ao consultar: {e}')  # except FileNotFoundError: self._tx_feedback.att('Erro ao consultar')
+        pass
+
 
     @staticmethod
     def _obter_situação():

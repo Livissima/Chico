@@ -4,13 +4,13 @@ from pathlib import Path
 from typing import Literal, Any
 from pandas import DataFrame, ExcelWriter
 
-from app.core import Consulta
+from app.core import ConsultaEstudantes
 
 
 class ExportaçãoXLSX :
     NOME_XLSX = 'Database'
 
-    def __init__(self, consulta: Consulta, path: Path | PathLike) -> None :
+    def __init__(self, consulta: ConsultaEstudantes, path: Path | PathLike) -> None :
         self._consulta = consulta
         self._gerar_xlsx(path)
 

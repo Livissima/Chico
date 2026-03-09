@@ -1,4 +1,4 @@
-from .consulta import Consulta
+from .consultaestudantes import ConsultaEstudantes
 from .formatação import Formatação
 from .integração import Integração
 #

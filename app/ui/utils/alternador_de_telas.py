@@ -4,6 +4,7 @@ from app.ui.screens.tela_estatísticas import TelaEstatísticas
 from app.ui.screens.tela_frequência import Frequência
 from app.ui.screens.telas_bot.tela_bot_inicial import TelaBot
 from app.ui.screens.telas_bot.tela_bot_credenciais import TelaBotCredenciais
+from app.ui.screens.telas_bot.tela_bot_servidores import TelaBotServidores
 from app.ui.screens.telas_bot.tela_bot_siap import TelaBotSiap
 from app.ui.screens.telas_bot.tela_bot_sige import TelaBotSige
 from app.ui.screens.tela_consulta import TelaConsulta
@@ -24,12 +25,13 @@ class AlternadorDeTelas:
             'telas_bot siap' : TelaBotSiap,
             'estatísticas' : TelaEstatísticas,
             'frequência' : Frequência,
+            'telas_bot servidores' : TelaBotServidores
         }
 
 
     def abrir(self, nome_tela: Literal[
         'inicial', 'telas_bot', 'consulta', 'telas_bot sige', 'telas_bot google', 'telas_bot siap', 'estatísticas',
-        'frequência'
+        'frequência', 'telas_bot servidores'
     ]
               ):
 

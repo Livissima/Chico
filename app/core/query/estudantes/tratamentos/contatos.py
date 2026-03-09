@@ -1,9 +1,7 @@
-import re
 from pandas import DataFrame, Series
 import pandas as pd
 
 from app.config.classes.telefone import Telefone
-from app.core.query.workflow.formatação import Formatação
 
 
 class TratamentoContatos:
