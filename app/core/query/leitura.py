@@ -1,15 +1,16 @@
 from os import listdir, path
 from typing import Literal
 import json
+from pathlib import Path
 
 class Leitura :
 
     def __init__(
             self,
-            _path: str,
-            tipo_de_relatório: Literal['fichas', 'contatos', 'gêneros', 'situações'] | str
+            _path: str | Path,
+            tipo_de_relatório: Literal['fichas', 'contatos', 'gêneros', 'situações', 'servidores'] | str
     ) :
-        print(f'Leitura: {tipo_de_relatório}')
+        print(f'Leitura: {tipo_de_relatório = }')
 
         self._tipo_de_relatório = tipo_de_relatório
         self._path_dados = _path
@@ -22,9 +23,10 @@ class Leitura :
         # print(f'___________LISTA_DIRS{lista_dirs}')
         leitura = []
         for nome_arquivo in lista_dirs:
+
             dados = self.ler_json(nome_arquivo, _path)
             leitura.extend(dados)
-
+        # print(f'{leitura = }')
         return leitura
 
     @property

@@ -1,12 +1,12 @@
 import os
-from app.core.query.source.tratamentos.tratamento import Tratamento
-from app.core.query.workflow.formatação import Formatação
-from app.core.query.workflow.integração import Integração
-from app.core.query.source.leitura import Leitura
+from app.core.query.estudantes.workflow.processamentoinicial import ProcessamentoInicial
+from app.core.query.estudantes.workflow.formatação import Formatação
+from app.core.query.estudantes.workflow.integração import Integração
+from app.core.query.leitura import Leitura
 from pandas import DataFrame
 
 
-class Consulta:
+class ConsultaEstudantes:
 
     def __init__(
             self,
@@ -37,7 +37,7 @@ class Consulta:
     @staticmethod
     def _tratar(dfs_leituras: dict) -> dict:
         return {
-            tipo : Tratamento(leitura.dataframe, tipo)
+            tipo : ProcessamentoInicial(leitura.dataframe, tipo)
             for tipo, leitura in dfs_leituras.items()
         }
 
