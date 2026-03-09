@@ -112,6 +112,9 @@ class NavegaçãoWeb :
             WebDriverWait(**self.__args_wait).until(presence_of_element_located(elemento))
             WebDriverWait(**self.__args_wait).until(visibility_of_element_located(elemento))
             el = WebDriverWait(**self.__args_wait).until(element_to_be_clickable(elemento))
+
+            self.master.execute_script("arguments[0].removeAttribute('readonly');", el)
+
             el.clear()  # limpa antes de digitar
             el.send_keys(string)
             self.aguardar_página()
@@ -181,11 +184,11 @@ class NavegaçãoWeb :
             self,
             nome_arquivo,
             pasta_destino,
-            tipo: Literal['fichas', 'contatos', 'gêneros', 'situações', 'sondagem'] | str
+            tipo: Literal['fichas', 'contatos', 'gêneros', 'situações', 'sondagem', 'servidores'] | str | None = None
     ) -> bool:
 
         inicio = time.time()
-        dados = self.__obter_tabelas(tipo)
+        dados = self.obter_tabelas(tipo)
 
         if dados:
             path_json = os.path.join(pasta_destino, f'{nome_arquivo}.json')
@@ -290,11 +293,10 @@ class NavegaçãoWeb :
     def _esperar_por_mudanca_estado(self, elemento, atributo, valor_antigo) :
         WebDriverWait(**self.__args_wait).until(lambda driver : elemento.get_attribute(atributo) != valor_antigo)
 
-    def __obter_tabelas(self, tipo: str) -> list[str] | list[dict[str, str]]:
-        tipos_simples = {'contatos', 'situações', 'gêneros', 'sondagem'}
+    def obter_tabelas(self, tipo: str | None = None) -> list[str] | list[dict[str, str]]:
         script = """"""
 
-        if tipo in tipos_simples :
+        if tipo != 'fichas' or tipo is None:
             elemento = (By.CSS_SELECTOR, 'table.tabela')
             WebDriverWait(**self.__args_wait).until(presence_of_element_located(elemento))
             script = Javascript.obter_tabelas
