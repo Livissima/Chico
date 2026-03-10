@@ -154,7 +154,7 @@ class TelaConsulta(CTkFrame):
 
             self._tx_feedback.att('Exportando')
 
-            # Exportação(consulta=consulta, path_destino=diretório_base)
+            Exportação(consulta=consulta, path_destino=diretório_base)
 
             # Pastador(diretório_base=diretório_base)
 
@@ -205,9 +205,9 @@ class TelaConsulta(CTkFrame):
             }
 
 
-    def _pesquisar_diretório(self):
-        PesquisaDiretório(self, 'Selecione o novo diretório', self._in_diretório_base)
-        self._tx_feedback.att(**self._obter_situação())
+    # def _pesquisar_diretório(self):
+    #     PesquisaDiretório(self, 'Selecione o novo diretório', self._in_diretório_base)
+    #     self._tx_feedback.att(**self._obter_situação())
 
     def _desfazer(self):
         Desfazimento(self).desfazer()

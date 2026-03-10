@@ -4,7 +4,6 @@ from pandas import DataFrame
 
 
 class Formatação:
-    #todo adicionar método para reordenar as colunas
 
     _colunas_datas: list[str] = [
         'Data de Nascimento', 'Data Matrícula', 'Data Situação'
@@ -32,14 +31,12 @@ class Formatação:
     ]
 
     def __init__(self, df_integrado: DataFrame):
-        print(f'\nFormatação instanciada.\n')
+        print(f'\nFormatação instanciada.\n    → {df_integrado.shape = }')
+
         self._df = df_integrado
-
-        print(f'Chegou como: {self._df.shape}')
         self.df_formatado: DataFrame = self._formatar(df_integrado)
-        print(f'Resultado: {self.df_formatado.shape}\n')
 
-
+        print(f'    → {self.df_formatado.shape = }\n')
 
     def _formatar(self, df_integrado: DataFrame) -> DataFrame:
         df_base = df_integrado
@@ -47,7 +44,6 @@ class Formatação:
         df = self._formatar_como_número(df_base)
         df = self._formatar_como_data(df_base)
         df = self._formatar_como_string(df_base)
-
         df = self._remover_duplicatas(df)
         df = self._reordenar_colunas(df)
         return df
@@ -105,15 +101,6 @@ class Formatação:
 
     def _reordenar_colunas(self, dataframe: pd.DataFrame) -> pd.DataFrame :
         return dataframe[self._colunas_ordenadas]
-
-    #todo repensar a relevânciaw2q1  desta método
-    @staticmethod
-    def remover_quebras_de_linhas(df: DataFrame) -> DataFrame:
-
-        df = df.replace(to_replace = ['\r', '\n', '\t', '\xa0'], value = [' ', ' ', ' ', ' '], regex = True)
-        df.columns = [str(coluna).replace('\r', ' ').replace('\n', ' ') for coluna in df.columns]
-        return df
-
 
     # def __getattr__(self, item):
     #     return getattr(self.df_formatado, item)
