@@ -1,60 +1,55 @@
-import unicodedata
+from app.config.settings.functions import normalizar_diacrítica
 
 class Acessos:
 
     @staticmethod
-    def normalizar_diacrítica(texto):
-        return ''.join(
-            c for c in unicodedata.normalize('NFKD', texto)
-            if not unicodedata.combining(c)
-        )
-
-    def extrair_senha_padrão(self, linha):
-        nomes = [self.normalizar_diacrítica(n) for n in linha['Estudante'].strip().split()]
+    def _obter_senha_email_padrão_seduc(linha):
+        nomes = [normalizar_diacrítica(n) for n in linha['Estudante'].strip().split()]
 
         primeira_letra = nomes[0][0].upper()
         ultima_letra = nomes[-1][0].lower()
-        dn = linha['Data de Nascimento'].strftime('%d%m%Y')
-        return f'{primeira_letra}{ultima_letra}{dn}'
+        data_nascimento = linha['Data de Nascimento'].strftime('%d%m%Y')
+        return f'{primeira_letra}{ultima_letra}{data_nascimento}'
 
-    def gerar_nova_senha(self, linha):
-        nomes = [self.normalizar_diacrítica(n) for n in linha['Estudante'].strip().split()]
+    @staticmethod
+    def _gerar_senha_netescola_padrão_chico(linha):
+        nome_splitado = [normalizar_diacrítica(n) for n in linha['Estudante'].strip().split()]
 
-        primeiro = nomes[0]
-        segundo = nomes[1] if len(nomes) > 1 else ""
+        primeiro_nome = nome_splitado[0]
+        segundo_nome = nome_splitado[1] if len(nome_splitado) > 1 else ""
 
-        if len(primeiro) < 5:
-            nome_final = primeiro + segundo
+        if len(primeiro_nome) < 5:
+            nome_final = primeiro_nome + segundo_nome
         else:
-            nome_final = primeiro
+            nome_final = primeiro_nome
 
         return nome_final.lower()+'00'
 
-    def gerar_senha_email(self, linha):
+    @staticmethod
+    def _gerar_senha_email_padrão_chico(linha):
         preposições = ['das', 'dos', 'de', 'do', 'da']
-        nomes = [
-            self.normalizar_diacrítica(n) for n in linha['Estudante'].strip().split() if n.lower() not in preposições
+
+        nome_splitado = [
+            normalizar_diacrítica(n) for n in linha['Estudante'].strip().split() if n.lower() not in preposições
         ]
 
-
-
-        prenome = nomes[0].lower()
-        sobrenome = nomes[1].lower()
-        terceirome = ''
+        primeiro_nome = nome_splitado[0].lower()
+        segundo_nome = nome_splitado[1].lower()
+        terceiro_nome = ''
 
         try:
-            terceirome = nomes[2].lower()
+            terceiro_nome = nome_splitado[2].lower()
+
         except IndexError:
             pass
 
+        if len(primeiro_nome) >= 8 :
+            return primeiro_nome
 
-        if len(prenome) >= 8 :
-            return prenome
-
-        elif len(prenome) + len(sobrenome) >= 8 :
-            return f'{prenome}{sobrenome}'
+        elif len(primeiro_nome) + len(segundo_nome) >= 8 :
+            return f'{primeiro_nome}{segundo_nome}'
 
         else:
-            return f'{prenome}{sobrenome}{terceirome}'
+            return f'{primeiro_nome}{segundo_nome}{terceiro_nome}'
 
 
