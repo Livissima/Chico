@@ -14,8 +14,8 @@ class Leitura :
 
         self._tipo_de_relatório = tipo_de_relatório
         self._path_dados = _path
-        self.df_leitura = self._ler(_path)
-        # print(f'{tipo_de_relatório = } : {len(self.df_leitura)}')
+        self.leitura = self._ler(_path)
+        print(f'\n\n{tipo_de_relatório = } : {len(self.leitura)}\n\n')
 
 
     def _ler(self, _path) -> list[str | dict] :
@@ -29,9 +29,9 @@ class Leitura :
         # print(f'{leitura = }')
         return leitura
 
-    @property
-    def dataframe(self) :
-        return self.df_leitura
+    # @property
+    # def dataframe(self) :
+    #     return self.df_leitura
 
     @staticmethod
     def ler_json(_nome_arquivo: str, _path):

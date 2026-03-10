@@ -36,18 +36,15 @@ class Integração:
 
     @staticmethod
     def _integrar_senha_padrão(df_base: DataFrame) -> Series:
-        acessos = Acessos()
-        return df_base.apply(acessos.extrair_senha_padrão, axis=1)
+        return df_base.apply(Acessos._obter_senha_email_padrão_seduc, axis=1)
 
     @staticmethod
     def _integrar_nova_senha(df_base: DataFrame) -> Series:
-        acessos = Acessos()
-        return df_base.apply(acessos.gerar_nova_senha, axis=1)
+        return df_base.apply(Acessos._gerar_senha_netescola_padrão_chico, axis=1)
 
     @staticmethod
     def _integrar_senha_educa(df_base: DataFrame) -> Series:
-        acessos = Acessos()
-        return df_base.apply(acessos.gerar_senha_email, axis=1)
+        return df_base.apply(Acessos._gerar_senha_email_padrão_chico, axis=1)
 
     @staticmethod
     def _integrar_tratamentos(df: dict[str, DataFrame]) -> DataFrame:
