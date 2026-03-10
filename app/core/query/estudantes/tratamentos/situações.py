@@ -3,6 +3,7 @@ from app.core.query.estudantes.workflow.formatação import Formatação
 
 
 class TratamentoSituações:
+    colunas = ['Data Situação', 'Matrícula', 'Situação', 'Código INEP']
 
     def __init__(self, leitura: list[dict[str, str]]):
 
@@ -16,7 +17,6 @@ class TratamentoSituações:
 
     def _definir_df_base(self, leitura: DataFrame) -> DataFrame:
         df = leitura[self.colunas]
-        df = Formatação.remover_quebras_de_linhas(df)
         df = df.rename({'Código INEP' : 'INEP'}, axis='columns')
         return df
 
@@ -24,13 +24,8 @@ class TratamentoSituações:
     def _pré_filtrar(df_base: DataFrame) -> DataFrame:
         df_ajustado = df_base[df_base['Situação'].notna()]
         df_ajustado = df_base[~df_base['Situação'].fillna('').astype(str).str.startswith('(rem.')]
-
         df_ajustado = df_ajustado.dropna(axis=0, how='all', ignore_index=True)
         return df_ajustado
-
-    @property
-    def colunas(self) -> list[str]:
-        return ['Data Situação', 'Matrícula', 'Situação', 'Código INEP']
 
     def __getattr__(self, item):
         return getattr(self.df_tratado, item)

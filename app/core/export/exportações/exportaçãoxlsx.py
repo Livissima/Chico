@@ -49,7 +49,8 @@ class ExportaçãoXLSX :
         })
         planilha.hide_gridlines(2)
 
-    def _formatos(self, pasta_) -> dict[str, Any] :
+    @staticmethod
+    def _formatos(pasta_) -> dict[str, Any] :
         formato_fonte = pasta_.add_format({
             "font_name" : "Times New Roman", "font_size" : 12
         })

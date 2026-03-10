@@ -21,6 +21,7 @@ class Irmão:
                 nomes_irmãos = irmãos['Estudante'].tolist()
                 nomes_irmãos.remove(row['Estudante'])
                 consulta.at[índice, 'Irmão 1'] = nomes_irmãos[0]
+
             elif len(irmãos) == 3:
                 nomes_irmãos = irmãos['Estudante'].tolist()
                 nomes_irmãos.remove(row['Estudante'])
