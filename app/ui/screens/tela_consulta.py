@@ -139,8 +139,8 @@ class TelaConsulta(CTkFrame):
             )
 
         except Exception as e:
-            print(f'Exception na consulta: {e}')
             self._tx_feedback.att(f'Erro ao consultar: {e}')
+            raise Exception(f'Problema na consulta: {e}')
         # except FileNotFoundError: self._tx_feedback.att('Erro ao consultar')
 
     def _consultar_servidores(self) :
@@ -166,9 +166,9 @@ class TelaConsulta(CTkFrame):
             )
 
         except Exception as e :
-            print(f'Exception na consulta: {e}')
-            self._tx_feedback.att(
-                f'Erro ao consultar: {e}')  # except FileNotFoundError: self._tx_feedback.att('Erro ao consultar')
+            self._tx_feedback.att(f'Erro ao consultar: {e}')
+            raise Exception(f'Problema na consulta: {e}')
+            # except FileNotFoundError: self._tx_feedback.att('Erro ao consultar')
         pass
 
 
