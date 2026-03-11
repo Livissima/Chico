@@ -84,12 +84,17 @@ class ScrapingSige:
                     raise Exception(f'Erro ao baixar foto de {estudante}: Status code {response.status_code}')
 
                 destino = os.path.join(path_destino, f'{estudante}.jpg')
+
                 with open(destino, 'wb') as file :
                     file.write(response.content)
+
                     print(f'Foto de {estudante} baixada.')
+
+                return
 
             except Exception as e :
                 print(f'Erro ao baixar foto de {estudante}: {e}')
+
 
         base64_data = url_elemento.split(',')[1]
 
@@ -98,6 +103,7 @@ class ScrapingSige:
         os.makedirs(path_destino, exist_ok=True)
 
         destino = os.path.join(path_destino, f'{estudante}.png')
+
         with open(destino, 'wb') as file :
             file.write(image_data)
             print(f'Foto de {estudante} baixada.')
