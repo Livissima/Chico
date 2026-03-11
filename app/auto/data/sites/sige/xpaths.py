@@ -7,8 +7,9 @@ class Xpaths:
             'ficha aluno' : self._ficha_aluno,
             'resumo' : self._resumo,
             'lápis' : self._lápis,
-            'alunos' : self._alunos,
-            'lápis docs' : self._lápis_docs
+            'alunos' : self._lápis_alunos,
+            'lápis docs' : self._lápis_docs,
+            'uniformes' : self._uniformes
         }
 
     @property
@@ -23,7 +24,9 @@ class Xpaths:
             'série' : '/html/body/div[8]/form/table[1]/tbody/tr[2]/td[2]/select',
             'turma' : '/html/body/div[8]/form/table[1]/tbody/tr[5]/td[2]/select',
             'turno' : '/html/body/div[8]/form/table[1]/tbody/tr[3]/td[2]/select',
-            'input data' : '/html/body/div[8]/form/table/tbody/tr[6]/td[2]/input'
+            'input data' : '/html/body/div[8]/form/table/tbody/tr[6]/td[2]/input',
+            'data eleição' : '/html/body/div[8]/form/table/tbody/tr/td/table/tbody/tr[7]/td/input',
+            'cpf servidor' : '//*[@id="txtCPF"]'
         }
 
     @property
@@ -44,7 +47,7 @@ class Xpaths:
         }
         turmas = {
             'ativas' : '/html/body/div[8]/form/table/tbody/tr/td/table/tbody/tr[6]/td[2]/input[1]',
-            'input data' : '/html/body/div[8]/form/table/tbody/tr[6]/td[2]/input'
+            'input data' : '//*[@id="txtDataBase"]'
         }
 
         return {
@@ -58,11 +61,12 @@ class Xpaths:
             'alunos' : '/html/body/div[7]/ul/li[1]/h4/a',
             'movimentação' : '/html/body/div[7]/ul/li[2]/h4/a',
             'período letivo' : '/html/body/div[7]/ul/li[3]/h4/a',
-            'documentos' : '/html/body/div[7]/ul/li[4]/h4/a'
+            'documentos' : '/html/body/div[7]/ul/li[4]/h4/a',
+            'programas' : '//*[@id="smoothmenu1"]/ul/li[5]/h4/a'
         }
 
     @property
-    def _alunos(self):
+    def _lápis_alunos(self):
         return {
             'consultar' : '/html/body/div[7]/ul/li[1]/ul/li[1]/a',
             'ficha do aluno' : '/html/body/div[7]/ul/li[1]/ul/li[2]/a'
@@ -104,7 +108,8 @@ class Xpaths:
 
         acomp_pedagógico = {
             '_xpath' : '/html/body/div[7]/ul/li[4]/ul/li[2]/ul/li[3]/a',
-            'alunos por idade' : '/html/body/div[7]/ul/li[4]/ul/li[2]/ul/li[3]/ul/li[6]/a'
+            'alunos por idade' : '/html/body/div[7]/ul/li[4]/ul/li[2]/ul/li[3]/ul/li[6]/a',
+            'input data' : '//*[@id="frm"]/table/tbody/tr[6]/td[2]/input'
         }
 
         dossiê_do_servidor = {
@@ -114,6 +119,8 @@ class Xpaths:
             'cpf' : '//*[@id="txtCPF"]'
         }
 
+
+
         return {
             '_xpath' : xpath_relatórios,
             'dados cadastrais' : dados_cadastrais,
@@ -122,3 +129,19 @@ class Xpaths:
             'dossiê do servidor' : dossiê_do_servidor
         }
 
+
+    @property
+    def _uniformes(self):
+        return {
+            'matrícula' : '//*[@id="txtMatricula"]',
+            'camiseta' : '//*[@id="cmbItem_1"]',
+            'calça' : '//*[@id="cmbItem_6"]',
+            'regata' : '//*[@id="cmbItem_2"]',
+            'bt bermuda' : '//*[@id="optTipoBermudaUnissex"]',
+            'bt saia' : '//*[@id="optTipoBermudaShortSaia"]',
+            'bermuda' : '//*[@id="cmbItem_4"]',
+            'saia' : '//*[@id="cmbItem_5"]',
+            'jaqueta' : '//*[@id="cmbItem_3"]',
+            'tênis' : '//*[@id="cmbItem_7"]',
+            'meias' : '//*[@id="cmbItem_8"]'
+        }

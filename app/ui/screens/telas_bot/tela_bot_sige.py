@@ -4,7 +4,7 @@ from customtkinter import CTkFrame, CTk
 
 from app.auto.bot import Bot
 
-from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
+from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
 from app.config.parâmetros import parâmetros
 from app.ui.functions.desfazimento import Desfazimento
 from app.ui.widgets import Botão, Input, CheckBox, Texto
@@ -14,7 +14,7 @@ from app.ui.config.cabeçalhos import Cabeçalhos
 from app.ui.functions.pesquisa_diretório import PesquisaDiretório
 
 if TYPE_CHECKING:
-    from app.ui.screens.janela import Janela
+    pass
 
 
 class TelaBotSige(CTkFrame):
@@ -29,7 +29,7 @@ class TelaBotSige(CTkFrame):
     @property
     def _kwargs(self) -> dict:
         return {
-            'destino' : parâmetros.novo_diretório,
+            'destino' : parâmetros.diretório_base,
             'alvos' : self._ck_alvos.valores_true
         }
 
@@ -70,7 +70,7 @@ class TelaBotSige(CTkFrame):
     def __inserir_inputs(self):
         self._in_diretório_base = Input(
             self,
-            texto=str(os.path.join(parâmetros.novo_diretório, 'fonte')),
+            texto=str(os.path.join(parâmetros.diretório_base, 'fonte')),
             x=120,
             y=135,
             largura=420+55
@@ -119,7 +119,7 @@ class TelaBotSige(CTkFrame):
         self._bt_desfazer = Botão(
             self,
             função=lambda: self._desfazer(),
-            condição=parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO,
+            condição=parâmetros.diretório_base != DIRETÓRIO_BASE_PADRÃO,
             texto='↩',
             fonte=('arial', 25),
             x=560,
@@ -128,7 +128,7 @@ class TelaBotSige(CTkFrame):
 
         self.bt_sondagem_emergencial = Botão(
             self,
-            função=lambda: Bot(tarefa='sondagem', path=parâmetros.novo_diretório),
+            função=lambda: Bot(tarefa='sondagem', parâmetros_web=None, path=parâmetros.diretório_base),
             condição=len(parâmetros.turmas_disponíveis) == 0,
             texto='SONDAR',
             fonte=('arial', 15),
@@ -184,12 +184,12 @@ class TelaBotSige(CTkFrame):
             print(f'selecione ao menos um conteúdo alvo')
 
         if any(alvo in self._ck_alvos.valores_true for alvo in ['Fichas', 'Contatos', 'Situações', 'Gêneros']):
-
-            Bot(tarefa='downloads', destino=self._kwargs['destino'], alvos=self._ck_alvos.valores_true)
+            Bot(tarefa='downloads', parâmetros_web=None, destino=self._kwargs['destino'],
+                alvos=self._ck_alvos.valores_true)
 
         if self._ck_alvos.valores_true == ['Fotos']:
             print(f'____Fotos')
-            Bot(tarefa='fotos', turmas=parâmetros.turmas_selecionadas)
+            Bot(tarefa='fotos', parâmetros_web=None, turmas=parâmetros.turmas_selecionadas)
 
 
     def _verificar_estatística(self):
@@ -202,13 +202,13 @@ class TelaBotSige(CTkFrame):
     def _desfazer(self):
         Desfazimento(self).desfazer()
         self._bt_desfazer.atualizar_visibilidade(
-            parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO
+            parâmetros.diretório_base != DIRETÓRIO_BASE_PADRÃO
         )
         self._verificar_estatística()
 
 
     def sondar(self):
-        Bot(tarefa='sondagem', path=parâmetros.novo_diretório)
+        Bot(tarefa='sondagem', parâmetros_web=None, path=parâmetros.diretório_base)
         self._verificar_estatística()
 
 

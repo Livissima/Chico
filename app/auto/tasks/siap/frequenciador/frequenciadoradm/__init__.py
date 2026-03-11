@@ -1,0 +1,1 @@
+from .frequenciadoradm import FrequenciadorAdm

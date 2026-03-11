@@ -7,10 +7,10 @@ from app.ui.config.cabeçalhos import Cabeçalhos
 from app.ui.functions.desfazimento import Desfazimento
 
 from app.ui.functions.pesquisa_diretório import PesquisaDiretório
-from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
+from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
 
 if TYPE_CHECKING:
-    from .janela import Janela
+    pass
 
 
 class TelaInicial(CTkFrame):
@@ -28,7 +28,7 @@ class TelaInicial(CTkFrame):
 
     def _inserir_widgets(self):
         self.primeira_linha = 180
-        self.segunda_linha = 350
+
 
         self.__inserir_textos()
         self.__inserir_inputs()
@@ -70,7 +70,7 @@ class TelaInicial(CTkFrame):
         #todo: Bloquear click
         self._in_diretório_base = Input(
             self,
-            texto=parâmetros.novo_diretório,
+            texto=parâmetros.diretório_base,
             fonte=('arial', 15),
             x=160,
             y=self.primeira_linha,
@@ -78,14 +78,14 @@ class TelaInicial(CTkFrame):
         )
 
     def __inserir_botões(self):
-
+        segunda_linha = 350
         self.bt_bot = Botão(
             self,
             função= lambda: self.controller.alternador.abrir('telas_bot'),
             texto='BOT',
             formato='bold',
-            x=120,
-            y=self.segunda_linha,
+            x=80,
+            y=segunda_linha,
             largura=100
         )
 
@@ -94,8 +94,8 @@ class TelaInicial(CTkFrame):
             função= lambda: self.controller.alternador.abrir('consulta'),
             texto='Consulta',
             formato='bold',
-            x=120+120,
-            y=self.segunda_linha,
+            x=120+80,
+            y=segunda_linha,
             largura=100
         )
 
@@ -104,8 +104,18 @@ class TelaInicial(CTkFrame):
             função=lambda: self.controller.alternador.abrir('estatísticas'),
             texto='Estatísticas',
             formato='bold',
-            x=120+120+120,
-            y=self.segunda_linha,
+            x=120+120+80,
+            y=segunda_linha,
+            largura=100
+        )
+
+        self.bt_frequência = Botão(
+            self,
+            função=lambda: self.controller.alternador.abrir('frequência'),
+            texto='Frequência',
+            formato='bold',
+            x=120+120+120+80,
+            y=segunda_linha,
             largura=100
         )
 
@@ -120,10 +130,12 @@ class TelaInicial(CTkFrame):
             largura=150
         )
 
+
+
         self._bt_desfazer = Botão(
             self,
             função=lambda: self._desfazer(),
-            condição=parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO,
+            condição=parâmetros.diretório_base != DIRETÓRIO_BASE_PADRÃO,
             texto='↩',
             fonte=('arial', 25),
             x=560,
@@ -134,7 +146,7 @@ class TelaInicial(CTkFrame):
     def _desfazer(self):
         Desfazimento(self).desfazer()
         self._bt_desfazer.atualizar_visibilidade(
-            parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO
+            parâmetros.diretório_base != DIRETÓRIO_BASE_PADRÃO
         )
 
 

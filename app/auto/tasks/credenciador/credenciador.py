@@ -6,90 +6,96 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
-from app.auto.data.sites.propriedades import Propriedades
+from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from typing import Literal
 import pandas as pd
 import unicodedata
 
-from app.auto.tasks.credenciador.credenciadorgoogle import CredenciadorGoogle
-from app.auto.tasks.credenciador.credenciadornetescola import CredenciadorNetescola
-
-
 class Credenciador:
 
-    def __init__(
-            self,
-            navegador,
-            path_database: str,
-            tipo: Literal['netescola', 'google'],
-            turmas: list[str] = None,
-            **kwargs
-    ):
-        print(f'class GerenciadorDeCredenciais instanciada.')
+    def __init__(self, navegador, path_database: str, turmas: list[str] = None, **kwargs) :
+        print(f'class {__class__.__name__} instanciada.\n'
+              f'    •{self = }\n'
+              f'    •{path_database = }\n'
+              # f'    •{tipo = }\n'
+              f'    •{turmas = }\n'
+              f'    •{kwargs = }\n'
+              )
 
         self.master = navegador
-        self.nv = NavegaçãoWeb(navegador, tipo)
-        self.pp = Propriedades(site=tipo)
+        self.nv = NavegaçãoWeb(navegador, 'netescola')
+        self.pp = PropriedadesWeb(site='netescola')
         self.turmas = turmas
+        self._path_database = path_database
         print(f'{self.turmas = }')
-
-        self.df = self.dataframe(path_database)
-        self.gerenciar(tipo)
+        self._logon()
+        self._gerenciar_selecionados()
+        # self.df = self._dataframe(path_database)
         # self.master.quit()
 
+    def _gerenciar_selecionados(self):
+        início = 0
 
-    def gerenciar(self, tipo):
-
-        início = 2
-        if tipo not in ('netescola', 'google') :
-            raise Exception(f'Tipo desconhecido: {tipo}')
-
-        for índice, linha in self.df.iloc[início:].iterrows():
-            estudante  = str(linha['Estudante'])
-            turma      = str(linha['Turma'])
-            matrícula  = str(linha['Matrícula'])
-            email      = str(linha['Educacional'])
-            dn         = str(linha['Data de Nascimento']).replace('/', '')
-            nova_senha = str(linha['Nova senha'])
-            senha_padrão = str(linha['Senha padrão'])
+        for índice, linha in self._dataframe().iloc[início:].iterrows():
+            estudante     = str(linha['Estudante'])
+            turma         = str(linha['Turma'])
+            matrícula     = str(linha['Matrícula'])
+            email         = str(linha['Educacional'])
+            dn            = str(linha['Data de Nascimento']).replace('/', '')
+            nova_senha    = str(linha['Nova senha'])
+            senha_padrão  = str(linha['Senha padrão'])
             senha_padrão2 = str(f'go2025{linha['Estudante'].lower().split()[0]}')
 
-            print(estudante, turma, matrícula, email, dn, nova_senha, senha_padrão, senha_padrão2)
+            # print(estudante, turma, matrícula, email, dn, nova_senha, senha_padrão, senha_padrão2)
 
-            self.anunciar(índice, estudante, turma, 'iniciando')
+            self.anunciar(índice, estudante, turma, 'Processando...')
 
-            if tipo == 'netescola':
-                CredenciadorNetescola()
+            self._gerenciar_indivíduo(matrícula, dn, email, nova_senha)
 
-            if tipo == 'google':
-                CredenciadorGoogle(
-                    navegador=self.master,
-                    estudante=estudante,
-                    matrícula=matrícula,
-                    email=email,
-                    dn=dn,
-                    nova_senha=nova_senha
-                )
-#
+            self.anunciar(índice, estudante, turma, 'Ok.', ok=True)
 
 
 
-    def dataframe(self, path):
-        _df = pd.read_excel(path, 'Base Ativa')
-        colunas = ['Turma', 'Matrícula', 'Educacional', 'Estudante', 'Data de Nascimento', 'Senha padrão', 'Nova senha']
-        df: DataFrame = _df[colunas].copy()
+    def _gerenciar_indivíduo(self, matrícula, dn, email, nova_senha):
 
-        df['Turma'] = df['Turma'].astype(str).str.strip()
+        self.nv.digitar_xpath('matrícula', string=matrícula)
+        self.nv.digitar_xpath('nascimento', string=dn)
+        self.nv.clicar('xpath', 'pesquisar')
+        self.nv.digitar_xpath('email', string=email)
+        self.nv.digitar_xpath('email2', string=email)
+        self.nv.digitar_xpath('senha', string=nova_senha)
+        self.nv.digitar_xpath('senha2', string=nova_senha)
+        self.nv.clicar('xpath', 'concordo')
+        self.nv.clicar('xpath', 'salvar')
+        self.nv.aguardar_página()
 
+        self.master.refresh()
+        self.nv.aguardar_página()
+
+
+
+    def _dataframe(self) -> DataFrame:
+        _df             = pd.read_excel(self._path_database, 'Base Ativa')
+        colunas         = ['Turma', 'Matrícula', 'Educacional', 'Estudante', 'Data de Nascimento', 'Senha padrão', 'Nova senha']
+        df: DataFrame   = _df[colunas].copy()
+        df['Turma']     = df['Turma'].astype(str).str.strip()
         df['Estudante'] = df['Estudante'].astype(str).str.normalize('NFKD').str.encode('ASCII', errors='ignore').str.decode('ASCII').str.strip()
+
+        df = df[df['Turma'].isin(self.turmas)]
 
         print(f'{df['Turma'].unique().tolist() = }')
         print(df.head())
-        df = df[df['Turma'].isin(self.turmas)]
 
         return df
 
     @staticmethod
-    def anunciar(ind, aluno: str, _turma: str, texto: str):
-        sys.stdout.write(f'\r {ind} {aluno} - {_turma}: {texto}.')
+    def anunciar(ind, aluno: str, _turma: str, texto: str, ok=False):
+
+        sys.stdout.write(f'\r {ind} - {aluno} - {_turma}: {texto}.')
+        if ok:
+            sys.stdout.write('\n')
         sys.stdout.flush()
+
+    def _logon(self) -> None:
+        self.master.get(self.pp.url)
+        self.master.maximize_window()

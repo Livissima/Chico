@@ -1,5 +1,5 @@
-import os
+from app.config.classes import cpf
+from app.config.classes.telefone import Telefone
 
-from app.auto.bot import Bot
-
-Bot(tarefa='siap', path=os.path.join(r'C:\Users\livia\OneDrive - Secretaria de Estado da Educação', 'Frequência Anual.xlsx'))
+# Telefone()
+cpf = CPF()

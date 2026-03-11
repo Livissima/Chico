@@ -21,7 +21,7 @@ class TelaBot(CTkFrame):
         # self.pack(expand=True, fill='both')
         self._configurar_layout()
         self._inserir_widgets()
-        print(f'{parâmetros.novo_diretório = }')
+        print(f'{parâmetros.diretório_base = }')
 
 
     def _configurar_layout(self):
@@ -81,6 +81,18 @@ class TelaBot(CTkFrame):
             x=10+150+150+80,
             y=y,
             largura=largura,
+        )
+        self.bt_servidores = Botão(
+            self,
+            # função=lambda: self.controller.alternador.abrir('telas_bot servidores'),
+            função=lambda: Bot(tarefa='servidores', parâmetros_web=None, path=parâmetros.diretório_base),
+            texto='Servidores',
+            fonte=('Arial', 20),
+            formato='bold',
+            x=10+80,
+            y=y+50,
+            largura=largura
+
         )
 
         self.bt_back = Botão(

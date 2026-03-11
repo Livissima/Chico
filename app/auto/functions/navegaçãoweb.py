@@ -11,9 +11,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.expected_conditions import presence_of_element_located, visibility_of_element_located, \
     element_to_be_clickable, staleness_of
 
-from app.auto.data.sites.propriedades import Propriedades
-from app.auto.functions.javascript import SCRIPT_OBTER_TABELAS_SIMPLES, SCRIPT_OBTER_TABELAS_FICHAS, \
-    SCRIPT_SELECIONAR_DISPARANDO_EVENTO
+from app.auto.data.sites.propriedadesweb import PropriedadesWeb
+from app.auto.functions.javascript import Javascript
 from app.config.parâmetros import parâmetros
 
 
@@ -22,8 +21,8 @@ class NavegaçãoWeb :
 
     def __init__(self, master: Chrome, site: str) :
         self.master = master
-        self._pp = Propriedades(site)
-        self.__timeout = 10
+        self._pp = PropriedadesWeb(site)
+        self.__timeout = 30
         self.__args_wait = {'driver' : self.master, 'timeout' : self.__timeout}
 
     def clicar(
@@ -113,6 +112,9 @@ class NavegaçãoWeb :
             WebDriverWait(**self.__args_wait).until(presence_of_element_located(elemento))
             WebDriverWait(**self.__args_wait).until(visibility_of_element_located(elemento))
             el = WebDriverWait(**self.__args_wait).until(element_to_be_clickable(elemento))
+
+            self.master.execute_script("arguments[0].removeAttribute('readonly');", el)
+
             el.clear()  # limpa antes de digitar
             el.send_keys(string)
             self.aguardar_página()
@@ -132,7 +134,6 @@ class NavegaçãoWeb :
             return elemento_web
         except Exception as e:
             print(f'Erro na obtenção de elemento: {seletor}\n{e}')
-
 
     def _obter_valor(self, *chaves) -> str :
         xpaths = self._pp.xpaths
@@ -183,11 +184,11 @@ class NavegaçãoWeb :
             self,
             nome_arquivo,
             pasta_destino,
-            tipo: Literal['fichas', 'contatos', 'gêneros', 'situações', 'sondagem'] | str
+            tipo: Literal['fichas', 'contatos', 'gêneros', 'situações', 'sondagem', 'servidores'] | str | None = None
     ) -> bool:
 
         inicio = time.time()
-        dados = self.__obter_tabelas(tipo)
+        dados = self.obter_tabelas(tipo)
 
         if dados:
             path_json = os.path.join(pasta_destino, f'{nome_arquivo}.json')
@@ -211,9 +212,8 @@ class NavegaçãoWeb :
                 self._selecionar_turma_sige(turma)
                 yield série, turma
 
-    def obter_turmas_siap(self) -> list[str]:
+    def obter_xpaths_turmas_siap(self) -> list[str]:
         container_turmas = self.master.find_element(By.CLASS_NAME, 'containerTurmaTurno')
-        # print(container_turmas)
         lista_xpath = []
         elementos_turmas = container_turmas.find_elements(By.CLASS_NAME, 'listaTurmas ')
 
@@ -221,18 +221,23 @@ class NavegaçãoWeb :
             xpath_turma = f'/html/body/form/div[4]/div[2]/div/div/div/div[1]/div[{índice}]'
             lista_xpath.append(xpath_turma)
 
-        print(f'{lista_xpath = }')
         return lista_xpath
 
-    def selecionar_dropdown(self, *chaves, valor = None, texto = None, elemento_espera = None) :
-        script = SCRIPT_SELECIONAR_DISPARANDO_EVENTO
-        xpaths = self._pp.xpaths
+    def selecionar_dropdown(self, by: Literal['xpath', 'xpath livre'], *chaves: str, valor=None, texto=None, elemento_espera=None) :
+        xpath: str = ''
 
-        for chave in chaves :
-            xpaths = xpaths[chave]
-        xpath = xpaths
+        if by == 'xpath' :
+            xpaths = self._pp.xpaths
+
+            for chave in chaves :
+                xpaths = xpaths[chave]
+            xpath = xpaths
+
+        if by == 'xpath livre' :
+            xpath = chaves[0]
 
         seletor: tuple[str, str] = (By.XPATH, xpath)
+        # print(f'{seletor = }')
 
         try :
             WebDriverWait(**self.__args_wait).until(presence_of_element_located(seletor))
@@ -240,13 +245,15 @@ class NavegaçãoWeb :
             WebDriverWait(**self.__args_wait).until(element_to_be_clickable(seletor))
             elemento = self.master.find_element(*seletor)
             if valor:
-                self.master.execute_script(script, elemento, valor)
+                Select(elemento).select_by_value(valor)
+                # self.master.execute_script(Javascript.selecionar, elemento, valor)
             if texto:
                 Select(elemento).select_by_visible_text(texto)
 
             try:
                 WebDriverWait(self.master, 2).until(staleness_of(elemento))
-            except Exception():
+
+            except Exception:
                 pass
 
             self._esperar_por_carregamento()
@@ -286,17 +293,16 @@ class NavegaçãoWeb :
     def _esperar_por_mudanca_estado(self, elemento, atributo, valor_antigo) :
         WebDriverWait(**self.__args_wait).until(lambda driver : elemento.get_attribute(atributo) != valor_antigo)
 
-    def __obter_tabelas(self, tipo: str) -> list[str] | list[dict[str, str]]:
-        tipos_simples = {'contatos', 'situações', 'gêneros', 'sondagem'}
+    def obter_tabelas(self, tipo: str | None = None) -> list[str] | list[dict[str, str]]:
         script = """"""
 
-        if tipo in tipos_simples :
+        if tipo != 'fichas' or tipo is None:
             elemento = (By.CSS_SELECTOR, 'table.tabela')
             WebDriverWait(**self.__args_wait).until(presence_of_element_located(elemento))
-            script = SCRIPT_OBTER_TABELAS_SIMPLES
+            script = Javascript.obter_tabelas
 
         if tipo == 'fichas' :
-            script = SCRIPT_OBTER_TABELAS_FICHAS
+            script = Javascript.obter_fichas
 
         dados = self.master.execute_script(script)
         return dados
@@ -457,3 +463,22 @@ class NavegaçãoWeb :
             elif valor == valor_procurado :
                 return caminho + [chave]
         return None
+
+
+
+    #todo: método temporário. Preciso reorganizar junto com os demais métodos de navegação
+    def reiniciar_disciplinas_diário(self, ano):
+        self.__acessar_painel_frequência()
+        self.__preencher_filtro_de_linhas(ano)
+
+    def __acessar_painel_frequência(self) :
+        self.clicar('xpath', 'menu sistema')
+        self.clicar('xpath', 'diário', '_xpath')
+
+    def __preencher_filtro_de_linhas(self, ano) :
+        seletor_tabela_update = (By.ID, 'cphFuncionalidade_UpdatePanel1')
+
+        self.digitar_xpath('diário', 'ano', string=ano)
+        self.clicar('xpath livre', '//*[@id="FormularioPrincipal"]/div[4]/div[2]/div/div[1]/div')  # clicar fora
+        self.selecionar_dropdown('xpath', 'diário', 'bimestre', valor='3')
+        self.clicar('xpath', 'diário', 'botão listar', elemento_espera=seletor_tabela_update)

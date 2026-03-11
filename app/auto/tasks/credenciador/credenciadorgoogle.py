@@ -6,7 +6,7 @@ import pandas as pd
 from pandas import DataFrame
 
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
-from app.auto.data.sites.propriedades import Propriedades
+from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 
 
 class CredenciadorGoogle:
@@ -26,7 +26,7 @@ class CredenciadorGoogle:
 
         self.master: Edge = navegador
         self.nv = NavegaçãoWeb(navegador, 'google')
-        self.pp = Propriedades(site='google')
+        self.pp = PropriedadesWeb(site='google')
 
         self.gerenciar(
             estudante=estudante,
@@ -80,7 +80,7 @@ class CredenciadorGoogle:
     #             self._tentar_senha(senha)
     #             self._checar_alerta(índice, dict_senhas)
     #
-    #             print('O Loop ```for índice, senha in dict_senhas.items() :``` , do método `self.gerenciar_google()`, chegou ao fim')
+    #             print('O Loop ```for índice, senha in dict_senhas.items() :``` , do méthodo `self.gerenciar_google()`, chegou ao fim')
     #
     #
     #

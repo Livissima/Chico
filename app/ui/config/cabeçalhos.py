@@ -16,7 +16,9 @@ class Cabeçalhos:
             'telas_bot sige' : self.bot_sige,
             'telas_bot credenciais': self.bot_credenciais,
             'estatísticas' : self.estatísticas,
-            'telas_bot siap' : self.bot_siap
+            'telas_bot siap' : self.bot_siap,
+            'frequência' : self.frequência,
+            'telas_bot servidores' : self.bot_servidores
         }
         setar = config[tela]
 
@@ -96,4 +98,20 @@ class Cabeçalhos:
             'título' : f'{PROJECT_NAME} - Estatísticas',
             'cabeçalho' : 'Estatísticas',
             'descrição' : parâmetros.nome_ue
+        }
+
+    @property
+    def frequência(self):
+        return {
+            'título' : f'{PROJECT_NAME} - Frequência',
+            'cabeçalho' : 'Frequência',
+            'descrição' : parâmetros.nome_ue
+        }
+
+    @property
+    def bot_servidores(self):
+        return {
+            'título' : f'{PROJECT_NAME} - Servidores',
+            'cabeçalho' : 'Servidores',
+            'descrição' : 'Dossiê de servidores'
         }

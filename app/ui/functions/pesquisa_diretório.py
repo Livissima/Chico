@@ -3,7 +3,7 @@ from tkinter.filedialog import askdirectory
 
 from customtkinter import CTkFrame
 
-from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
+from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
 from app.config.parâmetros import parâmetros
 
 
@@ -27,25 +27,25 @@ class PesquisaDiretório(CTkFrame):
 
     def pesquisar(self):
 
-        print(f'Atual: {parâmetros.novo_diretório}')
+        print(f'Atual: {parâmetros.diretório_base}')
 
-        self.widget_input.att(parâmetros.novo_diretório)
+        self.widget_input.att(parâmetros.diretório_base)
 
         self.obter_diretório()
 
-        parâmetros.novo_diretório = self.path
+        parâmetros.diretório_base = self.path
 
         self.classe._bt_desfazer.atualizar_visibilidade(
-            parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO
+            parâmetros.diretório_base != DIRETÓRIO_BASE_PADRÃO
         )
 
-        if parâmetros.novo_diretório == DIRETÓRIO_BASE_PADRÃO:
-            print(f'Alteração cancelada. Ficou {parâmetros.novo_diretório}')
+        if parâmetros.diretório_base == DIRETÓRIO_BASE_PADRÃO:
+            print(f'Alteração cancelada. Ficou {parâmetros.diretório_base}')
 
             return
 
-        if parâmetros.novo_diretório != DIRETÓRIO_BASE_PADRÃO:
-            print(f'Alterado para: {parâmetros.novo_diretório}')
+        if parâmetros.diretório_base != DIRETÓRIO_BASE_PADRÃO:
+            print(f'Alterado para: {parâmetros.diretório_base}')
             self.classe._tx_feedback.att(f'Diretório base atualizado.')
             return
 
@@ -64,7 +64,7 @@ class PesquisaDiretório(CTkFrame):
             return
 
         if not pesquisa:
-            self.path = parâmetros.novo_diretório
+            self.path = parâmetros.diretório_base
             self.widget_input.delete(0, 'end')
             self.widget_input.insert(0, self.path)
 

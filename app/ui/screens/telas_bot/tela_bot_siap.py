@@ -1,31 +1,25 @@
-import os.path
 import time
 
 from customtkinter import CTkFrame, CTk
 
 from app.auto.bot import Bot
-from app.auto.tasks import ConsultaDiasLetivos
 
-from app.config.app_config import DIRETÓRIO_BASE_PADRÃO
 from app.config.parâmetros import parâmetros
-from app.ui.functions.desfazimento import Desfazimento
-from app.ui.widgets import Botão, Input, CheckBox, Texto, Dropdown
+from app.ui.widgets import Botão, CheckBox, Texto, Dropdown
 from typing import TYPE_CHECKING
 
 from app.ui.config.cabeçalhos import Cabeçalhos
-from app.ui.functions.pesquisa_diretório import PesquisaDiretório
-from app.ui.widgets.caixa_data import CaixaData
 
 if TYPE_CHECKING :
-    from app.ui.screens.janela import Janela
+    pass
 
-ANO = 2025
+ANO = 2026
 
 class TelaBotSiap(CTkFrame) :
     def __init__(self, master, controller: "Janela") :
         super().__init__(master)
         self.master: CTk = master
-        self.controller = controller
+        self.controller  = controller
 
         self._configurar_layout()
         self._inserir_widgets()
@@ -108,7 +102,7 @@ class TelaBotSiap(CTkFrame) :
 
         self.bt_iniciar = Botão(
             self,
-            função=lambda: Bot(tarefa='siap', path=parâmetros.novo_diretório ),
+            função=lambda: Bot(tarefa='siap', parâmetros_web=None, path=parâmetros.diretório_base),
             # função=lambda: print(f'{self._dd_dia_inicial.valor_selecionado = }, {self._dd_mês_inicial.valor_selecionado = }'),
             texto='Iniciar',
             formato='bold',
@@ -128,7 +122,7 @@ class TelaBotSiap(CTkFrame) :
 
         self.bt_modulação = Botão(
             self,
-            função= lambda: Bot(tarefa='obter modulações', path=parâmetros.novo_diretório),
+            função= lambda: Bot(tarefa='obter modulações', parâmetros_web=None, path=parâmetros.diretório_base),
             largura=100
         )
 
@@ -148,7 +142,7 @@ class TelaBotSiap(CTkFrame) :
         print('clicado')
         time.sleep(1)
         try:
-            Bot(tarefa='consultar dias letivos', ano=ANO, path=parâmetros.novo_diretório)
+            Bot(tarefa='consultar dias letivos', parâmetros_web=None, ano=ANO, path=parâmetros.diretório_base)
             dias = parâmetros.lista_dias_letivos
             self._tx_feedback.att(f'Dias obtidos em {ANO}: {len(dias)}')
         except Exception as e:

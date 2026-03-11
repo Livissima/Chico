@@ -1,76 +1,76 @@
 import os
-from typing import Literal
+from os import PathLike
+from pathlib import Path
+from typing import Literal, Any
 from pandas import DataFrame, ExcelWriter
 
-#todo: Adicionar método para definir diretório_fonte de output pela UI
-#todo: adicionar método para salvar os paths selecionados
-
-class ExportaçãoXLSX:
-    def __init__(self, consulta, path):
-        self.consulta = consulta
-        self.path = path
-        self._exportar_xlsx()
-
-    def _exportar_xlsx(self):
-        with ExcelWriter(
-                path=os.path.join(self.path, 'Database.xlsx'),
-                engine='xlsxwriter',
-                date_format='DD/MM/YYYY'
-        ) as self.writer:
-            self._planilhar(nome='Base Ativa', situação='Cursando')
-            self._planilhar(nome='Base Bruta')
-            self._planilhar(nome='Transferidos', situação='(transferido)')
+from app.core import ConsultaEstudantes
 
 
-    def _planilhar(self, nome: str, situação: Literal['Cursando', '(transferido)'] | None = None):
-        df = DataFrame()
+class ExportaçãoXLSX :
+    NOME_XLSX = 'Database'
 
-        if situação is None:
-            df: DataFrame = self.consulta
-            df.to_excel(self.writer, sheet_name=nome)
+    def __init__(self, consulta: ConsultaEstudantes, path: Path | PathLike) -> None :
+        self._consulta = consulta
+        self._gerar_xlsx(path)
 
-        elif situação == 'Cursando':
-            df: DataFrame = self.consulta[self.consulta['Situação'] == 'Cursando']
-            df.to_excel(self.writer, sheet_name=nome)
+    def _gerar_xlsx(self, path: Path) -> None :
+        _path = Path(path, f'{self.NOME_XLSX}.xlsx')
+        with ExcelWriter(path=_path, engine='xlsxwriter', date_format='DD/MM/YYYY') as writer :
+            self._gerar_planilha(writer, self._df_ativa, 'Base Ativa')
+            self._gerar_planilha(writer, self._df_bruta, 'Base Bruta')
+            self._gerar_planilha(writer, self._df_transferidos, 'Transferidos')
 
-        elif situação == '(transferido)':
-            df: DataFrame = self.consulta[self.consulta['Situação'] == '(transferido)']
-            df.to_excel(self.writer, sheet_name=nome)
+    def _gerar_planilha(self, writer: ExcelWriter, df: DataFrame, nome_planilha: str) :
+        df.to_excel(writer, sheet_name=nome_planilha, index=False)
+        pasta_de_trabalho = writer.book
+        planilha = writer.sheets[nome_planilha]
 
+        formatos = self._formatos(pasta_de_trabalho)
+        formato_fonte = formatos['fonte']
+        formato_cabeçalho = formatos['cabeçalho']
 
-        self._formatar_planilha(df=df, nome_planilha=nome)
+        planilha.set_column(0, df.shape[1] - 1, None, formato_fonte)
 
-    def _formatar_planilha(self, df, nome_planilha):
-        # TODO: Organizar e modular essa merda aqui
+        for col_num, valor in enumerate(df.columns.values) :
+            planilha.write(0, col_num, valor, formato_cabeçalho)
 
-        fonte_dict = {
-            "font_name": "Times New Roman",
-            "font_size": 12
-        }
-        formato_tabela = {
-            'name': nome_planilha.replace(' ', '_'),
-            'columns': [{'header': 'Índice'}] + [{'header': col} for col in self.consulta.columns],
-            'style': 'Table Style Medium 2',
-            'autofilter': True
-        }
+        self._gerar_tabela(df, pasta_de_trabalho, planilha, nome_planilha)
 
-        pasta_de_trabalho = self.writer.book
-        planilha = self.writer.sheets[nome_planilha]
-
-        fonte_geral = pasta_de_trabalho.add_format(fonte_dict)
-        sem_borda = pasta_de_trabalho.add_format({'border': 0})
-
-        planilha.set_column(0, df.shape[1], None, fonte_geral)
-        planilha.set_row(0, None, sem_borda)
-
+    @staticmethod
+    def _gerar_tabela(df, pasta, planilha, nome) -> None :
         linhas = df.shape[0]
-        colunas = df.shape[1] + 1
-        planilha.add_table(0, 0, linhas, colunas - 1, formato_tabela)
+        colunas = df.shape[1]
+
+        # Configurar a tabela
+        planilha.add_table(0, 0, linhas, colunas - 1, {
+            'name' : nome.replace(' ', '_'), 'columns' : [{'header' : col} for col in df.columns],
+            'style' : 'Table Style Medium 2', 'autofilter' : True
+        })
         planilha.hide_gridlines(2)
 
-        for linha in range(1, linhas, + 1):
-            planilha.write(linha, 0, df.index[linha - 1], sem_borda)
+    @staticmethod
+    def _formatos(pasta_) -> dict[str, Any] :
+        formato_fonte = pasta_.add_format({
+            "font_name" : "Times New Roman", "font_size" : 12
+        })
 
-    def _localizar_coluna(self, coluna: str):
-        i = self.consulta.columns.get_loc(coluna) + 1
-        return i
+        formato_cabeçalho = pasta_.add_format({
+            "font_name" : "Times New Roman", "font_size" : 12, "bold" : True, "bg_color" : "#D3D3D3", "border" : 1
+        })
+
+        return {
+            'fonte' : formato_fonte, 'cabeçalho' : formato_cabeçalho
+        }
+
+    @property
+    def _df_ativa(self) -> DataFrame :
+        return self._consulta[self._consulta['Situação'] == 'Cursando'].copy()
+
+    @property
+    def _df_bruta(self) -> DataFrame :
+        return self._consulta.copy()
+
+    @property
+    def _df_transferidos(self) -> DataFrame :
+        return self._consulta[self._consulta['Situação'] == '(transferido)'].copy()

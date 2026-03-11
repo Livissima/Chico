@@ -2,6 +2,8 @@ import os
 from pathlib import Path
 from pandas import DataFrame
 
+from app.core import ConsultaEstudantes
+
 
 class ExportaçãoCSV:
 
@@ -18,18 +20,11 @@ class ExportaçãoCSV:
         'Estudante', 'Data de Nascimento', 'Turma', 'Telefone 1', 'Telefone 2', 'Telefone 3', 'Irmão 1', 'Irmão 2'
     ]
 
-    def __init__(self, consulta, path: Path):
-        self.path = os.path.join(path, 'Contatos Google.csv')
-        self.consulta = consulta
+    def __init__(self, consulta: ConsultaEstudantes, path: Path):
+        self._exportar(consulta, path)
 
-        self.csv = self.atribuir(self.consulta)
-
-        self._exportar()
-
-    def atribuir(self, consulta):
-
+    def _adaptar_df(self, consulta):
         colunas_dict: dict = {
-
             'First Name'          : consulta.apply(
                 lambda linha: f"{linha['Estudante']} - Transferido" if linha['Situação'] == '(transferido)'
                 else f"{linha['Estudante']} - {linha['Turma']}", axis=1
@@ -42,6 +37,8 @@ class ExportaçãoCSV:
         }
         return DataFrame(data=colunas_dict, columns=self.colunas_CSV)
 
-    def _exportar(self):
-        self.csv.to_csv(self.path)
+
+    def _exportar(self, df, _path):
+        df_adaptado = self._adaptar_df(df)
+        df_adaptado.to_csv(Path(_path, 'Contatos Google.csv'))
 

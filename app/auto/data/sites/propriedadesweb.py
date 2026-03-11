@@ -1,0 +1,33 @@
+import datetime
+from app.auto.data.sites.google import Google
+from app.auto.data.sites.netescola import NetEscola
+from app.auto.data.sites.siap import Siap
+from app.auto.data.sites.sige import Sige
+from app.auto.data.sites.tipagem import TipagemPropriedades
+
+
+class PropriedadesWeb(TipagemPropriedades) :
+    #todo: Esta classe está extremamente acoplada com dezenas de outras classes.
+    # Pensei em fazer uma singleton, mas os atributos dependem do argumento passado na instanciação
+
+    def __init__(self, site: str | None = None) :
+        _site = self.__sites.get(site.lower())()
+
+        for attr in self.atributos :
+            setattr(self, attr, getattr(_site, attr, None))
+
+    @property
+    def __sites(self) :
+        return {
+            'sige' : Sige,
+            'siap' : Siap,
+            'netescola' : NetEscola,
+            'google' : Google
+        }
+
+    @property
+    def atributos(self) :
+        return ['url', 'xpaths', 'caminhos', 'credenciais', 'ids', 'css_selectors']
+
+    def __getattr__(self, item) :
+        return getattr(self.site, item)
