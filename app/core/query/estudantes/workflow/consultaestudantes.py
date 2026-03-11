@@ -37,7 +37,7 @@ class ConsultaEstudantes:
     @staticmethod
     def _tratar(dfs_leituras: dict) -> dict:
         return {
-            tipo : ProcessamentoInicial(leitura.dataframe, tipo)
+            tipo : ProcessamentoInicial(leitura.leitura, tipo)
             for tipo, leitura in dfs_leituras.items()
         }
 
