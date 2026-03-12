@@ -9,7 +9,7 @@ import time
 from app.config.parâmetros.getters.tempo import tempo
 
 
-class Servidores:
+class DownloadDadosServidores:
     _nome_relatório_simples = 'lista_servidores'
 
     def __init__(

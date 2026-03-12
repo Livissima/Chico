@@ -1,10 +1,10 @@
 from typing import Literal
 from app.auto.functions.normalizar import normalizar_unicode, normalizar_dicionário
-from app.auto.tasks import ScrapingSige, ConsultaDiasLetivos
+from app.auto.tasks import DownloadFotosEstudantes, ConsultaDiasLetivos
 from app.auto.tasks.credenciador.credenciador import Credenciador
-from app.auto.tasks.sige.servidores import Servidores
+from app.auto.tasks.sige.downloaddadosservidores import DownloadDadosServidores
 # from app.auto.tasks.sige.uniformizador import
-from app.auto.tasks.sige.downloads import Downloads
+from app.auto.tasks.sige.downloaddadosestudantes import DownloadDadosEstudantes
 # from app.auto.tasks.credenciador.credenciador import Credenciador
 from app.auto.tasks.siap.frequenciador.frequenciador import Frequenciador
 from selenium import webdriver
@@ -47,15 +47,15 @@ class Bot:
         argumentos = self._argumentos
 
         tarefas = {
-            'fotos' : lambda: ScrapingSige(**argumentos(tarefa)),
+            'fotos' : lambda: DownloadFotosEstudantes(**argumentos(tarefa)),
             'siap'  : lambda: Frequenciador(**argumentos(tarefa)),
             'sondagem'  : lambda: Sondagem(**argumentos(tarefa)),
-            'downloads' : lambda: Downloads(**argumentos(tarefa)),
+            'downloads' : lambda: DownloadDadosEstudantes(**argumentos(tarefa)),
             'credenciar' : lambda: Credenciador(**argumentos(tarefa)),
             'consultar dias letivos' : lambda: ConsultaDiasLetivos(**argumentos(tarefa)),
             'obter modulações' : lambda: ObtençãoDeModulação(**argumentos(tarefa)),
             # 'uniformizar' : lambda: Uniformizador(**argumentos(tarefa))
-            'servidores' : lambda: Servidores(**argumentos(tarefa))
+            'servidores' : lambda: DownloadDadosServidores(**argumentos(tarefa))
         }
         return tarefas[tarefa]()
 

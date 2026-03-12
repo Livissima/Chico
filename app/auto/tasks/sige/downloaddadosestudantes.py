@@ -6,7 +6,7 @@ from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from app.config.parâmetros.getters.tempo import tempo
 
 
-class Downloads:
+class DownloadDadosEstudantes:
     #todo: Talvez esta classe deva ser renomeada para 'Estudantes' para manter a coerência com as outras tasks de downloads.
     def __init__(
             self,

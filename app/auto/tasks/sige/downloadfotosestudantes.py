@@ -11,10 +11,8 @@ from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from app.config.parâmetros import parâmetros
 
 
-class ScrapingSige:
-    """
-    Ideia de tarefa para visitar as fichas de todos os estudantes e extrair todos os dados disponíveis em "ficha do aluno"
-    """
+class DownloadFotosEstudantes:
+
     def __init__(
             self,
             navegador: Chrome,
@@ -70,11 +68,12 @@ class ScrapingSige:
             self._nv.clicar('xpath', 'ficha aluno', 'limpar')
             self._nv.aguardar_página(1)
 
-
-
     def _download_foto(self, estudante, path_destino) :
         elemento = self.master.find_element(By.CSS_SELECTOR, '#fotoAluno')
         url_elemento = elemento.get_attribute('src')
+        print(f'{url_elemento = }')
+
+        os.makedirs(path_destino, exist_ok=True)  # ← mover para cá
 
         if not url_elemento.startswith('data:image/png;base64,') :
             try :
@@ -88,23 +87,20 @@ class ScrapingSige:
                 with open(destino, 'wb') as file :
                     file.write(response.content)
 
-                    print(f'Foto de {estudante} baixada.')
-
+                print(f'Foto de {estudante} baixada.')
                 return
 
             except Exception as e :
                 print(f'Erro ao baixar foto de {estudante}: {e}')
-
+                return  # ← importante também
 
         base64_data = url_elemento.split(',')[1]
-
         image_data = base64.b64decode(base64_data)
-
-        os.makedirs(path_destino, exist_ok=True)
 
         destino = os.path.join(path_destino, f'{estudante}.png')
 
         with open(destino, 'wb') as file :
             file.write(image_data)
-            print(f'Foto de {estudante} baixada.')
+
+        print(f'Foto de {estudante} baixada.')
 
