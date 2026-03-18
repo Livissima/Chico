@@ -1,11 +1,20 @@
-import datetime
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, List, Tuple
+from dataclasses import dataclass, field
 
-class TipagemPropriedades:
-    url: Optional[str] = None
-    xpaths: Optional[Dict[str, Any]] = None
-    caminhos: Optional[Dict[str, Any]] = None
-    credenciais: Optional[Dict[str, Any]] = None
-    ids: Optional[Dict[str, Any]] = None
-    css_selectors: Optional[Dict[str, Any]] = None
+@dataclass(frozen=True)
+class Credenciais:
+    id: str
+    senha: str
+    tipo: Optional[str] = None
 
+
+@dataclass
+class SiteConfig:
+    nome: str
+    url: str
+    xpaths: Dict = field(default_factory=dict)
+    ids: Dict = field(default_factory=dict)
+    css_selectors: Dict = field(default_factory=dict)
+    caminhos: Dict[str, List[Tuple]] = field(default_factory=dict)
+    credenciais_padrão: Optional[Dict[str, Credenciais]] = None
+    lista_usuários: Optional[Dict[str, Credenciais]] = None
