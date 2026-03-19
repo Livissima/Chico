@@ -97,5 +97,5 @@ class Credenciador:
         sys.stdout.flush()
 
     def _logon(self) -> None:
-        self.master.get(self.pp.url)
+        self.master.get(self.pp.urls)
         self.master.maximize_window()

@@ -88,11 +88,12 @@ class NavegaçãoWeb :
             except Exception as js_error :
                 raise f"Falha no clique via JavaScript: {js_error}"
 
-    def caminhar(self, destino: str) -> None :
-        print(f'    Caminhando para {destino}')
-        destinos = self._pp.caminhos
-        for tupla in destinos[destino] :
-            self.clicar('xpath', *tupla)
+    def acessar_url(self, destino: str) -> None :
+        print(f'    → Caminhando para {destino}')
+        destinos = self._pp.urls
+        self.master.get(destinos[destino])
+        self.aguardar_página()
+
 
     def acessar_página(self, url):
         self.master.get(url)

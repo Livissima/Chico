@@ -32,7 +32,7 @@ class DownloadFotosEstudantes:
         self._obter_fotos(turmas)
 
     def _logon(self):
-        self.master.get(self._pp.url)
+        self.master.get(self._pp.urls)
         self.master.maximize_window()
         self._nv.digitar_xpath('misc', 'input id', string=self._pp.credenciais['id'])
         self._nv.digitar_xpath('misc', 'input senha', string=self._pp.credenciais['senha'])
@@ -41,7 +41,7 @@ class DownloadFotosEstudantes:
         self._nv.clicar('xpath', 'misc', 'alerta')
 
     def _obter_fotos(self, turmas: list):
-        self._nv.caminhar('ficha aluno')
+        self._nv.acessar_url('ficha aluno')
 
         df = self._leitura_df[['Turma', 'Estudante', 'Matrícula']]
         df = df[df['Turma'].isin(turmas)]

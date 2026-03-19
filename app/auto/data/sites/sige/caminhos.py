@@ -11,87 +11,38 @@ class Caminhos:
             'sondagem' : self._sondagem,
             'ficha aluno' : self._ficha_aluno,
             'modulações' : self._modulações,
-            'uniformes' : self._uniformes
         }
 
     @property
-    def _ir_lápis_docs(self):
-        return 'lápis', 'documentos'
-
-    @property
-    def _ir_relatórios(self):
-        return 'lápis docs', 'relatórios'
-
-    @property
     def _fichas(self):
-        return [
-            self._ir_lápis_docs,
-            (*self._ir_relatórios, '_xpath'),
-            (*self._ir_relatórios, 'dados cadastrais', '_xpath'),
-            (*self._ir_relatórios, 'dados cadastrais', 'ficha do aluno')
-        ]
+        return r'https://sige.educacao.go.gov.br/sige/modulos/Academico/Relatorios/ave_fichadoaluno_con.asp'
 
     @property
     def _contatos(self):
-        return [
-            self._ir_lápis_docs,
-            (*self._ir_relatórios, '_xpath'),
-            (*self._ir_relatórios, 'dados cadastrais', '_xpath'),
-            (*self._ir_relatórios, 'dados cadastrais', 'contatos dos alunos')
-        ]
+        return r'https://sige.educacao.go.gov.br/sige/modulos/Academico/Relatorios/Ave_telefones_con.asp'
 
     @property
     def _situações(self):
-        return [
-            self._ir_lápis_docs,
-            (*self._ir_relatórios, '_xpath'),
-            (*self._ir_relatórios, 'alunos', '_xpath'),
-            (*self._ir_relatórios, 'alunos', 'situação')
-        ]
+        return r'https://sige.educacao.go.gov.br/sige/modulos/Academico/Relatorios/Ave_situacao_con.asp'
 
     @property
     def _gêneros(self):
-        return [
-            self._ir_lápis_docs,
-            (*self._ir_relatórios, '_xpath'),
-            (*self._ir_relatórios, 'acomp. pedagógico', '_xpath'),
-            (*self._ir_relatórios, 'acomp. pedagógico', 'alunos por idade')
-        ]
+        return r'https://sige.educacao.go.gov.br/sige/modulos/Academico/Relatorios/Ave_alunosPorIdade_con.asp'
+
 
     @property
     def _quantitativo(self):
-        return [
-            self._ir_lápis_docs,
-            (*self._ir_relatórios, '_xpath'),
-            (*self._ir_relatórios, 'alunos', '_xpath'),
-            (*self._ir_relatórios, 'alunos', 'quantitativo')
-        ]
+        return r'https://sige.educacao.go.gov.br/sige/modulos/Academico/Relatorios/Ave_quantitativoAlunos_con.asp'
 
     @property
     def _sondagem(self):
-        return [
-            self._ir_lápis_docs,
-            (*self._ir_relatórios, '_xpath'),
-            (*self._ir_relatórios, 'dados cadastrais', '_xpath'),
-            (*self._ir_relatórios, 'dados cadastrais', 'turmas')
-        ]
+        return r'https://sige.educacao.go.gov.br/sige/modulos/Academico/Relatorios/Ave_turmas_con.asp'
 
     @property
     def _ficha_aluno(self):
-        return [
-            ('lápis', 'alunos'), ('alunos', 'ficha do aluno')
-        ]
+        return 'https://sige.educacao.go.gov.br/sige/modulos/academico/ave_aluno_cad.asp'
 
     @property
     def _modulações(self):
-        return [
-            self._ir_lápis_docs,
-            (*self._ir_relatórios, '_xpath'),
-            (*self._ir_relatórios, 'dossiê do servidor', '_xpath'),
-            (*self._ir_relatórios, 'dossiê do servidor', 'modulação'),
-            (*self._ir_relatórios, 'dossiê do servidor', 'geral')
-        ]
+        return r'https://sige.educacao.go.gov.br/sige/modulos/Dossie/Relatorios/ddv_docencia_con.asp'
 
-    @property
-    def _uniformes(self):
-        return 'lápis', 'uniformes'

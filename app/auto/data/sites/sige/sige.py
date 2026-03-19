@@ -7,38 +7,9 @@ from app.auto.data.sites.tipagem import SiteConfig
 from app.config.settings.env_config import ID_SIGE, SENHA_SIGE
 
 
-# class Sige :
-#
-#     @property
-#     def url(self):
-#         return Urls().url_principal
-#
-#     @property
-#     def credenciais(self) :
-#         return {
-#             'id' : ID_SIGE,
-#             'senha' : SENHA_SIGE
-#         }
-#
-#     @property
-#     def css_selectors(self) -> dict[str, str] :
-#         return CssSelectors().css_selectors
-#
-#     @property
-#     def ids(self) -> dict[str, str] :
-#         return Ids().ids
-#
-#     @property
-#     def xpaths(self) :
-#         return Xpaths().xpaths
-#
-#     @property
-#     def caminhos(self) -> dict[str, list[tuple]] :
-#         return Caminhos().caminhos
-
 Sige = SiteConfig(
     nome='sige',
-    url=Urls().url_principal,
+    urls=Urls().tela_login,
     xpaths=Xpaths().xpaths,
     ids=Ids().ids,
     css_selectors=CssSelectors().css_selectors,

@@ -25,7 +25,7 @@ class DownloadDadosEstudantes:
         self.master.quit()
 
     def _logon(self) -> None:
-        self.master.get(self._pp.url)
+        self.master.get(self._pp.urls)
         self.master.maximize_window()
         self._nv.digitar_xpath('misc', 'input id', string=self._pp.credenciais_padrão['id'])
         self._nv.digitar_xpath('misc', 'input senha', string=self._pp.credenciais_padrão['senha'])
@@ -38,7 +38,7 @@ class DownloadDadosEstudantes:
             self.__baixar_alvo(alvo.lower())
 
     def __baixar_alvo(self, alvo: str) -> None:
-        self._nv.caminhar(alvo.lower())
+        self._nv.acessar_url(alvo.lower())
 
         for série, turma in self._nv.iterar_turmas_sige():
             self.__capturar(alvo.lower(), turma)

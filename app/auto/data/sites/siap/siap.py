@@ -35,7 +35,7 @@ from app.config.settings.env_config import CREDENCIAIS_SIAP
 
 Siap = SiteConfig(
     nome = 'siap',
-    url=Urls().url_principal,
+    urls=Urls().url_principal,
     xpaths=Xpaths().xpaths,
     ids=Ids().ids,
     css_selectors=CssSelectors().css_selectors,

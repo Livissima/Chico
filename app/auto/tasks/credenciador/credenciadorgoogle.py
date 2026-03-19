@@ -40,7 +40,7 @@ class CredenciadorGoogle:
     def gerenciar(self, estudante, matrícula, email, dn, nova_senha) :
         print(f'{estudante = }')
 
-        self.nv.acessar_página(self.pp.url)
+        self.nv.acessar_página(self.pp.urls)
 
         self.nv.digitar_xpath('input email', string=email)
         print(f'Email digitado: {email}')

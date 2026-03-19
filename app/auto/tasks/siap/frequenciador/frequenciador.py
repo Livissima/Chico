@@ -35,7 +35,7 @@ class Frequenciador :
 
 
     def _executar(self):
-        self._nv.acessar_página(self._pp.url)
+        self._nv.acessar_página(self._pp.urls)
 
         for usuário, credenciais in self._pp.credenciais.items():
             print(f'\n → Iterando sobre {usuário}')
@@ -85,4 +85,4 @@ class Frequenciador :
     def __recomeçar(self):
         self._master.delete_all_cookies()
         time.sleep(2)
-        self._master.get(self._pp.url)
+        self._master.get(self._pp.urls)
