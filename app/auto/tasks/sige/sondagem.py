@@ -47,7 +47,7 @@ class Sondagem:
         print(f'Sucesso!\n{json.dumps(resumo, indent=4, ensure_ascii=False)}')
 
     def _logon(self):
-        self.master.get(self._pp.url)
+        self.master.get(self._pp.urls)
         self.master.maximize_window()
         self._nv.digitar_xpath('misc', 'input id', string=self._pp.credenciais['id'])
         self._nv.digitar_xpath('misc', 'input senha', string=self._pp.credenciais['senha'])
@@ -55,7 +55,7 @@ class Sondagem:
         self._nv.clicar('xpath', 'misc', 'alerta')
 
     def _obter_elemento_base(self):
-        self._nv.caminhar('sondagem')
+        self._nv.acessar_url('sondagem')
         print(f'caminhado para sondagem')
 
         self._nv.clicar('xpath', 'resumo', 'turmas', 'ativas')

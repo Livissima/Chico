@@ -54,7 +54,7 @@ class GerenciadorDeCredenciais :
             #     self.nv.aguardar_página()
             #
             if tipo == 'google' :
-                self.master.get(self.pp.url)
+                self.master.get(self.pp.urls)
                 self.gerenciar_google(estudante, email, senha_padrão, senha_padrão2, dn, nova_senha)
 
     def gerenciar_netescola(self, matrícula, dn, email, nova_senha) :

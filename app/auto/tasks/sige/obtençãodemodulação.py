@@ -27,7 +27,7 @@ class ObtençãoDeModulação:
         self.executar()
 
     def _logon(self) -> None:
-        self.master.get(self._pp.url)
+        self.master.get(self._pp.urls)
         self.master.maximize_window()
         self._nv.digitar_xpath('misc', 'input id', string=self._pp.credenciais['id'])
         self._nv.digitar_xpath('misc', 'input senha', string=self._pp.credenciais['senha'])
@@ -36,7 +36,7 @@ class ObtençãoDeModulação:
 
     def executar(self):
         self._logon()
-        self._nv.caminhar('modulações')
+        self._nv.acessar_url('modulações')
 
         for cpf in self.professores:
             self._nv.digitar_xpath('lápis docs', 'relatórios', 'dossiê do servidor', 'cpf', string=cpf)

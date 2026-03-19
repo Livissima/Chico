@@ -19,7 +19,7 @@ class TarefaBase(ABC):
             self.driver.quit()
 
     def _logon(self):
-        self.driver.get(self.config.url)
+        self.driver.get(self.config.urls)
         if self.config.nome == 'sige':
             creds = self.config.credenciais["admin"]
             self.nv.digitar_xpath('misc', 'input id', string=creds.id)

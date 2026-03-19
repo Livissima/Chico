@@ -11,7 +11,7 @@ class Credenciais:
 @dataclass
 class SiteConfig:
     nome: str
-    url: str
+    urls: str
     xpaths: Dict = field(default_factory=dict)
     ids: Dict = field(default_factory=dict)
     css_selectors: Dict = field(default_factory=dict)
