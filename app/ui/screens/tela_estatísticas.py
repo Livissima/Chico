@@ -2,14 +2,22 @@ from typing import TYPE_CHECKING
 
 from customtkinter import CTkFrame, CTk
 
-from ..config.cabeçalhos import Cabeçalhos
+# from ..config.cabeçalhos import Cabeçalhos
 from app.config.parâmetros import parâmetros
+from ..registry import RegistroTelas
 from ..widgets import Texto, Botão
 from ...auto.bot import Bot
+from ...config.__metadata__ import PROJECT_NAME
 
 if TYPE_CHECKING:
     from .janela import Janela
 
+@RegistroTelas.registrar(
+    nome_tela='estatísticas',
+    título_da_janela='Estatísticas',
+    cabeçalho='Estatísticas',
+    descrição=parâmetros.nome_ue
+)
 class TelaEstatísticas(CTkFrame):
     def __init__(self, master, controller: "Janela"):
         super().__init__(controller)
@@ -17,11 +25,8 @@ class TelaEstatísticas(CTkFrame):
         self.master: CTk = master
         self.controller = controller
 
-        self._configurar_layout()
         self._inserir_widgets()
 
-    def _configurar_layout(self) :
-        Cabeçalhos(self, 'estatísticas')
 
     def _inserir_widgets(self):
         self.primeira_linha = 80

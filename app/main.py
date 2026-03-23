@@ -2,16 +2,12 @@ import concurrent.futures
 import threading
 
 from app.ui.screens.janela import Janela
+from app.ui.functions.alternadordetelas import AlternadorDeTelas
 
+def main():
 
-# with concurrent.futures.ThreadPoolExecutor() as executor:
-#     thread_janela = executor.submit(Janela)
+    app = Janela()
+    alternador = AlternadorDeTelas(app.container, app)
+    alternador.abrir('inicial')
 
-
-# thread_janela = threading.Thread(
-#     target=Janela,
-#     daemon=False
-# )
-# thread_janela.start()
-
-Janela()
+main()

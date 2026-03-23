@@ -2,7 +2,7 @@ import tomllib
 from pathlib import Path
 
 def _get_metadata() :
-    pyproject_path = Path(__file__).parent.parent / "pyproject.toml"
+    pyproject_path = Path(__file__).parent.parent.parent / "pyproject.toml"
 
     with open(pyproject_path, "rb") as f :
         return tomllib.load(f)

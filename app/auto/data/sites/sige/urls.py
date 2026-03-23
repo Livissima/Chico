@@ -1,4 +1,8 @@
 class Urls:
+    #todo: Apenas a propriedade de tela_login está em uso. O resto é rascunho.
+    # Como o bot funcionava com caminhos (sequências de xpaths) e agora passa a ser com urls,
+    # ainda preciso adequar as classes de data para suportarem as múltiplas urls,
+    # dado que até então, elas só suportavam a url inicial.
 
 
 

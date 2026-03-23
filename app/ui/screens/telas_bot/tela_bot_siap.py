@@ -3,25 +3,33 @@ import time
 from customtkinter import CTkFrame, CTk
 
 from app.auto.bot import Bot
+from app.config.__metadata__ import PROJECT_NAME
 
 from app.config.parâmetros import parâmetros
+from app.ui.registry import RegistroTelas
 from app.ui.widgets import Botão, CheckBox, Texto, Dropdown
 from typing import TYPE_CHECKING
 
-from app.ui.config.cabeçalhos import Cabeçalhos
+# from app.ui.config.cabeçalhos import Cabeçalhos
 
 if TYPE_CHECKING :
     pass
 
 ANO = 2026
 
+
+@RegistroTelas.registrar(
+    nome_tela='telas_bot siap',
+    título_da_janela='Bot SIAP',
+    cabeçalho='BOT SIAP',
+    descrição=parâmetros.nome_ue
+)
 class TelaBotSiap(CTkFrame) :
     def __init__(self, master, controller: "Janela") :
         super().__init__(master)
         self.master: CTk = master
         self.controller  = controller
 
-        self._configurar_layout()
         self._inserir_widgets()
 
     def _inserir_widgets(self):
@@ -58,8 +66,7 @@ class TelaBotSiap(CTkFrame) :
         )
         pass
 
-    def _configurar_layout(self) :
-        Cabeçalhos(self, 'telas_bot siap')
+
 
     def __inserir_dropdowns(self):
         #todo fazer um kit de um frame com 3 widgets dentro, que servirá de modelo para o dropdown que gerará a tupla

@@ -18,9 +18,9 @@ class NetEscola:
             'salvar'   : '/html/body/div[1]/div[2]/div/div[2]/div[2]/div[4]/div[1]/div[3]/button'
         }
 
-    @property
-    def caminhos(self) -> dict[str, list[tuple]]:
-        caminhos = {
-            '' : [()]
-        }
-        return caminhos
+    # @property
+    # def caminhos(self) -> dict[str, list[tuple]]:
+    #     caminhos = {
+    #         '' : [()]
+    #     }
+    #     return caminhos

@@ -1,9 +1,11 @@
 from typing import TYPE_CHECKING
 from customtkinter import CTkFrame, CTk
 
+from app.config.__metadata__ import PROJECT_NAME, PROJECT_VERSION
 from app.config.parâmetros import parâmetros
+from app.ui.registry import RegistroTelas
 from app.ui.widgets import Texto, Botão, Input
-from app.ui.config.cabeçalhos import Cabeçalhos
+# from app.ui.config.cabeçalhos import Cabeçalhos
 from app.ui.functions.desfazimento import Desfazimento
 
 from app.ui.functions.pesquisa_diretório import PesquisaDiretório
@@ -12,7 +14,12 @@ from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
 if TYPE_CHECKING:
     pass
 
-
+@RegistroTelas.registrar(
+    nome_tela='inicial',
+    título_da_janela=F'v.{PROJECT_VERSION}',
+    cabeçalho=f'{PROJECT_NAME}',
+    descrição='Utilitário administrativo'
+)
 class TelaInicial(CTkFrame):
     def __init__(self, master, controller: "Janela"):
         super().__init__(controller)
@@ -20,11 +27,8 @@ class TelaInicial(CTkFrame):
         self.master: CTk = master
         self.controller = controller
 
-        self._configurar_layout()
         self._inserir_widgets()
 
-    def _configurar_layout(self) :
-        Cabeçalhos(self, 'inicial')
 
     def _inserir_widgets(self):
         self.primeira_linha = 180
