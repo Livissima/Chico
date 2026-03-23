@@ -1,6 +1,6 @@
 from customtkinter import CTk, CTkFrame
 from app.ui import Dimensionamento
-from app.ui.utils.alternador_de_telas import AlternadorDeTelas
+from app.ui.functions.alternadordetelas import AlternadorDeTelas
 
 
 class Janela(CTk):
@@ -20,7 +20,6 @@ class Janela(CTk):
 
 
     def _ir_tela(self):
-        self.alternador = AlternadorDeTelas(self.container, self)
         self.alternador.abrir('inicial')
 
     def dimensionar(self):

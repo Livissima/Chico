@@ -2,20 +2,31 @@ import os.path
 from pathlib import Path
 from typing import TYPE_CHECKING
 from customtkinter import CTk, CTkFrame
+
+from app.config.__metadata__ import PROJECT_NAME
 from app.core import ConsultaEstudantes, Exportação
 from app.core.query.servidores.consultaservidores import ConsultaServidores
 from app.core.utils.pastador import Pastador
 from app.ui.functions.pesquisa_diretório import PesquisaDiretório
 from app.config.parâmetros import parâmetros
+from app.ui.registry import RegistroTelas
 from app.ui.widgets.botão import Botão
 from app.ui.widgets.texto import Texto
-from app.ui.config.cabeçalhos import Cabeçalhos
+# from app.ui.config.cabeçalhos import Cabeçalhos
 from app.ui.functions.desfazimento import Desfazimento
 from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
 
 if TYPE_CHECKING:
     pass
 
+
+
+@RegistroTelas.registrar(
+    nome_tela='consulta',
+    título_da_janela='Consulta',
+    cabeçalho='Consulta',
+    descrição='Leitura e processamento de JSONs para gerar database'
+)
 class TelaConsulta(CTkFrame):
     #todo: aprimorar o widget de feedback da consulta, que continua consultando
     # quando o código crasha
@@ -26,11 +37,8 @@ class TelaConsulta(CTkFrame):
         self.master: CTk = master
         self.controller = controller
 
-        self._configurar_layout()
         self._inserir_widgets()
 
-    def _configurar_layout(self):
-        Cabeçalhos(self, 'consulta')
 
     def _inserir_widgets(self):
         self.__inserir_botões()

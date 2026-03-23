@@ -2,13 +2,20 @@ import os.path
 from typing import TYPE_CHECKING
 from customtkinter import CTkFrame, CTk
 from app.auto.bot import Bot
+from app.config.__metadata__ import PROJECT_NAME
 from app.config.parâmetros import parâmetros
-from app.ui.config.cabeçalhos import Cabeçalhos
+from app.ui.registry import RegistroTelas
+# from app.ui.config.cabeçalhos import Cabeçalhos
 from app.ui.widgets import Botão, Texto
 
 if TYPE_CHECKING:
     pass
-
+@RegistroTelas.registrar(
+    nome_tela='telas_bot',
+    título_da_janela='Bot',
+    cabeçalho='BOT',
+    descrição='Automação de tarefas'
+)
 class TelaBot(CTkFrame):
     #todo: Bolar um esqueminha de botão que aborte a automação em curso.
     #todo: Elaborar funções para pedir confirmação para executar o auto
@@ -19,13 +26,9 @@ class TelaBot(CTkFrame):
         self.master: CTk = master
         self.controller = controller
         # self.pack(expand=True, fill='both')
-        self._configurar_layout()
         self._inserir_widgets()
         print(f'{parâmetros.diretório_base = }')
 
-
-    def _configurar_layout(self):
-        Cabeçalhos(self, 'telas_bot')
 
     def _inserir_widgets(self):
         self.__inserir_textos()

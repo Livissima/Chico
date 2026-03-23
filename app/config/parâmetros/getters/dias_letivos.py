@@ -10,6 +10,7 @@ class DiasLetivos:
 
     @staticmethod
     def _gerar_lista_dias_letivos(path, ano) :
+        #todo: trazer a função de ler_json para este e outros getters
         _path = os.path.join(path, 'fonte', f'Dias Letivos {ano}.json')
         try :
             with open(_path, 'r', encoding='utf-8') as arquivo :

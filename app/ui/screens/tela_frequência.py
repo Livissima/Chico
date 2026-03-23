@@ -1,26 +1,29 @@
 from customtkinter import CTkFrame, CTk
 from typing import TYPE_CHECKING
 
-from ..config.cabeçalhos import Cabeçalhos
+from ..registry import RegistroTelas
+# from ..config.cabeçalhos import Cabeçalhos
 from ..widgets import Botão, Input, Texto
+from ...config.__metadata__ import PROJECT_NAME
 from ...config.parâmetros import parâmetros
 from ...core.frequency.compiladordefaltas import CompiladorDeFaltas
 
 if TYPE_CHECKING :
     from .janela import Janela
 
-
+@RegistroTelas.registrar(
+    nome_tela='frequência',
+    título_da_janela='Frequência',
+    cabeçalho='Frequência',
+    descrição=parâmetros.nome_ue
+)
 class Frequência(CTkFrame) :
     def __init__(self, master, controller: "Janela") :
         super().__init__(controller)
         self.master: CTk = master
         self.controller = controller
 
-        self._configurar_layout()
         self._inserir_widgets()
-
-    def _configurar_layout(self) :
-        Cabeçalhos(self, 'frequência')
 
     def _inserir_widgets(self) :
         self.__inserir_textos()
