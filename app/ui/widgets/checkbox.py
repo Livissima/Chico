@@ -7,6 +7,7 @@ class CheckBox(CTkFrame):
             self,
             classe,
             opções: List[str],
+            key_estado,
             valores_iniciais: dict[str, bool] | None = None,
             valor_exclusivo: str | None = None,
             fonte: tuple[str, int] = ('Arial', 16),
@@ -89,6 +90,8 @@ class CheckBox(CTkFrame):
             self.checkboxes[valor_exclusivo] = (checkbox_exclusivo, variável_exclusivo)
 
         self.alocar(x, y)
+
+
 
     def _ao_marcar_exclusivo(self):
         """Lida com a marcação do checkbox exclusivo."""

@@ -3,28 +3,36 @@ import os.path
 from customtkinter import CTkFrame, CTk
 
 from app.auto.bot import Bot
+from app.config.__metadata__ import PROJECT_NAME
+from app.config.parâmetros.parâmetros import state
 
 from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
 from app.config.parâmetros import parâmetros
 from app.ui.functions.desfazimento import Desfazimento
+from app.ui.registry import RegistroTelas
 from app.ui.widgets import Botão, Input, CheckBox, Texto
 from typing import TYPE_CHECKING
 
-from app.ui.config.cabeçalhos import Cabeçalhos
+# from app.ui.config.cabeçalhos import Cabeçalhos
 from app.ui.functions.pesquisa_diretório import PesquisaDiretório
 
 if TYPE_CHECKING:
     pass
 
-
+@RegistroTelas.registrar(
+    nome_tela='telas_bot sige',
+    título_da_janela='Bot SIGE',
+    cabeçalho='BOT SIGE',
+    descrição='Automação de tarefas'
+)
 class TelaBotSige(CTkFrame):
     def __init__(self, master, controller: "Janela"):
         super().__init__(master)
         self.master: CTk = master
         self.controller = controller
 
-        self._configurar_layout()
         self._inserir_widgets()
+        self._carregar_estado_anterior()
 
     @property
     def _kwargs(self) -> dict:
@@ -33,14 +41,12 @@ class TelaBotSige(CTkFrame):
             'alvos' : self._ck_alvos.valores_true
         }
 
-    def _configurar_layout(self):
-        Cabeçalhos(self, 'telas_bot sige')
 
     def _inserir_widgets(self):
 
         self.__inserir_checkboxes()
         self.__inserir_textos()
-        self.__inserir_inputs()
+        # self.__inserir_inputs()
         self.__inserir_botões()
         # self.__inserir_dropdowns()
 
@@ -78,7 +84,7 @@ class TelaBotSige(CTkFrame):
 
     def __inserir_botões(self):
         def back():
-            self.salvar_valores_checkboxes()
+            self.salvar_estado()
             self.controller.alternador.abrir('telas_bot')
 
         self._bt_back = Botão(
@@ -91,17 +97,17 @@ class TelaBotSige(CTkFrame):
             y=10,
         )
 
-        self._bt_localizar_dados = Botão(
-            self,
-            texto='Definir pasta',
-            fonte=('times new roman', 15),
-            formato='bold',
-            x=5,
-            y=136,
-            função=self.pesquisar_pasta_dados,
-            altura=25,
-            largura=100
-        )
+        # self._bt_localizar_dados = Botão(
+        #     self,
+        #     texto='Definir pasta',
+        #     fonte=('times new roman', 15),
+        #     formato='bold',
+        #     x=5,
+        #     y=136,
+        #     função=self.pesquisar_pasta_dados,
+        #     altura=25,
+        #     largura=100
+        # )
 
         self._bt_iniciar = Botão(
             self,
@@ -177,7 +183,7 @@ class TelaBotSige(CTkFrame):
         self._verificar_estatística()
 
     def iniciar_tarefa(self):
-        self.salvar_valores_checkboxes()
+        self.salvar_estado()
 
         if not self._ck_alvos.valores_true:
             self._tx_feedback.att('Selecione ao menos um conteúdo alvo.')
@@ -212,10 +218,14 @@ class TelaBotSige(CTkFrame):
         self._verificar_estatística()
 
 
-    def salvar_valores_checkboxes(self):
-        valores = self._ck_turmas.valor()
-        parâmetros._estado_turmas = valores
-        turmas_selecionadas = [turma for turma, selecionada in valores.items() if selecionada]
-        parâmetros.turmas_selecionadas = turmas_selecionadas
+    def salvar_estado(self):
+        state.estado_checkbox_alvos = self._ck_alvos.valor()
+        state.estado_checkbox_turmas = self._ck_turmas.valor()
+        state.turmas_selecionadas = [t for t, v in state.estado_checkbox_turmas.items() if v]
 
+    def _carregar_estado_anterior(self):
+        if state.estado_checkbox_alvos:
+            for nome, valor in state.estado_checkbox_alvos.items():
+                if valor: self._ck_alvos.marcar(nome)
+                else: self._ck_alvos.desmarcar(nome)
 

@@ -3,15 +3,47 @@ from .getters.dias_letivos import DiasLetivos
 from .getters.modulação_servidor import ModulaçãoServidor
 from .getters.prévias import Prévias
 from .getters.turmasséries import TurmasSéries
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional
+from pathlib import Path
+
+
 
 #todo dinamizar essa constante com algum getter
 ANO_ATUAL = 2026
+
+@dataclass
+class EstadoApp:
+    diretório_base : Path
+    nome_ue: str = ""
+    turmas_disponíveis: List[str] = field(default_factory=list)
+    turmas_selecionadas: List[str] = field(default_factory=list)
+
+    # Dicionários de estado de UI (Checkboxes)
+    estado_checkbox_turmas: Dict[str, bool] = field(default_factory=dict)
+    estado_checkbox_alvos: Dict[str, bool] = field(default_factory=dict)
+
+    # Dados complexos carregados
+    dias_letivos_lista: List[str] = field(default_factory=list)
+    dias_letivos_dict: Dict[str, List[str]] = field(default_factory=dict)
+    modulacoes: Dict[str, Any] = field(default_factory=dict)
+
+    # Cache de estrutura
+    turmas_por_serie: Dict[str, List[str]] = field(default_factory=dict)
+    series_disponiveis: List[str] = field(default_factory=list)
+
+
+# Instância global (Singleton)
+state = EstadoApp(diretório_base=Path(DIRETÓRIO_BASE_PADRÃO))
+
+
 
 class Parâmetros:
     #todo: refatorar essa bosta todinha. Provavelmente com uma dataclass. Só assim eu posos organizar o armazenamento
     # de parâmetros persistentes ao longo dos usos.
 
     def __init__(self):
+
 
         self.diretório_base = DIRETÓRIO_BASE_PADRÃO
         self.prévias = Prévias(self.diretório_base)

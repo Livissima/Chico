@@ -90,7 +90,7 @@ class NavegaçãoWeb :
 
     def acessar_url(self, destino: str) -> None :
         print(f'    → Caminhando para {destino}')
-        destinos = self._pp.urls
+        destinos = self._pp.caminhos
         self.master.get(destinos[destino])
         self.aguardar_página()
 
@@ -107,17 +107,17 @@ class NavegaçãoWeb :
             xpaths = xpaths[chave]
         xpath = xpaths
 
-        elemento: tuple[str, str] = (By.XPATH, xpath)
+        tag_elemento: tuple[str, str] = (By.XPATH, xpath)
 
         try :
-            WebDriverWait(**self.__args_wait).until(presence_of_element_located(elemento))
-            WebDriverWait(**self.__args_wait).until(visibility_of_element_located(elemento))
-            el = WebDriverWait(**self.__args_wait).until(element_to_be_clickable(elemento))
+            WebDriverWait(**self.__args_wait).until(presence_of_element_located(tag_elemento))
+            WebDriverWait(**self.__args_wait).until(visibility_of_element_located(tag_elemento))
+            elemento = WebDriverWait(**self.__args_wait).until(element_to_be_clickable(tag_elemento))
 
-            self.master.execute_script("arguments[0].removeAttribute('readonly');", el)
+            self.master.execute_script("arguments[0].removeAttribute('readonly');", elemento)
 
-            el.clear()  # limpa antes de digitar
-            el.send_keys(string)
+            elemento.clear()  # limpa antes de digitar
+            elemento.send_keys(string)
             self.aguardar_página()
 
         except ValueError as e :
@@ -224,7 +224,12 @@ class NavegaçãoWeb :
 
         return lista_xpath
 
-    def selecionar_dropdown(self, by: Literal['xpath', 'xpath livre'], *chaves: str, valor=None, texto=None, elemento_espera=None) :
+    def selecionar_dropdown(
+            self,
+            by: Literal['xpath', 'xpath livre'],
+            *chaves: str, valor=None, texto=None, elemento_espera=None
+    ) -> None:
+
         xpath: str = ''
 
         if by == 'xpath' :
@@ -271,25 +276,35 @@ class NavegaçãoWeb :
         try:
             WebDriverWait(**self.__args_wait).until(lambda driver : len(
                 driver.find_elements(By.CSS_SELECTOR, ".loading, .spinner, [aria-busy='true']")) == 0)
-        except:
+
+        except Exception as e:
+            # print(f'Exception esperando por carregamento: `{e}`. Seguindo adiante.')
             pass
+
         try:
             WebDriverWait(**self.__args_wait).until(
                 lambda driver : driver.execute_script("return jQuery.active == 0"))
-        except:
+
+        except Exception as e:
+            # print(f'Exception esperando por carregamento: `{e}`. Seguindo adiante.')
             pass
 
         try:
             WebDriverWait(**self.__args_wait).until(
                 lambda driver : driver.execute_script("return document.readyState") == "complete")
-        except:
+
+        except Exception as e:
+
+            # print(f'Exception esperando por carregamento: `{e}`. Seguindo adiante.')
             pass
 
     def _esperar_por_elemento_dependente(self, elemento_espera: tuple[str, str]) :
+
         try:
             WebDriverWait(**self.__args_wait).until(element_to_be_clickable(elemento_espera))
-        except:
-            print(f"Elemento dependente não carregou: {elemento_espera}")
+
+        except Exception as e:
+            print(f"Elemento dependente não carregou: {elemento_espera}: \n     `{e}`")
 
     def _esperar_por_mudanca_estado(self, elemento, atributo, valor_antigo) :
         WebDriverWait(**self.__args_wait).until(lambda driver : elemento.get_attribute(atributo) != valor_antigo)
@@ -389,7 +404,9 @@ class NavegaçãoWeb :
                 thead = tabela.find_element(By.CSS_SELECTOR, 'thead')
                 ths = thead.find_elements(By.CSS_SELECTOR, 'th')
                 cabeçalhos = [th.text.strip() for th in ths if th.text.strip()]
-            except :
+
+            except Exception as e:
+                print(f"Exception em __extrair_cabeçalho: `{e}`")
                 pass
 
             if not cabeçalhos :
@@ -397,7 +414,9 @@ class NavegaçãoWeb :
                     primeira_linha = tabela.find_element(By.CSS_SELECTOR, 'tbody tr')
                     tds = primeira_linha.find_elements(By.CSS_SELECTOR, 'td')
                     cabeçalhos = [td.text.strip() for td in tds if td.text.strip()]
-                except :
+
+                except Exception as e:
+                    print(f"Exception em __extrair_cabeçalho: `{e}`")
                     pass
 
             if not cabeçalhos :
@@ -406,8 +425,9 @@ class NavegaçãoWeb :
                               "E-mail Alternativo", "E-mail Institucional", "E-mail Educacional", "Ponto ID"]
 
             return cabeçalhos
+
         except Exception as e :
-            print(f'Erro ao extrair cabeçalhos: {e}')
+            print(f'Erro ao extrair cabeçalhos: `{e}`')
             return None
 
     @staticmethod
@@ -429,7 +449,8 @@ class NavegaçãoWeb :
                     correspondências = sum(1 for cabeçalho in cabeçalhos if cabeçalho.lower() in texto_linha)
                     if correspondências > 3 :
                         continue
-                except :
+                except Exception as e:
+                    print(f"Exception em __extrair_dados_tabela: `{e}`")
                     pass
 
                 células = linha.find_elements(By.CSS_SELECTOR, 'td')
