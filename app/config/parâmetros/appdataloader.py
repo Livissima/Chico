@@ -9,7 +9,8 @@ class AppDataLoader:
         resumo = ler_json(estado.diretório_base / 'fonte' / 'resumo.json')
         estado.nome_ue = resumo.get('Nome UE', '')
         estado.turmas_disponíveis = resumo.get('Turmas', [])
-
+        estado.turmas_selecionadas = estado.turmas_disponíveis[:]
+        estado.estado_checkbox_turmas = {t : True for t in estado.turmas_disponíveis}
         AppDataLoader._processar_estruturas_turmas(estado)
 
     @staticmethod
@@ -20,5 +21,5 @@ class AppDataLoader:
             série = ''.join(filter(str.isdigit, turma))
             if série: turmas_dict[série].append(turma)
 
-        estado.turmas_por_serie = {s: sorted(ts) for s, ts in sorted(turmas_dict.items())}
-        estado.series_disponiveis = sorted(set(t[0] for t in estado.turmas_disponíveis))
+        estado.turma_por_série = {s: sorted(ts) for s, ts in sorted(turmas_dict.items())}
+        estado.séries_disponíveis = sorted(set(t[0] for t in estado.turmas_disponíveis))
