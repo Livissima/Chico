@@ -7,7 +7,7 @@ class CheckBox(CTkFrame):
             self,
             classe,
             opções: List[str],
-            key_estado,
+            key_estado = None,
             valores_iniciais: dict[str, bool] | None = None,
             valor_exclusivo: str | None = None,
             fonte: tuple[str, int] = ('Arial', 16),
