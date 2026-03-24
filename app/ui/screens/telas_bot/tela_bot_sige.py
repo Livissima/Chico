@@ -4,7 +4,7 @@ from customtkinter import CTkFrame, CTk
 
 from app.auto.bot import Bot
 from app.config.__metadata__ import PROJECT_NAME
-from app.config.parâmetros.parâmetros import state
+from app.config.parâmetros.parâmetros import parâmetros
 
 from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
 from app.config.parâmetros import parâmetros
@@ -219,13 +219,13 @@ class TelaBotSige(CTkFrame):
 
 
     def salvar_estado(self):
-        state.estado_checkbox_alvos = self._ck_alvos.valor()
-        state.estado_checkbox_turmas = self._ck_turmas.valor()
-        state.turmas_selecionadas = [t for t, v in state.estado_checkbox_turmas.items() if v]
+        parâmetros.estado_checkbox_alvos = self._ck_alvos.valor()
+        parâmetros.estado_checkbox_turmas = self._ck_turmas.valor()
+        parâmetros.turmas_selecionadas = [t for t, v in parâmetros.estado_checkbox_turmas.items() if v]
 
     def _carregar_estado_anterior(self):
-        if state.estado_checkbox_alvos:
-            for nome, valor in state.estado_checkbox_alvos.items():
+        if parâmetros.estado_checkbox_alvos:
+            for nome, valor in parâmetros.estado_checkbox_alvos.items():
                 if valor: self._ck_alvos.marcar(nome)
                 else: self._ck_alvos.desmarcar(nome)
 
