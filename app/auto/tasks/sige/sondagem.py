@@ -49,8 +49,8 @@ class Sondagem:
     def _logon(self):
         self.master.get(self._pp.urls)
         self.master.maximize_window()
-        self._nv.digitar_xpath('misc', 'input id', string=self._pp.credenciais['id'])
-        self._nv.digitar_xpath('misc', 'input senha', string=self._pp.credenciais['senha'])
+        self._nv.digitar_xpath('misc', 'input id', string=self._pp.credenciais_padrão['id'])
+        self._nv.digitar_xpath('misc', 'input senha', string=self._pp.credenciais_padrão['senha'])
         self._nv.clicar('xpath', 'misc', 'entrar')
         self._nv.clicar('xpath', 'misc', 'alerta')
 

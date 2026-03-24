@@ -11,6 +11,11 @@ from typing import Dict, List, Any
 from pathlib import Path
 from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
 from app.config.parâmetros.getters.turmasséries import TurmasSéries
+from dataclasses import dataclass, field
+from typing import Dict, List, Any
+from pathlib import Path
+from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
+from app.config.parâmetros.getters.turmasséries import TurmasSéries
 
 
 #todo dinamizar essa constante com algum getter
@@ -20,36 +25,45 @@ ANO_ATUAL = 2026
 
 
 
+
+
 @dataclass
-class EstadoApp :
+class EstadoApp:
+    # 1. Caminhos e Configurações Básicas
     diretório_base: Path
     nome_ue: str = ""
-    turmas_disponíveis: List[str] = field(default_factory=list)
-    turmas_selecionadas: List[str] = field(default_factory=list)
+    resumo: Dict[str, Any] = field(default_factory=dict)
+    credenciais: Dict[str, str] = field(default_factory=dict)
 
-    # Estados de UI
+    # 2. Estrutura de Turmas (Dados Brutos)
+    turmas_disponíveis: List[str] = field(default_factory=list)
+    séries_disponíveis: List[str] = field(default_factory=list)
+    turma_por_série: Dict[str, List[str]] = field(default_factory=dict)
+
+    # 3. Seleções do Usuário (O que a UI altera)
+    turmas_selecionadas: List[str] = field(default_factory=list)
     estado_checkbox_turmas: Dict[str, bool] = field(default_factory=dict)
     estado_checkbox_alvos: Dict[str, bool] = field(default_factory=dict)
 
-    # Dados de Negócio
+    # 4. Dados de Negócio (O que o Bot consome)
     dias_letivos_lista: List[str] = field(default_factory=list)
     dias_letivos_dict: Dict[str, List[str]] = field(default_factory=dict)
     modulações: Dict[str, Any] = field(default_factory=dict)
 
-
+    # --- PROPRIEDADES COMPUTADAS (Para manter compatibilidade com o Bot) ---
     @property
-    def séries_selecionadas(self) -> list :
-        if not self.turmas_selecionadas :
+    def séries_selecionadas(self) -> list:
+        if not self.turmas_selecionadas:
             return []
         return TurmasSéries.gerar_lista_de_séries(self.turmas_selecionadas)
 
     @property
-    def turmas_selecionadas_por_série(self) -> dict :
-        if not self.turmas_selecionadas :
+    def turmas_selecionadas_por_série(self) -> dict:
+        if not self.turmas_selecionadas:
             return {}
         return TurmasSéries.gerar_dicionário_turmas_por_série(self.turmas_selecionadas)
 
-
+# Instância Singleton
 parâmetros = EstadoApp(diretório_base=Path(DIRETÓRIO_BASE_PADRÃO))
 
 
