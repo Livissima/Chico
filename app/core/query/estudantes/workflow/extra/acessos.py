@@ -3,7 +3,7 @@ from app.config.settings.functions import normalizar_diacrítica
 class Acessos:
 
     @staticmethod
-    def _obter_senha_email_padrão_seduc(linha):
+    def obter_senha_email_padrão_seduc(linha):
         nomes = [normalizar_diacrítica(n) for n in linha['Estudante'].strip().split()]
 
         primeira_letra = nomes[0][0].upper()
@@ -12,7 +12,7 @@ class Acessos:
         return f'{primeira_letra}{ultima_letra}{data_nascimento}'
 
     @staticmethod
-    def _gerar_senha_netescola_padrão_chico(linha):
+    def gerar_senha_netescola_padrão_chico(linha):
         nome_splitado = [normalizar_diacrítica(n) for n in linha['Estudante'].strip().split()]
 
         primeiro_nome = nome_splitado[0]
@@ -26,7 +26,7 @@ class Acessos:
         return nome_final.lower()+'00'
 
     @staticmethod
-    def _gerar_senha_email_padrão_chico(linha):
+    def gerar_senha_email_padrão_chico(linha):
         preposições = ['das', 'dos', 'de', 'do', 'da']
 
         nome_splitado = [

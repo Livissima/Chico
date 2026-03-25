@@ -36,15 +36,15 @@ class Integração:
 
     @staticmethod
     def _integrar_senha_padrão(df_base: DataFrame) -> Series:
-        return df_base.apply(Acessos._obter_senha_email_padrão_seduc, axis=1)
+        return df_base.apply(Acessos.obter_senha_email_padrão_seduc, axis=1)
 
     @staticmethod
     def _integrar_nova_senha(df_base: DataFrame) -> Series:
-        return df_base.apply(Acessos._gerar_senha_netescola_padrão_chico, axis=1)
+        return df_base.apply(Acessos.gerar_senha_netescola_padrão_chico, axis=1)
 
     @staticmethod
     def _integrar_senha_educa(df_base: DataFrame) -> Series:
-        return df_base.apply(Acessos._gerar_senha_email_padrão_chico, axis=1)
+        return df_base.apply(Acessos.gerar_senha_email_padrão_chico, axis=1)
 
     @staticmethod
     def _integrar_tratamentos(df: dict[str, DataFrame]) -> DataFrame:
@@ -75,7 +75,7 @@ class Integração:
         df_base['Data de Nascimento'] = pd.to_datetime(
             df_base['Data de Nascimento'],
             # format='mixed',      #comentado para teste
-            # dayfirst=True
+            dayfirst=True
         )
         _idade = Idade.calcular_idade(df_base['Data de Nascimento'])
         return _idade
