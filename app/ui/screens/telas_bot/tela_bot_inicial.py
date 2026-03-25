@@ -1,16 +1,14 @@
-import os.path
 from typing import TYPE_CHECKING
 from customtkinter import CTkFrame, CTk
 from app.auto.bot import Bot
-from app.config.__metadata__ import PROJECT_NAME
 from app.config.parâmetros import parâmetros
-from app.ui.registry import RegistroTelas
+from app.ui.config.registrodetelas import RegistradorDeTelas
 # from app.ui.config.cabeçalhos import Cabeçalhos
 from app.ui.widgets import Botão, Texto
 
 if TYPE_CHECKING:
     pass
-@RegistroTelas.registrar(
+@RegistradorDeTelas.registrar(
     nome_tela='telas_bot',
     título_da_janela='Bot',
     cabeçalho='BOT',
@@ -27,7 +25,7 @@ class TelaBot(CTkFrame):
         self.controller = controller
         # self.pack(expand=True, fill='both')
         self._inserir_widgets()
-        print(f'{parâmetros.diretório_base = }')
+        # print(f'{parâmetros.diretório_base = }')
 
 
     def _inserir_widgets(self):
@@ -47,7 +45,7 @@ class TelaBot(CTkFrame):
         )
 
     def __inserir_inputs(self):
-        pass
+        raise NotImplemented
 
     def __inserir_botões(self):
         y = 90
@@ -109,5 +107,5 @@ class TelaBot(CTkFrame):
         )
 
     def __inserir_dropdowns(self):
-        pass
+        raise NotImplemented
 

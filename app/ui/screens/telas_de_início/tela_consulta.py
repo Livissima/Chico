@@ -3,13 +3,11 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 from customtkinter import CTk, CTkFrame
 
-from app.config.__metadata__ import PROJECT_NAME
 from app.core import ConsultaEstudantes, Exportação
 from app.core.query.servidores.consultaservidores import ConsultaServidores
 from app.core.utils.pastador import Pastador
-from app.ui.functions.pesquisa_diretório import PesquisaDiretório
 from app.config.parâmetros import parâmetros
-from app.ui.registry import RegistroTelas
+from app.ui.config.registrodetelas import RegistradorDeTelas
 from app.ui.widgets.botão import Botão
 from app.ui.widgets.texto import Texto
 # from app.ui.config.cabeçalhos import Cabeçalhos
@@ -21,7 +19,7 @@ if TYPE_CHECKING:
 
 
 
-@RegistroTelas.registrar(
+@RegistradorDeTelas.registrar(
     nome_tela='consulta',
     título_da_janela='Consulta',
     cabeçalho='Consulta',
