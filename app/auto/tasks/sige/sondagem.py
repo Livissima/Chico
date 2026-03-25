@@ -20,6 +20,7 @@ class Sondagem:
             destino: str,
             **kwargs
     ):
+
         print(f'class Sondagem instanciada.')
         _path = Path(parâmetros.diretório_base, 'fonte', 'resumo.json')
         self.master = navegador
@@ -144,11 +145,9 @@ class Sondagem:
             except (KeyError, ValueError, TypeError, ZeroDivisionError):
                 return default
 
-
         chaves  = list(obter_o_que_der(lambda: tabela["Turma"]))
         valores = list(obter_o_que_der(lambda: tabela["Código"]))
         turmas = dict(zip(chaves, valores))
-
 
         resumo["Nome UE"] = obter_o_que_der(lambda: self.__obter_nome_ue())
         resumo["Códigos Turmas"] = obter_o_que_der(lambda: list(turmas.values()))

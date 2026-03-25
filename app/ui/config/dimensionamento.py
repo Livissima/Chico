@@ -13,7 +13,7 @@ class Dimensionamento:
     def posicionar(self):
         self.janela.geometry(f'{self.window_size}+{self.posição_central_tela}')
         self.janela.resizable(False, False)
-        self.janela._set_appearance_mode('dark')
+        # self.janela._set_appearance_mode('dark')
 
     @property
     def window_size(self):

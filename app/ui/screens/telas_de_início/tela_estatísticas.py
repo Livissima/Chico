@@ -4,15 +4,14 @@ from customtkinter import CTkFrame, CTk
 
 # from ..config.cabeçalhos import Cabeçalhos
 from app.config.parâmetros import parâmetros
-from ..registry import RegistroTelas
-from ..widgets import Texto, Botão
-from ...auto.bot import Bot
-from ...config.__metadata__ import PROJECT_NAME
+from app.ui.config.registrodetelas import RegistradorDeTelas
+from app.ui.widgets import Texto, Botão
+from app.auto.bot import Bot
 
 if TYPE_CHECKING:
-    from .janela import Janela
+    from app.ui.screens.janela import Janela
 
-@RegistroTelas.registrar(
+@RegistradorDeTelas.registrar(
     nome_tela='estatísticas',
     título_da_janela='Estatísticas',
     cabeçalho='Estatísticas',
