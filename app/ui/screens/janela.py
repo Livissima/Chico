@@ -1,5 +1,5 @@
 from customtkinter import CTk, CTkFrame
-from app.ui import Dimensionamento
+from app.ui.config.dimensionamento import Dimensionamento
 from app.ui.functions.alternadordetelas import AlternadorDeTelas
 
 
