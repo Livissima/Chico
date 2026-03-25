@@ -45,7 +45,7 @@ class TelaBot(CTkFrame):
         )
 
     def __inserir_inputs(self):
-        raise NotImplemented
+        pass
 
     def __inserir_botões(self):
         y = 90
@@ -107,5 +107,5 @@ class TelaBot(CTkFrame):
         )
 
     def __inserir_dropdowns(self):
-        raise NotImplemented
+        pass
 
