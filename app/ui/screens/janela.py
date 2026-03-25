@@ -10,14 +10,11 @@ class Janela(CTk):
         self.largura = None
         self.container = CTkFrame(self)
         self.container.pack(expand=True, fill='both')
+        self._set_appearance_mode('dark')
 
         self.dimensionar()
 
         self.alternador: AlternadorDeTelas = AlternadorDeTelas(self.container, self)
-        self.alternador.abrir('inicial')
-
-        self.mainloop()
-
 
     def _ir_tela(self):
         self.alternador.abrir('inicial')

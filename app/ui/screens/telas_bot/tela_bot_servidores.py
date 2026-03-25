@@ -1,22 +1,17 @@
 from customtkinter import CTkFrame, CTk
 
-import time
-
-from customtkinter import CTkFrame, CTk
-
 from app.auto.bot import Bot
-from app.config.__metadata__ import PROJECT_NAME
 
 from app.config.parâmetros import parâmetros
-from app.ui.registry import RegistroTelas
-from app.ui.widgets import Botão, CheckBox, Texto, Dropdown
-from typing import TYPE_CHECKING
+from app.ui.config.registrodetelas import RegistradorDeTelas
+from app.ui.widgets import Botão
+
 
 # from app.ui.config.cabeçalhos import Cabeçalhos
 
 
 
-@RegistroTelas.registrar(
+@RegistradorDeTelas.registrar(
     nome_tela='telas_bot servidores',
     título_da_janela='Servidores',
     cabeçalho='Servidores',
