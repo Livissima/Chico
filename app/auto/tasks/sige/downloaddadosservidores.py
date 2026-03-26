@@ -96,8 +96,3 @@ class DownloadDadosServidores:
             return json.dump(relação_servidores, arquivo, ensure_ascii=False, indent=2)
 
 
-        # Anotações para as notas
-
-        # 7ºA todas as disciplinas tem que digitar nota, fora o prof de arte que não tem, e matemática também não tem
-        # digitar as notas de arte para todas as turmas
-        # prof de matemática

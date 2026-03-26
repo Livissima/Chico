@@ -100,7 +100,7 @@ class NavegaçãoWeb :
         self.master.maximize_window()
         self.aguardar_página()
 
-    def digitar_xpath(self, *chaves, string: str) -> None:
+    def digitar_xpath(self, *chaves, string: str | Any) -> None:
         xpaths = self._pp.xpaths
 
         for chave in chaves :
