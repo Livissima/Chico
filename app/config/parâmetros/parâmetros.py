@@ -46,8 +46,8 @@ class EstadoApp:
     estado_checkbox_alvos: Dict[str, bool] = field(default_factory=dict)
 
     # 4. Dados de Negócio (O que o Bot consome)
-    dias_letivos_lista: List[str] = field(default_factory=list)
-    dias_letivos_dict: Dict[str, List[str]] = field(default_factory=dict)
+    lista_dias_letivos: List[str] = field(default_factory=list)
+    dicionário_dias_letivos: Dict[str, List[str]] = field(default_factory=dict)
     modulações: Dict[str, Any] = field(default_factory=dict)
 
     # --- PROPRIEDADES COMPUTADAS (Para manter compatibilidade com o Bot) ---
