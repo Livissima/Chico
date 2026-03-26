@@ -1,30 +1,11 @@
-import json
-import os
-from os import PathLike
-
-class DiasLetivos:
-
-    def __init__(self, path: PathLike, ano: int):
-        self.lista_dias_letivos = self._gerar_lista_dias_letivos(path, ano)
-        self.dicionário_dias_letivos = self._gerar_dict_dias_letivos(self.lista_dias_letivos)
-
+class DiasLetivos :
     @staticmethod
-    def _gerar_lista_dias_letivos(path, ano) :
-        #todo: trazer a função de ler_json para este e outros getters
-        _path = os.path.join(path, 'fonte', f'Dias Letivos {ano}.json')
-        try :
-            with open(_path, 'r', encoding='utf-8') as arquivo :
-                dias_letivos = json.load(arquivo)
-                return dias_letivos
-        except FileNotFoundError as e :
-            print(f'Erro em {e}')
-            return []
+    def processar(dados_json: list) -> tuple[list, dict] :
+        if not dados_json :
+            return [], {}
 
-    @staticmethod
-    def _gerar_dict_dias_letivos(leitura) :
-        dias_splitados = [dia.split('/') for dia in leitura]
-        lista_meses = [dia[1] for dia in dias_splitados]
-        meses_letivos = list(sorted(set(lista_meses)))
+        dias_splitados = [dia.split('/') for dia in dados_json]
+        lista_meses = sorted(set(dia[1] for dia in dias_splitados))
 
-        dicionário = {chave : [dia[0] for dia in dias_splitados if dia[1] == chave] for chave in meses_letivos}
-        return dicionário
+        dicionario = {mes : [dia[0] for dia in dias_splitados if dia[1] == mes] for mes in lista_meses}
+        return dados_json, dicionario
