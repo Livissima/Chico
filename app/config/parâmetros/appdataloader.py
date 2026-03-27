@@ -9,31 +9,31 @@ from app.config.parâmetros.getters.turmasséries import TurmasSéries
 
 class AppDataLoader :
     @staticmethod
-    def carregar_tudo(estado: Parâmetros) :
+    def carregar_tudo(parâmetros: Parâmetros) :
         # 1. Resumo e Dados Básicos
-        resumo = ler_json(estado.diretório_base / 'fonte' / 'resumo.json')
-        estado.nome_ue = resumo.get('Nome UE', '')
-        estado.turmas_disponíveis = resumo.get('Turmas', [])
-        estado.turmas_selecionadas = estado.turmas_disponíveis[:]
-        estado.estado_checkbox_turmas = {t : True for t in estado.turmas_disponíveis}
+        resumo = ler_json(parâmetros.diretório_base / 'fonte' / 'resumo.json')
+        parâmetros.nome_ue = resumo.get('Nome UE', '')
+        parâmetros.turmas_disponíveis = resumo.get('Turmas', [])
+        parâmetros.turmas_selecionadas = parâmetros.turmas_disponíveis[:]
+        parâmetros.estado_checkbox_turmas = {t : True for t in parâmetros.turmas_disponíveis}
 
         # 2. Estrutura de Turmas (Usando a lógica do Getter TurmasSéries)
-        estado.turma_por_série = TurmasSéries.gerar_dicionário_turmas_por_série(estado.turmas_disponíveis)
-        estado.séries_disponíveis = TurmasSéries.gerar_lista_de_séries(estado.turmas_disponíveis)
+        parâmetros.turma_por_série = TurmasSéries.gerar_dicionário_turmas_por_série(parâmetros.turmas_disponíveis)
+        parâmetros.séries_disponíveis = TurmasSéries.gerar_lista_de_séries(parâmetros.turmas_disponíveis)
 
         # 3. Dias Letivos
-        caminho_dias = estado.diretório_base / 'fonte' / f'Dias Letivos {ANO_ATUAL}.json'
+        caminho_dias = parâmetros.diretório_base / 'fonte' / f'Dias Letivos {ANO_ATUAL}.json'
         dados_dias = ler_json(caminho_dias)
         lista, dicio = DiasLetivos.processar(dados_dias)
-        estado.lista_dias_letivos = lista
-        estado.dicionário_dias_letivos = dicio
+        parâmetros.lista_dias_letivos = lista
+        parâmetros.dicionário_dias_letivos = dicio
 
         # 4. Modulações (Lê todos os arquivos da pasta e processa)
-        pasta_modulacoes = estado.diretório_base / 'fonte' / 'modulações'
+        pasta_modulacoes = parâmetros.diretório_base / 'fonte' / 'modulações'
         conteudos_modulacao = []
         if pasta_modulacoes.exists() :
             for arquivo in os.listdir(pasta_modulacoes) :
                 if arquivo.endswith('.json') :
                     conteudos_modulacao.append(ler_json(pasta_modulacoes / arquivo))
 
-        estado.modulações = ModulaçãoServidor.processar(conteudos_modulacao)
+        parâmetros.modulações = ModulaçãoServidor.processar(conteudos_modulacao)
