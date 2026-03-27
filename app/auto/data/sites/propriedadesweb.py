@@ -21,10 +21,7 @@ class PropriedadesWeb(SiteConfig) :
 
         return config
 
-
-
-
-
+#class PropriedadesWeb
     # #todo: Esta classe está extremamente acoplada com dezenas de outras classes.
     # # Pensei em fazer uma singleton, mas os atributos dependem do argumento passado na instanciação
     #
