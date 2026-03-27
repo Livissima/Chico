@@ -1,17 +1,13 @@
+#app/ui/screens/telas_bot/tela_bot_sige.py
 import os.path
-
 from customtkinter import CTkFrame, CTk
-
 from app.auto.bot import Bot
-
 from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
 from app.config.parâmetros import parâmetros
 from app.ui.functions.desfazimento import Desfazimento
 from app.ui.config.registrodetelas import RegistradorDeTelas
 from app.ui.widgets import Botão, Input, CheckBox, Texto
 from typing import TYPE_CHECKING
-
-# from app.ui.config.cabeçalhos import Cabeçalhos
 from app.ui.functions.pesquisadiretório import PesquisaDiretório
 
 if TYPE_CHECKING:
