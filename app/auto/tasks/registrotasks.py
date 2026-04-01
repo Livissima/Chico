@@ -1,12 +1,25 @@
-from typing import Type, Dict, Any
+# app/auto/registry.py
+from typing import Dict, Type, Callable
 
-class RegistroTasks :
-    REGISTRO: Dict[str, Type[Any]] = {}
+
+class TaskRegistry :
+    _tarefas: Dict[str, Type] = {}
 
     @classmethod
-    def registrar(cls, task: str):
-        def wrapper(classe_envelopada) :
-            cls.REGISTRO[task] = classe_envelopada
-            return classe_envelopada
-
+    def registrar(cls, nome: str) :
+        def wrapper(task_class: Type) -> Type :
+            cls._tarefas[nome] = task_class
+            print(f"✅ Task '{nome}' registrada: {task_class.__name__}")
+            return task_class
         return wrapper
+
+    @classmethod
+    def obter(cls, nome: str) -> Type :
+        if nome not in cls._tarefas :
+            raise ValueError(f"❌ Task '{nome}' não encontrada. "
+                             f"Disponíveis: {list(cls._tarefas.keys())}")
+        return cls._tarefas[nome]
+
+    @classmethod
+    def listar(cls) -> list[str] :
+        return list(cls._tarefas.keys())

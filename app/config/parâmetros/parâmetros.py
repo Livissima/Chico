@@ -17,6 +17,7 @@ class Parâmetros :
 
     turmas_selecionadas: List[str] = field(default_factory=list)
     estado_checkbox_turmas: Dict[str, bool] = field(default_factory=dict)
+    estado_checkbox_alvos: Dict[str, bool] = field(default_factory=dict)
 
     lista_dias_letivos: List[str] = field(default_factory=list)
     dicionário_dias_letivos: Dict[str, List[str]] = field(default_factory=dict)
