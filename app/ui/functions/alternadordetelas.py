@@ -1,3 +1,4 @@
+#app/ui/functions/alternadordetelas.py
 from app.ui.config.registrodetelas import RegistradorDeTelas
 from app.ui.widgets import Texto, Botão
 
@@ -5,17 +6,17 @@ class AlternadorDeTelas:
     def __init__(self, container, controller):
         self.container = container
         self.controller = controller
-        self.histórico = []
-        self.tela_atual = None
+        self._histórico = []
+        self._tela_atual = None
 
     def abrir(self, nome_tela: str, salvar_no_histórico: bool = True):
         if nome_tela not in RegistradorDeTelas.REGISTRO_DE_TELAS:
             raise ValueError(f"Tela '{nome_tela}' não encontrada.")
 
-        if salvar_no_histórico and self.tela_atual:
-            self.histórico.append(self.tela_atual)
+        if salvar_no_histórico and self._tela_atual:
+            self._histórico.append(self._tela_atual)
 
-        self.tela_atual = nome_tela
+        self._tela_atual = nome_tela
 
         if self.container.winfo_children():
             for widget in self.container.winfo_children():
@@ -33,7 +34,7 @@ class AlternadorDeTelas:
 
         self._criar_cabeçalho_automático(tela_instância, meta)
 
-        if meta['mostrar_voltar'] and self.histórico:
+        if meta['mostrar_voltar'] and self._histórico:
             self._criar_botão_voltar(tela_instância)
 
     def _criar_cabeçalho_automático(self, tela, meta):
@@ -58,12 +59,12 @@ class AlternadorDeTelas:
         )
 
     def voltar(self):
-        if self.histórico:
-            última_tela = self.histórico.pop()
+        if self._histórico:
+            última_tela = self._histórico.pop()
             self.abrir(última_tela, salvar_no_histórico=False)
 
     def _criar_botão_voltar(self, tela):
-        if not self.histórico:
+        if not self._histórico:
             return
 
 

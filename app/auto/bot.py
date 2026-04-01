@@ -21,7 +21,6 @@ class Bot:
                 'downloads', 'siap', 'credenciar', 'sondagem', 'fotos', 'consultar dias letivos', 'obter modulações',
                 'uniformizar', 'servidores'
             ],
-            # parâmetros_web,
             kwargs_tarefa: dict | None = None, **kwargs
     ) :
 
