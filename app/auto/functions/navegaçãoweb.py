@@ -1,6 +1,7 @@
 import json
 import os.path
 import time
+from dataclasses import dataclass
 from typing import Literal, Generator, Any
 from selenium.common import ElementClickInterceptedException, StaleElementReferenceException
 from selenium.webdriver import Chrome
@@ -14,6 +15,7 @@ from selenium.webdriver.support.expected_conditions import presence_of_element_l
 from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.auto.functions.javascript import Javascript
 from app.config.parâmetros import parâmetros
+from app.config.parâmetros.estruturadeseleção import EstruturaDeSeleção
 
 
 class NavegaçãoWeb :
@@ -205,11 +207,12 @@ class NavegaçãoWeb :
             print('Nenhum dado extraído')
             return False
 
-    def iterar_turmas_sige(self) -> Generator[tuple[Any, Any], Any, None]:
+    def iterar_turmas_sige(self, seleção: EstruturaDeSeleção) -> Generator[tuple[Any, Any], Any, None]:
         for série in parâmetros.séries_selecionadas :
             self._selecionar_série(série)
-            turmas_correspoentes = parâmetros.turmas_selecionadas_por_série[série]
-            for turma in turmas_correspoentes :
+            turmas = seleção.turmas_selecionadas_por_série.get(série, [])
+            # turmas_correspondentes = parâmetros.turmas_selecionadas_por_série[série]
+            for turma in turmas :
                 self._selecionar_turma_sige(turma)
                 yield série, turma
 
