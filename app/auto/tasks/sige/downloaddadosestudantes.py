@@ -4,7 +4,7 @@ from pathlib import Path
 from selenium.webdriver import Chrome
 from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
-from app.auto.tasks.registrotasks import TaskRegistry
+from app.auto.tasks.taskregistry import TaskRegistry
 from app.config.parâmetros.estruturadeseleção import EstruturaDeSeleção
 from app.config.parâmetros.getters.tempo import tempo
 

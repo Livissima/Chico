@@ -184,12 +184,11 @@ class TelaBotSige(CTkFrame):
             print(f'selecione ao menos um conteúdo alvo')
 
         if any(alvo in self._ck_alvos.valores_true for alvo in ['Fichas', 'Contatos', 'Situações', 'Gêneros']):
-            Bot(tarefa='downloads', parâmetros_web=None, destino=self._kwargs['destino'],
-                alvos=self._ck_alvos.valores_true)
+            Bot(tarefa='downloads', destino=self._kwargs['destino'], alvos=self._ck_alvos.valores_true)
 
         if self._ck_alvos.valores_true == ['Fotos']:
             print(f'____Fotos')
-            Bot(tarefa='fotos', parâmetros_web=None, turmas=parâmetros.turmas_selecionadas)
+            Bot(tarefa='fotos', turmas=parâmetros.turmas_selecionadas)
 
 
     def _verificar_estatística(self):
