@@ -6,12 +6,13 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
+from app.auto.tasks.taskregistry import TaskRegistry
 from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from app.config.parâmetros import parâmetros
 from app.config.parâmetros.getters.tempo import tempo
 
-
+@TaskRegistry.registrar('sondagem')
 class Sondagem:
 
     def __init__(
