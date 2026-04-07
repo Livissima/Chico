@@ -5,12 +5,15 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
+from app.auto.tasks.taskregistry import TaskRegistry
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from typing import Literal
 import pandas as pd
 import unicodedata
 
+
+@TaskRegistry.registrar('credenciar')
 class Credenciador:
 
     def __init__(self, navegador, path_database: str, turmas: list[str] = None, **kwargs) :

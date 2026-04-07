@@ -1,163 +1,35 @@
+from pathlib import Path
+from dataclasses import dataclass, field
+from typing import Dict, List, Any
 from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
-from .getters.dias_letivos import DiasLetivos
-from .getters.modulação_servidor import ModulaçãoServidor
-from .getters.prévias import Prévias
 from .getters.turmasséries import TurmasSéries
-from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional
-from pathlib import Path
-from dataclasses import dataclass, field
-from typing import Dict, List, Any
-from pathlib import Path
-from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
-from app.config.parâmetros.getters.turmasséries import TurmasSéries
-from dataclasses import dataclass, field
-from typing import Dict, List, Any
-from pathlib import Path
-from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
-from app.config.parâmetros.getters.turmasséries import TurmasSéries
 
-
-#todo dinamizar essa constante com algum getter
 ANO_ATUAL = 2026
-
-# app/config/parâmetros/parâmetros.py
-
-
-
 
 
 @dataclass
-class EstadoApp:
-    # 1. Caminhos e Configurações Básicas
+class Parâmetros :
     diretório_base: Path
     nome_ue: str = ""
-    resumo: Dict[str, Any] = field(default_factory=dict)
-    credenciais: Dict[str, str] = field(default_factory=dict)
-
-    # 2. Estrutura de Turmas (Dados Brutos)
     turmas_disponíveis: List[str] = field(default_factory=list)
     séries_disponíveis: List[str] = field(default_factory=list)
     turma_por_série: Dict[str, List[str]] = field(default_factory=dict)
 
-    # 3. Seleções do Usuário (O que a UI altera)
     turmas_selecionadas: List[str] = field(default_factory=list)
     estado_checkbox_turmas: Dict[str, bool] = field(default_factory=dict)
     estado_checkbox_alvos: Dict[str, bool] = field(default_factory=dict)
 
-    # 4. Dados de Negócio (O que o Bot consome)
     lista_dias_letivos: List[str] = field(default_factory=list)
     dicionário_dias_letivos: Dict[str, List[str]] = field(default_factory=dict)
     modulações: Dict[str, Any] = field(default_factory=dict)
 
-    # --- PROPRIEDADES COMPUTADAS (Para manter compatibilidade com o Bot) ---
     @property
-    def séries_selecionadas(self) -> list:
-        if not self.turmas_selecionadas:
-            return []
+    def séries_selecionadas(self) -> list :
         return TurmasSéries.gerar_lista_de_séries(self.turmas_selecionadas)
 
     @property
-    def turmas_selecionadas_por_série(self) -> dict:
-        if not self.turmas_selecionadas:
-            return {}
+    def turmas_selecionadas_por_série(self) -> dict :
         return TurmasSéries.gerar_dicionário_turmas_por_série(self.turmas_selecionadas)
 
-# Instância Singleton
-parâmetros = EstadoApp(diretório_base=Path(DIRETÓRIO_BASE_PADRÃO))
 
-
-
-# class Parâmetros:
-#     #todo: refatorar essa bosta todinha. Provavelmente com uma dataclass. Só assim eu posos organizar o armazenamento
-#     # de parâmetros persistentes ao longo dos usos.
-#
-#     def __init__(self):
-#
-#
-#         self.diretório_base = DIRETÓRIO_BASE_PADRÃO
-#         self.prévias = Prévias(self.diretório_base)
-#
-#         self._séries_selecionadas = None
-#         self._turmas_selecionadas_por_série = None
-#         self._estado_turmas = {}
-#
-#         self.__lista_dias_letivos = DiasLetivos(self.diretório_base, ANO_ATUAL).lista_dias_letivos
-#         self.__dicio_dias_letivos = DiasLetivos(self.diretório_base, ANO_ATUAL).dicionário_dias_letivos
-#
-#         self.__modulações = ModulaçãoServidor(self.diretório_base).modulações
-#
-#         self.__resumo = self.prévias.resumo
-#         self.__nome_ue = self.prévias.nome_ue
-#
-#         self.turmas_disponíveis = self.prévias.turmas
-#
-#         self.séries_disponíveis = TurmasSéries(self.prévias).lista_séries
-#         self.turmas_disponíveis_por_série = TurmasSéries(self.prévias).dicionário_turmas_por_série
-#
-#         for turma in self.turmas_disponíveis:
-#             self._estado_turmas[turma] = True
-#
-#         self._turmas_selecionadas = self.turmas_disponíveis
-#
-#
-#     @property
-#     def resumo(self) -> dict :
-#         return self.__resumo
-#
-#     @resumo.setter
-#     def resumo(self, valor) -> None:
-#         self.__resumo = valor
-#
-#     @property
-#     def lista_dias_letivos(self) -> list:
-#         return self.__lista_dias_letivos
-#
-#     @lista_dias_letivos.setter
-#     def lista_dias_letivos(self, valor) -> None:
-#         self.__lista_dias_letivos = valor
-#
-#     @property
-#     def dicionário_dias_letivos(self)  -> dict:
-#         return self.__dicio_dias_letivos
-#
-#     @dicionário_dias_letivos.setter
-#     def dicionário_dias_letivos(self, valor) -> None:
-#         self.__dicio_dias_letivos = valor
-#
-#     @property
-#     def nome_ue(self) -> str:
-#         return self.__nome_ue
-#
-#     @nome_ue.setter
-#     def nome_ue(self, valor) -> None:
-#         self.__nome_ue = valor
-#
-#     @property
-#     def modulações(self) -> dict:
-#         return self.__modulações
-#
-#     @modulações.setter
-#     def modulações(self, valor) -> None:
-#         self.__modulações = valor
-#
-#     @property
-#     def turmas_selecionadas(self) -> list[str]:
-#         return self._turmas_selecionadas
-#
-#     @turmas_selecionadas.setter
-#     def turmas_selecionadas(self, value: list[str]) -> None:
-#         self._turmas_selecionadas = value
-#         self._séries_selecionadas = TurmasSéries.gerar_lista_de_séries(value)
-#         self._turmas_selecionadas_por_série = TurmasSéries.gerar_dicionário_turmas_por_série(value)
-#
-#     @property
-#     def séries_selecionadas(self) -> list:
-#         return self._séries_selecionadas
-#
-#     @property
-#     def turmas_selecionadas_por_série(self):
-#         return self._turmas_selecionadas_por_série
-#
-#
-# parâmetros = Parâmetros()
+parâmetros = Parâmetros(diretório_base=Path(DIRETÓRIO_BASE_PADRÃO))

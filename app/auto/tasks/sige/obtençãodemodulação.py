@@ -6,11 +6,12 @@ import pandas as pd
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 
+from app.auto.tasks.taskregistry import TaskRegistry
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.config.parâmetros import parâmetros
 
-
+@TaskRegistry.registrar('obter modulações')
 class ObtençãoDeModulação:
     def __init__(
             self,
