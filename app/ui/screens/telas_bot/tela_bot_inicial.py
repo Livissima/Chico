@@ -75,7 +75,7 @@ class TelaBot(CTkFrame):
         )
         self.bt_credenciais = Botão(
             self,
-            função=lambda: self.controller.alternador.abrir('telas_bot google'),
+            função=lambda: self.controller.alternador.abrir('telas_bot credenciais'),
             texto='Credenciais',
             fonte=('Arial', 20),
             formato='bold',
