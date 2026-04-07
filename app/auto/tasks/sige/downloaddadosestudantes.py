@@ -1,4 +1,3 @@
-#app/auto/tasks/sige/downloaddadosestudantes.py
 from os import PathLike
 from pathlib import Path
 from selenium.webdriver import Chrome

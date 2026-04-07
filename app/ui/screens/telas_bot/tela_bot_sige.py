@@ -21,6 +21,14 @@ if TYPE_CHECKING:
     descrição='Automação de tarefas'
 )
 class TelaBotSige(CTkFrame):
+    seleção = EstruturaDeSeleção(
+        #todo: passar esse objeto pra outro lugar apropriado
+
+        séries_selecionadas=parâmetros.séries_selecionadas,
+        turmas_selecionadas_por_série=parâmetros.turmas_selecionadas_por_série
+    )
+
+
     def __init__(self, master, controller: "Janela"):
         super().__init__(master)
         self.master: CTk = master
@@ -109,11 +117,22 @@ class TelaBotSige(CTkFrame):
             texto='Iniciar',
             fonte=('times new roman', 20),
             formato='bold',
-            x='centro',
+            x=150,
             y=350,
-            largura=90,
-            função=lambda: self.iniciar_tarefa(),
+            largura=120,
+            função=lambda: self._iniciar_tarefa(),
             condição=len(parâmetros.turmas_disponíveis) > 0
+        )
+
+        self._bt_noteador = Botão(
+            self,
+            texto='Lançar notas',
+            fonte=('times new roman', 20),
+            formato='bold',
+            x=300,
+            y=350,
+            largura=120,
+            função=lambda: self._notear()
         )
 
 
@@ -177,24 +196,21 @@ class TelaBotSige(CTkFrame):
         )
         self._verificar_estatística()
 
-    def iniciar_tarefa(self):
+    def _iniciar_tarefa(self):
         self.salvar_estado()
 
         if not self._ck_alvos.valores_true:
             self._tx_feedback.att('Selecione ao menos um conteúdo alvo.')
             print(f'selecione ao menos um conteúdo alvo')
 
-        seleção = EstruturaDeSeleção(
-            séries_selecionadas=parâmetros.séries_selecionadas,
-            turmas_selecionadas_por_série=parâmetros.turmas_selecionadas_por_série
-        )
+
 
         if any(alvo in self._ck_alvos.valores_true for alvo in ['Fichas', 'Contatos', 'Situações', 'Gêneros']):
             Bot(tarefa='downloads', destino=self._kwargs['destino'], alvos=self._ck_alvos.valores_true, seleção=seleção)
 
         if self._ck_alvos.valores_true == ['Fotos']:
             print(f'____Fotos')
-            Bot(tarefa='fotos', turmas=parâmetros.turmas_selecionadas, seleção=seleção)
+            Bot(tarefa='fotos', turmas=parâmetros.turmas_selecionadas, seleção=self.seleção)
 
 
     def _verificar_estatística(self):
@@ -228,3 +244,6 @@ class TelaBotSige(CTkFrame):
                 if valor: self._ck_alvos.marcar(nome)
                 else: self._ck_alvos.desmarcar(nome)
 
+
+    def _notear(self):
+        Bot(tarefa='noteador', seleção=self.seleção, alvos=self._ck_alvos)

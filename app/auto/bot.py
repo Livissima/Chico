@@ -16,7 +16,6 @@ from app.auto.tasks.sige.sondagem import Sondagem
 
 
 class Bot:
-    # app/auto/bot.py
     def __init__(self, tarefa: str, **kwargs) :
         tarefa_normalizada = normalizar_unicode(tarefa)
 
