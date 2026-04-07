@@ -1,17 +1,14 @@
+#app/ui/screens/telas_bot/tela_bot_sige.py
 import os.path
-
 from customtkinter import CTkFrame, CTk
-
 from app.auto.bot import Bot
-
+from app.config.parâmetros.estruturadeseleção import EstruturaDeSeleção
 from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
 from app.config.parâmetros import parâmetros
 from app.ui.functions.desfazimento import Desfazimento
 from app.ui.config.registrodetelas import RegistradorDeTelas
 from app.ui.widgets import Botão, Input, CheckBox, Texto
 from typing import TYPE_CHECKING
-
-# from app.ui.config.cabeçalhos import Cabeçalhos
 from app.ui.functions.pesquisadiretório import PesquisaDiretório
 
 if TYPE_CHECKING:
@@ -187,13 +184,17 @@ class TelaBotSige(CTkFrame):
             self._tx_feedback.att('Selecione ao menos um conteúdo alvo.')
             print(f'selecione ao menos um conteúdo alvo')
 
+        seleção = EstruturaDeSeleção(
+            séries_selecionadas=parâmetros.séries_selecionadas,
+            turmas_selecionadas_por_série=parâmetros.turmas_selecionadas_por_série
+        )
+
         if any(alvo in self._ck_alvos.valores_true for alvo in ['Fichas', 'Contatos', 'Situações', 'Gêneros']):
-            Bot(tarefa='downloads', parâmetros_web=None, destino=self._kwargs['destino'],
-                alvos=self._ck_alvos.valores_true)
+            Bot(tarefa='downloads', destino=self._kwargs['destino'], alvos=self._ck_alvos.valores_true, seleção=seleção)
 
         if self._ck_alvos.valores_true == ['Fotos']:
             print(f'____Fotos')
-            Bot(tarefa='fotos', parâmetros_web=None, turmas=parâmetros.turmas_selecionadas)
+            Bot(tarefa='fotos', turmas=parâmetros.turmas_selecionadas, seleção=seleção)
 
 
     def _verificar_estatística(self):

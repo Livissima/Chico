@@ -1,3 +1,4 @@
+#app/ui/screens/telas_bot/tela_bot_servidores.py
 from customtkinter import CTkFrame, CTk
 
 from app.auto.bot import Bot

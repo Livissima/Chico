@@ -3,6 +3,8 @@ from os import PathLike
 from typing import Literal
 
 from selenium.webdriver.common.by import By
+
+from app.auto.tasks.taskregistry import TaskRegistry
 from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
@@ -10,7 +12,7 @@ from selenium.webdriver import Chrome
 from app.auto.tasks.siap.frequenciador import FrequenciadorAdm, FrequenciadorProf
 from app.auto.tasks.siap.frequenciador.relatóriodeausências import RelatórioDeAusências
 
-
+@TaskRegistry.registrar('siap')
 class Frequenciador :
 
     def __init__(

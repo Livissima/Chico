@@ -7,10 +7,11 @@ from pathlib import Path
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 
+from app.auto.tasks.taskregistry import TaskRegistry
 from app.auto.functions import NavegaçãoWeb
 from app.config.parâmetros import parâmetros
 
-
+@TaskRegistry.registrar('consultar dias letivos')
 class ConsultaDiasLetivos:
     def __init__(
             self,

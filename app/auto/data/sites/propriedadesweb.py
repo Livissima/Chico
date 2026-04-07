@@ -1,8 +1,8 @@
-from app.auto.data.sites.google import Google
-from app.auto.data.sites.netescola import NetEscola
+from app.auto.data.sites.google.google import Google
+from app.auto.data.sites.netescola.netescola import NetEscola
 from app.auto.data.sites.siap import Siap
 from app.auto.data.sites.sige import Sige
-from app.auto.data.sites.tipagem import SiteConfig
+from app.auto.data.sites.siteconfig import SiteConfig
 
 
 class PropriedadesWeb(SiteConfig) :
@@ -21,10 +21,7 @@ class PropriedadesWeb(SiteConfig) :
 
         return config
 
-
-
-
-
+#class PropriedadesWeb
     # #todo: Esta classe está extremamente acoplada com dezenas de outras classes.
     # # Pensei em fazer uma singleton, mas os atributos dependem do argumento passado na instanciação
     #

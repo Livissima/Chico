@@ -1,9 +1,10 @@
+#app/auto/data/sites/siap/siap.py
 from app.auto.data.sites.siap.caminhos import Caminhos
 from app.auto.data.sites.siap.css_selectors import CssSelectors
 from app.auto.data.sites.siap.ids import Ids
 from app.auto.data.sites.siap.urls import Urls
 from app.auto.data.sites.siap.xpaths import Xpaths
-from app.auto.data.sites.tipagem import SiteConfig
+from app.auto.data.sites.siteconfig import SiteConfig
 from app.config.settings.env_config import CREDENCIAIS_SIAP
 
 
