@@ -13,6 +13,7 @@ class TaskSignature :
     name: str
     required: Dict[str, type] = field(default_factory=dict)
     optional: Dict[str, type] = field(default_factory=dict)
+    aceita_extras: bool = False
 
     def validar(self, kwargs: dict) -> tuple[bool, str] :
         faltando = set(self.required.keys()) - set(kwargs.keys())
@@ -21,7 +22,9 @@ class TaskSignature :
 
         permitidos = set(self.required.keys()) | set(self.optional.keys())
         invalidos = set(kwargs.keys()) - permitidos
-        if invalidos :
+
+        # ← NOVO: só reclama se não tem **kwargs
+        if invalidos and not self.aceita_extras :
             return False, f"Argumentos inesperados: {invalidos}"
 
         return True, ""
@@ -53,25 +56,26 @@ class TaskRegistry :
     @staticmethod
     def _extrair_assinatura(nome: str, task_class: Type) -> TaskSignature :
         assinatura = TaskSignature(name=nome)
-
-        assinatura_init = inspect.signature(task_class.__init__)
-
+        sig = inspect.signature(task_class.__init__)
         hints = get_type_hints(task_class.__init__)
 
-        for nome_parâmetro, parâmetro in assinatura_init.parameters.items() :
-            if nome_parâmetro == 'self' :
+        tem_kwargs = any(p.kind == inspect.Parameter.VAR_KEYWORD for p in sig.parameters.values())
+
+        for param_name, param in sig.parameters.items() :
+            if param_name == 'self' :
+                continue
+            if param.kind == inspect.Parameter.VAR_KEYWORD :
                 continue
 
-            if parâmetro.kind == inspect.Parameter.VAR_KEYWORD :
-                continue
+            tipo = hints.get(param_name, Any)
 
-            tipo = hints.get(nome_parâmetro, Any)
-
-            if parâmetro.default == inspect.Parameter.empty :
-                assinatura.required[nome_parâmetro] = tipo
+            if param.default == inspect.Parameter.empty :
+                assinatura.required[param_name] = tipo
             else :
-                assinatura.optional[nome_parâmetro] = tipo
+                assinatura.optional[param_name] = tipo
 
+        # ← NOVO: guardar flag
+        assinatura.aceita_extras = tem_kwargs
         return assinatura
 
     @classmethod

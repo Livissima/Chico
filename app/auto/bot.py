@@ -16,28 +16,31 @@ from app.auto.tasks.sige.sondagem import Sondagem
 
 
 class Bot:
-    def __init__(self, tarefa: str, **kwargs):
-        print(f"Bot iniciado: {tarefa}.\n   - Argumentos: {list(kwargs.keys())}\n")
+    # app/auto/bot.py
+    def __init__(self, tarefa: str, **kwargs) :
         tarefa_normalizada = normalizar_unicode(tarefa)
 
+        print(f"\n🤖 Bot iniciando: '{tarefa}'")
+        print(f"   Argumentos: {list(kwargs.keys())}\n")
 
-        válido, mensagem = TaskRegistry.validar_argumentos(tarefa_normalizada, kwargs)
-        if not válido:
-            raise ValueError(f'Erro de validação de argumentos na task "{tarefa}": {mensagem}')
-
+        # ← Criar navegador AQUI
         navegador = webdriver.Chrome()
+        kwargs['navegador'] = navegador
 
-        try:
-            kwargs['navegador'] = navegador
+        # ← DEPOIS validar
+        valido, mensagem = TaskRegistry.validar_argumentos(tarefa_normalizada, kwargs)
+        if not valido :
+            navegador.quit()
+            raise ValueError(f"❌ Erro de validação: {mensagem}")
 
+        try :
             task_class = TaskRegistry.obter(tarefa_normalizada)
-            print(f'→ Executando {task_class.__name__}.')
+            print(f"🚀 Executando {task_class.__name__}...\n")
             task_class(**kwargs)
-
-        except Exception as e:
-            print(f' ––– Erro durante execução: {e}')
+        except Exception as e :
+            print(f"\n❌ Erro durante execução: {e}")
             raise
-        finally:
+        finally :
             navegador.quit()
 
     #
