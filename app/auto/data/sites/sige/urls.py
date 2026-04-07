@@ -10,6 +10,9 @@ class Urls:
     def tela_login(self) -> str:
         return 'https://sige.educacao.go.gov.br/sige/login.asp'
 
+    ################################################################
+    ################################################################
+    ################################################################
     @property
     def tela_fichas(self) -> str:
         return r'https://sige.educacao.go.gov.br/sige/modulos/Academico/Relatorios/ave_fichadoaluno_con.asp'

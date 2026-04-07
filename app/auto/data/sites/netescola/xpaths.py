@@ -1,8 +1,4 @@
-class NetEscola:
-
-    @property
-    def url(self):
-        return 'https://netescola.educacao.go.gov.br/#PrimeiroAcesso'
+class Xpaths:
 
     @property
     def xpaths(self):
@@ -17,10 +13,3 @@ class NetEscola:
             'concordo' : '/html/body/div[1]/div[2]/div/div[2]/div[2]/div[4]/div[1]/div[1]/label/input',
             'salvar'   : '/html/body/div[1]/div[2]/div/div[2]/div[2]/div[4]/div[1]/div[3]/button'
         }
-
-    # @property
-    # def caminhos(self) -> dict[str, list[tuple]]:
-    #     caminhos = {
-    #         '' : [()]
-    #     }
-    #     return caminhos

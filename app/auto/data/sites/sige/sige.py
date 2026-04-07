@@ -4,7 +4,7 @@ from app.auto.data.sites.sige.css_selectors import CssSelectors
 from app.auto.data.sites.sige.ids import Ids
 from app.auto.data.sites.sige.urls import Urls
 from app.auto.data.sites.sige.xpaths import Xpaths
-from app.auto.data.sites.tipagem import SiteConfig, Credenciais
+from app.auto.data.sites.siteconfig import SiteConfig, Credenciais
 from app.config.settings.env_config import ID_SIGE, SENHA_SIGE
 
 
