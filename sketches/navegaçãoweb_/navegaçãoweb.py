@@ -1,11 +1,11 @@
 from typing import Literal
 from selenium.webdriver import Chrome
 # from app.auto import Propriedades
-from app.auto.functions.navegaçãoweb_.navegaçãowebmobilidade import NavegaçãoWebMobilidade
-from app.auto.functions.navegaçãoweb_.navegaçãowebscraping import NavegaçãoWebScraping
-from app.auto.functions.navegaçãoweb_.navegaçãowebsiap import NavegaçãoWebSiap
-from app.auto.functions.navegaçãoweb_.navegaçãowebsige import NavegaçãoWebSige
-from app.auto.functions.navegaçãoweb_.tipagemnavegação import TipagemNavegação
+from sketches.navegaçãoweb_.navegaçãowebmobilidade import NavegaçãoWebMobilidade
+from sketches.navegaçãoweb_.navegaçãowebscraping import NavegaçãoWebScraping
+from sketches.navegaçãoweb_.navegaçãowebsiap import NavegaçãoWebSiap
+from sketches.navegaçãoweb_.navegaçãowebsige import NavegaçãoWebSige
+from sketches.navegaçãoweb_.tipagemnavegação import TipagemNavegação
 
 
 class NavegaçãoWeb(TipagemNavegação) :
