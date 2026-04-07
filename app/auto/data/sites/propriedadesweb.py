@@ -1,8 +1,8 @@
-from app.auto.data.sites.google import Google
-from app.auto.data.sites.netescola import NetEscola
+from app.auto.data.sites.google.google import Google
+from app.auto.data.sites.netescola.netescola import NetEscola
 from app.auto.data.sites.siap import Siap
 from app.auto.data.sites.sige import Sige
-from app.auto.data.sites.tipagem import SiteConfig
+from app.auto.data.sites.siteconfig import SiteConfig
 
 
 class PropriedadesWeb(SiteConfig) :
