@@ -206,7 +206,7 @@ class TelaBotSige(CTkFrame):
 
 
         if any(alvo in self._ck_alvos.valores_true for alvo in ['Fichas', 'Contatos', 'Situações', 'Gêneros']):
-            Bot(tarefa='downloads', destino=self._kwargs['destino'], alvos=self._ck_alvos.valores_true, seleção=seleção)
+            Bot(tarefa='downloads', destino=self._kwargs['destino'], alvos=self._ck_alvos.valores_true, seleção=self.seleção)
 
         if self._ck_alvos.valores_true == ['Fotos']:
             print(f'____Fotos')
