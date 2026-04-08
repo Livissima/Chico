@@ -13,7 +13,7 @@ class LançadorDeNotas:
             alvos: list[str],
             **kwargs
     ):
-        print(f'Classe LançadorDeNotas instanciada: {seleção = }')
+        print(f'Classe LançadorDeNotas instanciada: \n{seleção = }\n{alvos = }')
 
         self.master = navegador
         self._seleção = seleção
@@ -33,19 +33,39 @@ class LançadorDeNotas:
         self._nv.clicar('xpath', 'misc', 'alerta')
 
     def _executar(self, alvos: list[str]) -> None :
-        print(f'{alvos = }')
         for alvo in alvos :
             print(f'{alvo = }')
-            self.__baixar_alvo()
+            self._preencher_form()
 
-    def __baixar_alvo(self) -> None :
+    def _preencher_form(self) -> None :
         self._nv.acessar_url('https://sige.educacao.go.gov.br/sige/modulos/Academico/ave_chamada_cad.asp')
 
         for série, turma in self._nv.iterar_turmas_sige(self._seleção) :
-            # self._lançar()
+            self._lançar_notas()
             print(f'{série = }, {turma = }')
 
 
-    def _lançar(self):
+    def _lançar_notas(self):
+        #selecionar disciplina;
+        ## as veze demora para a lista de alunos carregar.
+        # Veja se isso está sendo cuidado. A demora acontece após seecionar a turma, então devemos esperar isso para então selecionar disciplina, pois o próprio SIGE não cria essa trava
+        #marcar bimestre
+        #marcar todos '/html/body/div[8]/form/table/tbody/tr[15]/td/table/tbody/tr[1]/td[1]/input'
+        #clicar cadastrar (id cmdCadastrar)
         pass
+
+    def _ordenar(self):
+        pass
+
+    def _preencher_cargas_horárias(self):
+        pass
+
+
+
+    def _selecionar_bimestre(self, bimestre: int) -> None:
+        xpath_bimestre = f'/html/body/div[8]/form/table/tbody/tr[11]/td/input[{bimestre}]'
+        self._nv.clicar('xpath livre', xpath_bimestre)
+
+
+
 
