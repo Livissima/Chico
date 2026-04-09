@@ -18,12 +18,12 @@ ANO = 2026
 
 
 @RegistradorDeTelas.registrar(
-    nome_tela='telas_bot siap',
+    nome_tela='bot_siap',
     título_da_janela='Bot SIAP',
     cabeçalho='BOT SIAP',
     descrição=parâmetros.nome_ue
 )
-class TelaBotSiap(CTkFrame) :
+class TelaSiap(CTkFrame) :
     def __init__(self, master, controller: "Janela") :
         super().__init__(master)
         self.master: CTk = master
@@ -118,7 +118,7 @@ class TelaBotSiap(CTkFrame) :
 
         self.bt_back = Botão(
             self,
-            função=lambda: self.controller.alternador.abrir('telas_bot'),
+            função=lambda: self.controller.alternador.abrir('bot'),
             texto='←',
             fonte=('Arial', 20),
             formato='bold',

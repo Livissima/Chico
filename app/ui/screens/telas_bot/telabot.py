@@ -9,7 +9,7 @@ from app.ui.widgets import Botão, Texto
 if TYPE_CHECKING:
     pass
 @RegistradorDeTelas.registrar(
-    nome_tela='telas_bot',
+    nome_tela='bot',
     título_da_janela='Bot',
     cabeçalho='BOT',
     descrição='Automação de tarefas'
@@ -54,7 +54,7 @@ class TelaBot(CTkFrame):
         self.bt_siap = Botão(
             self,
             #todo flexibilizar esse path
-            função=lambda: self.controller.alternador.abrir('telas_bot siap'),
+            função=lambda: self.controller.alternador.abrir('bot_siap'),
             texto='SIAP',
             fonte=('Arial', 20),
             formato='bold',
@@ -65,7 +65,7 @@ class TelaBot(CTkFrame):
 
         self.bt_sige = Botão(
             self,
-            função=lambda: self.controller.alternador.abrir('telas_bot sige'),
+            função=lambda: self.controller.alternador.abrir('bot_sige'),
             texto='SIGE',
             fonte=('Arial', 20),
             formato='bold',
@@ -75,7 +75,7 @@ class TelaBot(CTkFrame):
         )
         self.bt_credenciais = Botão(
             self,
-            função=lambda: self.controller.alternador.abrir('telas_bot credenciais'),
+            função=lambda: self.controller.alternador.abrir('bot_credenciais'),
             texto='Credenciais',
             fonte=('Arial', 20),
             formato='bold',
@@ -85,7 +85,7 @@ class TelaBot(CTkFrame):
         )
         self.bt_servidores = Botão(
             self,
-            # função=lambda: self.controller.alternador.abrir('telas_bot servidores'),
+            # função=lambda: self.controller.alternador.abrir('bot_servidores'),
             função=lambda: Bot(tarefa='servidores', parâmetros_web=None, path=parâmetros.diretório_base),
             texto='Servidores',
             fonte=('Arial', 20),

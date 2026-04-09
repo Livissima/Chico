@@ -15,12 +15,12 @@ if TYPE_CHECKING:
     pass
 
 @RegistradorDeTelas.registrar(
-    nome_tela='telas_bot sige',
+    nome_tela='bot_sige',
     título_da_janela='Bot SIGE',
     cabeçalho='BOT SIGE',
     descrição='Automação de tarefas'
 )
-class TelaBotSige(CTkFrame):
+class TelaSige(CTkFrame):
     seleção = EstruturaDeSeleção(
         #todo: passar esse objeto pra outro lugar apropriado
 
@@ -88,7 +88,7 @@ class TelaBotSige(CTkFrame):
     def __inserir_botões(self):
         def back():
             self.salvar_estado()
-            self.controller.alternador.abrir('telas_bot')
+            self.controller.alternador.abrir('bot')
 
         self._bt_back = Botão(
             self,
