@@ -11,6 +11,7 @@ class Caminhos:
             'sondagem' : self._sondagem,
             'ficha aluno' : self._ficha_aluno,
             'modulações' : self._modulações,
+            'avaliação' : self._avaliação,
         }
 
     @property
@@ -29,7 +30,6 @@ class Caminhos:
     def _gêneros(self):
         return r'https://sige.educacao.go.gov.br/sige/modulos/Academico/Relatorios/Ave_alunosPorIdade_con.asp'
 
-
     @property
     def _quantitativo(self):
         return r'https://sige.educacao.go.gov.br/sige/modulos/Academico/Relatorios/Ave_quantitativoAlunos_con.asp'
@@ -46,3 +46,6 @@ class Caminhos:
     def _modulações(self):
         return r'https://sige.educacao.go.gov.br/sige/modulos/Dossie/Relatorios/ddv_docencia_con.asp'
 
+    @property
+    def _avaliação(self):
+        return 'https://sige.educacao.go.gov.br/sige/modulos/Academico/Ave_NotasFaltas_cad.asp'

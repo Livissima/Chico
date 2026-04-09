@@ -33,15 +33,16 @@ class LançadorDeNotas:
         self._nv.clicar('xpath', 'misc', 'alerta')
 
     def _executar(self, alvos: list[str]) -> None :
+        
         for alvo in alvos :
             print(f'{alvo = }')
             self._preencher_form()
 
-    def _preencher_form(self) -> None :
+    def _preencher_form(self, função) -> None :
         self._nv.acessar_url('https://sige.educacao.go.gov.br/sige/modulos/Academico/ave_chamada_cad.asp')
 
         for série, turma in self._nv.iterar_turmas_sige(self._seleção) :
-            self._lançar_notas()
+            função()
             print(f'{série = }, {turma = }')
 
 
@@ -58,14 +59,15 @@ class LançadorDeNotas:
         pass
 
     def _preencher_cargas_horárias(self):
+        # self._nv.acessar_destino('https://sige.educacao.go.gov.br/sige/modulos/Academico/Ave_NotasFaltas_cad.asp')
+        #selecionar disciplina
         pass
 
 
 
     def _selecionar_bimestre(self, bimestre: int) -> None:
-        xpath_bimestre = f'/html/body/div[8]/form/table/tbody/tr[11]/td/input[{bimestre}]'
+        _bimestres = list(range(1, 5))
+        xpath_bimestre = f'/html/body/div[8]/form/table/tbody/tr[11]/td/input[{_bimestres[bimestre]}]'
         self._nv.clicar('xpath livre', xpath_bimestre)
-
-
 
 
