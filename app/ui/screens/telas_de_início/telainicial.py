@@ -85,7 +85,7 @@ class TelaInicial(CTkFrame):
         segunda_linha = 350
         self.bt_bot = Botão(
             self,
-            função= lambda: self.controller.alternador.abrir('telas_bot'),
+            função= lambda: self.controller.alternador.abrir('bot'),
             texto='BOT',
             formato='bold',
             x=80,

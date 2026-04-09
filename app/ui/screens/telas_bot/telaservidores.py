@@ -1,4 +1,3 @@
-#app/ui/screens/telas_bot/tela_bot_servidores.py
 from customtkinter import CTkFrame, CTk
 
 from app.auto.bot import Bot
@@ -8,17 +7,16 @@ from app.ui.config.registrodetelas import RegistradorDeTelas
 from app.ui.widgets import Botão
 
 
-# from app.ui.config.cabeçalhos import Cabeçalhos
 
 
 
 @RegistradorDeTelas.registrar(
-    nome_tela='telas_bot servidores',
+    nome_tela='bot_servidores',
     título_da_janela='Servidores',
     cabeçalho='Servidores',
     descrição='Dossiê de servidores'
 )
-class TelaBotServidores(CTkFrame):
+class TelaServidores(CTkFrame):
     def __init__(self, master, controller: "Janela") :
         super().__init__(master)
         self.master: CTk = master
@@ -62,7 +60,7 @@ class TelaBotServidores(CTkFrame):
 
         self.bt_back = Botão(
             self,
-            função=lambda: self.controller.alternador.abrir('telas_bot'),
+            função=lambda: self.controller.alternador.abrir('bot'),
             texto='←',
             fonte=('Arial', 20),
             formato='bold',

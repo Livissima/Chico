@@ -12,12 +12,12 @@ if TYPE_CHECKING:
     pass
 
 @RegistradorDeTelas.registrar(
-    nome_tela='telas_bot credenciais',
+    nome_tela='bot_credenciais',
     título_da_janela='Bot Credenciais',
     cabeçalho='BOT Credenciais',
     descrição='Gerenciamento automático de credenciais'
 )
-class TelaBotCredenciais(CTkFrame):
+class TelaCredenciais(CTkFrame):
     def __init__(self, master, controller: "Janela"):
         super().__init__(master)
         self.master: CTk = master
@@ -48,7 +48,7 @@ class TelaBotCredenciais(CTkFrame):
     def __inserir_botões(self):
         def back():
             self.salvar_valores_checkboxes()
-            self.controller.alternador.abrir('telas_bot')
+            self.controller.alternador.abrir('bot')
 
         self.bt_back = Botão(
             self,
