@@ -41,7 +41,7 @@ class DownloadFotosEstudantes:
         self._nv.clicar('xpath', 'misc', 'alerta')
 
     def _obter_fotos(self, turmas: list):
-        self._nv.acessar_url('ficha aluno')
+        self._nv.acessar_destino('ficha aluno')
 
         df = self._leitura_df[['Turma', 'Estudante', 'Matrícula']]
         df = df[df['Turma'].isin(turmas)]

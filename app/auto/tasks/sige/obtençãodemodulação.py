@@ -37,7 +37,7 @@ class ObtençãoDeModulação:
 
     def executar(self):
         self._logon()
-        self._nv.acessar_url('modulações')
+        self._nv.acessar_destino('modulações')
 
         for cpf in self.professores:
             self._nv.digitar_xpath('lápis docs', 'relatórios', 'dossiê do servidor', 'cpf', string=cpf)

@@ -90,17 +90,21 @@ class NavegaçãoWeb :
             except Exception as js_error :
                 raise f"Falha no clique via JavaScript: {js_error}"
 
-    def acessar_url(self, destino: str) -> None :
-        print(f'    → Caminhando para {destino}')
-        destinos = self._pp.caminhos
-        self.master.get(destinos[destino])
-        self.aguardar_página()
+    def acessar_destino(self, destino: str) -> None :
+        print(f'')
+        _destino = destino
+        if '.' not in destino:
+            destinos = self._pp.caminhos
+            _destino = str(destinos[destino])
 
+        try:
+            print(f'Acessando: {_destino}')
+            self.master.get(_destino)
+            self.aguardar_página()
+        except Exception as e:
+            print(f'Destino ruim: {_destino = }\n{e}')
+            raise
 
-    def acessar_página(self, url):
-        self.master.get(url)
-        self.master.maximize_window()
-        self.aguardar_página()
 
     def digitar_xpath(self, *chaves, string: str | Any) -> None:
         xpaths = self._pp.xpaths

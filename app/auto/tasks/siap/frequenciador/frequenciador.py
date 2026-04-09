@@ -37,7 +37,7 @@ class Frequenciador :
 
 
     def _executar(self):
-        self._nv.acessar_página(self._pp.urls)
+        self._nv.acessar_destino(self._pp.urls)
 
         for usuário, credenciais in self._pp.credenciais.items():
             print(f'\n → Iterando sobre {usuário}')
