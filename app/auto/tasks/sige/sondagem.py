@@ -57,7 +57,7 @@ class Sondagem:
         self._nv.clicar('xpath', 'misc', 'alerta')
 
     def _obter_elemento_base(self):
-        self._nv.acessar_url('sondagem')
+        self._nv.acessar_destino('sondagem')
         print(f'caminhado para sondagem')
 
         self._nv.clicar('xpath', 'resumo', 'turmas', 'ativas')

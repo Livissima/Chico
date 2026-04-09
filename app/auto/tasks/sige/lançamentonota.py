@@ -39,7 +39,7 @@ class LançadorDeNotas:
             self._preencher_form()
 
     def _preencher_form(self, função) -> None :
-        self._nv.acessar_url('https://sige.educacao.go.gov.br/sige/modulos/Academico/ave_chamada_cad.asp')
+        self._nv.acessar_destino('https://sige.educacao.go.gov.br/sige/modulos/Academico/ave_chamada_cad.asp')
 
         for série, turma in self._nv.iterar_turmas_sige(self._seleção) :
             função()

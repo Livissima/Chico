@@ -166,7 +166,8 @@ class TelaSige(CTkFrame):
             altura=30,
             largura=80,
             x=0,
-            y=200, espaçamento=5
+            y=200,
+            espaçamento=5
         )
 
         self._inserir_checkbox_turmas()
@@ -206,7 +207,7 @@ class TelaSige(CTkFrame):
 
 
         if any(alvo in self._ck_alvos.valores_true for alvo in ['Fichas', 'Contatos', 'Situações', 'Gêneros']):
-            Bot(tarefa='downloads', destino=self._kwargs['destino'], alvos=self._ck_alvos.valores_true, seleção=self.seleção)
+            Bot(tarefa='downloads', destino=self._kwargs['destino'], tarefas_sige=self._ck_alvos.valores_true, seleção=self.seleção)
 
         if self._ck_alvos.valores_true == ['Fotos']:
             print(f'____Fotos')
