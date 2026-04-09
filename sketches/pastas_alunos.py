@@ -1,6 +1,4 @@
 #TODO: Realocar este módulo para um pacote apropriado.
-
-#TODO: organizar a lógica para usar as pastas de letras iniciais, em vez de jogar tudo junto
 from pathlib import Path
 
 import pandas as pd
