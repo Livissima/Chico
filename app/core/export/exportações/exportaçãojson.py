@@ -1,11 +1,11 @@
 import json
-from os import PathLike
 from pathlib import Path
+
 from app.core import ConsultaEstudantes
 
 
 class ExportaçãoJSON:
-    def __init__(self, consulta: ConsultaEstudantes, _path: Path | PathLike):
+    def __init__(self, consulta: ConsultaEstudantes, _path: Path):
         self._exportar(consulta, _path)
 
     def _exportar(self, consulta, _path):
