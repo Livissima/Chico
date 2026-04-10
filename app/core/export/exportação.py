@@ -1,11 +1,9 @@
 from pathlib import Path
 
-from pandas import DataFrame
-
 from app.core import ConsultaEstudantes
 from app.core.export.exportações.exportaçãocsv import ExportaçãoCSV
-from app.core.export.exportações.exportaçãoxlsx import ExportaçãoXLSX
 from app.core.export.exportações.exportaçãojson import ExportaçãoJSON
+from app.core.export.exportações.exportaçãoxlsx import ExportaçãoXLSX
 from app.core.query.servidores.consultaservidores import ConsultaServidores
 
 
@@ -19,7 +17,7 @@ class Exportação:
             path_destino: Path
     ):
 
-        print(f'df_formatado chegando na exportação: {consulta.shape}')
+        print(f'=> Dataframe final para exportação: {consulta.shape = }')
 
         self.exportar_tudo(consulta, path_destino)
 
@@ -28,4 +26,3 @@ class Exportação:
         ExportaçãoXLSX(consulta, path)
         ExportaçãoCSV(consulta, path)
         ExportaçãoJSON(consulta, path)
-

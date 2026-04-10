@@ -2,18 +2,10 @@ import os
 from os import PathLike
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 from pandas import DataFrame
-from app.config.parâmetros import parâmetros
-import warnings
-from openpyxl import __name__ as openpyxl_name
 
-pd.set_option('display.max_columns', None)
-pd.set_option('display.expand_frame_repr', False)  # Evita quebra do DataFrame em múltiplas linhas
-pd.set_option('display.width', None)  # Ajusta automaticamente à largura do terminal
-warnings.filterwarnings('ignore', category=UserWarning, module=openpyxl_name)
-PATH_TEST = R'/tests/resultados/Compilado de Faltas.csv'
+from app.config.parâmetros import parâmetros
 
 
 class CompiladorDeFaltas:
@@ -25,23 +17,20 @@ class CompiladorDeFaltas:
 
     def exportar_compilado(self):
         destino = Path(self._path, 'Compilado de Faltas.csv')
-        self._compilado_nominal_de_faltas.to_csv(destino, sep=',', index=False)
+        self._compilado_nominal_de_faltas.to_csv(destino, index=False)
 
 
     def _compilar_faltas(self):
-        print(f'::::::: Compilando faltas ___________')
+        print(f'::::::: Compilando faltas :::::::')
         df_inicial = self._ler_dfs()
         compilado = self._tratar(df_inicial)
         return compilado
-
 
     @staticmethod
     def _tratar(df_inicial: DataFrame):
         df = df_inicial.copy()
         df['Lançado'] = df['Lançado'].fillna('')
-        # df['Lançado'] = df['Lançado'].replace([np.True_, np.False_], ['True', 'False'])
         df['Data']    = df['Data'].dt.strftime('%d/%m/%Y')
-
         return df
 
 

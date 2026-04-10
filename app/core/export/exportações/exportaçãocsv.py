@@ -1,11 +1,12 @@
-import os
 from pathlib import Path
+
 from pandas import DataFrame
 
 from app.core import ConsultaEstudantes
 
 
 class ExportaçãoCSV:
+    NOME_CSV = 'Contatos Google'
 
     colunas_CSV: list[str] = [
         "First Name", "Middle Name", "Last Name", "Phonetic First Name", "Phonetic Middle Name", "Phonetic Last Name",
@@ -23,8 +24,14 @@ class ExportaçãoCSV:
     def __init__(self, consulta: ConsultaEstudantes, path: Path):
         self._exportar(consulta, path)
 
-    def _adaptar_df(self, consulta):
-        colunas_dict: dict = {
+    def _exportar(self, df, _path):
+        dict_contatos = self._dicionarizar(df)
+        df_contatos = DataFrame(data=dict_contatos, columns=self.colunas_CSV)
+        df_contatos.to_csv(Path(_path, f'{self.NOME_CSV}.csv'))
+
+    @staticmethod
+    def _dicionarizar(consulta) -> dict:
+        return {
             'First Name'          : consulta.apply(
                 lambda linha: f"{linha['Estudante']} - Transferido" if linha['Situação'] == '(transferido)'
                 else f"{linha['Estudante']} - {linha['Turma']}", axis=1
@@ -35,10 +42,4 @@ class ExportaçãoCSV:
             'Relation 1 - Value'  : consulta['Irmão 1'],
             'Relation 1 - Label'  : 'Irmão(ã)'
         }
-        return DataFrame(data=colunas_dict, columns=self.colunas_CSV)
-
-
-    def _exportar(self, df, _path):
-        df_adaptado = self._adaptar_df(df)
-        df_adaptado.to_csv(Path(_path, 'Contatos Google.csv'))
 
