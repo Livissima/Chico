@@ -8,7 +8,6 @@ from app.core.query.servidores.consultaservidores import ConsultaServidores
 
 
 class Exportação:
-    #todo exportar um ATALHO para área de trabalho. Path(user_desktop_dir())
     #todo: Bolar uma forma de organizar subclasses para distinguir as exportações de estudantes e servidores
 
     def __init__(
