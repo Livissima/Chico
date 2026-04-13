@@ -1,5 +1,4 @@
 import os
-from os import PathLike
 from pathlib import Path
 
 import pandas as pd
@@ -8,64 +7,86 @@ from pandas import DataFrame
 from app.config.parâmetros import parâmetros
 
 
-class CompiladorDeFaltas:
-    def __init__(self, diretório_base: PathLike | Path):
+class CompiladorDeFaltas :
+    NOME_PASTA_REGISTROS = 'Registro de Faltas'
+    NOME_CSV_DE_FALTAS = 'Compilado de Faltas'
+
+    def __init__(self, diretório_base: Path) :
+        print(f'\n::::::: Compilando faltas :::::::\n')
+
         self._path = Path(diretório_base, 'fonte', 'Controle de Frequência')
-        self._compilado_nominal_de_faltas = self._compilar_faltas()
-        print(f'{self._compilado_nominal_de_faltas}')
 
+        self._compilado_de_faltas = self._compilar_faltas()
+        # print(f'{self._compilado_de_faltas}')
 
-    def exportar_compilado(self):
-        destino = Path(self._path, 'Compilado de Faltas.csv')
-        self._compilado_nominal_de_faltas.to_csv(destino, index=False)
+    def compilar_e_exportar(self) :
+        destino = Path(self._path, f'{self.NOME_CSV_DE_FALTAS}.csv')
+        self._compilado_de_faltas.to_csv(destino, index=False)
 
-
-    def _compilar_faltas(self):
-        print(f'::::::: Compilando faltas :::::::')
-        df_inicial = self._ler_dfs()
-        compilado = self._tratar(df_inicial)
+    def _compilar_faltas(self) :
+        dfs_iniciais = self._ler_dfs()
+        compilado = self._gerar_dataframe(dfs_iniciais)
         return compilado
 
-    @staticmethod
-    def _tratar(df_inicial: DataFrame):
-        df = df_inicial.copy()
-        df['Lançado'] = df['Lançado'].fillna('')
-        df['Data']    = df['Data'].dt.strftime('%d/%m/%Y')
-        return df
-
-
-    def _ler_dfs(self):
-        dataframe_total = pd.DataFrame()
-        for diretório_arquivo in self._diretórios_registros:
-            if diretório_arquivo.suffix not in ['.xlsx', '.xlsm'] :  #todo: implementar csv no futuro
+    def _ler_dfs(self) -> DataFrame | dict[int | str, DataFrame] | None :
+        for diretório_arquivo in self._paths_de_registros_de_faltas :
+            if diretório_arquivo.suffix not in ['.xlsx', '.xlsm'] :  # todo: implementar csv no futuro
                 continue
+
+            print(f' - Diretório registro: {diretório_arquivo}')
 
             try :
                 dicionário_dataframes = pd.read_excel(
-                    diretório_arquivo, sheet_name=parâmetros.turmas_disponíveis, engine='openpyxl')
+                    diretório_arquivo,
+                    sheet_name=parâmetros.turmas_disponíveis,
+                    engine='openpyxl'
+                )
+                print(f'\n - Dataframes lidos e dicionário de dataframes gerado: {dicionário_dataframes.keys() = }')
+                for nome_turma, dataframe in dicionário_dataframes.items():
+                    print(f'    -> {nome_turma} : {dataframe.shape}')
+                # print(dicionário_dataframes)
+                return dicionário_dataframes
 
-                print(f'_________{diretório_arquivo = }')
-                for turma, dataframe in dicionário_dataframes.items() :
-                    # print(f'{turma}:\n{list(dataframe.columns)}')
-                    dataframe = dataframe[['Estudante', 'Data', 'Lançado', 'Matrícula']].copy()
-                    dataframe = dataframe.dropna(axis=0)
-                    dataframe['Turma'] = turma
-                    dataframe['Matrícula'] = dataframe['Matrícula'].astype(int).astype(str)
-                    dataframe_total = dataframe_total._append(dataframe, ignore_index=True)
+            except Exception as e:
+                raise e
 
-            except ValueError:
-                pass
+        raise
 
-        return dataframe_total
 
+    @staticmethod
+    def _gerar_dataframe(dicio_dfs: dict[int | str, DataFrame] | None) -> DataFrame | None:
+        # print(f'{dicio_dfs = }')
+        df_geral = pd.DataFrame()
+        lista_dfs = []
+
+        if dicio_dfs is None:
+            print(f'  ->  Dicionário vazio na compilação de faltas.')
+            return None
+
+        for nome_turma, df_turma in dicio_dfs.items() :
+            # print(f'\n{nome_turma = } : {df_turma.head(1)}')
+            df_turma = df_turma[['Estudante', 'Data', 'Lançado', 'Matrícula']].copy()
+            df_turma = df_turma.dropna(axis=0)
+            df_turma['Turma'] = nome_turma
+            df_turma['Matrícula'] = df_turma['Matrícula'].astype(int).astype(str)
+            df_turma['Lançado'] = df_turma['Lançado'].fillna('')
+            print(df_turma.head(1))
+            # df_turma = df_turma.dropna(axis=0, subset='Estudante')
+            # df_turma['Data'] = df_turma['Data'].dt.strftime('%d/%m/%Y')
+            lista_dfs.append(df_turma)
+            # print(f'{lista_dfs = }')
+
+        # df_geral = df_geral._append_internal(lista_dfs)
+        # print(df_geral)
+        return df_geral
 
     @property
-    def _diretórios_registros(self) -> list[Path]:
-        path_pasta_registro_de_faltas = Path(self._path, 'Registro de Faltas')
+    def _paths_de_registros_de_faltas(self) -> list[Path] :
+        path_pasta_registro_de_faltas = Path(self._path, self.NOME_PASTA_REGISTROS)
         lista_itens = os.listdir(path_pasta_registro_de_faltas)
         lista_diretórios = [Path(path_pasta_registro_de_faltas, item) for item in lista_itens]
         return lista_diretórios
 
 
 if __name__ == '__main__' :
-    CompiladorDeFaltas(parâmetros.diretório_base).exportar_compilado()
+    CompiladorDeFaltas(parâmetros.diretório_base).compilar_e_exportar()
