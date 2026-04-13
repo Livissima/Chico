@@ -67,7 +67,7 @@ class Frequência(CTkFrame) :
         self._tx_feedback.att('Compilando...')
 
         try:
-            CompiladorDeFaltas(parâmetros.diretório_base).compilar_e_exportar()
+            CompiladorDeFaltas(parâmetros.diretório_base).exportar()
             self._tx_feedback.att(f"'Compilado de Faltas' gerado com sucesos em \n{parâmetros.diretório_base}")
 
         except Exception as e:
