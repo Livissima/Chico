@@ -8,6 +8,7 @@ from .extra.acessos import Acessos
 class Integração:
     #todo: Importar a responsabilidade de chamada de filtrar excls. Assim, a classe vai resultar em
     # dataframes que serão transferidos para a exportação
+    #todo: implementar uma coluna com nome do estudante reduzido para compatibilidade com layouts estreitos
 
     def __init__(self, dfs_tratados: dict[str, DataFrame]):
         self.df = dfs_tratados
