@@ -1,7 +1,6 @@
 import json
 import os.path
 import time
-from dataclasses import dataclass
 from typing import Literal, Generator, Any
 from selenium.common import ElementClickInterceptedException, StaleElementReferenceException
 from selenium.webdriver import Chrome
@@ -361,11 +360,15 @@ class NavegaçãoWeb :
                 path_json = os.path.join(pasta_destino, f'{nome_arquivo}.json')
                 with open(path_json, 'w', encoding='utf-8') as arquivo :
                     json.dump(dados_combinados, arquivo, ensure_ascii=False, indent=2)
+
                 print(f'Total de {len(dados_combinados)} linhas salvas em {path_json}')
+
                 return True
+
             else :
                 print('nenhum dado extraído')
                 return False
+
         except Exception as e :
             print(f'Erro ao extrair tabelas (fallback): {e}')
             return False
@@ -396,11 +399,6 @@ class NavegaçãoWeb :
         if texto :
             selecionar.select_by_visible_text(texto)
 
-    # def selecionar(self, div, valor = '1'):
-    #
-    #     selecionar_elemento = WebDriverWait(**self.__args_wait).until(presence_of_element_located(div))
-    #     selecionar = Select(selecionar_elemento)
-    #     selecionar.select_by_value(valor)
 
     @staticmethod
     def __extrair_cabeçalhos(tabela) :
@@ -427,9 +425,11 @@ class NavegaçãoWeb :
                     pass
 
             if not cabeçalhos :
-                cabeçalhos = ["Matrícula", "Aluno", "Data de Nascimento", "Nome da Mãe", "CPF do Responsável",
-                              "Nome do Responsável", "Telefone residencial", "Telefone responsável", "Telefone celular",
-                              "E-mail Alternativo", "E-mail Institucional", "E-mail Educacional", "Ponto ID"]
+                cabeçalhos = [
+                    "Matrícula", "Aluno", "Data de Nascimento", "Nome da Mãe", "CPF do Responsável",
+                    "Nome do Responsável", "Telefone residencial", "Telefone responsável", "Telefone celular",
+                    "E-mail Alternativo", "E-mail Institucional", "E-mail Educacional", "Ponto ID"
+                ]
 
             return cabeçalhos
 
@@ -484,13 +484,17 @@ class NavegaçãoWeb :
     def __obter_chave_por_valor(self, dicionário: dict, valor_procurado: str, caminho=None) :
         if caminho is None :
             caminho = []
+
         for chave, valor in dicionário.items() :
             if isinstance(valor, dict) :
                 resultado = self.__obter_chave_por_valor(valor, valor_procurado, caminho + [chave])
                 if resultado :
                     return resultado
+
             elif valor == valor_procurado :
+
                 return caminho + [chave]
+
         return None
 
 
