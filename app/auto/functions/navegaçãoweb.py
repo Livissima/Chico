@@ -12,6 +12,7 @@ from selenium.webdriver.support.expected_conditions import presence_of_element_l
     element_to_be_clickable, staleness_of
 
 from app.auto.data.sites.propriedadesweb import PropriedadesWeb
+from app.auto.data.sites.siteconfig import SiteConfig
 from app.auto.functions.javascript import Javascript
 from app.config.parâmetros import parâmetros
 from app.config.parâmetros.estruturadeseleção import EstruturaDeSeleção
@@ -20,9 +21,9 @@ from app.config.parâmetros.estruturadeseleção import EstruturaDeSeleção
 class NavegaçãoWeb :
     #todo distribuir responsabilidades para sub módulos
 
-    def __init__(self, master: Chrome, site: str) :
+    def __init__(self, master: Chrome, config: SiteConfig) :
         self.master = master
-        self._pp = PropriedadesWeb(site)
+        self._pp = PropriedadesWeb(config)
         self.__timeout = 30
         self.__args_wait = {'driver' : self.master, 'timeout' : self.__timeout}
 

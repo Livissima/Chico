@@ -11,7 +11,7 @@ class PropriedadesWeb(SiteConfig) :
             'sige' : Sige,
             'siap' : Siap,
             'netescola' : NetEscola,
-            'google' : Google
+            # 'google' : Google
         }
 
         config = _sites.get(site.lower())
@@ -21,28 +21,19 @@ class PropriedadesWeb(SiteConfig) :
 
         return config
 
-#class PropriedadesWeb
-    # #todo: Esta classe está extremamente acoplada com dezenas de outras classes.
-    # # Pensei em fazer uma singleton, mas os atributos dependem do argumento passado na instanciação
-    #
-    # def __init__(self, site: str | None = None) :
-    #     _site = self.__sites.get(site.lower())()
-    #
-    #     for attr in self.atributos :
-    #         setattr(self, attr, getattr(_site, attr, None))
-    #
-    # @property
-    # def __sites(self) :
-    #     return {
-    #         'sige' : Sige,
-    #         'siap' : Siap,
-    #         'netescola' : NetEscola,
-    #         'google' : Google
-    #     }
-    #
-    # @property
-    # def atributos(self) :
-    #     return ['url', 'xpaths', 'caminhos', 'credenciais', 'ids', 'css_selectors']
-    #
-    # def __getattr__(self, item) :
-    #     return getattr(self.site, item)
+
+# class PropriedadesFactory:
+#     _SITES: dict[str, SiteConfig] = {
+#         'sige' : Sige,
+#         'siap' : Siap,
+#         'netescola' : NetEscola,
+#         # 'google' : Google
+#     }
+#
+#     @classmethod
+#     def obter_config(cls, site: str) -> SiteConfig:
+#         config = cls._SITES.get(site.lower())
+#         if not config:
+#             raise ValueError(f"Site '{site}' não registrado.")
+#         return config
+#
