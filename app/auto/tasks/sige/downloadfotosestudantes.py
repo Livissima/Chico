@@ -5,12 +5,12 @@ from pandas import read_excel
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 
-from app.auto.tasks.taskregistry import TaskRegistry
+from app.auto.tasks.registrotasks import RegistroTasks
 from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from app.config.parâmetros import parâmetros
 
-@TaskRegistry.registrar('fotos')
+@RegistroTasks.registrar('fotos')
 class DownloadFotosEstudantes:
 
     def __init__(

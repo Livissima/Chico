@@ -2,7 +2,7 @@ from typing import Literal
 from app.auto.functions.funções import normalizar_unicode, normalizar_dicionário
 from app.auto.tasks import DownloadFotosEstudantes, ConsultaDiasLetivos
 from app.auto.tasks.credenciador.credenciador import Credenciador
-from app.auto.tasks.taskregistry import TaskRegistry
+from app.auto.tasks.registrotasks import RegistroTasks
 from app.auto.tasks.sige.downloaddadosservidores import DownloadDadosServidores
 # from app.auto.tasks.sige.uniformizador import
 from app.auto.tasks.sige.downloaddadosestudantes import DownloadDadosEstudantes
@@ -27,13 +27,13 @@ class Bot:
         kwargs['navegador'] = navegador
 
         # ← DEPOIS validar
-        valido, mensagem = TaskRegistry.validar_argumentos(tarefa_normalizada, kwargs)
+        valido, mensagem = RegistroTasks.validar_argumentos(tarefa_normalizada, kwargs)
         if not valido :
             navegador.quit()
             raise ValueError(f"❌ Erro de validação: {mensagem}")
 
         try :
-            task_class = TaskRegistry.obter(tarefa_normalizada)
+            task_class = RegistroTasks.obter(tarefa_normalizada)
             print(f"🚀 Executando {task_class.__name__}...\n")
             task_class(**kwargs)
         except Exception as e :

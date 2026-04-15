@@ -7,7 +7,7 @@ from app.core import ConsultaEstudantes, Exportação
 from app.core.query.servidores.consultaservidores import ConsultaServidores
 from app.core.utils.pastador import Pastador
 from app.config.parâmetros import parâmetros
-from app.ui.config.registrodetelas import RegistradorDeTelas
+from app.ui.config.registrotelas import RegistroTelas
 from app.ui.widgets.botão import Botão
 from app.ui.widgets.texto import Texto
 # from app.ui.config.cabeçalhos import Cabeçalhos
@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
 
 
-@RegistradorDeTelas.registrar(
+@RegistroTelas.registrar(
     nome_tela='consulta',
     título_da_janela='Consulta',
     cabeçalho='Consulta',

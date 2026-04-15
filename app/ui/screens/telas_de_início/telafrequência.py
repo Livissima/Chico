@@ -1,7 +1,7 @@
 from customtkinter import CTkFrame, CTk
 from typing import TYPE_CHECKING
 
-from app.ui.config.registrodetelas import RegistradorDeTelas
+from app.ui.config.registrotelas import RegistroTelas
 # from ..config.cabeçalhos import Cabeçalhos
 from app.ui.widgets import Botão, Texto
 from app.config.parâmetros import parâmetros
@@ -10,7 +10,7 @@ from app.core.frequency.compiladordefaltas import CompiladorDeFaltas
 if TYPE_CHECKING :
     from app.ui.screens.janela import Janela
 
-@RegistradorDeTelas.registrar(
+@RegistroTelas.registrar(
     nome_tela='frequência',
     título_da_janela='Frequência',
     cabeçalho='Frequência',

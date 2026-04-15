@@ -1,10 +1,10 @@
 from selenium.webdriver import Chrome
 from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
-from app.auto.tasks.taskregistry import TaskRegistry
+from app.auto.tasks.registrotasks import RegistroTasks
 from app.config.parâmetros.estruturadeseleção import EstruturaDeSeleção
 
-@TaskRegistry.registrar('noteador')
+@RegistroTasks.registrar('noteador')
 class LançadorDeNotas:
     def __init__(
             self,

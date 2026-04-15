@@ -1,9 +1,10 @@
 from typing import TYPE_CHECKING
 from customtkinter import CTkFrame, CTk
 
+from app.auto import Bot
 from app.config.__metadata__ import PROJECT_NAME, PROJECT_VERSION
 from app.config.parâmetros import parâmetros
-from app.ui.config.registrodetelas import RegistradorDeTelas
+from app.ui.config.registrotelas import RegistroTelas
 from app.ui.widgets import Texto, Botão, Input
 # from app.ui.config.cabeçalhos import Cabeçalhos
 from app.ui.functions.desfazimento import Desfazimento
@@ -14,7 +15,7 @@ from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
 if TYPE_CHECKING:
     pass
 
-@RegistradorDeTelas.registrar(
+@RegistroTelas.registrar(
     nome_tela='inicial',
     título_da_janela=F'v.{PROJECT_VERSION}',
     cabeçalho=f'{PROJECT_NAME}',
@@ -146,6 +147,13 @@ class TelaInicial(CTkFrame):
             y=self.primeira_linha+30
         )
 
+        self._bt_teste = Botão(
+            self,
+            função=lambda: Bot(tarefa='investigar'),
+            texto='Teste',
+            y=300,
+            largura=100
+        )
 
     def _desfazer(self):
         Desfazimento(self).desfazer()
