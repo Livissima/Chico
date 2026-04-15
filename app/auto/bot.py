@@ -1,5 +1,5 @@
 from typing import Literal
-from app.auto.functions.normalizar import normalizar_unicode, normalizar_dicionário
+from app.auto.functions.funções import normalizar_unicode, normalizar_dicionário
 from app.auto.tasks import DownloadFotosEstudantes, ConsultaDiasLetivos
 from app.auto.tasks.credenciador.credenciador import Credenciador
 from app.auto.tasks.taskregistry import TaskRegistry
