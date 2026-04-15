@@ -1,7 +1,11 @@
 from app.config.__metadata__ import PROJECT_NAME
 
-class RegistradorDeTelas:
-    REGISTRO_DE_TELAS = {}
+
+
+
+class RegistroTelas:
+
+    REGISTRO = {}
 
     @classmethod
     def registrar(
@@ -14,7 +18,7 @@ class RegistradorDeTelas:
     ):
 
         def wrapper(wrapped_class):
-            cls.REGISTRO_DE_TELAS[nome_tela] = {
+            cls.REGISTRO[nome_tela] = {
                 'class' : wrapped_class,
                 'metadata' : {
                     'título_janela' : f'{PROJECT_NAME} - {título_da_janela}',

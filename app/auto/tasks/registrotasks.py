@@ -30,7 +30,7 @@ class TaskSignature :
         return True, ""
 
 
-class TaskRegistry :
+class RegistroTasks :
 
     _tarefas: Dict[str, Type] = {}
     _assinaturas: Dict[str, TaskSignature] = {}

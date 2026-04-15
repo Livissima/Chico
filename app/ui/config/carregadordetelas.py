@@ -1,7 +1,7 @@
 import importlib
 import pkgutil
 from app.ui import screens
-from app.ui.config.registrodetelas import RegistradorDeTelas
+from app.ui.config.registrotelas import RegistroTelas
 
 class CarregadorDeTelas:
     _telas_carregadas: bool = False
@@ -25,4 +25,4 @@ class CarregadorDeTelas:
 
         cls._telas_carregadas = True
 
-        print(f"Total de telas registradas: {len(RegistradorDeTelas.REGISTRO_DE_TELAS)}\n   → {list(RegistradorDeTelas.REGISTRO_DE_TELAS)}")
+        print(f"Total de telas registradas: {len(RegistroTelas.REGISTRO)}\n   → {list(RegistroTelas.REGISTRO)}")

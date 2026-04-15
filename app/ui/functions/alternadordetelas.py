@@ -1,5 +1,5 @@
 #app/ui/functions/alternadordetelas.py
-from app.ui.config.registrodetelas import RegistradorDeTelas
+from app.ui.config.registrotelas import RegistroTelas
 from app.ui.widgets import Texto, Botão
 
 class AlternadorDeTelas:
@@ -10,7 +10,7 @@ class AlternadorDeTelas:
         self._tela_atual = None
 
     def abrir(self, nome_tela: str, salvar_no_histórico: bool = True):
-        if nome_tela not in RegistradorDeTelas.REGISTRO_DE_TELAS:
+        if nome_tela not in RegistroTelas.REGISTRO:
             raise ValueError(f"Tela '{nome_tela}' não encontrada.")
 
         if salvar_no_histórico and self._tela_atual:
@@ -24,7 +24,7 @@ class AlternadorDeTelas:
                     widget.salvar_estado()
                 widget.destroy()
 
-        dados = RegistradorDeTelas.REGISTRO_DE_TELAS[nome_tela]
+        dados = RegistroTelas.REGISTRO[nome_tela]
 
         meta = dados['metadata']
 

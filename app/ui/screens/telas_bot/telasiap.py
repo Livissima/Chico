@@ -5,7 +5,7 @@ from customtkinter import CTkFrame, CTk
 from app.auto.bot import Bot
 
 from app.config.parâmetros import parâmetros
-from app.ui.config.registrodetelas import RegistradorDeTelas
+from app.ui.config.registrotelas import RegistroTelas
 from app.ui.widgets import Botão, CheckBox, Texto, Dropdown
 from typing import TYPE_CHECKING
 
@@ -17,7 +17,7 @@ if TYPE_CHECKING :
 ANO = 2026
 
 
-@RegistradorDeTelas.registrar(
+@RegistroTelas.registrar(
     nome_tela='bot_siap',
     título_da_janela='Bot SIAP',
     cabeçalho='BOT SIAP',

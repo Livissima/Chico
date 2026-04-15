@@ -3,11 +3,11 @@ from pathlib import Path
 from selenium.webdriver import Chrome
 from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
-from app.auto.tasks.taskregistry import TaskRegistry
+from app.auto.tasks.registrotasks import RegistroTasks
 from app.config.parâmetros.estruturadeseleção import EstruturaDeSeleção
 from app.config.parâmetros.getters.tempo import tempo
 
-@TaskRegistry.registrar('downloads')
+@RegistroTasks.registrar('downloads')
 class DownloadDadosEstudantes:
     #todo: converter isso em algo como BotSige, que armazenará métodos comuns e direcionará rotinas exclusivas.
     # assim, as classes das diferentes tasks de SIGE serão chamadas em métodos do BotSige.

@@ -6,7 +6,7 @@ from app.config.parâmetros.estruturadeseleção import EstruturaDeSeleção
 from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
 from app.config.parâmetros import parâmetros
 from app.ui.functions.desfazimento import Desfazimento
-from app.ui.config.registrodetelas import RegistradorDeTelas
+from app.ui.config.registrotelas import RegistroTelas
 from app.ui.widgets import Botão, Input, CheckBox, Texto
 from typing import TYPE_CHECKING
 from app.ui.functions.pesquisadiretório import PesquisaDiretório
@@ -14,7 +14,7 @@ from app.ui.functions.pesquisadiretório import PesquisaDiretório
 if TYPE_CHECKING:
     pass
 
-@RegistradorDeTelas.registrar(
+@RegistroTelas.registrar(
     nome_tela='bot_sige',
     título_da_janela='Bot SIGE',
     cabeçalho='BOT SIGE',

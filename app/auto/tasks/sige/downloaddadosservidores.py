@@ -1,7 +1,7 @@
 #app/auto/tasks/sige/downloaddadosservidores.py
 import json
 
-from app.auto.tasks.taskregistry import TaskRegistry
+from app.auto.tasks.registrotasks import RegistroTasks
 from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
@@ -10,7 +10,7 @@ import time
 
 from app.config.parâmetros.getters.tempo import tempo
 
-@TaskRegistry.registrar('servidores')
+@RegistroTasks.registrar('servidores')
 class DownloadDadosServidores:
     _nome_relatório_simples = 'lista_servidores'
 

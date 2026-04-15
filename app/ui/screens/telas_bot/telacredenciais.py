@@ -3,7 +3,7 @@ import os.path
 from customtkinter import CTkFrame, CTk
 from app.auto.bot import Bot
 from app.config.parâmetros import parâmetros
-from app.ui.config.registrodetelas import RegistradorDeTelas
+from app.ui.config.registrotelas import RegistroTelas
 from app.ui.widgets import Botão, CheckBox, Texto
 from typing import TYPE_CHECKING
 
@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     pass
 
-@RegistradorDeTelas.registrar(
+@RegistroTelas.registrar(
     nome_tela='bot_credenciais',
     título_da_janela='Bot Credenciais',
     cabeçalho='BOT Credenciais',
