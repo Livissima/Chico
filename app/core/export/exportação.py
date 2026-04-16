@@ -16,12 +16,13 @@ class Exportação:
             path_destino: Path
     ):
 
-        print(f'=> Dataframe final para exportação: {consulta.shape = }')
+        print(f'=> Dataframe final para exportação: {consulta = }')
 
         self.exportar_tudo(consulta, path_destino)
 
     @staticmethod
     def exportar_tudo(consulta, path):
+        if consulta.shape[1] > 30:
+            ExportaçãoCSV(consulta, path)
+            ExportaçãoJSON(consulta, path)
         ExportaçãoXLSX(consulta, path)
-        ExportaçãoCSV(consulta, path)
-        ExportaçãoJSON(consulta, path)
