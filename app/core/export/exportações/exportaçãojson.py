@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+from app.config.settings.functions import escrever_json
 from app.core import ConsultaEstudantes
 
 
@@ -17,8 +18,7 @@ class ExportaçãoJSON:
         dicionário_completo = consulta.to_dict(orient='list')
 
         caminho_completo = Path(_path, 'fonte', 'Database.json')
-        with open(caminho_completo, 'w', encoding='utf-8') as arquivo :
-            json.dump(dicionário_completo, arquivo, ensure_ascii=False, indent=0)
+        escrever_json(dicionário_completo, caminho_completo)
 
     @staticmethod
     def _exportar_resumido(consulta, _path):
@@ -26,5 +26,4 @@ class ExportaçãoJSON:
         resumo = resumo.to_dict(orient='list')
 
         caminho_completo = Path(_path, 'fonte', 'Database resumida.json')
-        with open(caminho_completo, 'w', encoding='utf-8') as arquivo :
-            json.dump(resumo, arquivo, ensure_ascii=False, indent=0)
+        escrever_json(resumo, caminho_completo)

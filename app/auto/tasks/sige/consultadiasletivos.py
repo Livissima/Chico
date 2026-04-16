@@ -1,12 +1,9 @@
-import json
-import os.path
 from datetime import datetime
 from os import PathLike
 from pathlib import Path
-
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
-
+from app.config.settings.functions import escrever_json
 from app.auto.tasks.registrotasks import RegistroTasks
 from app.auto.functions import NavegaçãoWeb
 from app.config.parâmetros import parâmetros
@@ -61,9 +58,7 @@ class ConsultaDiasLetivos:
     @staticmethod
     def _exportar_json(path: Path, lista_dias):
         parâmetros.lista_dias_letivos = lista_dias
-        with open(path, 'x', encoding='utf-8') as arquivo:
-            json.dump(lista_dias, arquivo, ensure_ascii=False, indent=2)
-
+        escrever_json(lista_dias, path)
 
     @property
     def _descritores_para_desprezar(self) -> list[str]:

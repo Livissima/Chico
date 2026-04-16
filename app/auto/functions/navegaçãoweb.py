@@ -13,6 +13,7 @@ from selenium.webdriver.support.expected_conditions import presence_of_element_l
 
 from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.auto.data.sites.siteconfig import SiteConfig
+from app.config.settings.functions import escrever_json
 from app.auto.functions.javascript import Javascript
 from app.config.parâmetros import parâmetros
 from app.config.parâmetros.estruturadeseleção import EstruturaDeSeleção
@@ -122,7 +123,7 @@ class NavegaçãoWeb :
 
             self.master.execute_script("arguments[0].removeAttribute('readonly');", elemento)
 
-            elemento.clear()  # limpa antes de digitar
+            elemento.clear()
             elemento.send_keys(string)
             self.aguardar_página()
 
@@ -139,6 +140,7 @@ class NavegaçãoWeb :
         try :
             elemento_web = WebDriverWait(**self.__args_wait).until(presence_of_element_located(seletor))
             return elemento_web
+
         except Exception as e:
             print(f'Erro na obtenção de elemento: {seletor}\n{e}')
 
@@ -201,8 +203,7 @@ class NavegaçãoWeb :
             path_json = os.path.join(pasta_destino, f'{nome_arquivo}.json')
             os.makedirs(os.path.dirname(path_json), exist_ok=True)
 
-            with open(path_json, 'w', encoding='utf-8') as arquivo :
-                json.dump(dados, arquivo, ensure_ascii=False, indent=2)
+            escrever_json(dados, path_json, 2)
 
             tempo = time.time() - inicio
             print(f'✓ {len(dados)} linhas extraídas em {tempo:.2f}s - {path_json}')
@@ -359,9 +360,8 @@ class NavegaçãoWeb :
 
             if dados_combinados :
                 path_json = os.path.join(pasta_destino, f'{nome_arquivo}.json')
-                with open(path_json, 'w', encoding='utf-8') as arquivo :
-                    json.dump(dados_combinados, arquivo, ensure_ascii=False, indent=2)
 
+                escrever_json(dados_combinados, path_json, 2)
                 print(f'Total de {len(dados_combinados)} linhas salvas em {path_json}')
 
                 return True
@@ -499,9 +499,8 @@ class NavegaçãoWeb :
         return None
 
 
-
-    #todo: método temporário. Preciso reorganizar junto com os demais métodos de navegação
     def reiniciar_disciplinas_diário(self, ano):
+        #todo: método temporário. Preciso reorganizar junto com os demais métodos de navegação
         self.__acessar_painel_frequência()
         self.__preencher_filtro_de_linhas(ano)
 
