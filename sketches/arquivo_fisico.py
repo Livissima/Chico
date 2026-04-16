@@ -1,11 +1,10 @@
-
+import pandas as pd
+import unicodedata
 import pandas as pd
 import unicodedata
 
 path_df_caixas = r'C:\Users\meren\OneDrive - Secretaria de Estado da Educação\Controle do Arquivo Físico.xlsx'
 path_df_pastas_a_serem_arquivadas = r'C:\Users\meren\OneDrive - Secretaria de Estado da Educação\Situação Históricos.xlsx'
-import pandas as pd
-import unicodedata
 
 
 # Função para normalizar texto (remover acentos e converter para maiúsculas)
