@@ -6,6 +6,7 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
+from app.config.settings.functions import escrever_json
 from app.auto.tasks.registrotasks import RegistroTasks
 from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
@@ -175,10 +176,7 @@ class Sondagem:
 
     @staticmethod
     def exportar(path: Path, resumo: dict):
-
-        with open(path, 'w', encoding='utf-8') as arquivo:
-            json.dump(resumo, arquivo, ensure_ascii=False, indent=2)
-        return arquivo
+        escrever_json(resumo, path)
 
     def __obter_nome_ue(self) -> str:
         nome_ue = self.master.find_element(By.XPATH, '/html/body/table[1]/tbody/tr[4]').text.split(" - ")[1]

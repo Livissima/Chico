@@ -1,6 +1,7 @@
 #app/auto/tasks/sige/downloaddadosservidores.py
 import json
 
+from app.config.settings.functions import escrever_json, ler_json
 from app.auto.tasks.registrotasks import RegistroTasks
 from app.auto.data.sites.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
@@ -50,7 +51,7 @@ class DownloadDadosServidores:
     def _pesquisar_dados_pessoais(self):
         print('\n ## Pesquisando dados pessoais')
         url_dados = 'https://sige.educacao.go.gov.br/sige/modulos/Dossie/Relatorios/ddv_funcionario_con.asp#'
-        json_servidores = self._carregar_json()
+        json_servidores = ler_json(self._caminho_completo)
         path_destino = Path(self._path, 'Servidores')
         print(f'{json_servidores = }')
 
@@ -89,12 +90,7 @@ class DownloadDadosServidores:
         todos_os_servidores = self._nv.obter_tabelas()
         return todos_os_servidores
 
-    def _carregar_json(self) -> dict[str, str]:
-        with open(self._caminho_completo, 'r', encoding='utf-8') as arquivo :
-            return json.load(arquivo)
-
     def _descarregar_json(self, relação_servidores: dict[str, str]) -> None:
-        with open(self._caminho_completo, 'w', encoding='utf-8') as arquivo:
-            return json.dump(relação_servidores, arquivo, ensure_ascii=False, indent=2)
+        escrever_json(relação_servidores, self._caminho_completo)
 
 

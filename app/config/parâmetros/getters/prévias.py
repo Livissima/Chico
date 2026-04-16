@@ -4,9 +4,11 @@ from json import JSONDecodeError
 from os import PathLike
 from pathlib import Path
 
+from app.config.settings.functions import ler_json
+
 
 class Prévias:
-    def __init__(self, path_resumo: PathLike | Path):
+    def __init__(self, path_resumo: Path):
         self._validar_path(path_resumo)
         self._path = Path(path_resumo, 'fonte', 'resumo.json')
 
@@ -23,11 +25,10 @@ class Prévias:
 
 
     @staticmethod
-    def _ler_resumo(path: PathLike) -> dict[str, list | str]:
+    def _ler_resumo(path: Path) -> dict[str, list | str]:
         try:
             if Path(path).exists():
-                with open(path, 'r', encoding='utf-8') as arquivo:
-                    resumo = json.load(arquivo)
+                resumo = ler_json(path)
                 return resumo
             else:
                 return {

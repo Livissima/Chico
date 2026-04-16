@@ -12,6 +12,7 @@ from selenium.webdriver.support.expected_conditions import presence_of_element_l
     element_to_be_clickable, staleness_of
 
 from app.auto.data.sites.propriedadesweb import PropriedadesWeb
+from app.config.settings.functions import escrever_json
 from app.auto.functions.javascript import SCRIPT_OBTER_TABELAS_SIMPLES, SCRIPT_OBTER_TABELAS_FICHAS, \
     SCRIPT_SELECIONAR_DISPARANDO_EVENTO
 from app.config.parâmetros import parâmetros
@@ -79,8 +80,7 @@ class NavegaçãoWebScraping :
             path_json = os.path.join(pasta_destino, f'{nome_arquivo}.json')
             os.makedirs(os.path.dirname(path_json), exist_ok=True)
 
-            with open(path_json, 'w', encoding='utf-8') as arquivo :
-                json.dump(dados, arquivo, ensure_ascii=False, indent=2)
+            escrever_json(dados, path_json)
 
             tempo = time.time() - inicio
             print(f'✓ {len(dados)} linhas extraídas em {tempo:.2f}s - {path_json}')
