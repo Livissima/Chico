@@ -72,3 +72,13 @@ class ConsultaServidores:
         nome_xlsx = 'Servidores.xlsx'
         with ExcelWriter(Path(parâmetros.diretório_base, nome_xlsx), engine='xlsxwriter') as writer:
             df.to_excel(writer, sheet_name='Servidores atuais')
+
+    def __getitem__(self, item) :
+        return self.consulta[item]
+
+    def __getattr__(self, name) :
+        return getattr(self.consulta, name)
+
+    def __len__(self) :
+        return len(self.consulta)
+

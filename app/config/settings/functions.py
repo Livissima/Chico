@@ -49,3 +49,4 @@ def escrever_json(conteúdo, _path, indent: int = 0):
     with open(_path, 'w', encoding='utf-8') as arquivo :
         json.dump(conteúdo, arquivo, ensure_ascii=False, indent=indent)
 
+
