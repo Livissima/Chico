@@ -26,7 +26,9 @@ class Xpaths:
             'turno' : '/html/body/div[8]/form/table[1]/tbody/tr[3]/td[2]/select',
             'input data' : '/html/body/div[8]/form/table/tbody/tr[6]/td[2]/input',
             'data eleição' : '/html/body/div[8]/form/table/tbody/tr/td/table/tbody/tr[7]/td/input',
-            'cpf servidor' : '//*[@id="txtCPF"]'
+            'cpf servidor' : '//*[@id="txtCPF"]',
+            'matrícula' : '//*[@id="txtMatricula"]',
+            'data matrícula' : '//*[@id="txtDataRecebimento"]'
         }
 
     @property
