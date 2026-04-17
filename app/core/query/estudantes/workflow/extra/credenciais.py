@@ -1,6 +1,8 @@
 from app.config.settings.functions import normalizar_diacrítica
+from app.core.query.estudantes.workflow.extra.common import preposições_nominais
 
-class Acessos:
+
+class Credenciais:
 
     @staticmethod
     def obter_senha_email_padrão_seduc(linha):
@@ -27,10 +29,8 @@ class Acessos:
 
     @staticmethod
     def gerar_senha_email_padrão_chico(linha):
-        preposições = ['das', 'dos', 'de', 'do', 'da']
-
         nome_splitado = [
-            normalizar_diacrítica(n) for n in linha['Estudante'].strip().split() if n.lower() not in preposições
+            normalizar_diacrítica(n) for n in linha['Estudante'].strip().split() if n.lower() not in preposições_nominais
         ]
 
         primeiro_nome = nome_splitado[0].lower()
@@ -51,5 +51,4 @@ class Acessos:
 
         else:
             return f'{primeiro_nome}{segundo_nome}{terceiro_nome}'
-
 
