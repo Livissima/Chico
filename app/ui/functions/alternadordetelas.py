@@ -78,4 +78,3 @@ class AlternadorDeTelas:
             largura= 40, altura=40
         )
         tela.bt_back.lift()
-
