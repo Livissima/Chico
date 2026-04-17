@@ -9,7 +9,7 @@ from app.config.parâmetros.getters.turmasséries import TurmasSéries
 
 class AppDataLoader :
     @staticmethod
-    def carregar_tudo(parâmetros: Parâmetros) :
+    def carregar_dados(parâmetros: Parâmetros) :
         # 1. Resumo e Dados Básicos
         resumo = ler_json(parâmetros.diretório_base / 'fonte' / 'resumo.json')
         parâmetros.nome_ue = resumo.get('Nome UE', '')
