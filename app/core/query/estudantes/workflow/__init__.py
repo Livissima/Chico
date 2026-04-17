@@ -2,7 +2,7 @@ import pandas as pd
 
 from .consultaestudantes import ConsultaEstudantes
 from .formatação import Formatação
-from .integração import Integração
+from .integraçãodeextras import IntegraçãoDeExtras
 #
 
 import warnings

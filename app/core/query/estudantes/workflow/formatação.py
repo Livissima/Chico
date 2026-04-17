@@ -19,7 +19,7 @@ class Formatação:
         'Matrícula', 'CPF Aluno', 'Filiação 1 - CPF', 'Filiação 2 - CPF', 'INEP'
     ]
 
-    _colunas_ordenadas = [
+    _colunas_ordenadas = [    #colunas fora desta lista são eliminadas
         'Turma', 'Matrícula', 'Data Matrícula', 'Número pra chamada', 'Estudante', 'Nome Social', 'Gênero', 'Idade',
         'Data de Nascimento', 'CPF Aluno', 'Nome Responsável', 'Município de Naturalidade', 'UF de Naturalidade',
         'Nacionalidade', 'País de origem',  'Endereço: Logradouro', 'Endereço: Complemento', 'Endereço: Número',
@@ -27,7 +27,7 @@ class Formatação:
         'Filiação 1 - RG', 'Filiação 2', 'Filiação 2 - Prof', 'Filiação 2 - CPF', 'Filiação 2 - RG', 'Irmão 1',
         'Certidão de Nascimento: Termo', 'Certidão de Nascimento: Livro', 'Certidão de Nascimento: Folha', 'RG',
         'RG - Emissor', 'RG - Expedição', 'Telefone 1', 'Telefone 2', 'Telefone 3', 'Educacional', 'Senha padrão',
-        'Nova senha', 'Senha educa',  'Curso', 'Série', 'Turno', 'INEP', 'Situação', 'Data Situação'
+        'Nova senha', 'Senha educa',  'Curso', 'Série', 'Turno', 'INEP', 'Situação', 'Data Situação', 'Nome abreviado'
     ]
 
     def __init__(self, df_integrado: DataFrame):
@@ -101,9 +101,6 @@ class Formatação:
 
     def _reordenar_colunas(self, dataframe: pd.DataFrame) -> pd.DataFrame :
         return dataframe[self._colunas_ordenadas]
-
-    # def __getattr__(self, item):
-    #     return getattr(self.df_formatado, item)
 
     def __getitem__(self, item):
         return self.df_formatado[item]

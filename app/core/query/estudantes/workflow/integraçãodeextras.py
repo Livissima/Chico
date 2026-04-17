@@ -2,10 +2,11 @@ import pandas as pd
 from pandas import DataFrame, Series
 
 from .extra import *
-from .extra.acessos import Acessos
+from .extra.abreviados import Abreviados
+from .extra.credenciais import Credenciais
 
 
-class Integração:
+class IntegraçãoDeExtras:
     #todo: Importar a responsabilidade de chamada de filtrar excls. Assim, a classe vai resultar em
     # dataframes que serão transferidos para a exportação
     #todo: implementar uma coluna com nome do estudante reduzido para compatibilidade com layouts estreitos
@@ -25,6 +26,7 @@ class Integração:
         df_base['Senha padrão'] = self._integrar_senha_padrão(df_base)
         df_base['Nova senha'] = self._integrar_nova_senha(df_base)
         df_base['Senha educa'] = self._integrar_senha_educa(df_base)
+        df_base['Nome abreviado'] = self._integrar_abreviação(df_base)
 
         try:
             df_base = self._integrar_sociais(df_base, self._path_df_social)
@@ -34,18 +36,21 @@ class Integração:
         finally:
             return df_base
 
+    @staticmethod
+    def _integrar_abreviação(df_base: DataFrame) -> Series:
+        return df_base.apply(Abreviados.abreviar, axis=1)
 
     @staticmethod
     def _integrar_senha_padrão(df_base: DataFrame) -> Series:
-        return df_base.apply(Acessos.obter_senha_email_padrão_seduc, axis=1)
+        return df_base.apply(Credenciais.obter_senha_email_padrão_seduc, axis=1)
 
     @staticmethod
     def _integrar_nova_senha(df_base: DataFrame) -> Series:
-        return df_base.apply(Acessos.gerar_senha_netescola_padrão_chico, axis=1)
+        return df_base.apply(Credenciais.gerar_senha_netescola_padrão_chico, axis=1)
 
     @staticmethod
     def _integrar_senha_educa(df_base: DataFrame) -> Series:
-        return df_base.apply(Acessos.gerar_senha_email_padrão_chico, axis=1)
+        return df_base.apply(Credenciais.gerar_senha_email_padrão_chico, axis=1)
 
     @staticmethod
     def _integrar_tratamentos(df: dict[str, DataFrame]) -> DataFrame:
