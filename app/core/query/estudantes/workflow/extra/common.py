@@ -1,0 +1,1 @@
+preposições_nominais: list[str] = ['das', 'dos', 'de', 'do', 'da']
