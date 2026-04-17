@@ -1,7 +1,9 @@
 import os
+from statistics import mean
+
 from app.core.query.estudantes.workflow.processamentoinicial import ProcessamentoInicial
 from app.core.query.estudantes.workflow.formatação import Formatação
-from app.core.query.estudantes.workflow.integração import Integração
+from app.core.query.estudantes.workflow.integraçãodeextras import IntegraçãoDeExtras
 from app.core.query.leitura import Leitura
 from pandas import DataFrame
 
@@ -24,7 +26,7 @@ class ConsultaEstudantes:
         dfs_leitura = self._ler()
         dfs_tratados = self._tratar(dfs_leitura)
 
-        df_integrado = Integração(dfs_tratados).df_integrado
+        df_integrado = IntegraçãoDeExtras(dfs_tratados).df_integrado
         df_formatado = Formatação(df_integrado).df_formatado
         return df_formatado
 
