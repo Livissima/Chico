@@ -128,8 +128,9 @@ class TelaSiap(CTkFrame) :
 
         self.bt_modulação = Botão(
             self,
-            função= lambda: Bot(tarefa='obter modulações', parâmetros_web=None, path=parâmetros.diretório_base),
-            largura=100
+            função= lambda: Bot(tarefa='obter modulacoes', parâmetros_web=None, path=parâmetros.diretório_base),
+            texto='Obter modulações',
+            largura=150
         )
 
     def _inserir_botão_de_obter_dias_letivos(self):
