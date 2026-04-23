@@ -6,7 +6,7 @@ from app.auto.data.sites.siteconfig import SiteConfig
 
 
 class PropriedadesWeb(SiteConfig) :
-    def __new__(cls, site: str | None = None):
+    def __new__(cls, site: str):
         _sites = {
             'sige' : Sige,
             'siap' : Siap,
