@@ -23,6 +23,8 @@ class Parâmetros :
     dicionário_dias_letivos: Dict[str, List[str]] = field(default_factory=dict)
     modulações: Dict[str, Any] = field(default_factory=dict)
 
+    resumo: Dict[str, Any] = field(default_factory=dict)
+
     @property
     def séries_selecionadas(self) -> list :
         return TurmasSéries.gerar_lista_de_séries(self.turmas_selecionadas)
