@@ -14,20 +14,14 @@ from app.ui.functions.pesquisadiretório import PesquisaDiretório
 if TYPE_CHECKING:
     pass
 
+
 @RegistroTelas.registrar(
-    nome_tela='bot_sige',
+    nome_tela='bot sige',
     título_da_janela='Bot SIGE',
     cabeçalho='BOT SIGE',
     descrição='Automação de tarefas'
 )
 class TelaSige(CTkFrame):
-    seleção = EstruturaDeSeleção(
-        #todo: passar esse objeto pra outro lugar apropriado
-
-        séries_selecionadas=parâmetros.séries_selecionadas,
-        turmas_selecionadas_por_série=parâmetros.turmas_selecionadas_por_série
-    )
-
 
     def __init__(self, master, controller: "Janela"):
         super().__init__(master)
@@ -36,13 +30,6 @@ class TelaSige(CTkFrame):
 
         self._inserir_widgets()
         self._carregar_estado_anterior()
-
-    @property
-    def _kwargs(self) -> dict:
-        return {
-            'destino' : parâmetros.diretório_base,
-            'alvos' : self._ck_alvos.valores_true
-        }
 
 
     def _inserir_widgets(self):
@@ -58,7 +45,7 @@ class TelaSige(CTkFrame):
 
         if not parâmetros.turmas_disponíveis:
             feed_inicial = {
-                'texto' : 'Turmas não encontradas. Faça o download do conteúdo de todas as turmas,\n' 
+                'texto' : 'Turmas não encontradas. Faça o download do conteúdo de todas as turmas,\n'
                           'ou faça uma sondagem caso queira selecionar turmas específicas.',
                 'fonte' : ('arial', 16),
                 'cor' : 'orange',
@@ -99,18 +86,6 @@ class TelaSige(CTkFrame):
             x=10,
             y=10,
         )
-
-        # self._bt_localizar_dados = Botão(
-        #     self,
-        #     texto='Definir pasta',
-        #     fonte=('times new roman', 15),
-        #     formato='bold',
-        #     x=5,
-        #     y=136,
-        #     função=self.pesquisar_pasta_dados,
-        #     altura=25,
-        #     largura=100
-        # )
 
         self._bt_iniciar = Botão(
             self,
@@ -200,18 +175,30 @@ class TelaSige(CTkFrame):
     def _iniciar_tarefa(self):
         self.salvar_estado()
 
-        if not self._ck_alvos.valores_true:
-            self._tx_feedback.att('Selecione ao menos um conteúdo alvo.')
-            print(f'selecione ao menos um conteúdo alvo')
+        seleção = EstruturaDeSeleção(
+            séries_selecionadas=parâmetros.séries_selecionadas,
+            turmas_selecionadas_por_série=parâmetros.turmas_selecionadas_por_série
+        )
 
+        if not self._ck_alvos.valores_true or not seleção.turmas_selecionadas_por_série:
+            self._tx_feedback.atualizar('Selecione ao menos um conteúdo alvo.')
+            print(f'\n      ### Nenhum conteúdo selecionado para download.\n')
+            return
 
+        if not seleção.turmas_selecionadas_por_série:
+            self._tx_feedback.atualizar('Selecione ao menos uma turma')
+            print('     ### Nenhuma turma selecionada para download.')
+            return
 
         if any(alvo in self._ck_alvos.valores_true for alvo in ['Fichas', 'Contatos', 'Situações', 'Gêneros']):
-            Bot(tarefa='downloads', destino=self._kwargs['destino'], tarefas_sige=self._ck_alvos.valores_true, seleção=self.seleção)
+            # print(f'{seleção = }')
+            # print(f'{seleção = }')
+            # print(f'{seleção = }')
+            Bot(tarefa='downloads', destino=parâmetros.diretório_base, tarefas_sige=self._ck_alvos.valores_true, seleção=seleção)
 
         if self._ck_alvos.valores_true == ['Fotos']:
-            print(f'____Fotos')
-            Bot(tarefa='fotos', turmas=parâmetros.turmas_selecionadas, seleção=self.seleção)
+            pass
+            # Bot(tarefa='fotos', turmas=parâmetros.turmas_selecionadas, seleção=seleção)
 
 
     def _verificar_estatística(self):

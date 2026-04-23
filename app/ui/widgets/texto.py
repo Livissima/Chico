@@ -122,7 +122,7 @@ class Texto(CTkFrame):
         self.place(x=x_pos, y=y_pos)
 
 
-    def att(
+    def atualizar(
             self,
             novo_texto: str,
             fonte: tuple[str, int] = ('Arial', 16),

@@ -34,10 +34,8 @@ class Frequência(CTkFrame) :
             self,
             texto=' ',
             fonte=('times new roman', 25),
-            x='centro',
-            y=395,
-            altura=100,
-            largura=self.controller.largura-5,
+            y=395, altura=100,
+            largura=self.controller.largura - 5
         )
 
     def __inserir_botões(self) :
@@ -53,9 +51,8 @@ class Frequência(CTkFrame) :
 
         self._bt_compilar_faltas = Botão(
             self,
-            função=lambda: self._compilar_faltas(),
+            função=lambda : self._compilar_faltas(),
             texto='Compilar faltas',
-            x='centro',
             y=300,
             largura=120
         )
@@ -64,15 +61,15 @@ class Frequência(CTkFrame) :
         pass
 
     def _compilar_faltas(self):
-        self._tx_feedback.att('Compilando...')
+        self._tx_feedback.atualizar('Compilando...')
 
         try:
             CompiladorDeFaltas(parâmetros.diretório_base).exportar()
-            self._tx_feedback.att(f"'Compilado de Faltas' gerado com sucesos em \n{parâmetros.diretório_base}")
+            self._tx_feedback.atualizar(f"'Compilado de Faltas' gerado com sucesos em \n{parâmetros.diretório_base}")
 
         except Exception as e:
             print(f'Exception na frequência: {e}')
-            self._tx_feedback.att(f'Erro\n{e}', fonte=('arial', 10), cor='red')
+            self._tx_feedback.atualizar(f'Erro\n{e}', fonte=('arial', 10), cor='red')
             raise e
 
 

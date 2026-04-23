@@ -54,7 +54,7 @@ class TelaConsulta(CTkFrame):
             altura=100,
             largura=self.controller.largura-5,
         )
-        self._tx_feedback.att(**self._obter_situação())
+        self._tx_feedback.atualizar(**self._obter_situação())
 
     def __inserir_botões(self):
         # self.bt_localizar_diretório_base = Botão(
@@ -127,17 +127,17 @@ class TelaConsulta(CTkFrame):
         diretório_base = parâmetros.diretório_base
         fonte = str(os.path.join(diretório_base, 'fonte'))
 
-        self._tx_feedback.att('Consultando estudantes')
+        self._tx_feedback.atualizar('Consultando estudantes')
         try:
             consulta = ConsultaEstudantes(diretório_fonte=fonte)
 
-            self._tx_feedback.att('Exportando')
+            self._tx_feedback.atualizar('Exportando')
 
             Exportação(consulta=consulta, path_destino=diretório_base)
 
             Pastador(diretório_base=diretório_base)
 
-            self._tx_feedback.att(
+            self._tx_feedback.atualizar(
                 f'Planilhas geradas e exportadas para\n{diretório_base}',
                 ('Arial', 20),
                 'bold',
@@ -145,7 +145,7 @@ class TelaConsulta(CTkFrame):
             )
 
         except Exception as e:
-            self._tx_feedback.att(f'Erro ao consultar: {e}')
+            self._tx_feedback.atualizar(f'Erro ao consultar: {e}')
             raise Exception(f'Problema na consulta: {e}')
         # except FileNotFoundError: self._tx_feedback.att('Erro ao consultar')
 
@@ -153,18 +153,18 @@ class TelaConsulta(CTkFrame):
         diretório_base = parâmetros.diretório_base
         fonte = str(Path(diretório_base, 'fonte', 'Servidores'))
 
-        self._tx_feedback.att('Consultando servidores')
+        self._tx_feedback.atualizar('Consultando servidores')
 
         try :
             consulta = ConsultaServidores(diretório_fonte=fonte)
 
-            self._tx_feedback.att('Exportando')
+            self._tx_feedback.atualizar('Exportando')
 
             Exportação(consulta=consulta, path_destino=diretório_base)
 
             # Pastador(diretório_base=diretório_base)
 
-            self._tx_feedback.att(
+            self._tx_feedback.atualizar(
                 f'Planilhas geradas e exportadas para\n{diretório_base}',
                 ('Arial', 20),
                 'bold',
@@ -172,7 +172,7 @@ class TelaConsulta(CTkFrame):
             )
 
         except Exception as e :
-            self._tx_feedback.att(f'Erro ao consultar: {e}')
+            self._tx_feedback.atualizar(f'Erro ao consultar: {e}')
             raise Exception(f'Problema na consulta: {e}')
             # except FileNotFoundError: self._tx_feedback.att('Erro ao consultar')
         pass
@@ -217,4 +217,4 @@ class TelaConsulta(CTkFrame):
 
     def _desfazer(self):
         Desfazimento(self).desfazer()
-        self._tx_feedback.att(**self._obter_situação())
+        self._tx_feedback.atualizar(**self._obter_situação())

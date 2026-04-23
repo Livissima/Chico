@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     pass
 
 @RegistroTelas.registrar(
-    nome_tela='bot_credenciais',
+    nome_tela='bot credenciais',
     título_da_janela='Bot Credenciais',
     cabeçalho='BOT Credenciais',
     descrição='Gerenciamento automático de credenciais'

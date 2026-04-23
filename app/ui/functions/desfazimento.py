@@ -19,7 +19,7 @@ class Desfazimento(CTkFrame):
     def desfazer(self):
         parâmetros.diretório_base = DIRETÓRIO_BASE_PADRÃO
         self.classe._in_diretório_base.limpar()
-        self.classe._tx_feedback.att('Diretório revertido para o padrão.')
+        self.classe._tx_feedback.atualizar('Diretório revertido para o padrão.')
         # self._bt_desfazer.destroy()
 
         print(f'Desfeito para: {parâmetros.diretório_base}')

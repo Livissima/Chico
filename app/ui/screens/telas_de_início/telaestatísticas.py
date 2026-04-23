@@ -117,7 +117,7 @@ class TelaEstatísticas(CTkFrame):
 
         for índice, valor in enumerate(valores):
             if valor == '__ERRO__':
-                self.tx_valores.att(
+                self.tx_valores.atualizar(
                     novo_texto=valor,
                     cor='red',
                     índice=índice

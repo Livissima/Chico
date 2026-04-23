@@ -29,7 +29,7 @@ class PesquisaDiretório(CTkFrame):
 
         print(f'Atual: {parâmetros.diretório_base}')
 
-        self.widget_input.att(parâmetros.diretório_base)
+        self.widget_input.atualizar(parâmetros.diretório_base)
 
         self.obter_diretório()
 
@@ -46,7 +46,7 @@ class PesquisaDiretório(CTkFrame):
 
         if parâmetros.diretório_base != DIRETÓRIO_BASE_PADRÃO:
             print(f'Alterado para: {parâmetros.diretório_base}')
-            self.classe._tx_feedback.att(f'Diretório base atualizado.')
+            self.classe._tx_feedback.atualizar(f'Diretório base atualizado.')
             return
 
 
