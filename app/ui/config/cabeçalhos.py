@@ -18,7 +18,7 @@
 #             # 'estatísticas' : self.estatísticas,
 #             # 'telas_bot siap' : self.bot_siap,
 #             # 'frequência' : self.frequência,
-#             # 'telas_bot servidores' : self.bot_servidores
+#             # 'telas_bot servidores' : self.bot servidores
 #         }
 #         setar = config[tela]
 #
