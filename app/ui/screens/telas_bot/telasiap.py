@@ -6,7 +6,8 @@ from app.auto.bot import Bot
 
 from app.config.parâmetros import parâmetros
 from app.ui.config.registrotelas import RegistroTelas
-from app.ui.widgets import Botão, CheckBox, Texto, Dropdown
+from app.ui.widgets.modelos_widgets import frame_feedback, botão_back
+from app.ui.widgets import Botão, CheckBox, Dropdown
 from typing import TYPE_CHECKING
 
 # from app.ui.config.cabeçalhos import Cabeçalhos
@@ -53,16 +54,7 @@ class TelaSiap(CTkFrame) :
         #         'formato' : 'bold'
         #     }
 
-        self._tx_feedback = Texto(
-            self,
-            **feed_inicial,
-            # texto='  ',
-            # fonte=('arial', 16),
-            y=400-5,
-            altura=100,
-            largura=self.controller.largura-10,
-
-        )
+        self._tx_feedback = frame_feedback(self, feed_inicial['texto'])
         pass
 
 
@@ -116,15 +108,7 @@ class TelaSiap(CTkFrame) :
             largura=130
         )
 
-        self.bt_back = Botão(
-            self,
-            função=lambda: self.controller.alternador.abrir('bot'),
-            texto='←',
-            fonte=('Arial', 20),
-            formato='bold',
-            x=10,
-            y=10,
-        )
+        self.bt_back = botão_back(self, 'bot')
 
         self.bt_modulação = Botão(
             self,

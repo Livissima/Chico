@@ -2,8 +2,8 @@ from customtkinter import CTkFrame, CTk
 from typing import TYPE_CHECKING
 
 from app.ui.config.registrotelas import RegistroTelas
-# from ..config.cabeçalhos import Cabeçalhos
-from app.ui.widgets import Botão, Texto
+from app.ui.widgets.modelos_widgets import frame_feedback, botão_back
+from app.ui.widgets import Botão
 from app.config.parâmetros import parâmetros
 from app.core.frequency.compiladordefaltas import CompiladorDeFaltas
 
@@ -30,24 +30,10 @@ class Frequência(CTkFrame) :
         self.__inserir_inputs()
 
     def __inserir_textos(self) :
-        self._tx_feedback = Texto(
-            self,
-            texto=' ',
-            fonte=('times new roman', 25),
-            y=395, altura=100,
-            largura=self.controller.largura - 5
-        )
+        self._tx_feedback = frame_feedback(self)
 
     def __inserir_botões(self) :
-        self._bt_back = Botão(
-            self,
-            função=lambda : self.controller.alternador.abrir('inicial'),
-            texto='←',
-            fonte=('Arial', 20),
-            formato='bold',
-            x=10,
-            y=10
-        )
+        self._bt_back = botão_back(self)
 
         self._bt_compilar_faltas = Botão(
             self,

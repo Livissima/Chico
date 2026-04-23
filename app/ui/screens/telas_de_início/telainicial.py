@@ -1,12 +1,10 @@
 from typing import TYPE_CHECKING
 from customtkinter import CTkFrame, CTk
-
-from app.auto import Bot
 from app.config.__metadata__ import PROJECT_NAME, PROJECT_VERSION
 from app.config.parâmetros import parâmetros
 from app.ui.config.registrotelas import RegistroTelas
-from app.ui.widgets import Texto, Botão, Input
-# from app.ui.config.cabeçalhos import Cabeçalhos
+from app.ui.widgets.modelos_widgets import frame_feedback, campo_input
+from app.ui.widgets import Texto, Botão
 from app.ui.functions.desfazimento import Desfazimento
 
 from app.ui.functions.pesquisadiretório import PesquisaDiretório
@@ -41,17 +39,8 @@ class TelaInicial(CTkFrame):
         self.__inserir_botões()
 
     def __inserir_textos(self):
-        self.tx_intro = Texto(
-            self,
-            texto='Texto vazio',
-            fonte=('times new roman', 15),
-            # x='centro',
-            y=80,
-            largura=self.controller.largura-10,
-            altura=40
-        )
 
-        self.tx_alterar_diretório = Texto(
+        self._tx_alterar_diretório = Texto(
             self,
             texto='Alterar diretório (opcional)',
             fonte=('times new roman', 15),
@@ -62,25 +51,11 @@ class TelaInicial(CTkFrame):
             altura=20
         )
 
-        self._tx_feedback = Texto(
-            self,
-            texto='',
-            fonte=('arial', 20),
-            y=400-5,
-            altura=100,
-            largura=self.controller.largura-10,
-        )
+        self._tx_feedback = frame_feedback(self)
 
     def __inserir_inputs(self):
         #todo: Bloquear click
-        self._in_diretório_base = Input(
-            self,
-            texto=parâmetros.diretório_base,
-            fonte=('arial', 15),
-            x=160,
-            y=self.primeira_linha,
-            largura=435
-        )
+        self._in_diretório_base = campo_input(self)
 
     def __inserir_botões(self):
         segunda_linha = 350
@@ -134,8 +109,6 @@ class TelaInicial(CTkFrame):
             y=self.primeira_linha,
             largura=150
         )
-
-
 
         self._bt_desfazer = Botão(
             self,
