@@ -54,7 +54,7 @@ class TelaBot(CTkFrame):
         self.bt_siap = Botão(
             self,
             #todo flexibilizar esse path
-            função=lambda: self.controller.alternador.abrir('bot_siap'),
+            função=lambda: self.controller.alternador.abrir('bot siap'),
             texto='SIAP',
             fonte=('Arial', 20),
             formato='bold',
@@ -65,7 +65,7 @@ class TelaBot(CTkFrame):
 
         self.bt_sige = Botão(
             self,
-            função=lambda: self.controller.alternador.abrir('bot_sige'),
+            função=lambda: self.controller.alternador.abrir('bot sige'),
             texto='SIGE',
             fonte=('Arial', 20),
             formato='bold',
@@ -75,7 +75,7 @@ class TelaBot(CTkFrame):
         )
         self.bt_credenciais = Botão(
             self,
-            função=lambda: self.controller.alternador.abrir('bot_credenciais'),
+            função=lambda: self.controller.alternador.abrir('bot credenciais'),
             texto='Credenciais',
             fonte=('Arial', 20),
             formato='bold',
