@@ -17,6 +17,7 @@ app/config/app_settings.json
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/**/csv-editor.xml
 
 # AWS User-specific
 .idea/**/aws.xml
