@@ -1,4 +1,3 @@
-from os import PathLike
 from pathlib import Path
 from selenium.webdriver import Chrome
 from app.auto.data.sites.propriedadesweb import PropriedadesWeb
@@ -22,7 +21,6 @@ class DownloadDadosEstudantes:
         print(f'class Downloads instanciada.')
         self.master = navegador
         self._destino = destino
-        # self._alvos = tarefas_sige
         self._seleção = seleção
 
         self._nv = NavegaçãoWeb(navegador, 'sige')
@@ -61,6 +59,8 @@ class DownloadDadosEstudantes:
         tasks_avaliação = ['Avaliação']
 
         for série, turma in self._nv.iterar_turmas_sige(self._seleção):
+
+
             if tarefa in tasks_download:
                 self._baixar_relatório(tarefa.lower(), turma)
             if tarefa in tasks_avaliação:
@@ -71,7 +71,7 @@ class DownloadDadosEstudantes:
         self._nv.download_json(turma, self.__mapear_diretório(tipo), tipo)
         self._retornar()
 
-    def __mapear_diretório(self, tipo: str) -> PathLike:
+    def __mapear_diretório(self, tipo: str) -> Path:
         return Path(self._destino, 'fonte', tipo.title())
 
     def __gerar_relatório(self, tipo) -> None:
@@ -84,4 +84,4 @@ class DownloadDadosEstudantes:
 
     def _retornar(self) -> None:
         self._nv.clicar('css', 'voltar')
-
+        
