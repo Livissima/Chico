@@ -1,4 +1,5 @@
 import json
+import os
 import re
 import warnings
 from typing import Any
@@ -65,6 +66,13 @@ def escrever_json(conteúdo: Any, caminho_arquivo: str | Path, indent: int = 4) 
 
     except (TypeError, OverflowError) as e :
         print(f"Erro ao serializar JSON: {e}")
+
     except IOError as e :
         print(f"Erro de E/S ao salvar o arquivo: {e}")
 
+
+def truncar_diretório(_dir: str) -> str:
+    _diretório = _dir.split('\\')
+    _diretório = os.path.join(*_diretório[0 :3], '...', '...', *_diretório[-2 :])
+    _diretório = _diretório.replace(':', ':\\')
+    return _diretório
