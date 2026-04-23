@@ -1,6 +1,8 @@
 import json
 import re
 import warnings
+from typing import Any
+
 from openpyxl import __name__ as openpyxl_name
 import pandas as pd
 import unicodedata
@@ -45,8 +47,24 @@ def ajustar_print_pandas():
     pd.set_option('display.width', None)  # Ajusta automaticamente à largura do terminal
     warnings.filterwarnings('ignore', category=UserWarning, module=openpyxl_name)
 
-def escrever_json(conteúdo, _path, indent: int = 0):
-    with open(_path, 'w', encoding='utf-8') as arquivo :
-        json.dump(conteúdo, arquivo, ensure_ascii=False, indent=indent)
 
+def escrever_json(conteúdo: Any, caminho_arquivo: str | Path, indent: int = 4) :
+
+    path = Path(caminho_arquivo)
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    try :
+        with open(path, 'w', encoding='utf-8') as arquivo :
+            json.dump(
+                conteúdo,
+                arquivo,
+                ensure_ascii=False,
+                indent=indent,
+                default=str
+            )
+
+    except (TypeError, OverflowError) as e :
+        print(f"Erro ao serializar JSON: {e}")
+    except IOError as e :
+        print(f"Erro de E/S ao salvar o arquivo: {e}")
 
