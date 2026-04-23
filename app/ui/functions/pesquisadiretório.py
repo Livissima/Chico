@@ -19,7 +19,7 @@ class PesquisaDiretório(CTkFrame):
 
         super().__init__(master=classe)
 
-        self.widget_input = widget_input
+        self._widget_input = widget_input
         self.título_janela = título_janela
         self.path: str  = ''
 
@@ -29,7 +29,7 @@ class PesquisaDiretório(CTkFrame):
 
         print(f'Atual: {parâmetros.diretório_base}')
 
-        self.widget_input.atualizar(parâmetros.diretório_base)
+        self._widget_input.atualizar(parâmetros.diretório_base)
 
         self.obter_diretório()
 
@@ -59,14 +59,14 @@ class PesquisaDiretório(CTkFrame):
 
         if pesquisa:
             self.path = os.path.normpath(pesquisa)
-            self.widget_input.delete(0, 'end')
-            self.widget_input.insert(0, self.path)
+            self._widget_input.delete(0, 'end')
+            self._widget_input.insert(0, self.path)
             return
 
         if not pesquisa:
             self.path = parâmetros.diretório_base
-            self.widget_input.delete(0, 'end')
-            self.widget_input.insert(0, self.path)
+            self._widget_input.delete(0, 'end')
+            self._widget_input.insert(0, self.path)
 
 
 

@@ -2,9 +2,9 @@ from typing import TYPE_CHECKING
 
 from customtkinter import CTkFrame, CTk
 
-# from ..config.cabeçalhos import Cabeçalhos
 from app.config.parâmetros import parâmetros
 from app.ui.config.registrotelas import RegistroTelas
+from app.ui.widgets.modelos_widgets import botão_back
 from app.ui.widgets import Texto, Botão
 from app.auto.bot import Bot
 
@@ -36,7 +36,7 @@ class TelaEstatísticas(CTkFrame):
         self.__inserir_inputs()
 
     def __inserir_textos(self):
-        self.tx_chaves = Texto(
+        self._tx_chaves = Texto(
             self,
             textos_empilhados=list(self.estatísticas().keys()),
             largura=200,
@@ -85,15 +85,7 @@ class TelaEstatísticas(CTkFrame):
             largura=100
         )
 
-        self.bt_back = Botão(
-            self,
-            função=lambda: self.controller.alternador.abrir('inicial'),
-            texto='←',
-            fonte=('Arial', 20),
-            formato='bold',
-            x=10,
-            y=10
-        )
+        self.bt_back = botão_back(self)
 
     def sondar(self):
         #todo: definir locks para que a tela seja atualizada apropriadamente

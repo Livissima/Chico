@@ -68,7 +68,7 @@ class AlternadorDeTelas:
             return
 
 
-        tela.bt_back = Botão(
+        tela._bt_back = Botão(
             tela,
             função=self.voltar,
             texto='←',
@@ -77,4 +77,4 @@ class AlternadorDeTelas:
             x=10, y=10,
             largura= 40, altura=40
         )
-        tela.bt_back.lift()
+        tela._bt_back.lift()

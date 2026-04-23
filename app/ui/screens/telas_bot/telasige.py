@@ -1,5 +1,4 @@
 #app/ui/screens/telas_bot/tela_bot_sige.py
-import os.path
 from customtkinter import CTkFrame, CTk
 from app.auto.bot import Bot
 from app.config.parâmetros.estruturadeseleção import EstruturaDeSeleção
@@ -7,7 +6,8 @@ from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
 from app.config.parâmetros import parâmetros
 from app.ui.functions.desfazimento import Desfazimento
 from app.ui.config.registrotelas import RegistroTelas
-from app.ui.widgets import Botão, Input, CheckBox, Texto
+from app.ui.widgets.modelos_widgets import frame_feedback, campo_input, botão_back
+from app.ui.widgets import Botão, CheckBox
 from typing import TYPE_CHECKING
 from app.ui.functions.pesquisadiretório import PesquisaDiretório
 
@@ -36,9 +36,7 @@ class TelaSige(CTkFrame):
 
         self.__inserir_checkboxes()
         self.__inserir_textos()
-        # self.__inserir_inputs()
         self.__inserir_botões()
-        # self.__inserir_dropdowns()
 
     def __inserir_textos(self):
         feed_inicial = {'texto' : '', 'fonte' : ('arial', 20)}
@@ -52,40 +50,13 @@ class TelaSige(CTkFrame):
                 'formato' : 'bold'
             }
 
-        self._tx_feedback = Texto(
-            self,
-            **feed_inicial,
-            # texto=feed_inicial[0],
-            # fonte=('arial', feed_inicial[1]),
-            y=400-5,
-            altura=100,
-            largura=self.controller.largura-10,
-
-        )
+        self._tx_feedback = frame_feedback(self, feed_inicial['texto'])
 
     def __inserir_inputs(self):
-        self._in_diretório_base = Input(
-            self,
-            texto=str(os.path.join(parâmetros.diretório_base, 'fonte')),
-            x=120,
-            y=135,
-            largura=420+55
-        )
+        self._in_diretório_base = campo_input(self)
 
     def __inserir_botões(self):
-        def back():
-            self.salvar_estado()
-            self.controller.alternador.abrir('bot')
-
-        self._bt_back = Botão(
-            self,
-            função=lambda: back(),
-            texto='←',
-            fonte=('Arial', 20),
-            formato='bold',
-            x=10,
-            y=10,
-        )
+        self._bt_back = botão_back(self, 'bot')
 
         self._bt_iniciar = Botão(
             self,
@@ -106,19 +77,8 @@ class TelaSige(CTkFrame):
             formato='bold',
             x=300,
             y=350,
-            largura=120,
+            largura=140,
             função=lambda: self._notear()
-        )
-
-
-        self._bt_desfazer = Botão(
-            self,
-            função=lambda: self._desfazer(),
-            condição=parâmetros.diretório_base != DIRETÓRIO_BASE_PADRÃO,
-            texto='↩',
-            fonte=('arial', 25),
-            x=560,
-            y=135+30
         )
 
         self.bt_sondagem_emergencial = Botão(
@@ -128,7 +88,6 @@ class TelaSige(CTkFrame):
             texto='SONDAR',
             fonte=('arial', 15),
             formato='bold',
-            x='centro',
             y=300,
             largura=90
         )
@@ -142,7 +101,6 @@ class TelaSige(CTkFrame):
             largura=80,
             x=0,
             y=200,
-            espaçamento=5
         )
 
         self._inserir_checkbox_turmas()
@@ -208,18 +166,10 @@ class TelaSige(CTkFrame):
         if len(parâmetros.turmas_disponíveis) > 0:
             self._bt_iniciar.mudar_cor('blue')
 
-    def _desfazer(self):
-        Desfazimento(self).desfazer()
-        self._bt_desfazer.atualizar_visibilidade(
-            parâmetros.diretório_base != DIRETÓRIO_BASE_PADRÃO
-        )
-        self._verificar_estatística()
-
 
     def sondar(self):
         Bot(tarefa='sondagem', parâmetros_web=None, path=parâmetros.diretório_base)
         self._verificar_estatística()
-
 
     def salvar_estado(self):
         parâmetros.estado_checkbox_alvos = self._ck_alvos.valor()

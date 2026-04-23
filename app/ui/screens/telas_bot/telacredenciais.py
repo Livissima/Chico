@@ -4,6 +4,7 @@ from customtkinter import CTkFrame, CTk
 from app.auto.bot import Bot
 from app.config.parâmetros import parâmetros
 from app.ui.config.registrotelas import RegistroTelas
+from app.ui.widgets.modelos_widgets import botão_back
 from app.ui.widgets import Botão, CheckBox, Texto
 from typing import TYPE_CHECKING
 
@@ -46,24 +47,14 @@ class TelaCredenciais(CTkFrame):
         pass
 
     def __inserir_botões(self):
-        def back():
-            self.salvar_valores_checkboxes()
-            self.controller.alternador.abrir('bot')
 
-        self.bt_back = Botão(
-            self,
-            função=lambda: back(),
-            texto='←',
-            fonte=('Arial', 20),
-            formato='bold',
-            x=10,
-            y=10,
-        )
+        self._bt_back = botão_back(self, 'bot')
+
         y = 350
 
         print(f'{self._ck_turmas.valores_true = }')
 
-        self.bt_netescola = Botão(
+        self._bt_netescola = Botão(
             # todo: o feedback no console está inacurado.
             self,
             função=lambda: Bot(

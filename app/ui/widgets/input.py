@@ -71,7 +71,7 @@ class Input(CTkFrame):
     def __str__(self):
         return str(self.input.get())
 
-    def att(self, valor):
+    def atualizar(self, valor):
         self.input.delete(0, "end")
         self.input.insert(0, valor)
 
