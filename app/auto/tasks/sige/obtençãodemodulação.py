@@ -1,12 +1,11 @@
 import os.path
-import time
 from pathlib import Path
 
 import pandas as pd
 from selenium.webdriver import Chrome
 from app.auto.tasks.registrotasks import RegistroTasks
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
-from app.auto.data.sites.propriedadesweb import PropriedadesWeb
+from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
 from app.config.parâmetros import parâmetros
 
 @RegistroTasks.registrar('obter modulacoes')

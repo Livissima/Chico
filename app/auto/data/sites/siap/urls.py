@@ -1,5 +1,7 @@
-class Urls:
+from dataclasses import dataclass
 
-    @property
-    def tela_login(self) -> str:
-        return 'https://siap.educacao.go.gov.br/'
+
+@dataclass(frozen=True)
+class SiapUrls:
+    tela_login: str = 'https://siap.educacao.go.gov.br/'
+

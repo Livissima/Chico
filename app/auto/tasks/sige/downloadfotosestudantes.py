@@ -6,7 +6,7 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 
 from app.auto.tasks.registrotasks import RegistroTasks
-from app.auto.data.sites.propriedadesweb import PropriedadesWeb
+from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from app.config.parâmetros import parâmetros
 

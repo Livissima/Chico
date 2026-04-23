@@ -1,20 +1,17 @@
-import json
-import os.path
 import time
-from typing import Literal, Generator, Any
+from typing import Literal
 from selenium.common import ElementClickInterceptedException, StaleElementReferenceException
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.expected_conditions import presence_of_element_located, visibility_of_element_located, \
     element_to_be_clickable, staleness_of
 
-from app.auto.data.sites.propriedadesweb import PropriedadesWeb
+from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
 from app.auto.functions.javascript import SCRIPT_OBTER_TABELAS_SIMPLES, SCRIPT_OBTER_TABELAS_FICHAS, \
     SCRIPT_SELECIONAR_DISPARANDO_EVENTO
-from app.config.parâmetros import parâmetros
+
 
 class NavegaçãoWebMobilidade:
     def __init__(self, master: Chrome, site: str) :

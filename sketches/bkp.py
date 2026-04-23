@@ -4,10 +4,9 @@ from selenium.common import NoSuchElementException
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
-from app.auto.data.sites.propriedadesweb import PropriedadesWeb
+from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
 from typing import Literal
 import pandas as pd
-import unicodedata
 
 
 class GerenciadorDeCredenciais :

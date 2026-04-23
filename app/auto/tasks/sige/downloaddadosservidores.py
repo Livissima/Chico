@@ -1,13 +1,11 @@
 #app/auto/tasks/sige/downloaddadosservidores.py
-import json
 
 from app.config.settings.functions import escrever_json, ler_json
 from app.auto.tasks.registrotasks import RegistroTasks
-from app.auto.data.sites.propriedadesweb import PropriedadesWeb
+from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
 from pathlib import Path
-import time
 
 from app.config.parâmetros.getters.tempo import tempo
 
