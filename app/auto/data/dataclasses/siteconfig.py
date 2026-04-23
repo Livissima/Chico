@@ -1,12 +1,6 @@
-from typing import Optional, Dict, List, Tuple
+from typing import Dict, List, Tuple
 from dataclasses import dataclass, field
-
-@dataclass(frozen=True)
-class Credenciais:
-    id: str
-    senha: str
-    tipo: Optional[str] = None
-
+from app.auto.data.dataclasses.credenciais import Credenciais
 
 @dataclass
 class SiteConfig:

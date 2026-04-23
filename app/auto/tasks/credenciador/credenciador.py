@@ -1,16 +1,10 @@
 import sys
 from pandas import DataFrame
-from selenium.common import NoSuchElementException
-from selenium.webdriver import Chrome
-from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webelement import WebElement
 
 from app.auto.tasks.registrotasks import RegistroTasks
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
-from app.auto.data.sites.propriedadesweb import PropriedadesWeb
-from typing import Literal
+from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
 import pandas as pd
-import unicodedata
 
 
 @RegistroTasks.registrar('credenciar')

@@ -4,12 +4,9 @@ from pandas import DataFrame
 from selenium.common import StaleElementReferenceException
 from selenium.webdriver.common.by import By
 
-from app.auto.data.sites.propriedadesweb import PropriedadesWeb
+from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
-
-from app.config.parâmetros import parâmetros
-from selenium.webdriver.support.ui import Select
 
 from app.config.parâmetros.getters.tempo import tempo
 

@@ -1,12 +1,8 @@
-import sys
 import time
-from typing import Literal
 from selenium.webdriver import Edge
-import pandas as pd
-from pandas import DataFrame
 
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
-from app.auto.data.sites.propriedadesweb import PropriedadesWeb
+from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
 
 
 class CredenciadorGoogle:

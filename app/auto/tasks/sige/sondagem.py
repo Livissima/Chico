@@ -1,5 +1,4 @@
 import json
-import os.path
 from pathlib import Path
 from typing import Any
 from selenium.webdriver import Chrome
@@ -8,7 +7,7 @@ from selenium.webdriver.remote.webelement import WebElement
 
 from app.config.settings.functions import escrever_json
 from app.auto.tasks.registrotasks import RegistroTasks
-from app.auto.data.sites.propriedadesweb import PropriedadesWeb
+from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from app.config.parâmetros import parâmetros
 from app.config.parâmetros.getters.tempo import tempo

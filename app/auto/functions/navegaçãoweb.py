@@ -1,18 +1,16 @@
-import json
 import os.path
 import time
 from typing import Literal, Generator, Any
 from selenium.common import ElementClickInterceptedException, StaleElementReferenceException
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.expected_conditions import presence_of_element_located, visibility_of_element_located, \
     element_to_be_clickable, staleness_of
 
-from app.auto.data.sites.propriedadesweb import PropriedadesWeb
-from app.auto.data.sites.siteconfig import SiteConfig
+from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
+from app.auto.data.dataclasses.siteconfig import SiteConfig
 from app.config.settings.functions import escrever_json
 from app.auto.functions.javascript import Javascript
 from app.config.parâmetros import parâmetros

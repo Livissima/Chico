@@ -4,7 +4,7 @@ from pandas import DataFrame
 from selenium.common import StaleElementReferenceException
 from selenium.webdriver.common.by import By
 
-from app.auto.data.sites.propriedadesweb import PropriedadesWeb
+from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
 from app.auto.functions.javascript import SCRIPT_MARCAR_FALTA_COMO_ADM
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
