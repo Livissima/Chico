@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 @RegistroTelas.registrar(
     nome_tela='inicial',
-    título_da_janela=F'v.{PROJECT_VERSION}',
+    título_da_janela=f'v.{PROJECT_VERSION}',
     cabeçalho=f'{PROJECT_NAME}',
     descrição='Utilitário administrativo'
 )
@@ -147,13 +147,6 @@ class TelaInicial(CTkFrame):
             y=self.primeira_linha+30
         )
 
-        self._bt_teste = Botão(
-            self,
-            função=lambda: Bot(tarefa='investigar'),
-            texto='Teste',
-            y=300,
-            largura=100
-        )
 
     def _desfazer(self):
         Desfazimento(self).desfazer()
