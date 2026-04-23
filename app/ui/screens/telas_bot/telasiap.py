@@ -18,7 +18,7 @@ ANO = 2026
 
 
 @RegistroTelas.registrar(
-    nome_tela='bot_siap',
+    nome_tela='bot siap',
     título_da_janela='Bot SIAP',
     cabeçalho='BOT SIAP',
     descrição=parâmetros.nome_ue
@@ -145,15 +145,15 @@ class TelaSiap(CTkFrame) :
             )
 
     def _função_botão_obter(self):
-        self._tx_feedback.att(f'Consultando dias letivos para o ano de {ANO}', ('arial', 20))
+        self._tx_feedback.atualizar(f'Consultando dias letivos para o ano de {ANO}', ('arial', 20))
         print('clicado')
         time.sleep(1)
         try:
             Bot(tarefa='consultar dias letivos', parâmetros_web=None, ano=ANO, path=parâmetros.diretório_base)
             dias = parâmetros.lista_dias_letivos
-            self._tx_feedback.att(f'Dias obtidos em {ANO}: {len(dias)}')
+            self._tx_feedback.atualizar(f'Dias obtidos em {ANO}: {len(dias)}')
         except Exception as e:
-            self._tx_feedback.att(f'Falha em obter dias letivos')
+            self._tx_feedback.atualizar(f'Falha em obter dias letivos')
             print(f'Falha em obter dias letivos: {e}')
 
     def atualizar_dropdown_dia_inicial(self, mês_selecionado):
