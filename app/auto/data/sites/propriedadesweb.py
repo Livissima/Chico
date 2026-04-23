@@ -1,5 +1,5 @@
 from app.auto.data.sites.google.google import Google
-from app.auto.data.sites.netescola.netescola import NetEscola
+from app.auto.data.sites import NetEscola
 from app.auto.data.sites.siap import Siap
 from app.auto.data.sites.sige import Sige
 from app.auto.data.sites.siteconfig import SiteConfig
