@@ -17,15 +17,39 @@ classifiers = [
 ]
 
 dependencies = [
+    "et-xmlfile==2.0.0",
+    "openpyxl==3.1.5",
+    "numpy==2.4.4",
+    "pandas==3.0.2",
+    "python-dateutil==2.9.0.post0",
+    "six==1.17.0",
+    "tzdata==2026.2",
+    "attrs==26.1.0",
+    "certifi==2026.4.22",
+    "cffi==2.0.0",
+    "h11==0.16.0",
+    "idna==3.13",
+    "outcome==1.3.0.post0",
+    "pycparser==3.0",
+    "pysocks==1.7.1",
+    "selenium==4.43.0",
+    "sniffio==1.3.1",
+    "sortedcontainers==2.4.0",
+    "trio==0.33.0",
+    "trio-websocket==0.12.2",
+    "typing_extensions==4.15.0",
+    "urllib3==2.6.3",
+    "websocket-client==1.9.0",
+    "wsproto==1.3.2",
     "customtkinter==5.2.2",
-    "pandas==2.3.2",
-    "platformdirs==4.3.8",
-    "python-dotenv==1.1.1",
-    "python_dateutil==2.9.0.post0",
+    "darkdetect==0.8.0",
+    "packaging==26.1",
     "screeninfo==0.8.1",
-    "selenium==4.35.0",
-
-    # Adicione outras dependências aqui
+    "dotenv==0.9.9",
+    "python-dotenv==1.2.2",
+    "xlsxwriter==3.2.9",
+    "charset_normalizer==3.4.7",
+    "requests==2.33.1"
 ]
 
 [project.optional-dependencies]
