@@ -3,8 +3,6 @@ from app.auto.tasks.registrotasks import RegistroTasks
 from selenium import webdriver
 
 
-
-
 class Bot:
     #todo: implementar multithreading / assynch
     def __init__(self, tarefa: str, **kwargs) :
@@ -27,9 +25,11 @@ class Bot:
             task_class = RegistroTasks.obter(tarefa_normalizada)
             print(f"🚀 Executando {task_class.__name__}...\n")
             task_class(**kwargs)
+
         except Exception as e :
             print(f"\n❌ Erro durante execução: {e}")
             raise
+
         finally :
             navegador.quit()
 
