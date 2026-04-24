@@ -16,7 +16,7 @@ class Exportação:
             path_destino: Path
     ):
 
-        print(f'=> Dataframe final para exportação: {consulta = }')
+        print(f'=> Dataframe final para exportação: {consulta.shape = }')
 
         self.exportar_tudo(consulta, path_destino)
 
