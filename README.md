@@ -4,9 +4,13 @@ Utilitário de automação para atividades administrativas do cotidiano escolar 
 
 Desenvolvido para secretárias e auxiliares de escolas estaduais que trabalham com os sistemas **SIGE** e **SIAP** da Secretaria de Estado da Educação de Goiás.
 
+Este projeto nasce de uma iniciativa individual para otimizar fluxos de trabalho na rotina administrativa escolar. 
+Ele busca mitigar limitações técnicas e gargalos operacionais dos sistemas legados do Estado, oferecendo 
+soluções de automação que priorizam a agilidade e a integridade dos dados no atendimento à comunidade escolar.
+
 ---
 
-## O que o Chico faz
+## O que o Chico faz:
 
 - **Download de dados de estudantes** — fichas, contatos, situações, gêneros e fotos via SIGE
 - **Consulta e exportação** — gera uma planilha `Database.xlsx` consolidada com dados de todos os estudantes da escola
@@ -17,12 +21,12 @@ Desenvolvido para secretárias e auxiliares de escolas estaduais que trabalham c
 
 ---
 
-## Pré-requisitos
+## Pré-requisitos:
 
 > O setup é manual. É esperado que a pessoa que instalar o Chico tenha familiaridade básica com Python e linha de comando.
 
 - Python 3.12+
-- Google Chrome instalado
+- Microsoft Edge instalado (instalado por padrão em qualquer computador com Windows 10/11)
 - ChromeDriver compatível com a versão do Chrome instalada
 - Acesso ao SIGE e ao SIAP com credenciais válidas
 - Windows (o projeto usa caminhos e variáveis de ambiente do Windows)
@@ -30,11 +34,11 @@ Desenvolvido para secretárias e auxiliares de escolas estaduais que trabalham c
 
 ---
 
-## Instalação
+## Instalação:
 
 **1. Clone o repositório**
 ```bash
-git clone https://github.com/<seu-usuario>/chico.git
+git clone https://github.com/Livissima/Chico.git
 cd chico
 ```
 
@@ -45,11 +49,9 @@ python -m venv .venv
 ```
 
 **3. Instale as dependências**
-```bash
-pip install -r requirements.txt
-```
 
-> Se não houver `requirements.txt`, use o `pyproject.toml`:
+
+> U''se o `pyproject.toml`:
 > ```bash
 > pip install .
 > ```
@@ -70,7 +72,7 @@ python -m app.main
 
 ---
 
-## Estrutura de diretórios esperada
+## Estrutura de diretórios esperada:
 
 O Chico trabalha com uma pasta base (por padrão no OneDrive, configurável na interface). Dentro dela, ele espera e cria a seguinte estrutura:
 
