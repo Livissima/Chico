@@ -6,3 +6,12 @@ app/config/app_settings.json
 *.env
 # Ignorar completamente a pasta da IDE
 .idea/
+
+# Pastas de Build e Distribuição
+build/
+dist/
+*.egg-info/
+
+# Byte-compiled / arquivos de cache
+__pycache__/
+*.py[cod]
