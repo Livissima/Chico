@@ -98,6 +98,9 @@ O Chico automatiza interações com sistemas da SEDUC-GO (SIGE e SIAP). Seu func
 
 Credenciais nunca devem ser commitadas. O arquivo `.env` está no `.gitignore`.
 
+Há várias funcionalidades que ainda estão sendo planejadas e/ou testadas para serem implementadas efetivamente no projeto.
+Acompanhe o projeto!!
+
 ---
 
 ## Licença
