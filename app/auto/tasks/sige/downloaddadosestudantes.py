@@ -52,7 +52,7 @@ class DownloadDadosEstudantes:
         #marcar bimestre
         #marcar todos '/html/body/div[8]/form/table/tbody/tr[15]/td/table/tbody/tr[1]/td[1]/input'
         #clicar cadastrar (id cmdCadastrar)
-        pass
+        raise NotImplementedError
 
     def _executar_tarefa(self, tarefa: str) -> None:
         tasks_download = ['Fichas', 'Contatos', 'Situações', 'Gêneros', 'Fotos']
@@ -60,26 +60,27 @@ class DownloadDadosEstudantes:
 
         for série, turma in self._nv.iterar_turmas_sige(self._seleção):
 
-
             if tarefa in tasks_download:
-                self._baixar_relatório(tarefa.lower(), turma)
+                self._obter_e_baixar_relatório(tarefa.lower(), turma)
+
             if tarefa in tasks_avaliação:
                 self._avaliar(tarefa)
 
-    def _baixar_relatório(self, tipo: str, turma: str) -> None:
-        self.__gerar_relatório(tipo)
+    def _obter_e_baixar_relatório(self, tipo: str, turma: str) -> None:
+        self._requerir_relatório(tipo)
         self._nv.download_json(turma, self.__mapear_diretório(tipo), tipo)
         self._retornar()
 
     def __mapear_diretório(self, tipo: str) -> Path:
         return Path(self._destino, 'fonte', tipo.title())
 
-    def __gerar_relatório(self, tipo) -> None:
+    def _requerir_relatório(self, tipo) -> None:
         if tipo == 'fichas':
             self._nv.clicar('xpath', 'misc', 'marcar todos')
         if tipo == 'gêneros':
-            # self.nv.clicar('xpath', 'resumo', 'turmas', 'ativas')
             self._nv.digitar_xpath('lápis docs', 'relatórios', 'acomp. pedagógico', 'input data', string=tempo.hoje)
+
+            
         self._nv.clicar('id', 'gerar')
 
     def _retornar(self) -> None:
