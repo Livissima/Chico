@@ -8,8 +8,10 @@ from app.config.parâmetros.getters.tempo import tempo
 
 @RegistroTasks.registrar('downloads')
 class DownloadDadosEstudantes:
+
     #todo: converter isso em algo como BotSige, que armazenará métodos comuns e direcionará rotinas exclusivas.
     # assim, as classes das diferentes tasks de SIGE serão chamadas em métodos do BotSige.
+
     def __init__(
             self,
             navegador: Chrome,
@@ -18,7 +20,8 @@ class DownloadDadosEstudantes:
             seleção: EstruturaDeSeleção,
             **kwargs
     ):
-        print(f'class Downloads instanciada.')
+
+        print(f'class DownloadDadosEstudantes instanciada.\n     {tarefas_sige = }')
         self.master = navegador
         self._destino = destino
         self._seleção = seleção
@@ -26,9 +29,40 @@ class DownloadDadosEstudantes:
         self._nv = NavegaçãoWeb(navegador, 'sige')
         self._pp = PropriedadesWeb('sige')
 
+        if len(tarefas_sige) > 1 :
+            self._executar_múltiplos(tarefas_sige, destino, seleção, kwargs)
+            self.master.quit()
+            return
+
         self._logon()
-        self._executar_conjunto_de_tarefas(tarefas_sige)
+        self._executar_tarefa(tarefas_sige[0])
         self.master.quit()
+
+
+    @staticmethod
+    def _executar_múltiplos(tarefas, destino, seleção, kwargs):
+        from threading import Thread
+
+        def rodar(tarefa_única):
+            novo_driver = Chrome()
+            DownloadDadosEstudantes(
+                navegador=novo_driver,
+                destino=destino,
+                tarefas_sige=[tarefa_única],
+                seleção=seleção,
+                **kwargs
+            )
+
+        threads = []
+        for tarefa in tarefas:
+            thread = Thread(target=rodar, args=(tarefa,))
+            thread.start()
+            threads.append(thread)
+
+
+
+
+
 
     def _logon(self) -> None:
         self.master.get(self._pp.urls)
@@ -37,13 +71,6 @@ class DownloadDadosEstudantes:
         self._nv.digitar_xpath('misc', 'input senha', string=self._pp.credenciais_padrão.senha)
         self._nv.clicar('xpath', 'misc', 'entrar')
         self._nv.clicar('xpath', 'misc', 'alerta')
-
-    def _executar_conjunto_de_tarefas(self, tarefas: list[str]) -> None:
-
-        for tarefa in tarefas:
-            self._nv.acessar_destino(tarefa.lower())
-            self._executar_tarefa(tarefa)
-
 
     def _avaliar(self, tarefa):
         #selecionar disciplina;
@@ -54,7 +81,10 @@ class DownloadDadosEstudantes:
         #clicar cadastrar (id cmdCadastrar)
         raise NotImplementedError
 
+
+
     def _executar_tarefa(self, tarefa: str) -> None:
+        self._nv.acessar_destino(tarefa.lower())
         tasks_download = ['Fichas', 'Contatos', 'Situações', 'Gêneros', 'Fotos']
         tasks_avaliação = ['Avaliação']
 
@@ -77,10 +107,10 @@ class DownloadDadosEstudantes:
     def _requerir_relatório(self, tipo) -> None:
         if tipo == 'fichas':
             self._nv.clicar('xpath', 'misc', 'marcar todos')
+
         if tipo == 'gêneros':
             self._nv.digitar_xpath('lápis docs', 'relatórios', 'acomp. pedagógico', 'input data', string=tempo.hoje)
 
-            
         self._nv.clicar('id', 'gerar')
 
     def _retornar(self) -> None:
