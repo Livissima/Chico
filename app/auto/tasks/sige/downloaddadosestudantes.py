@@ -1,5 +1,5 @@
 from pathlib import Path
-from selenium.webdriver import Chrome
+from selenium.webdriver import Edge
 from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from app.auto.tasks.registrotasks import RegistroTasks
@@ -14,14 +14,14 @@ class DownloadDadosEstudantes:
 
     def __init__(
             self,
-            navegador: Chrome,
+            navegador: Edge,
             destino: str,
             tarefas_sige: list[str],
             seleção: EstruturaDeSeleção,
             **kwargs
     ):
 
-        print(f'class DownloadDadosEstudantes instanciada.\n     {tarefas_sige = }')
+        print(f'class DownloadDadosEstudantes instanciada. {tarefas_sige = }')
         self.master = navegador
         self._destino = destino
         self._seleção = seleção
@@ -41,10 +41,15 @@ class DownloadDadosEstudantes:
 
     @staticmethod
     def _executar_múltiplos(tarefas, destino, seleção, kwargs):
+        #todo: script feião. Dá pra separar responsabilidades depois
         from threading import Thread
+        from selenium.webdriver.edge.options import Options
+        opções = Options()
+        opções.add_argument("--headless=new")
+        opções.add_argument("--window-size=1920,1080")
 
         def rodar(tarefa_única):
-            novo_driver = Chrome()
+            novo_driver = Edge(options=opções)
             DownloadDadosEstudantes(
                 navegador=novo_driver,
                 destino=destino,
@@ -58,10 +63,6 @@ class DownloadDadosEstudantes:
             thread = Thread(target=rodar, args=(tarefa,))
             thread.start()
             threads.append(thread)
-
-
-
-
 
 
     def _logon(self) -> None:

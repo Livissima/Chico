@@ -1,10 +1,10 @@
-from app.config.settings.functions import normalizar_unicode, normalizar_dicionário
-from app.auto.tasks.registrotasks import RegistroTasks
 from selenium import webdriver
+
+from app.auto.tasks.registrotasks import RegistroTasks
+from app.config.settings.functions import normalizar_unicode
 
 
 class Bot:
-    #todo: implementar multithreading / assynch
     def __init__(self, tarefa: str, **kwargs) :
         tarefa_normalizada = normalizar_unicode(tarefa)
 
@@ -12,7 +12,7 @@ class Bot:
         print(f"   Argumentos: {list(kwargs.keys())}\n")
 
         # ← Criar navegador AQUI
-        navegador = webdriver.Chrome()
+        navegador = webdriver.Edge()
         kwargs['navegador'] = navegador
 
         # ← DEPOIS validar
