@@ -1,9 +1,7 @@
 import os
-from statistics import mean
-
-from app.core.query.estudantes.workflow.processamentoinicial import ProcessamentoInicial
-from app.core.query.estudantes.workflow.formatação import Formatação
-from app.core.query.estudantes.workflow.integraçãodeextras import IntegraçãoDeExtras
+from app.core.query.estudantes.pipeline.processamentoinicial import ProcessamentoInicial
+from app.core.query.estudantes.pipeline.formatação import Formatação
+from app.core.query.estudantes.pipeline.integraçãodeextras import IntegraçãoDeExtras
 from app.core.query.leitura import Leitura
 from pandas import DataFrame
 
@@ -23,10 +21,10 @@ class ConsultaEstudantes:
         self.dataframe = self._consultar(diretório_fonte)
 
     def _consultar(self, _path) -> DataFrame:
-        dfs_leitura = self._ler()
-        dfs_tratados = self._tratar(dfs_leitura)
+        dados_brutos = self._ler()
+        dados_processados = self._processar(dados_brutos)
 
-        df_integrado = IntegraçãoDeExtras(dfs_tratados).df_integrado
+        df_integrado = IntegraçãoDeExtras(dados_processados).df_integrado
         df_formatado = Formatação(df_integrado).df_formatado
         return df_formatado
 
@@ -37,9 +35,9 @@ class ConsultaEstudantes:
         }
 
     @staticmethod
-    def _tratar(dfs_leituras: dict) -> dict:
+    def _processar(dfs_leituras: dict) -> dict:
         return {
-            tipo : ProcessamentoInicial(leitura.leitura, tipo)
+            tipo : ProcessamentoInicial(leitura.fluxo_inicial, tipo)
             for tipo, leitura in dfs_leituras.items()
         }
 

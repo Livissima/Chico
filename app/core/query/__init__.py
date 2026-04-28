@@ -1,4 +1,4 @@
-from app.core.query.estudantes.workflow import *
+from app.core.query.estudantes.pipeline import *
 # from app.core.query.estudantes.source import *
 #
 

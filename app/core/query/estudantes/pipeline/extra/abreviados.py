@@ -1,5 +1,5 @@
 
-from app.core.query.estudantes.workflow.extra.common import preposições_nominais
+from app.core.query.estudantes.pipeline.extra.common import preposições_nominais
 
 
 

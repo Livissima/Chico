@@ -1,5 +1,5 @@
 from app.config.settings.functions import normalizar_diacrítica
-from app.core.query.estudantes.workflow.extra.common import preposições_nominais
+from app.core.query.estudantes.pipeline.extra.common import preposições_nominais
 
 
 class Credenciais:

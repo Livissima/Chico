@@ -26,7 +26,7 @@ class ConsultaServidores:
 
     def _consultar(self, path: Path):
 
-        leitura = Leitura(path, 'servidores').leitura
+        leitura = Leitura(path, 'servidores').fluxo_inicial
 
         return DataFrame(self._gerar_pessoas(leitura))
 

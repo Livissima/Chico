@@ -1,50 +1,28 @@
+from typing import Iterable, Generator
+
 import unicodedata
-from pandas import DataFrame, Series, ExcelWriter
+from pandas import DataFrame
 
 
 class TratamentoFichas:
 
-    def __init__(self, leitura: list[str]):
-        self._leitura = leitura
-        self.df_tratado = self._gerar_df(leitura)
+    def __init__(self, fluxo_leitura: Iterable[str]):
+        self.fluxo = self._processar_pipeline(fluxo_leitura)
 
-    def _gerar_df(self, leitura: list[str]) -> DataFrame:
-        tratado = self._tratar(leitura)
-        return DataFrame(data=tratado)
+        self._leitura = fluxo_leitura
+        self.df_tratado = self._gerar_df(fluxo_leitura)
 
-    def _tratar(self, leitura: list[str]) -> list[dict[str, str]]:
-        strings = self._normalizar_strings(leitura)
-        strings_separadas = self._gerar_separadores(strings)
-        lista_de_listas_de_dados = self._splitar_linha(strings_separadas)
-        lista_de_listas_limpas = self._remover_espaços_sobressalentes(lista_de_listas_de_dados)
-        return [{chave: (aluno[índice]) for chave, índice in self._guia.items()} for aluno in lista_de_listas_limpas]
+    def _processar_pipeline(self, fluxo_leitura: Iterable[str]) -> Generator[dict, None, None]:
+        for linha in fluxo_leitura:
+            linha_limpa = unicodedata.normalize('NFKC', linha).replace('  ', ' ')
 
-    @staticmethod
-    def _normalizar_strings(lista_strings: list[str]) -> list[str]:
-        return [unicodedata.normalize('NFKC', linha).replace('	', ' ') for linha in lista_strings]
+            for troca in self._map_para_separadores:
+                linha_limpa = linha_limpa.replace(troca, ":::")
 
-    def _gerar_separadores(self, linhas: list[str]) :
-        linhas_com_separadores: list[str] = []
-        for linha in linhas :
-            for troca in self._map_para_separadores :
-                linha = linha.replace(troca, ':::')
+            partes = [p.strip() for p in linha_limpa.split(':::')[1:]]
 
-            linhas_com_separadores.append(linha)
-
-        return linhas_com_separadores
-
-    @staticmethod
-    def _splitar_linha(linhas) -> list[list[str]]:
-        return [linha.split(':::')[1:] for linha in linhas]
-
-    @staticmethod
-    def _remover_espaços_sobressalentes(lista_de_lista: list[list[str]]) -> list[list[str]] :
-        resultado = []
-        for lista in lista_de_lista :
-            nova_lista = [string.strip() for string in lista]
-            resultado.append(nova_lista)
-
-        return resultado
+            if len(partes) >= len(self._guia):
+                yield {chave: partes[índice] for chave, índice in self._guia.items()}
 
 
     @property

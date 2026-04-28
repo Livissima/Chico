@@ -1,4 +1,4 @@
-from os import listdir, path
+from os import listdir
 from typing import Literal
 import json
 from pathlib import Path
@@ -14,29 +14,22 @@ class Leitura :
 
         self._tipo_de_relatório = tipo_de_relatório
         self._path_dados = _path
-        self.leitura = self._ler(_path)
-        print(f'\n{tipo_de_relatório = } : {len(self.leitura)}\n')
+        self.fluxo_inicial = self._ler(_path)
 
 
-    def _ler(self, _path) -> list[str | dict] :
-        lista_dirs = listdir(_path)
-        leitura = []
-        for nome_arquivo in lista_dirs:
-
-            dados = self.ler_json(nome_arquivo, _path)
-            leitura.extend(dados)
-        return leitura
+    def _ler(self, _path) :
+        for nome_arquivo in listdir(_path):
+            yield from self.ler_json(nome_arquivo, _path)
 
 
     @staticmethod
     def ler_json(_nome_arquivo: str, _path):
+        caminho_completo = Path(_path, _nome_arquivo)
 
-        caminho_completo = path.join(_path, _nome_arquivo)
-        try :
-            with open(caminho_completo, 'r', encoding='utf-8') as arquivo :
-                return json.load(arquivo)
-        except Exception as e :
-            print(f'Erro ao ler {_nome_arquivo}: {e}')
-            return []
+        with open(caminho_completo, encoding='utf-8') as arquivo :
+            dados = json.load(arquivo)
+            yield from dados
+
+
 
 

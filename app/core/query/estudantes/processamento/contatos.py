@@ -1,3 +1,5 @@
+from typing import Iterable, Generator
+
 from pandas import DataFrame, Series
 import pandas as pd
 
@@ -17,10 +19,26 @@ class TratamentoContatos:
         'Telefone 1', 'Telefone 2', 'Telefone 3'
     ]
 
-    def __init__(self, leitura: list[dict[str, str]]) -> None:
-        self._df = DataFrame(leitura)
-        self.df_tratado = self._tratar(self._df)
-        # print(f'{self.df_tratado}')
+    def __init__(self, fluxo_leitura: Iterable[str]) -> None:
+        self.fluxo = self.processar_pipeline(fluxo_leitura)
+
+    def _processar_pipeline(self, fluxo: Iterable[dict]) -> Generator:
+        vistos = set()
+
+        for item in fluxo:
+            token = item.get('Matrícula')
+            if token in vistos:
+                continue
+            vistos.add(token)
+
+            telefones = self._limpar_e_ordenar_telefones(item)
+
+            yield {
+                'Matrícula' : item.get('Matrícula'),
+                **telefones,
+                'Educacional' : item.get('E-mail educacional')
+            }
+
 
     def _tratar(self, leitura: DataFrame) -> Series:
         estrutura_base = self._estruturar_df_base(leitura)
