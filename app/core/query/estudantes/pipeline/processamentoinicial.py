@@ -1,9 +1,9 @@
 from typing import Literal, Iterable
 from pandas import DataFrame
-from app.core.query.estudantes.processamento.fichas import TratamentoFichas
-from app.core.query.estudantes.processamento.contatos import TratamentoContatos
-from app.core.query.estudantes.processamento.situações import TratamentoSituações
-from app.core.query.estudantes.processamento.gêneros import TratamentoGêneros
+from app.core.query.estudantes.processamento_específico.fichas import TratamentoFichas
+from app.core.query.estudantes.processamento_específico.contatos import TratamentoContatos
+from app.core.query.estudantes.processamento_específico.situações import TratamentoSituações
+from app.core.query.estudantes.processamento_específico.gêneros import TratamentoGêneros
 
 
 class ProcessamentoInicial:
