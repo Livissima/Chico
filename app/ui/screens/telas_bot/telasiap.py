@@ -63,86 +63,86 @@ class TelaSiap(CTkFrame) :
         #todo fazer um kit de um frame com 3 widgets dentro, que servirá de modelo para o dropdown que gerará a tupla
         # de datas iniciais e finais
         x_inicial = 10
-        self._dd_mês_inicial = Dropdown(
-            self,
-            alternativas=list(parâmetros.dicionário_dias_letivos.keys()),
-            comando=self.atualizar_dropdown_dia_inicial,
-            x=x_inicial,
-            altura=25,
-            largura=70,
-            arredondamento=0
-        )
-
-        self._dd_dia_inicial = Dropdown(
-            self,
-            alternativas=[],
-            # comando=self.atualizar_dropdown_dia_inicial,
-            x=x_inicial+75,
-            altura=25,
-            largura=70,
-            arredondamento=0
-        )
+        # self._dd_mês_inicial = Dropdown(
+        #     self,
+        #     alternativas=list(parâmetros.dicionário_dias_letivos.keys()),
+        #     comando=self.atualizar_dropdown_dia_inicial,
+        #     x=x_inicial,
+        #     altura=25,
+        #     largura=70,
+        #     arredondamento=0
+        # )
+        #
+        # self._dd_dia_inicial = Dropdown(
+        #     self,
+        #     alternativas=[],
+        #     # comando=self.atualizar_dropdown_dia_inicial,
+        #     x=x_inicial+75,
+        #     altura=25,
+        #     largura=70,
+        #     arredondamento=0
+        # )
         pass
 
     def __inserir_checkboxes(self):
-        self.ck_dias_alvo = CheckBox(
-            self,
-            opções=['Hoje'],
-            valor_exclusivo='Outros Dias',
-            y=100
-        )
+        # self.ck_dias_alvo = CheckBox(
+        #     self,
+        #     opções=['Hoje'],
+        #     valor_exclusivo='Outros Dias',
+        #     y=100
+        # )
+        pass
 
     def __inserir_inputs(self):
         pass
 
     def __inserir_botões(self):
-        self._inserir_botão_de_obter_dias_letivos()
 
         self.bt_iniciar = Botão(
             self,
-            função=lambda: Bot(tarefa='siap', parâmetros_web=None, path=parâmetros.diretório_base),
+            função=lambda: Bot(tarefa='siap', path=parâmetros.diretório_base),
             # função=lambda: print(f'{self._dd_dia_inicial.valor_selecionado = }, {self._dd_mês_inicial.valor_selecionado = }'),
             texto='Iniciar',
+            fonte=('Arial', 22),
             formato='bold',
             y=350,
-            largura=130
+            largura=160
+        )
+
+        self.bt_obter_dias_letivos = Botão(
+            self,
+            função=lambda : self._função_botão_obter(),
+            texto='Obter dias letivos',
+            largura=150,
+            y=300
         )
 
         self.bt_back = botão_back(self, 'bot')
 
-        self.bt_modulação = Botão(
-            self,
-            função= lambda: Bot(tarefa='obter modulacoes', parâmetros_web=None, path=parâmetros.diretório_base),
-            texto='Obter modulações',
-            largura=150
-        )
+        # self.bt_modulação = Botão(
+        #     self,
+        #     função= lambda: Bot(tarefa='obter modulacoes', parâmetros_web=None, path=parâmetros.diretório_base),
+        #     texto='Obter modulações',
+        #     largura=150
+        # )
 
-    def _inserir_botão_de_obter_dias_letivos(self):
 
-        if len(parâmetros.lista_dias_letivos) == 0:
-            self.bt_obter_dias_letivos = Botão(
-                self,
-                função=lambda: self._função_botão_obter(),
-                texto='Obter dias letivos',
-                largura=150,
-                y=300
-            )
 
     def _função_botão_obter(self):
         self._tx_feedback.atualizar(f'Consultando dias letivos para o ano de {ANO}', ('arial', 20))
+
         print('clicado')
+
         time.sleep(1)
+
         try:
-            Bot(tarefa='consultar dias letivos', parâmetros_web=None, ano=ANO, path=parâmetros.diretório_base)
+            Bot(tarefa='consultar dias letivos', ano=ANO, path=parâmetros.diretório_base)
             dias = parâmetros.lista_dias_letivos
             self._tx_feedback.atualizar(f'Dias obtidos em {ANO}: {len(dias)}')
+
         except Exception as e:
             self._tx_feedback.atualizar(f'Falha em obter dias letivos')
             print(f'Falha em obter dias letivos: {e}')
-
-    def atualizar_dropdown_dia_inicial(self, mês_selecionado):
-        novas_alternativas = parâmetros.dicionário_dias_letivos.get(mês_selecionado, [])
-        self._dd_dia_inicial.atualizar_alternativas(novas_alternativas)
 
 
 

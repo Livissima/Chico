@@ -6,6 +6,11 @@ from app.auto.tasks.registrotasks import RegistroTasks
 from app.config.parâmetros.estruturadeseleção import EstruturaDeSeleção
 from app.config.parâmetros.getters.tempo import tempo
 
+
+
+
+
+
 @RegistroTasks.registrar('downloads')
 class DownloadDadosEstudantes:
 

@@ -1,5 +1,4 @@
 #todo alocar este módulo de uma forma mais organizada
-from os import PathLike
 from pathlib import Path
 
 import numpy as np
@@ -7,23 +6,30 @@ import pandas as pd
 from pandas import DataFrame
 
 
-class RelatórioDeAusências:
+class RelaçãoDeFaltas:
 
     def __init__(
             self,
-            path: PathLike,
+            path: Path,
     ):
 
-        _path: PathLike = Path(path, 'fonte', 'Controle de Frequência', 'Compilado de Faltas.csv')
+        _path: Path = Path(path, 'fonte', 'Controle de Frequência', 'Compilado de Faltas.csv')
         self._leitura = self._obter_df_faltas(_path)
 
     @property
     def dataframe(self) -> DataFrame:
+
         if self._leitura is None:
-            ausentes = DataFrame({'Estudante' : None, 'Data' : None, 'Matrícula' : None, 'Lançado': None})
+            ausentes = DataFrame({
+                'Estudante' : None,
+                'Data' : None,
+                'Matrícula' : None,
+                'Lançado': None
+            })
             return ausentes
 
         else:
+
             df = self._leitura.copy()
             df = df[['Estudante', 'Data', 'Matrícula', 'Lançado']]
             df = df[df['Lançado'] == np.True_]

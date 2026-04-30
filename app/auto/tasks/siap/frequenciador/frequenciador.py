@@ -1,5 +1,5 @@
 import time
-from os import PathLike
+from pathlib import Path
 from typing import Literal
 
 from selenium.webdriver.common.by import By
@@ -10,7 +10,9 @@ from app.auto.functions.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
 
 from app.auto.tasks.siap.frequenciador import FrequenciadorAdm, FrequenciadorProf
-from app.auto.tasks.siap.frequenciador.relatóriodeausências import RelatórioDeAusências
+from app.auto.tasks.siap.frequenciador.relaçãodefaltas import RelaçãoDeFaltas
+
+
 
 @RegistroTasks.registrar('siap')
 class Frequenciador :
@@ -18,17 +20,17 @@ class Frequenciador :
     def __init__(
             self,
             navegador: Chrome,
-            path: PathLike,
+            path: Path,
             periodo: list[str],
-            # data = None,
             **kwargs
     ):
         # print(f'{data = }')
         print(f'frequenciador: {path = }')
         print(f'frequenciador: {periodo = }')
+
         self._período = periodo
         # _path: PathLike = Path(path, 'fonte', 'Compilado Faltas.xlsx')
-        self._ausências = RelatórioDeAusências(path)
+        self._df_faltas = RelaçãoDeFaltas(path).dataframe
         self._master = navegador
         self._nv = NavegaçãoWeb(navegador, 'siap')
         self._pp = PropriedadesWeb(site='siap')
@@ -58,12 +60,13 @@ class Frequenciador :
             'adm' : lambda: FrequenciadorAdm(
                 navegador=self._master,
                 período=self._período,
-                relatório_de_ausências=self._ausências.dataframe
+                relatório_de_ausências=self._df_faltas
             ),
+
             'prof' : lambda: FrequenciadorProf(
                 navegador=self._master,
                 professor=cpf_prof,
-                ausentes_na_data=self._ausências.dataframe
+                ausentes_na_data=self._df_faltas
             )
         }
         executar[tipo_de_usuário]()
@@ -77,8 +80,8 @@ class Frequenciador :
         self._nv.aguardar_página()
 
     def __resolver_captcha(self) :
-        captcha = self._master.find_element(By.XPATH, self._pp.xpaths['captcha'])
-        self._nv.digitar_xpath('input captcha', string=captcha.text)
+        captcha = self._master.find_element(By.XPATH, self._pp.xpaths['captcha']).text
+        self._nv.digitar_xpath('input captcha', string=captcha)
 
     def __inserir_credenciais(self, _id, senha):
         self._nv.digitar_xpath('input login', string=_id)
