@@ -3,6 +3,7 @@ import time
 from pandas import DataFrame
 from selenium.common import StaleElementReferenceException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webelement import WebElement
 
 from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
 from app.auto.functions.navegaçãoweb import NavegaçãoWeb
@@ -11,6 +12,21 @@ from selenium.webdriver import Chrome
 from app.config.parâmetros.getters.tempo import tempo
 
 mês = 'Abril'
+
+
+def retry(self):
+    self.master.back()
+    time.sleep(3)
+
+def deu_error(erro: str | None) -> bool:
+    if not erro:
+        return False
+    if 'Server Error' in erro:
+        return True
+    return False
+
+
+
 class FrequenciadorProf :
 
     def __init__(
@@ -82,12 +98,12 @@ class FrequenciadorProf :
         for índice_dia in range(len(dias_pendentes)) :
             self._processar_dia_individual(índice_linha, índice_dia)
 
-    def _bloco_try_processar_dia(self, índice_linha, índice_dia):
+    def _verificar_erro(self, índice_linha, índice_dia):
         dias_pendentes_atualizados = self._obter_calendários_e_dias(índice_linha)
 
         if índice_dia >= len(dias_pendentes_atualizados) :
             print(f"Índice de dia {índice_dia} fora do range")
-            return
+            return None
 
         dia_atual = dias_pendentes_atualizados[índice_dia]
         print(f'Clicando no dia: {dia_atual.text}')
@@ -97,7 +113,16 @@ class FrequenciadorProf :
 
         erro = ''
         body = self.master.find_element(By.TAG_NAME, 'body')
-        return erro, body
+
+        try:
+            erro = body.find_element(By.TAG_NAME, 'h1').text
+        except Exception as e:
+            print(f'Exception em `obter_erro_e_body`:\n{e}')
+            pass
+
+        finally:
+
+            return erro
 
     def _processar_dia_individual(self, índice_linha, índice_dia) :
 
@@ -105,26 +130,19 @@ class FrequenciadorProf :
         while tentativas < 3 :
             try :
 
-                erro, body = self._bloco_try_processar_dia(índice_linha, índice_dia)
+                erro = self._verificar_erro(índice_linha, índice_dia)
 
-                try:
-                    erro = body.find_element(By.TAG_NAME, 'h1').text
-
-                except Exception as e:
-                    print(f'Exception em `processar_dia_individual`:\n      {e}\n')
-                    pass
-
-                finally:
-
-                    print(f'{erro = }')
-
-                if 'Server Error' in erro:
-                    self.master.back()
-                    time.sleep(3)
+                if deu_error(erro):
+                    retry(self)
                     tentativas += 1
                     continue
 
-                lista_coluna_pontinhos, lista_matrículas_ausentes = self._obter_listas_do_processamento_dia()
+
+                lista_pacotes_pontinhos = self._obter_lista_pacotes_pontinhos()
+                data_pacote = self._obter_data_da_lista(lista_pacotes_pontinhos)
+
+                lista_coluna_pontinhos = self._obter_colunas_pontinhos(lista_pacotes_pontinhos)
+                lista_matrículas_ausentes = self._obter_lista_matrículas_ausentes(data_pacote)
 
                 self._agir_nas_colunas(lista_coluna_pontinhos, lista_matrículas_ausentes)
 
@@ -137,22 +155,11 @@ class FrequenciadorProf :
                 print(f"Tentativa {tentativas} falhou para dia {índice_dia}")
                 time.sleep(2)
 
-    def _obter_listas_do_processamento_dia(self):
-        elemento_maior = self.master.find_element(By.ID, 'cphFuncionalidade_cphCampos_ControleFrequenciaAluno')
-
-        sub_elemento = elemento_maior.find_element(By.CLASS_NAME, 'index-1')
-        elemento_empacotador = sub_elemento.find_element(By.CLASS_NAME, 'listaTableWrap')
-
-        lista_pacotes_pontinhos = elemento_empacotador.find_elements(By.CLASS_NAME, 'listaDeFrequencias')
-        data_pacote = lista_pacotes_pontinhos[0].get_attribute('data-data')
-        print(f'{data_pacote = }')
-
-        lista_coluna_pontinhos = [pacote.find_element(By.CLASS_NAME, 'itens') for pacote in lista_pacotes_pontinhos]
-
+    def _obter_lista_matrículas_ausentes(self, data):
         _df = self._ausentes_na_Data.copy()
-        df_ausentes_na_data = _df[_df['Data'] == data_pacote]
+        df_ausentes_na_data = _df[_df['Data'] == data]
         lista_matrículas_ausentes = df_ausentes_na_data['Matrícula'].tolist()
-        return lista_coluna_pontinhos, lista_matrículas_ausentes
+        return lista_matrículas_ausentes
 
     def __preencher_filtro_de_linhas(self) :
         seletor_tabela_update = (By.ID, 'cphFuncionalidade_UpdatePanel1')
@@ -249,3 +256,22 @@ class FrequenciadorProf :
                 print(f'::::::::::: O alvo {ponto_alvo.get_attribute('data-matricula')} já estava com falta nesta coluna e foi ignorado.')
 
 
+    @staticmethod
+    def _obter_colunas_pontinhos(lista_pacotes_pontinhos):
+        return [pacote.find_element(By.CLASS_NAME, 'itens') for pacote in lista_pacotes_pontinhos]
+
+    def _obter_lista_pacotes_pontinhos(self):
+        elemento_maior = self.master.find_element(By.ID, 'cphFuncionalidade_cphCampos_ControleFrequenciaAluno')
+
+        sub_elemento = elemento_maior.find_element(By.CLASS_NAME, 'index-1')
+        elemento_empacotador = sub_elemento.find_element(By.CLASS_NAME, 'listaTableWrap')
+
+        return elemento_empacotador.find_elements(By.CLASS_NAME, 'listaDeFrequencias')
+
+    @staticmethod
+    def _obter_data_da_lista(lista_pacote: list[WebElement]):
+        data_pacote = lista_pacote[0].get_attribute('data-data')
+        print(f'{data_pacote = }')
+        return data_pacote
+
+    def _obter
