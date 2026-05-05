@@ -1,4 +1,5 @@
 import time
+from typing import Literal
 
 from pandas import DataFrame
 from selenium.common import StaleElementReferenceException
@@ -187,8 +188,7 @@ class FrequenciadorProf :
         print(f'Encontradas {len(linhas_resultado)} linhas')
         return linhas_resultado
 
-    def __obter_dias_pendentes(self):
-        #todo: Bolar um esqueminha para decidir entre retornar dias_ok, dias_pendentes e _dias, que são todos úteis em contextos diferentes.
+    def _obter_dias_iteráveis(self, escopo: Literal['pendentes', 'prontos', 'todos']):
         seletor_calendário = (By.ID, 'cphFuncionalidade_cphCampos_CalendarioMensal')
         div_calendário = self.nv.obter_elemento(*seletor_calendário)
         tabela_calendário = div_calendário.find_element(By.TAG_NAME, 'table')
@@ -199,15 +199,22 @@ class FrequenciadorProf :
         dias_pendentes = [dia for dia in dias_relevantes if dia.get_attribute('data-executado') == 'False']
 
         _dias = [dia for dia in dias_relevantes if int(dia.text) <= int(tempo.hoje_dia)]
-        print(f'{dias = }')  # dias = [dia for dia in dias_relevantes if ]
-        return dias_pendentes
+        print(f'{dias = }')
+
+        retorno = {
+            'pendentes' : dias_pendentes,
+            'prontos' : dias_ok,
+            'todos' : _dias
+        }
+
+        return retorno[escopo]
 
 
     def _obter_calendários_e_dias(self, índice_linha):
         tentativas = 0
         while tentativas < 4 :
             try:
-                return self.__obter_dias_pendentes()
+                return self._obter_dias_iteráveis('pendentes')
 
             except Exception as e:
                 print(f'Erro na obtenção de calendário. Tentando novamente... {e}')
@@ -247,6 +254,7 @@ class FrequenciadorProf :
     @staticmethod
     def _agir_nos_pontos(pontinhos_alvos):
         for ponto_alvo in pontinhos_alvos :
+
             if ponto_alvo.get_attribute('data-ausente') == 'False':
                 ponto_alvo.click()
                 time.sleep(0.7)
@@ -274,4 +282,3 @@ class FrequenciadorProf :
         print(f'{data_pacote = }')
         return data_pacote
 
-    def _obter
