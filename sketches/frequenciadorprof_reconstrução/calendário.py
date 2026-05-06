@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from app.auto.tasks.siap.frequenciador.frequenciadorprof import ProcessadorDisciplina
+    from app.auto.tasks.siap.frequenciador.prof.frequenciadorprof import ProcessadorDisciplina
     from app.auto.tasks.siap.frequenciador import LinhasDisciplinas
 
 

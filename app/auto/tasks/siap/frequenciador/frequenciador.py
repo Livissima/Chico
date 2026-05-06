@@ -21,7 +21,7 @@ class Frequenciador :
             self,
             navegador: Chrome,
             path: Path,
-            periodo: list[str],
+            periodo: list[str] = None,
             **kwargs
     ):
         # print(f'{data = }')
@@ -41,18 +41,18 @@ class Frequenciador :
     def _executar(self):
         self._nv.acessar_destino(self._pp.urls)
 
-        for usuário, credenciais in self._pp.credenciais.items():
-            print(f'\n → Iterando sobre {usuário}')
+        for usuário, credenciais in self._pp.lista_usuários.items():
+            print(f'\n → Acessando conta de usuário: {usuário}')
 
-            id_cpf_prof = credenciais['id']
-            senha = credenciais['senha']
-            tipo = credenciais['tipo']
+            id_cpf_prof = credenciais.id
+            senha = credenciais.senha
+            tipo = credenciais.tipo
 
-            self._logon(usuário, id_cpf_prof, senha)
+            self._logon(id_cpf_prof, senha)
             self._executar_usuário(tipo, id_cpf_prof)
-            self.__recomeçar()
+            self._passar_para_próximo_usuário()
 
-            print(f'Frequenciamento finalizado para {usuário}\n')
+            print(f'Frequenciamento finalizado para {usuário}\n\n', '###'*50, '\n', '###'*50, '\n')
 
 
     def _executar_usuário(self, tipo_de_usuário: Literal['adm', 'prof'], cpf_prof) :
@@ -72,8 +72,7 @@ class Frequenciador :
         executar[tipo_de_usuário]()
 
 
-    def _logon(self, usuário, _id, senha) :
-        print(f'Fazendo login para: {usuário}')
+    def _logon(self, _id, senha) :
         self.__inserir_credenciais(_id, senha)
         self.__resolver_captcha()
         self._nv.clicar('xpath', 'botão login')
@@ -87,7 +86,7 @@ class Frequenciador :
         self._nv.digitar_xpath('input login', string=_id)
         self._nv.digitar_xpath('input senha', string=senha)
 
-    def __recomeçar(self):
+    def _passar_para_próximo_usuário(self):
         self._master.delete_all_cookies()
         time.sleep(2)
         self._master.get(self._pp.urls)

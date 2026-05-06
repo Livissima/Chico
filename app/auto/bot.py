@@ -28,7 +28,7 @@ class Bot:
 
         except Exception as e :
             print(f"\n❌ Erro durante execução: {e}")
-            raise
+            raise Exception(f'Erro durante a execução: {e}')
 
         finally :
             navegador.quit()

@@ -1,2 +1,2 @@
 from .frequenciadoradm import FrequenciadorAdm
-from .frequenciadorprof import FrequenciadorProf
+from app.auto.tasks.siap.frequenciador.prof.frequenciadorprof import FrequenciadorProf
