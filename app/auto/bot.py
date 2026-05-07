@@ -27,8 +27,8 @@ class Bot:
             task_class(**kwargs)
 
         except Exception as e :
-            print(f"\n❌ Erro durante execução: {e}")
-            raise Exception(f'Erro durante a execução: {e}')
+            # print(f"\n❌ Erro durante execução: {e}")
+            raise Exception(f'Erro durante a execução da task: {e}')
 
         finally :
             navegador.quit()
