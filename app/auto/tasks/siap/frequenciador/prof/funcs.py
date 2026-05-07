@@ -1,7 +1,9 @@
+from dataclasses import dataclass
 from functools import wraps
 import sys
 import time
 from functools import wraps
+from typing import Callable, Any
 
 from selenium.webdriver.remote.webelement import WebElement
 
@@ -74,14 +76,28 @@ def obter_lista_matrículas_ausentes(self, data) :
     return lista_matrículas_ausentes
 
 
+def debugar(func=None, *, pausa: int | float = 0) :
+    def decorator(f) :
+        @wraps(f)
+        def wrapper(*args, **kwargs) :
+            nome_func = f.__name__
+            print(f'   ↑↑↑↑↑↑ Iniciando função: `{nome_func}`')
 
+            resultado = f(*args, **kwargs)
 
-def debugar(func) :
-    @wraps(func)
-    def wrapper(*args, **kwargs) :
-        nome_func = wrapper.__name__
-        print(f'   ↑↑↑↑↑↑ Iniciando função: `{nome_func}`')
-        func(*args, **kwargs)
-        print(f'   ↓↓↓↓↓↓ Saindo da função `{nome_func}`')
+            if pausa > 0 :
+                print(f'Pausando a execução após {nome_func} por {pausa}s')
+                time.sleep(pausa)
 
-    return wrapper
+            print(f'   ↓↓↓↓↓↓ Saindo da função `{nome_func}`')
+            return resultado
+
+        return wrapper
+
+    # O "segredo" está aqui:
+    if func is None :
+        # Caso @debugar(pausa=20) -> retorna o decorator para ser aplicado depois
+        return decorator
+    else :
+        # Caso @debugar -> aplica o decorator imediatamente na func
+        return decorator(func)

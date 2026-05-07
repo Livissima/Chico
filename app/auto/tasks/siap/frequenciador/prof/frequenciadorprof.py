@@ -150,7 +150,7 @@ class FrequenciadorProf :
     def _obter_linhas_disciplinas(self, tentativas: int = 3) -> list[WebElement] :
         print(f'Obtendo disciplinas do(a) professor(a)')
         tries = 0
-        lista = []
+        linhas_resultado = []
 
         while tries < tentativas:
             try:
@@ -162,20 +162,19 @@ class FrequenciadorProf :
                 linhas_resultado = [linha for linha in linhas_gerais if linha.get_attribute('class') != 'topo']
 
                 print(f'\n  → Disciplinas encontradas: {len(linhas_resultado)}\n')
-                lista.append(linhas_resultado)
-                break
+                return linhas_resultado
 
-
-            except StaleElementReferenceException as e:
-                tries = cantar_exception(tries, 'obter linhas disciplinas', e)
-            except Exception as e:
+            except (StaleElementReferenceException, Exception) as e:
                 tries = cantar_exception(tries, 'obter linhas disciplinas', e)
 
 
-        return lista
+
+        return linhas_resultado
 
     @debugar
     def _obter_dias_iteráveis(self, escopo: Literal['pendentes', 'prontos', 'todos'] = 'pendentes'):
+        print(f' - Obtendo dias iteráveis no escorpo `{escopo}`')
+
         div_calendário = self.nv.obter_elemento(*SELETOR_CALENDÁRIO_ITERÁVEIS)
         tabela_calendário = div_calendário.find_element(*SELETOR_TABELA)
         corpo_tabela = tabela_calendário.find_element(*SELETOR_CORPO_TABELA)
@@ -185,22 +184,23 @@ class FrequenciadorProf :
         dias_pendentes = [dia for dia in dias_relevantes if dia.get_attribute('data-executado') == 'False']
 
         _dias = [dia for dia in dias_relevantes if int(dia.text) <= int(tempo.hoje_dia)]
-        print(f'{dias = }')
 
         retorno = {
             'pendentes' : dias_pendentes,
             'prontos' : dias_ok,
             'todos' : _dias
         }
+        dias_iteráveis = retorno[escopo]
+        dias_printáveis = [dia.text for dia in dias_iteráveis]
+        print(f'Dias iteráveis obtidos: {len(dias_printáveis)} → {dias_printáveis}')
+        return dias_iteráveis
 
-        return retorno[escopo]
-
-    @debugar
+    @debugar(pausa=20)
     def _obter_calendários_e_dias(self, índice_linha):
         tentativas = 0
         while tentativas < 4 :
             try:
-                return self._obter_dias_iteráveis()
+                return self._obter_dias_iteráveis('todos')
 
             except StaleElementReferenceException as e:
                 tentativas += cantar_exception(tentativas, 'calendários e dias', e, índice_linha)
