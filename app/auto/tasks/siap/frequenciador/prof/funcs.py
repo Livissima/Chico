@@ -1,3 +1,4 @@
+#app/auto/tasks/siap/frequenciador/prof/funcs.py
 import sys
 import time
 from functools import wraps
@@ -17,8 +18,10 @@ def Print(ação: str, valor: Any, valor2: Any = None) -> None :
         str : "\033[0;32m",  # Verde
         None : "\033[2;37m",  # Cinza Faint
         "AÇÃO" : "\033[0m",  # Branco Negrito
-        "RESET" : "\033[0m", list : "\033[0;36m",  # Ciano para listas
+        "RESET" : "\033[0m",
+        list : "\033[0;36m",  # Ciano para listas
         dict : "\033[0;33m",  # Amarelo para dicionários
+        TypeError : '\033[0:47m'  #fundo cinza para exception
     }
 
     def formatar(v) :
@@ -105,8 +108,8 @@ def está_fora_do_range(índice: int, escopo: list[WebElement]) -> bool :
 @debugar
 def cantar_exception(_tentativas: int, etapa: str, exception, índice: int = 0) -> int :
     exceção = getattr(exception, '__name__', exception.__class__.__name__)
-    print(f"Exception '{exceção}' no processamento de {etapa}: {exception}\n "
-          f"  ## Tentativa {_tentativas + 1} falhou em {índice}.")
+    Print(f"\nException '{exceção}' na etapa `{etapa}`", {exception})
+    Print(f"  ## Tentativa {_tentativas + 1} falhou em:", {índice})
     for i in range(2, -1, -1) :
         sys.stdout.write(f'\r     Tentando novamente em {i} segundos...')
         sys.stdout.flush()
