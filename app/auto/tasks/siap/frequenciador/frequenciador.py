@@ -39,12 +39,12 @@ class Frequenciador :
     def _executar(self):
         self._nv.acessar_destino(self._pp.urls)
 
-        for usuário, credenciais in self._pp.credenciais.items():
+        for usuário, credenciais in self._pp.lista_usuários.items():
             print(f'\n → Iterando sobre {usuário}')
 
-            id_cpf_prof = credenciais['id']
-            senha = credenciais['senha']
-            tipo = credenciais['tipo']
+            id_cpf_prof = credenciais.id
+            senha = credenciais.senha
+            tipo = credenciais.tipo
 
             self._logon(usuário, id_cpf_prof, senha)
             self._executar_usuário(tipo, id_cpf_prof)
