@@ -1,7 +1,10 @@
 import json
 import os
 import re
+import sys
+import time
 import warnings
+from functools import wraps
 from typing import Any
 
 from openpyxl import __name__ as openpyxl_name
@@ -71,8 +74,56 @@ def escrever_json(conteúdo: Any, caminho_arquivo: str | Path, indent: int = 4) 
         print(f"Erro de E/S ao salvar o arquivo: {e}")
 
 
-def truncar_diretório(_dir: str) -> str:
-    _diretório = _dir.split('\\')
-    _diretório = os.path.join(*_diretório[0 :3], '...', '...', *_diretório[-2 :])
-    _diretório = _diretório.replace(':', ':\\')
-    return _diretório
+def truncar_diretório(path: str | Path) -> str:
+    diretório = str(path).split('\\')
+    diretório = os.path.join(*diretório[0 :3], '...', '...', *diretório[-2 :])
+    diretório = diretório.replace(':', ':\\')
+    return diretório
+
+
+def str_exception(e: TypeError | Exception) -> str:
+    return str(e).split('\n')[0]
+
+
+def Print(ação: str, valor: Any, valor2: Any = None) -> None :
+    """Função utilitária para prints coloridos no terminal."""
+    ESTILOS = {
+        bool : "\033[3;35m", int : "\033[0;34m", float : "\033[1;34m", str : "\033[0;32m", None : "\033[2;37m",
+        "AÇÃO" : "\033[0m", "RESET" : "\033[0m", list : "\033[0;36m", dict : "\033[0;33m",
+    }
+
+    def formatar(v) :
+        cor = ESTILOS.get(type(v), "")
+        return f"{cor}{v}{ESTILOS['RESET']}"
+
+    prefixo = f"{ESTILOS['AÇÃO']}{ação}:{ESTILOS['RESET']}"
+
+    if valor2 is not None :
+        mensagem = f"{prefixo} {formatar(valor)} – {formatar(valor2)}"
+    else :
+        mensagem = f"{prefixo} {formatar(valor)}"
+
+    sys.stdout.write(mensagem + "\n")
+    sys.stdout.flush()
+
+
+def debugar(func_ou_pausa=None, *, pausa: int | float = 0) :
+    """Decorador para rastrear execução de funções e pausar se necessário."""
+    real_pausa = pausa
+    if isinstance(func_ou_pausa, (int, float)) :
+        real_pausa = func_ou_pausa
+        func_ou_pausa = None
+
+    def decorator(f) :
+        @wraps(f)
+        def wrapper(*args, **kwargs) :
+            resultado = f(*args, **kwargs)
+            if real_pausa > 0 :
+                time.sleep(real_pausa)
+            return resultado
+
+        return wrapper
+
+    if func_ou_pausa is None :
+        return decorator
+    return decorator(func_ou_pausa)
