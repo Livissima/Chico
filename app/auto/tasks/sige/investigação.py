@@ -6,7 +6,8 @@ from selenium.webdriver import Chrome
 from selenium.common.exceptions import NoAlertPresentException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from app.auto.data.sites import PropriedadesWeb
+
+from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
 from app.auto.functions import NavegaçãoWeb
 from app.config.settings.functions import ajustar_print_pandas, escrever_json
 from app.auto.tasks.registrotasks import RegistroTasks

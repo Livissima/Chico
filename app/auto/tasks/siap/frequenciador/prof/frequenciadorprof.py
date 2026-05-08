@@ -65,18 +65,18 @@ class FrequenciadorProf :
                     self._processar_dias_letivos_da_disciplina(índice_linha)
 
             except (StaleElementReferenceException, Exception) as e:
-                raise e
-                # tentativas = cantar_exception(tentativas, 'processar disciplina', e, índice_linha)
+                # raise e
+                tentativas = cantar_exception(tentativas, 'processar disciplina', e, índice_linha)
 
     @debugar
     def _processar_dias_letivos_da_disciplina(self, índice_linha) :
-        Print(f'# Processando dias letivos da disciplina', f'{índice_linha = }')
+        Print(f'# Processando dias letivos da disciplina na disciplina de índice', índice_linha)
         selecionar_mês(self, MÊS)
 
-        dias_pendentes = self._obter_calendários_e_dias(índice_linha)
+        dias_pendentes = self._obter_calendários_e_dias(índice_linha, 'todos')
 
         if not dias_pendentes :
-            print('     - Nenhum dia pendente encontrado')
+            Print('     - Nenhum dia pendente encontrado. Seguindo para o índice', {índice_linha+1})
             return
 
         for índice_dia in range(len(dias_pendentes)) :
@@ -91,7 +91,7 @@ class FrequenciadorProf :
         dias_pendentes_atualizados = self._obter_calendários_e_dias(índice_linha, 'todos')
 
         if índice_dia >= len(dias_pendentes_atualizados) :
-            print(f"Índice de dia `{índice_dia}` fora do range")
+            Print(f'Índice de dia fora do range: {índice_dia}')
             return None
 
         dia_atual = dias_pendentes_atualizados[índice_dia]
