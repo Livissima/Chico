@@ -100,7 +100,7 @@ class TelaSiap(CTkFrame) :
 
         self.bt_iniciar = Botão(
             self,
-            função=lambda: Bot(tarefa='siap', parâmetros_web=None, path=parâmetros.diretório_base, periodo=[]),
+            função=lambda: Bot(tarefa='siap', path=parâmetros.diretório_base, periodo=[]),
             # função=lambda: print(f'{self._dd_dia_inicial.valor_selecionado = }, {self._dd_mês_inicial.valor_selecionado = }'),
             texto='Iniciar',
             formato='bold',
@@ -112,7 +112,7 @@ class TelaSiap(CTkFrame) :
 
         self.bt_modulação = Botão(
             self,
-            função= lambda: Bot(tarefa='obter modulacoes', parâmetros_web=None, path=parâmetros.diretório_base),
+            função= lambda: Bot(tarefa='obter modulacoes', path=parâmetros.diretório_base),
             texto='Obter modulações',
             largura=150
         )
