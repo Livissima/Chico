@@ -1,7 +1,7 @@
 #app/auto/tasks/siap/frequenciador/prof/constantes.py
 from selenium.webdriver.common.by import By
 
-MÊS = 'Abril'
+MÊS = 'Maio'
 BIMESTRE = '2'
 SELETOR_TABELA_UPDATE = (By.ID, 'cphFuncionalidade_UpdatePanel1')
 SELETOR_CORPO_TABELA = (By.TAG_NAME, 'tbody')
