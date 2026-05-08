@@ -13,12 +13,12 @@ logger = logging.getLogger(__name__)
 @dataclass
 class CredencialSIAP :
     usuario: str
-    id_siap: str
+    id: str
     senha: str
     tipo: str
 
     def validar(self) -> bool :
-        return all([self.usuario, self.id_siap, self.senha, self.tipo])
+        return all([self.usuario, self.id, self.senha, self.tipo])
 
     def __repr__(self) -> str :
         return f"CredencialSIAP(usuario='{self.usuario}', tipo='{self.tipo}')"
@@ -109,7 +109,7 @@ class ConfiguradorAmbiente :
                 self._erros.append(mensagem)
                 continue
 
-            cred = CredencialSIAP(usuario=usuario, id_siap=id_siap, senha=senha, tipo=tipo)
+            cred = CredencialSIAP(usuario=usuario, id=id_siap, senha=senha, tipo=tipo)
 
             if not cred.validar() :
                 mensagem = f"Credencial SIAP inválida para usuário {usuario}"
