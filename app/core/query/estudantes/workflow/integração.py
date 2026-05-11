@@ -6,7 +6,7 @@ from .extra.abreviados import Abreviados
 from .extra.credenciais import Credenciais
 
 
-class IntegraçãoDeExtras:
+class Integração:
     #todo: Importar a responsabilidade de chamada de filtrar excls. Assim, a classe vai resultar em
     # dataframes que serão transferidos para a exportação
     #todo: implementar uma coluna com nome do estudante reduzido para compatibilidade com layouts estreitos

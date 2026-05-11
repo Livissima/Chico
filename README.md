@@ -4,7 +4,7 @@ Utilitário de automação para atividades administrativas do cotidiano escolar 
 
 Desenvolvido para secretárias e auxiliares de escolas estaduais que trabalham com os sistemas **SIGE** e **SIAP** da Secretaria de Estado da Educação de Goiás.
 
-Este projeto nasce de uma iniciativa individual para otimizar fluxos de trabalho na rotina administrativa escolar. 
+Este projeto nasce de uma iniciativa individual para atender as necessidades percebidas na rotina administrativa escolar. 
 Ele busca mitigar limitações técnicas e gargalos operacionais dos sistemas legados do Estado, oferecendo 
 soluções de automação que priorizam a agilidade e a integridade dos dados no atendimento à comunidade escolar.
 
@@ -15,7 +15,7 @@ soluções de automação que priorizam a agilidade e a integridade dos dados no
 - **Download de dados de estudantes** — fichas, contatos, situações, gêneros e fotos via SIGE
 - **Consulta e exportação** — gera uma planilha `Database.xlsx` consolidada com dados de todos os estudantes da escola
 - **Frequência automatizada** — lança faltas no SIAP a partir de um compilado de ausências, tanto por perfil administrativo quanto por perfil de professor
-- **Credenciais** — automatiza o primeiro acesso de estudantes no NetEscola e no e-mail institucional
+- **Credenciais** — automatiza o gerenciamento de credenciais NetEscola dos estudantes. 
 - **Sondagem** — coleta o resumo de turmas ativas, capacidade e efetivados diretamente do SIGE
 - **Estatísticas** — exibe os dados consolidados da escola na interface
 
@@ -92,13 +92,19 @@ O Chico trabalha com uma pasta base (por padrão no OneDrive, configurável na i
 
 ---
 
-## Aviso
+## Aviso e considerações:
 
-O Chico automatiza interações com sistemas da SEDUC-GO (SIGE e SIAP). Seu funcionamento depende da estrutura atual desses sistemas — mudanças nos portais podem exigir atualização dos seletores e XPaths.
+O Chico automatiza interações com sistemas da SEDUC-GO (SIGE e SIAP). Seu funcionamento depende da estrutura atual 
+desses sistemas — mudanças nos portais podem exigir atualização dos seletores e XPaths.
 
-Credenciais nunca devem ser commitadas. O arquivo `.env` está no `.gitignore`.
+Credenciais nunca devem ser commitadas. O arquivo `.env` está no `.gitignore`, e deve ser preenchido de acordo com o [.env.example](.env.example)
+
 
 Há várias funcionalidades que ainda estão sendo planejadas e/ou testadas para serem implementadas efetivamente no projeto.
+Algumas estão no package [sketches](sketches), outras apenas em minha cabeça. 
+
+Os produtos deste programa sustentam uma cadeia de consultas externas em `VBA` e `Excel`, que em algum futuro serão portadas para python. 
+
 Acompanhe o projeto!!
 
 ---
@@ -106,3 +112,5 @@ Acompanhe o projeto!!
 ## Licença
 
 Uso livre para fins não comerciais — veja [LICENSE](LICENSE).
+
+___
