@@ -19,9 +19,6 @@ class Abreviados:
 
         nome_final = ' '.join(nome)
 
-
-
-        print(f'{nome_final = }')
         return nome_final
 
 
