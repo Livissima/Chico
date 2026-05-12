@@ -14,6 +14,10 @@ from app.ui.functions.pesquisadiretório import PesquisaDiretório
 if TYPE_CHECKING:
     pass
 
+seleção = EstruturaDeSeleção(
+    séries_selecionadas=parâmetros.séries_selecionadas,
+    turmas_selecionadas_por_série=parâmetros.turmas_selecionadas_por_série
+)
 
 @RegistroTelas.registrar(
     nome_tela='bot sige',
@@ -72,13 +76,13 @@ class TelaSige(CTkFrame):
 
         self._bt_noteador = Botão(
             self,
-            texto='Lançar notas',
+            texto='Coletar notas',
             fonte=('times new roman', 20),
             formato='bold',
             x=300,
             y=350,
             largura=140,
-            função=lambda: self._notear()
+            função=lambda: self._coletar_notas()
         )
 
         self.bt_sondagem_emergencial = Botão(
@@ -133,11 +137,6 @@ class TelaSige(CTkFrame):
     def _iniciar_tarefa(self):
         self.salvar_estado()
 
-        seleção = EstruturaDeSeleção(
-            séries_selecionadas=parâmetros.séries_selecionadas,
-            turmas_selecionadas_por_série=parâmetros.turmas_selecionadas_por_série
-        )
-
         if not self._ck_alvos.valores_true or not seleção.turmas_selecionadas_por_série:
             self._tx_feedback.atualizar('Selecione ao menos um conteúdo alvo.')
             print(f'\n      ### Nenhum conteúdo selecionado para download.\n')
@@ -149,14 +148,10 @@ class TelaSige(CTkFrame):
             return
 
         if any(alvo in self._ck_alvos.valores_true for alvo in ['Fichas', 'Contatos', 'Situações', 'Gêneros']):
-            # print(f'{seleção = }')
-            # print(f'{seleção = }')
-            # print(f'{seleção = }')
             Bot(tarefa='downloads', destino=parâmetros.diretório_base, tarefas_sige=self._ck_alvos.valores_true, seleção=seleção)
 
         if self._ck_alvos.valores_true == ['Fotos']:
-            pass
-            # Bot(tarefa='fotos', turmas=parâmetros.turmas_selecionadas, seleção=seleção)
+            Bot(tarefa='fotos', turmas=parâmetros.turmas_selecionadas, seleção=seleção)
 
 
     def _verificar_estatística(self):
@@ -179,9 +174,11 @@ class TelaSige(CTkFrame):
     def _carregar_estado_anterior(self):
         if parâmetros.estado_checkbox_alvos:
             for nome, valor in parâmetros.estado_checkbox_alvos.items():
-                if valor: self._ck_alvos.marcar(nome)
-                else: self._ck_alvos.desmarcar(nome)
+                if valor:
+                    self._ck_alvos.marcar(nome)
+                else:
+                    self._ck_alvos.desmarcar(nome)
 
 
-    def _notear(self):
-        Bot(tarefa='noteador', seleção=self.seleção, alvos=self._ck_alvos)
+    def _coletar_notas(self):
+        Bot(tarefa='coleta notas', seleção=seleção, alvos=self._ck_alvos)

@@ -15,7 +15,7 @@ class DownloadDadosEstudantes:
     def __init__(
             self,
             navegador: Edge,
-            destino: str,
+            destino: str,  #todo: Repensar este parâmetro/atributo.
             tarefas_sige: list[str],
             seleção: EstruturaDeSeleção,
             **kwargs
