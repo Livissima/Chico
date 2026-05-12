@@ -90,6 +90,7 @@ class NavegaçãoWeb :
                 raise f"Falha no clique via JavaScript: {js_error}"
 
     def acessar_destino(self, destino: str) -> None :
+        """Aceita URLs e 'caminhos'"""
         print(f'')
         _destino = destino
         if '.' not in destino:
