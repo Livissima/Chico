@@ -1,3 +1,0 @@
-class ColetaNotas:
-    raise NotImplemented
-
