@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 from customtkinter import CTk, CTkFrame
 
+from app.config.settings.app_config import DIRETÓRIO_SECRETARIA
 from app.config.settings.functions import truncar_diretório
 from app.core import ConsultaEstudantes, Exportação
 from app.core.query.servidores.consultaservidores import ConsultaServidores
@@ -39,7 +40,6 @@ class TelaConsulta(CTkFrame):
     def _inserir_widgets(self):
         self.__inserir_botões()
         self.__inserir_textos()
-        self.__iserir_inputs()
 
     def __inserir_textos(self):
         self._tx_feedback = frame_feedback(self, self._obter_situação()['novo_texto'])
@@ -73,8 +73,6 @@ class TelaConsulta(CTkFrame):
 
         self._bt_back = botão_back(self)
 
-    def __iserir_inputs(self):
-        pass
 
     def _consultar_estudantes(self):
         diretório_base = parâmetros.diretório_base
@@ -86,9 +84,9 @@ class TelaConsulta(CTkFrame):
 
             self._tx_feedback.atualizar('Exportando')
 
-            Exportação(consulta=consulta, path_destino=diretório_base)
+            Exportação(consulta=consulta, path_destino=diretório_base).exportar_tudo()
 
-            Pastador(diretório_base=diretório_base)
+            Pastador(diretório_base=diretório_base, diretório_secretaria=DIRETÓRIO_SECRETARIA).criar_pastas()
 
             self._tx_feedback.atualizar(
                 f'Planilhas geradas e exportadas para\n{diretório_base}',

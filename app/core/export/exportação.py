@@ -8,21 +8,20 @@ from app.core.query.servidores.consultaservidores import ConsultaServidores
 
 
 class Exportação:
-    #todo: Bolar uma forma de organizar subclasses para distinguir as exportações de estudantes e servidores
-
     def __init__(
             self,
             consulta: ConsultaEstudantes | ConsultaServidores,
             path_destino: Path
     ):
+        self._consulta = consulta
+        self._path_destino = path_destino
 
         print(f'=> Dataframe final para exportação: {consulta.shape = }')
 
-        self.exportar_tudo(consulta, path_destino)
+        self.exportar_tudo()
 
-    @staticmethod
-    def exportar_tudo(consulta, path):
-        if consulta.shape[1] > 30:
-            ExportaçãoCSV(consulta, path)
-            ExportaçãoJSON(consulta, path)
-        ExportaçãoXLSX(consulta, path)
+    def exportar_tudo(self):
+        if isinstance(self._consulta, ConsultaEstudantes):
+            ExportaçãoCSV(self._consulta, self._path_destino)
+            ExportaçãoJSON(self._consulta, self._path_destino)
+        ExportaçãoXLSX(self._consulta, self._path_destino)
