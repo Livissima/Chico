@@ -5,12 +5,13 @@ from typing import Literal, Any
 from pandas import DataFrame, ExcelWriter
 
 from app.core import ConsultaEstudantes
+from app.core.query.servidores.consultaservidores import ConsultaServidores
 
 
 class ExportaçãoXLSX :
     NOME_XLSX = 'Database'
 
-    def __init__(self, consulta: ConsultaEstudantes, path: Path) -> None :
+    def __init__(self, consulta: ConsultaEstudantes | ConsultaServidores, path: Path) -> None :
         self._executar(consulta, path)
 
     def _executar(self, consulta, path) :

@@ -3,21 +3,16 @@ from pathlib import Path
 import pandas as pd
 from pandas import DataFrame
 
-from app.config.settings.app_config import DIRETÓRIO_SECRETARIA
 from app.config.settings.functions import normalizar_diacrítica
 
 
 class Pastador:
-    def __init__(self, diretório_base: str | Path):
+    def __init__(self, diretório_base: str | Path, diretório_secretaria: Path):
         self._path_df = Path(diretório_base, 'Database.xlsx')
-        self._path_pasta_estudantes = Path(DIRETÓRIO_SECRETARIA, 'Estudantes')
+        self._path_pasta_estudantes = Path(diretório_secretaria, 'Estudantes')
 
 
-        self._criar_pastas()
-
-
-
-    def _criar_pastas(self):
+    def criar_pastas(self):
         for índice, linha in self._dataframe.iterrows() :
             matrícula = linha['Matrícula']
             estudante = linha['Estudante']
@@ -38,7 +33,7 @@ class Pastador:
 
             try :
                 path_final.mkdir()
-                print(f'Criada: {path_final}')
+                print(f'\nCriada nova pasta: {path_final}')
             except FileExistsError :
                 pass
 
