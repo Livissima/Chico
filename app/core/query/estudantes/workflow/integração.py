@@ -13,7 +13,6 @@ class Integração:
 
     def __init__(self, dfs_tratados: dict[str, DataFrame]):
         self.df = dfs_tratados
-        # print(f'{dfs_tratados = }')
         self._path_df_social: str = r'C:\Users\meren\OneDrive - Secretaria de Estado da Educação\Secretaria\2025\Dados\Estudantes\Base de dados\Etnia e religião.xlsx'  #todo: temporário. Preciso que esta variável seja mais flexível e adiquirida dinamicamente.
         self.df_integrado: DataFrame = self.integrar(dfs_tratados)
 
@@ -33,8 +32,7 @@ class Integração:
         except FileNotFoundError as exception:
             print(f'Séries não puderam ser carregadas: {exception}')
 
-        finally:
-            return df_base
+        return df_base
 
     @staticmethod
     def _integrar_abreviação(df_base: DataFrame) -> Series:
@@ -60,14 +58,11 @@ class Integração:
         gêneros = df['gêneros'].df_tratado
 
         for df_tratado in (fichas, contatos, situações, gêneros):
-            # print(f'{df_tratado = }')
             df_tratado['Matrícula'] = df_tratado['Matrícula'].astype(str).str.strip()
 
-        eixo = 'Matrícula'
+        on_how = {'on' : 'Matrícula', 'how' : 'left'}
 
-        df_tratamentos_integrados = (fichas.merge(contatos, on=eixo, how='left'
-                                                  ).merge(gêneros, on=eixo, how='left'
-                                                          ).merge(situações, on=eixo, how='left'))
+        df_tratamentos_integrados = fichas.merge(contatos, **on_how).merge(gêneros, **on_how).merge(situações, **on_how)
 
         return df_tratamentos_integrados
 
