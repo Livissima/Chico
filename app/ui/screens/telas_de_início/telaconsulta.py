@@ -7,7 +7,7 @@ from app.config.settings.app_config import DIRETÓRIO_SECRETARIA
 from app.config.settings.functions import truncar_diretório
 from app.core import ConsultaEstudantes, Exportação
 from app.core.query.servidores.consultaservidores import ConsultaServidores
-from app.core.utils.pastador import Pastador
+from app.core.utils.geradordepastasestudantes import GeradorDePastasEstudantes
 from app.config.parâmetros import parâmetros
 from app.ui.config.registrotelas import RegistroTelas
 
@@ -86,7 +86,7 @@ class TelaConsulta(CTkFrame):
 
             Exportação(consulta=consulta, path_destino=diretório_base).exportar_tudo()
 
-            Pastador(diretório_base=diretório_base, diretório_secretaria=DIRETÓRIO_SECRETARIA).criar_pastas()
+            GeradorDePastasEstudantes(diretório_base=diretório_base, diretório_secretaria=DIRETÓRIO_SECRETARIA).criar_pastas()
 
             self._tx_feedback.atualizar(
                 f'Planilhas geradas e exportadas para\n{diretório_base}',
