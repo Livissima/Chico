@@ -96,6 +96,8 @@ class TelaSige(CTkFrame):
             largura=90
         )
 
+
+
     def __inserir_checkboxes(self):
         self._ck_alvos = CheckBox(
             self,
@@ -182,3 +184,4 @@ class TelaSige(CTkFrame):
 
     def _coletar_notas(self):
         Bot(tarefa='coleta notas', seleção=seleção, alvos=self._ck_alvos)
+
