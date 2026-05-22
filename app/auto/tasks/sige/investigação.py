@@ -1,12 +1,12 @@
 #todo: módulo 99% funcional. É só organizar agora e corrigir o erro com os CEPMG e superar o hardcoding
-
+import time
 from pathlib import Path
 import pandas as pd
 from selenium.webdriver import Chrome
 from selenium.common.exceptions import NoAlertPresentException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from app.auto.data.sites import PropriedadesWeb
+from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
 from app.auto.functions import NavegaçãoWeb
 from app.config.settings.functions import ajustar_print_pandas, escrever_json
 from app.auto.tasks.registrotasks import RegistroTasks
@@ -20,13 +20,13 @@ path_xlsx = Path(  #hardcoded por enquanto
 
 nomes_planilhas = ['Fev-Mar', 'Abr-Mai', 'Jun-Jul', 'Ago-Set']
 
-nome_planilha_atual = nomes_planilhas[0]
+nome_planilha_atual = nomes_planilhas[1]
 
 planilha_atual = pd.read_excel(path_xlsx, nome_planilha_atual)
 
 planilha_atual['Matrícula'] = planilha_atual['Matrícula'].astype(float).astype(str)
 
-alunos_incógnitos = planilha_atual[planilha_atual['Escola'] == 'Transferido']
+alunos_incógnitos = planilha_atual[planilha_atual['Escola'] == '-']
 
 
 @RegistroTasks.registrar('investigar')
@@ -48,12 +48,18 @@ class Investigação :
 
         for aluno in alunos_incógnitos.itertuples() :
             self._nv.acessar_destino(url_página)
-            matrícula = aluno.Matrícula[0 :11]
-            nome_estudante = aluno.Estudante
+            try:
+                matrícula = aluno.Matrícula[0 :11]
+                nome_estudante = aluno.Estudante
+            except IndexError:
+                continue
+            except TypeError as e:
+                print(f'{matrícula = }\n{nome_estudante = }')
+                time.sleep(30)
             resultado = self._investigar_indivíduo(matrícula, nome_estudante)
             resultados_finais.update(resultado)
 
-        escrever_json(resultados_finais, r'C:\Users\meren\PycharmProjects\Chico\tests\transferidos.json')
+        escrever_json(resultados_finais, r'C:\Users\meren\Desktop\transferidos.json')
 
     def _investigar_indivíduo(self, matrícula, nome_estudante) :
         print(f"Investigando '{nome_estudante}'.")

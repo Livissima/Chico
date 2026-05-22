@@ -13,7 +13,7 @@ def ler_pdf(path: Path):
 
     return string_dump
 
-_path = Path(r'C:\Users\meren\Downloads', 'formulario_completo_52034860-1.pdf')
+_path = Path(r'C:\Users\meren\Downloads', 'bolsafamilia2026.pdf')
 leitura = ler_pdf(_path)
 
 
@@ -22,21 +22,27 @@ sresp = 'Responsável familiar: '
 sdn = 'Dt. Nasc.: '
 ssérie = 'Série: '
 
-linhas = leitura.split('\n')
-nomes = [linha.replace(snome, '').replace('Dados dos Estudantes', '').title() for linha in linhas if snome in linha]
-responsáveis = [linha.replace(sresp, '').title() for linha in linhas if linha.startswith(sresp)]
-dns = [linha.replace(sdn, '')[0:10] for linha in linhas if linha.startswith(sdn)]
+linhas = [linha.strip() for linha in leitura.split('\n')]
 
-for linha in linhas: print(linha)
-dados = [nomes, responsáveis, dns]
+# Usamos 'in' em vez de 'startswith' para evitar problemas com formatação do PDF
+nomes = [linha.replace(snome, '').replace('Dados dos Estudantes', '').title().strip() for linha in linhas if snome in linha]
+responsáveis = [linha.replace(sresp, '').title().strip() for linha in linhas if sresp in linha]
+dns = [linha.replace(sdn, '').strip()[0:10] for linha in linhas if sdn in linha]
 
-df = DataFrame()
-df['Estudante'] = nomes
-df['Responsável'] = responsáveis
-df['Data de Nascimento'] = dns
+# Alerta de segurança: se o PDF tiver um layout onde um aluno não tem responsável,
+# as listas ainda podem ficar com tamanhos desalinhados.
+# Para garantir que o DataFrame seja criado sem quebrar, você pode montá-lo assim:
+dados = {
+    'Estudante': nomes,
+    'Responsável': responsáveis,
+    'Data de Nascimento': dns
+}
+
+# Criamos o DataFrame garantindo que o Pandas lide com a diferença de tamanhos (caso falte algum dado)
+df = DataFrame.from_dict(dados, orient='index').transpose()
 
 
-nome_relatório = 'Relação de estudantes - Sistema Presença'
+nome_relatório = 'Relação de estudantes - Sistema Presença - 2'
 path_relatório = Path(r'C:\Users\meren\OneDrive - Secretaria de Estado da Educação\Secretaria', nome_relatório)
 with ExcelWriter(f'{path_relatório}.xlsx', engine='xlsxwriter') as writer:
     df.to_excel(writer, sheet_name='Lista')
