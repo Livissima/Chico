@@ -87,6 +87,19 @@ class TelaBot(CTkFrame):
 
         )
 
+        self.bt_investigar = Botão(
+            self,
+            função=lambda : Bot(tarefa='investigar'),
+            texto='Investigar',
+            fonte=('times new roman', 20),
+            formato='bold',
+            x=10+150+80,
+            y=y + 50,
+            largura=largura
+
+
+        )
+
         self.bt_back = botão_back(self)
 
     def __inserir_dropdowns(self):
