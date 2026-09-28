@@ -38,3 +38,5 @@ class Livro(Base) :
 
 
 Base.metadata.create_all(bind=db)
+
+
