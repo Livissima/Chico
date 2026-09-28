@@ -2,9 +2,6 @@ from pandas import DataFrame, ExcelWriter
 from pypdf import PdfReader
 from pathlib import Path
 
-from app.config.parâmetros import parâmetros
-
-
 def ler_pdf(path: Path):
     reader = PdfReader(path)
     string_dump = ""
@@ -13,7 +10,7 @@ def ler_pdf(path: Path):
 
     return string_dump
 
-_path = Path(r'C:\Users\meren\Downloads', 'bolsafamilia2026.pdf')
+_path = Path(r'C:\Users\meren\Downloads', 'sistemapresençaagoset.pdf')
 leitura = ler_pdf(_path)
 
 
@@ -42,7 +39,7 @@ dados = {
 df = DataFrame.from_dict(dados, orient='index').transpose()
 
 
-nome_relatório = 'Relação de estudantes - Sistema Presença - 2'
-path_relatório = Path(r'C:\Users\meren\OneDrive - Secretaria de Estado da Educação\Secretaria', nome_relatório)
+nome_relatório = 'Formulário Sistema Presença Ago-Set 2026'
+path_relatório = Path(r'C:\Users\meren\Downloads', nome_relatório)
 with ExcelWriter(f'{path_relatório}.xlsx', engine='xlsxwriter') as writer:
     df.to_excel(writer, sheet_name='Lista')
