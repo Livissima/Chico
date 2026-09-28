@@ -9,13 +9,13 @@ from app.core import ConsultaEstudantes, Exportação
 from app.core.query.servidores.consultaservidores import ConsultaServidores
 from app.core.utils.pastador import Pastador
 from app.config.parâmetros import parâmetros
-from app.ui.config.registrotelas import RegistroTelas
+from app.ui.customtkinter.config.registrotelas import RegistroTelas
 
-from app.ui.widgets.modelos_widgets import frame_feedback, botão_back
-from app.ui.widgets.botão import Botão
+from app.ui.customtkinter.widgets.modelos_widgets import frame_feedback, botão_back
+from app.ui.customtkinter.widgets.botão import Botão
 
 if TYPE_CHECKING:
-    from app.ui.screens.janela import Janela
+    from app.ui.customtkinter.screens.janela import Janela
     pass
 
 

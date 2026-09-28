@@ -2,14 +2,12 @@
 from customtkinter import CTkFrame, CTk
 from app.auto.bot import Bot
 from app.config.parâmetros.estruturadeseleção import EstruturaDeSeleção
-from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
 from app.config.parâmetros import parâmetros
-from app.ui.functions.desfazimento import Desfazimento
-from app.ui.config.registrotelas import RegistroTelas
-from app.ui.widgets.modelos_widgets import frame_feedback, campo_input, botão_back
-from app.ui.widgets import Botão, CheckBox
+from app.ui.customtkinter.config.registrotelas import RegistroTelas
+from app.ui.customtkinter.widgets.modelos_widgets import frame_feedback, campo_input, botão_back
+from app.ui.customtkinter.widgets import Botão, CheckBox
 from typing import TYPE_CHECKING
-from app.ui.functions.pesquisadiretório import PesquisaDiretório
+from app.ui.customtkinter.functions.pesquisadiretório import PesquisaDiretório
 
 if TYPE_CHECKING:
     pass

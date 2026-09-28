@@ -2,12 +2,12 @@ from typing import TYPE_CHECKING
 from customtkinter import CTkFrame, CTk
 from app.config.__metadata__ import PROJECT_NAME, PROJECT_VERSION
 from app.config.parâmetros import parâmetros
-from app.ui.config.registrotelas import RegistroTelas
-from app.ui.widgets.modelos_widgets import frame_feedback, campo_input
-from app.ui.widgets import Texto, Botão
-from app.ui.functions.desfazimento import Desfazimento
+from app.ui.customtkinter.config.registrotelas import RegistroTelas
+from app.ui.customtkinter.widgets.modelos_widgets import frame_feedback, campo_input
+from app.ui.customtkinter.widgets import Texto, Botão
+from app.ui.customtkinter.functions.desfazimento import Desfazimento
 
-from app.ui.functions.pesquisadiretório import PesquisaDiretório
+from app.ui.customtkinter.functions.pesquisadiretório import PesquisaDiretório
 from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO
 
 if TYPE_CHECKING:

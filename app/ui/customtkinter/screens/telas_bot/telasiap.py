@@ -5,9 +5,9 @@ from customtkinter import CTkFrame, CTk
 from app.auto.bot import Bot
 
 from app.config.parâmetros import parâmetros
-from app.ui.config.registrotelas import RegistroTelas
-from app.ui.widgets.modelos_widgets import frame_feedback, botão_back
-from app.ui.widgets import Botão, CheckBox, Dropdown
+from app.ui.customtkinter.config.registrotelas import RegistroTelas
+from app.ui.customtkinter.widgets.modelos_widgets import frame_feedback, botão_back
+from app.ui.customtkinter.widgets import Botão, CheckBox, Dropdown
 from typing import TYPE_CHECKING
 
 # from app.ui.config.cabeçalhos import Cabeçalhos

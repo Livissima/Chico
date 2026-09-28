@@ -1,8 +1,8 @@
 from typing import Literal, TYPE_CHECKING
 
-from customtkinter import CTkFrame, CTk, CTkLabel
+from customtkinter import CTkFrame, CTkLabel
 if TYPE_CHECKING:
-    from app.ui.screens.janela import Janela
+    from app.ui.customtkinter.screens.janela import Janela
 
 class Texto(CTkFrame):
     def __init__(
