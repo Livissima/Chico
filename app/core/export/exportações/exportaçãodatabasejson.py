@@ -5,7 +5,7 @@ from app.config.settings.functions import escrever_json
 from app.core import ConsultaEstudantes
 
 
-class ExportaçãoJSON:
+class ExportaçãoDatabaseJSON:
     def __init__(self, consulta: ConsultaEstudantes, _path: Path):
         self._exportar(consulta, _path)
 

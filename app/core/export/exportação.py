@@ -1,9 +1,9 @@
 from pathlib import Path
 
 from app.core import ConsultaEstudantes
-from app.core.export.exportações.exportaçãocsv import ExportaçãoCSV
-from app.core.export.exportações.exportaçãojson import ExportaçãoJSON
-from app.core.export.exportações.exportaçãoxlsx import ExportaçãoXLSX
+from app.core.export.exportações.exportaçãocontatoscsv import ExportaçãoContatosCSV
+from app.core.export.exportações.exportaçãodatabasejson import ExportaçãoDatabaseJSON
+from app.core.export.exportações.exportaçãodatabasexlsx import ExportaçãoDatabaseXLSX
 from app.core.query.servidores.consultaservidores import ConsultaServidores
 
 
@@ -13,15 +13,15 @@ class Exportação:
             consulta: ConsultaEstudantes | ConsultaServidores,
             path_destino: Path
     ):
+        print(f'=> Dataframe final para exportação: {type(consulta) = }{consulta.shape = }')
+        self._path = path_destino
         self._consulta = consulta
-        self._path_destino = path_destino
-
-        print(f'=> Dataframe final para exportação: {consulta.shape = }')
 
         self.exportar_tudo()
 
+
     def exportar_tudo(self):
         if isinstance(self._consulta, ConsultaEstudantes):
-            ExportaçãoCSV(self._consulta, self._path_destino)
-            ExportaçãoJSON(self._consulta, self._path_destino)
-        ExportaçãoXLSX(self._consulta, self._path_destino)
+            ExportaçãoContatosCSV(self._consulta, self._path)
+            ExportaçãoDatabaseJSON(self._consulta, self._path)
+        ExportaçãoDatabaseXLSX(self._consulta, self._path)
