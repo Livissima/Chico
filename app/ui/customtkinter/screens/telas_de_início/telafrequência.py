@@ -1,14 +1,14 @@
 from customtkinter import CTkFrame, CTk
 from typing import TYPE_CHECKING
 
-from app.ui.config.registrotelas import RegistroTelas
-from app.ui.widgets.modelos_widgets import frame_feedback, botão_back
-from app.ui.widgets import Botão
+from app.ui.customtkinter.config.registrotelas import RegistroTelas
+from app.ui.customtkinter.widgets.modelos_widgets import frame_feedback, botão_back
+from app.ui.customtkinter.widgets import Botão
 from app.config.parâmetros import parâmetros
 from app.core.frequency.compiladordefaltas import CompiladorDeFaltas
 
 if TYPE_CHECKING :
-    from app.ui.screens.janela import Janela
+    from app.ui.customtkinter.screens.janela import Janela
 
 @RegistroTelas.registrar(
     nome_tela='frequência',

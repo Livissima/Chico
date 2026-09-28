@@ -1,9 +1,9 @@
 from tkinter import StringVar
 from typing import Literal, TYPE_CHECKING, Optional, Union, Callable
 
-from customtkinter import CTkFrame, CTk, CTkOptionMenu
+from customtkinter import CTkFrame, CTkOptionMenu
 if TYPE_CHECKING:
-    from app.ui.screens.janela import Janela
+    from app.ui.customtkinter.screens.janela import Janela
 
 class Dropdown(CTkFrame):
     def __init__(

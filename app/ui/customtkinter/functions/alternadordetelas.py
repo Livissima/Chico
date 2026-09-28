@@ -1,6 +1,6 @@
 #app/ui/functions/alternadordetelas.py
-from app.ui.config.registrotelas import RegistroTelas
-from app.ui.widgets import Texto, Botão
+from app.ui.customtkinter.config.registrotelas import RegistroTelas
+from app.ui.customtkinter.widgets import Texto, Botão
 
 class AlternadorDeTelas:
     def __init__(self, container, controller):

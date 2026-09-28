@@ -1,7 +1,7 @@
 import importlib
 import pkgutil
-from app.ui import screens
-from app.ui.config.registrotelas import RegistroTelas
+from app.ui.customtkinter import screens
+from app.ui.customtkinter.config.registrotelas import RegistroTelas
 
 class CarregadorDeTelas:
     _telas_carregadas: bool = False

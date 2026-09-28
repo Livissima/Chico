@@ -1,7 +1,7 @@
 from typing import Any
 
 from app.config.parâmetros import parâmetros
-from app.ui.widgets import Texto, Botão, Input
+from app.ui.customtkinter.widgets import Texto, Botão, Input
 
 
 def frame_feedback(self_tela, extra: Any | None = None) -> Texto:
