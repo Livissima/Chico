@@ -4,14 +4,16 @@ from pathlib import Path
 from typing import Literal, Any
 from pandas import DataFrame, ExcelWriter
 
+from app.config.settings.functions import normalizar_diacrítica
 from app.core import ConsultaEstudantes
 from app.core.query.servidores.consultaservidores import ConsultaServidores
 
 
-class ExportaçãoXLSX :
+class ExportaçãoDatabaseXLSX :
     NOME_XLSX = 'Database'
 
     def __init__(self, consulta: ConsultaEstudantes | ConsultaServidores, path: Path) -> None :
+        self._path = Path(path, self.NOME_XLSX)
         self._executar(consulta, path)
 
     def _executar(self, consulta, path) :
@@ -20,6 +22,7 @@ class ExportaçãoXLSX :
         estrutura = self._estruturar(consulta)
 
         self._gerar_xlsx(_path, estrutura)
+        self._gerar_csv(estrutura)
 
     @staticmethod
     def _estruturar(consulta) :
@@ -32,6 +35,14 @@ class ExportaçãoXLSX :
             return [df_ativa, df_bruta, df_transferidos]
 
         return consulta
+
+    def _gerar_csv(self, estrutura: list[DataFrame]) -> None:
+        estrutura[0].to_csv(f'{self._path}_CSV.csv', index_label='#')
+        xmlson = estrutura[0]
+        xmlson_cols = [normalizar_diacrítica(col).replace(' ', '_').replace(':', '') for col in xmlson.columns]
+        xmlson.columns = xmlson_cols
+        # print(f'{xmlson_cols = }, {xmlson.columns}')
+        xmlson.to_xml(f'{self._path}_XML.xml')
 
 
 
