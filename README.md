@@ -2,7 +2,7 @@
 
 Utilitário de automação para atividades administrativas do cotidiano escolar em Goiás.
 
-Desenvolvido para secretárias e auxiliares de escolas estaduais que trabalham com os sistemas **SIGE** e **SIAP** da Secretaria de Estado da Educação de Goiás.
+Desenvolvido para servidores da educação que trabalham com os sistemas **SIGE** e/ou **SIAP**, de autoriada Secretaria de Estado da Educação de Goiás.
 
 Este projeto nasce de uma iniciativa individual para atender as necessidades percebidas na rotina administrativa escolar. 
 Ele busca mitigar limitações técnicas e gargalos operacionais dos sistemas legados do Estado, oferecendo 
