@@ -1,9 +1,9 @@
 from typing import Literal
 from pandas import DataFrame
-from app.core.query.estudantes.tratamentos.fichas import TratamentoFichas
-from app.core.query.estudantes.tratamentos.contatos import TratamentoContatos
-from app.core.query.estudantes.tratamentos.situações import TratamentoSituações
-from app.core.query.estudantes.tratamentos.gêneros import TratamentoGêneros
+from app.core.funcionalidades.query.estudantes.tratamentos.fichas import TratamentoFichas
+from app.core.funcionalidades.query.estudantes.tratamentos.contatos import TratamentoContatos
+from app.core.funcionalidades.query.estudantes.tratamentos.situações import TratamentoSituações
+from app.core.funcionalidades.query.estudantes.tratamentos.gêneros import TratamentoGêneros
 
 
 class ProcessamentoInicial:
