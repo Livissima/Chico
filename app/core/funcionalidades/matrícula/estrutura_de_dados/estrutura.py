@@ -1,9 +1,8 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Any
-import re
 
 @dataclass
-class CampoSchema:
+class Campo:
     chave: str
     rótulo: str
     tipo: str = 'text'
@@ -35,7 +34,7 @@ class CampoSchema:
 @dataclass
 class LinhaFormulário:
     proporções: List[float]
-    campos: List[CampoSchema]
+    campos: List[Campo]
 
 @dataclass
 class SeçãoFormulário:

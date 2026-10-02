@@ -1,5 +1,5 @@
 from typing import List, Dict, Any, Tuple
-from schemas import SeçãoFormulário
+from estrutura_de_dados.estrutura import SeçãoFormulário
 
 class FormValidator:
 
