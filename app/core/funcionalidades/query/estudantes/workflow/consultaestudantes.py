@@ -1,10 +1,9 @@
 import os
-from statistics import mean
 
-from app.core.query.estudantes.workflow.processamentoinicial import ProcessamentoInicial
-from app.core.query.estudantes.workflow.formatação import Formatação
-from app.core.query.estudantes.workflow.integração import Integração
-from app.core.query.leitura import Leitura
+from app.core.funcionalidades.query.estudantes.workflow.processamentoinicial import ProcessamentoInicial
+from app.core.funcionalidades.query.estudantes.workflow.formatação import Formatação
+from app.core.funcionalidades.query.estudantes.workflow.integração import Integração
+from app.core.funcionalidades.query.leitura import Leitura
 from pandas import DataFrame
 
 
