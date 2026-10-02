@@ -1,11 +1,11 @@
 import streamlit as st
 from typing import Dict, Any
-from app.core.funcionalidades.matrícula.schemas import SeçãoFormulário, CampoSchema
+from estrutura_de_dados.estrutura import SeçãoFormulário, Campo
 
 class StreamLitFormRenderer:
 
     @staticmethod
-    def renderizar_campo(container, campo: CampoSchema) -> Any:
+    def renderizar_campo(container, campo: Campo) -> Any:
         if campo.tipo == 'text':
             return container.text_input(
                 label=campo.rótulo,

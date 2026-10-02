@@ -1,7 +1,7 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-from estrutura_dados import TODAS_AS_SECOES
+from formulário import TODAS_AS_SECOES
 from form_builder import StreamLitFormRenderer
 from validator import FormValidator
 from context_adapter import ContextAdapter
