@@ -6,7 +6,7 @@ from customtkinter import CTk, CTkFrame
 from app.config.settings.app_config import DIRETÓRIO_SECRETARIA
 from app.config.settings.functions import truncar_diretório
 from app.core import ConsultaEstudantes, Exportação
-from app.core.query.servidores.consultaservidores import ConsultaServidores
+from app.core.funcionalidades.query.servidores.consultaservidores import ConsultaServidores
 from app.core.utils.pastador import Pastador
 from app.config.parâmetros import parâmetros
 from app.ui.customtkinter.config.registrotelas import RegistroTelas
