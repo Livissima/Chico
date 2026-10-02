@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Formulário de Matrícula - {{ nome_estudante }}</title>
+<style>
+/* ===== Estilos de texto (equivalentes ao Excel) ===== */
+.rotulo-destaque { font: bold 9pt Arial, sans-serif; color: #000000; white-space: nowrap; }
+.rotulo-normal   { font: normal 9pt Arial, sans-serif; color: #000000; white-space: nowrap; }
+.valor-normal    { font: normal 11pt Tahoma, sans-serif; color: #0800a8; }
+.valor-destaque  { font: bold 12pt Tahoma, sans-serif; color: #0800a8; }
+
+/* ===== Página A4 ===== */
+* { box-sizing: border-box; }
+body { margin: 0; background: #8a8a8a; padding: 8mm 0; }
+.pagina {
+  width: 210mm; height: 297mm; margin: 0 auto; background: #fff;
+  padding: 8mm 10mm; position: relative; overflow: hidden;
+  box-shadow: 0 0 6mm rgba(0,0,0,.4);
+}
+@page { size: A4; margin: 0; }
+@media print {
+  body { background: #fff; padding: 0; }
+  .pagina { box-shadow: none; margin: 0; }
+}
+
+/* ===== Cabeçalho ===== */
+.cabecalho { text-align: center; margin-bottom: 1.5mm; }
+.cabecalho .logo { height: 13mm; display: block; margin: 0 auto 1mm; }
+.cabecalho .titulo { font: bold 11pt Arial, sans-serif; line-height: 1.25; }
+
+/* ===== Quadro e seções ===== */
+.quadro { border: .4mm solid #000; }
+.secao {
+  background: #bfbfbf; border-top: .3mm solid #000; border-bottom: .3mm solid #000;
+  text-align: center; font: bold 10pt Arial, sans-serif; padding: .3mm 0;
+}
+.quadro > .secao:first-child { border-top: 0; }
+
+/* ===== Linhas e campos ===== */
+.linha { display: flex; align-items: flex-end; gap: 3mm; padding: .7mm 1.5mm; }
+.campo { display: flex; align-items: flex-end; gap: 1mm; min-width: 0; flex: 1; }
+.campo .v { flex: 1; min-width: 0; min-height: 4.6mm; border-bottom: .25mm solid #000; padding-left: 1mm; line-height: 1.15; }
+.campo.sem-linha .v { border-bottom: 0; }
+.g2 { flex: 2; } .g3 { flex: 3; } .g4 { flex: 4; } .g5 { flex: 5; }
+.fixo { flex: none; }
+
+/* ===== Caixas de seleção (preencher com "X" ou vazio) ===== */
+.op { display: inline-flex; align-items: center; gap: 1mm; white-space: nowrap; }
+.cb {
+  display: inline-block; width: 3.6mm; height: 3.6mm; border: .25mm solid #000;
+  font: bold 9pt Tahoma, sans-serif; color: #0800a8; text-align: center; line-height: 3.3mm; font-style: normal;
+}
+.opcoes { display: flex; justify-content: space-between; flex: 1; }
+
+/* ===== Tamanhos de uniforme ===== */
+.unif { display: flex; flex: 1; border: .25mm solid #000; }
+.unif > div { flex: 1; display: flex; border-left: .25mm solid #000; align-items: center; }
+.unif > div:first-child { border-left: 0; }
+.unif .rotulo-normal { padding: 0 1mm; flex: 1; text-align: center; }
+.unif .valor-normal { width: 9mm; border-left: .25mm solid #000; align-self: stretch; text-align: center; }
+
+/* ===== Núcleo familiar ===== */
+.nucleo { display: grid; grid-template-columns: repeat(5, auto); gap: 1mm 4mm; justify-content: start; }
+
+/* ===== Necessidade educacional especial ===== */
+.nee-grid { display: grid; grid-template-columns: repeat(5, 1fr); border-top: .25mm solid #000; }
+.nee-grid .op { border-left: .25mm solid #000; border-bottom: .25mm solid #000; padding: .8mm 1mm; }
+.nee-grid .op:nth-child(5n+1) { border-left: 0; }
+.nee-grid .rotulo-normal { font-size: 7.5pt; }
+.nee-grid .op.outro .valor-normal { font-size: 8pt; }
+
+.assinatura { padding: 4mm 0 0; display: flex; gap: 1mm; align-items: flex-end; }
+.assinatura .v { flex: 1; border-bottom: .3mm solid #000; min-height: 5mm; }
+.nota { text-align: right; margin-top: 6mm; font: italic 9pt "Times New Roman", serif; text-decoration: underline; }
+</style>
+</head>
+<body>
+<!--
+  Variáveis (Jinja2). Caixas de seleção: passe "X" para marcada ou "" para vazia.
+  Exemplo: genero_m="X", genero_f=""
+-->
+<div class="pagina">
+
+  <div class="cabecalho">
+    <img class="logo" src="{{ logo_src }}" alt="" onerror="this.style.display='none'">
+    <div class="titulo">CEPI CHICO MENDES<br>FORMULÁRIO DE MATRÍCULA DE ESTUDANTE</div>
+  </div>
+
+  <div class="quadro">
+
+    <!-- ================= DADOS PESSOAIS ================= -->
+    <div class="secao">DADOS PESSOAIS</div>
+
+    <div class="linha">
+      <div class="campo"><span class="rotulo-destaque">Nome Estudante:</span><span class="v valor-destaque">{{ nome_estudante }}</span></div>
+    </div>
+    <div class="linha">
+      <div class="campo g2"><span class="rotulo-normal">Data nascimento:</span><span class="v valor-normal">{{ data_nascimento }}</span></div>
+      <span class="op fixo rotulo-normal">Gênero:
+        <i class="cb">{{ genero_m }}</i>M <i class="cb">{{ genero_f }}</i>F</span>
+      <div class="campo g3"><span class="rotulo-normal">Nome social:</span><span class="v valor-normal">{{ nome_social }}</span></div>
+    </div>
+    <div class="linha">
+      <div class="campo g2"><span class="rotulo-destaque">CPF</span><span class="rotulo-normal">(estudante):</span><span class="v valor-normal">{{ cpf_estudante }}</span></div>
+      <div class="campo g3"><span class="rotulo-normal">Município de Naturalidade:</span><span class="v valor-normal">{{ municipio_naturalidade }}</span></div>
+      <div class="campo"><span class="rotulo-normal">UF:</span><span class="v valor-normal">{{ uf_naturalidade }}</span></div>
+    </div>
+    <div class="linha">
+      <div class="campo g2"><span class="rotulo-normal">Termo cert. nasc.:</span><span class="v valor-normal">{{ termo_cert_nasc }}</span></div>
+      <div class="campo"><span class="rotulo-normal">Livro:</span><span class="v valor-normal">{{ livro }}</span></div>
+      <div class="campo"><span class="rotulo-normal">Folha:</span><span class="v valor-normal">{{ folha }}</span></div>
+      <div class="campo g2"><span class="rotulo-normal">Dt. Emissão(</span><span class="rotulo-destaque" style="margin-left:-1mm">CN</span><span class="rotulo-normal" style="margin-left:-1mm">):</span><span class="v valor-normal">{{ dt_emissao_cn }}</span></div>
+    </div>
+    <div class="linha">
+      <div class="campo g2"><span class="rotulo-normal">Cartório de registro:</span><span class="v valor-normal">{{ cartorio_registro }}</span></div>
+      <div class="campo g2"><span class="rotulo-normal">Município de Registro:</span><span class="v valor-normal">{{ municipio_registro }}</span></div>
+    </div>
+    <div class="linha">
+      <span class="rotulo-normal">Cor/Etnia:</span>
+      <div class="opcoes rotulo-normal">
+        <span class="op"><i class="cb">{{ cor_branca }}</i>Branca</span>
+        <span class="op"><i class="cb">{{ cor_preta }}</i>Preta</span>
+        <span class="op"><i class="cb">{{ cor_parda }}</i>Parda</span>
+        <span class="op"><i class="cb">{{ cor_indigena }}</i>Indígena</span>
+        <span class="op"><i class="cb">{{ cor_amarela }}</i>Amarela</span>
+        <span class="op"><i class="cb">{{ cor_nao_declarada }}</i>Não declarada</span>
+      </div>
+    </div>
+    <div class="linha">
+      <span class="rotulo-normal">Religião:</span>
+      <div class="opcoes rotulo-normal">
+        <span class="op"><i class="cb">{{ rel_budismo }}</i>Budismo</span>
+        <span class="op"><i class="cb">{{ rel_catolicismo }}</i>Catolicismo</span>
+        <span class="op"><i class="cb">{{ rel_evangelismo }}</i>Evangelismo</span>
+        <span class="op"><i class="cb">{{ rel_congregacao }}</i>Congregação</span>
+        <span class="op"><i class="cb">{{ rel_espirita }}</i>Espírita</span>
+        <span class="op"><i class="cb">{{ rel_sem_religiao }}</i>Sem religião</span>
+      </div>
+    </div>
+    <div class="linha">
+      <span class="rotulo-destaque">Tamanhos uniformes</span>
+      <div class="unif">
+        <div><span class="rotulo-normal">Bermuda/short-saia</span><span class="valor-normal">{{ tam_bermuda }}</span></div>
+        <div><span class="rotulo-normal">Camiseta</span><span class="valor-normal">{{ tam_camiseta }}</span></div>
+        <div><span class="rotulo-normal">Calça</span><span class="valor-normal">{{ tam_calca }}</span></div>
+        <div><span class="rotulo-normal">Jaqueta</span><span class="valor-normal">{{ tam_jaqueta }}</span></div>
+        <div><span class="rotulo-normal">Tênis</span><span class="valor-normal">{{ tam_tenis }}</span></div>
+      </div>
+    </div>
+
+    <!-- ================= DADOS FAMILIARES ================= -->
+    <div class="secao">DADOS FAMILIARES</div>
+
+    <!-- Filiação 1 -->
+    <div class="linha">
+      <div class="campo g5"><span class="rotulo-destaque">Filiação 1:</span><span class="v valor-destaque">{{ filiacao1_nome }}</span></div>
+      <div class="campo"><span class="rotulo-normal">D.N.:</span><span class="v valor-normal">{{ filiacao1_dn }}</span></div>
+    </div>
+    <div class="linha">
+      <div class="campo g2"><span class="rotulo-normal">CPF:</span><span class="v valor-normal">{{ filiacao1_cpf }}</span></div>
+      <div class="campo g2"><span class="rotulo-normal">Título eleitoral:</span><span class="v valor-normal">{{ filiacao1_titulo }}</span></div>
+      <div class="campo"><span class="rotulo-normal">UF:</span><span class="v valor-normal">{{ filiacao1_uf }}</span></div>
+      <div class="campo"><span class="rotulo-normal">Zona:</span><span class="v valor-normal">{{ filiacao1_zona }}</span></div>
+      <div class="campo"><span class="rotulo-normal">Seção:</span><span class="v valor-normal">{{ filiacao1_secao }}</span></div>
+    </div>
+    <div class="linha">
+      <div class="campo g5"><span class="rotulo-normal">Profissão:</span><span class="v valor-normal">{{ filiacao1_profissao }}</span></div>
+      <span class="op fixo rotulo-normal">Falecida: <i class="cb">{{ filiacao1_falecida_sim }}</i>Sim <i class="cb">{{ filiacao1_falecida_nao }}</i>Não</span>
+    </div>
+
+    <!-- Filiação 2 -->
+    <div class="linha">
+      <div class="campo g5"><span class="rotulo-destaque">Filiação 2:</span><span class="v valor-destaque">{{ filiacao2_nome }}</span></div>
+      <div class="campo"><span class="rotulo-normal">D.N.:</span><span class="v valor-normal">{{ filiacao2_dn }}</span></div>
+    </div>
+    <div class="linha">
+      <div class="campo g2"><span class="rotulo-normal">CPF:</span><span class="v valor-normal">{{ filiacao2_cpf }}</span></div>
+      <div class="campo g2"><span class="rotulo-normal">Título eleitoral:</span><span class="v valor-normal">{{ filiacao2_titulo }}</span></div>
+      <div class="campo"><span class="rotulo-normal">UF:</span><span class="v valor-normal">{{ filiacao2_uf }}</span></div>
+      <div class="campo"><span class="rotulo-normal">Zona:</span><span class="v valor-normal">{{ filiacao2_zona }}</span></div>
+      <div class="campo"><span class="rotulo-normal">Seção:</span><span class="v valor-normal">{{ filiacao2_secao }}</span></div>
+    </div>
+    <div class="linha">
+      <div class="campo g5"><span class="rotulo-normal">Profissão:</span><span class="v valor-normal">{{ filiacao2_profissao }}</span></div>
+      <span class="op fixo rotulo-normal">Falecido <i class="cb">{{ filiacao2_falecido_sim }}</i>Sim <i class="cb">{{ filiacao2_falecido_nao }}</i>Não</span>
+    </div>
+
+    <!-- Responsável -->
+    <div class="linha">
+      <div class="campo g5"><span class="rotulo-destaque">Responsável:</span><span class="v valor-destaque">{{ responsavel_nome }}</span></div>
+      <div class="campo"><span class="rotulo-normal">D.N.:</span><span class="v valor-normal">{{ responsavel_dn }}</span></div>
+    </div>
+    <div class="linha">
+      <div class="campo g2"><span class="rotulo-normal">CPF:</span><span class="v valor-normal">{{ responsavel_cpf }}</span></div>
+      <div class="campo g2"><span class="rotulo-normal">Título eleitoral:</span><span class="v valor-normal">{{ responsavel_titulo }}</span></div>
+      <div class="campo"><span class="rotulo-normal">UF:</span><span class="v valor-normal">{{ responsavel_uf }}</span></div>
+      <div class="campo"><span class="rotulo-normal">Zona:</span><span class="v valor-normal">{{ responsavel_zona }}</span></div>
+      <div class="campo"><span class="rotulo-normal">Seção:</span><span class="v valor-normal">{{ responsavel_secao }}</span></div>
+    </div>
+    <div class="linha">
+      <div class="campo g3"><span class="rotulo-normal">Profissão:</span><span class="v valor-normal">{{ responsavel_profissao }}</span></div>
+      <div class="campo g2"><span class="rotulo-normal">Relação:</span><span class="v valor-normal">{{ responsavel_relacao }}</span></div>
+    </div>
+
+    <!-- Núcleo familiar -->
+    <div class="linha" style="border-top:.25mm solid #000; padding:1.2mm 1.5mm">
+      <span class="rotulo-destaque">Núcleo Familiar:</span>
+      <div class="nucleo rotulo-normal">
+        <span class="op"><i class="cb">{{ nuc_mae }}</i>Mãe</span>
+        <span class="op"><i class="cb">{{ nuc_pai }}</i>Pai</span>
+        <span class="op"><i class="cb">{{ nuc_irmaos }}</i>Irmãos</span>
+        <span class="op"><i class="cb">{{ nuc_madrasta }}</i>Madrasta</span>
+        <span class="op"><i class="cb">{{ nuc_tutor_legal }}</i>Tutor Legal</span>
+        <span class="op"><i class="cb">{{ nuc_tios }}</i>Tios</span>
+        <span class="op"><i class="cb">{{ nuc_avos }}</i>Avós</span>
+        <span class="op"><i class="cb">{{ nuc_primos }}</i>Primos</span>
+        <span class="op"><i class="cb">{{ nuc_padrasto }}</i>Padrasto</span>
+        <span class="op"><i class="cb">{{ nuc_outros }}</i>Outros:<span class="valor-normal">{{ nuc_outros_texto }}</span></span>
+      </div>
+    </div>
+
+    <!-- ================= ENDEREÇO ================= -->
+    <div class="secao">ENDEREÇO, CONTATO E INFORMAÇÕES COMPLEMENTARES</div>
+
+    <div class="linha">
+      <div class="campo g4"><span class="rotulo-normal">Logradouro:</span><span class="v valor-normal">{{ logradouro }}</span></div>
+      <div class="campo"><span class="rotulo-normal">QD.</span><span class="v valor-normal">{{ quadra }}</span></div>
+      <div class="campo"><span class="rotulo-normal">LT.</span><span class="v valor-normal">{{ lote }}</span></div>
+      <div class="campo"><span class="rotulo-normal">nº.</span><span class="v valor-normal">{{ numero }}</span></div>
+      <div class="campo g2"><span class="rotulo-normal">CEP:</span><span class="v valor-normal">{{ cep }}</span></div>
+    </div>
+    <div class="linha">
+      <div class="campo"><span class="rotulo-normal">Complemento:</span><span class="v valor-normal">{{ complemento }}</span></div>
+      <div class="campo"><span class="rotulo-normal">Bairro:</span><span class="v valor-normal">{{ bairro }}</span></div>
+    </div>
+    <div class="linha">
+      <div class="campo"><span class="rotulo-normal">Município:</span><span class="v valor-normal">{{ municipio }}</span></div>
+      <div class="campo"><span class="rotulo-normal">UC (Equatorial):</span><span class="v valor-normal">{{ uc_equatorial }}</span></div>
+    </div>
+    <div class="linha">
+      <div class="campo"><span class="rotulo-normal">Celular da Mãe:</span><span class="v valor-normal">{{ celular_mae }}</span></div>
+      <div class="campo"><span class="rotulo-normal">Fone p/ Contato:</span><span class="v valor-normal">{{ fone_contato }}</span></div>
+    </div>
+    <div class="linha">
+      <div class="campo"><span class="rotulo-normal">Celular do Pai:</span><span class="v valor-normal">{{ celular_pai }}</span></div>
+      <div class="campo"><span class="rotulo-normal">Telefone Fixo:</span><span class="v valor-normal">{{ telefone_fixo }}</span></div>
+    </div>
+    <div class="linha">
+      <div class="campo"><span class="rotulo-normal">Email p/ contato:</span><span class="v valor-normal">{{ email_contato }}</span></div>
+    </div>
+    <div class="linha">
+      <div class="campo g3"><span class="rotulo-normal">Irmão(s) nesta UE</span><span class="v valor-normal">{{ irmaos_ue }}</span></div>
+      <div class="campo"><span class="rotulo-normal">CadÚnico:</span><span class="v valor-normal">{{ cadunico }}</span></div>
+    </div>
+
+    <!-- ================= NECESSIDADE EDUCACIONAL ESPECIAL ================= -->
+    <div class="secao">NECESSIDADE EDUCACIONAL ESPECIAL:
+      <span class="op" style="font-size:10pt"><i class="cb">{{ nee_sim }}</i>Sim</span>
+      <span class="op" style="font-size:10pt"><i class="cb">{{ nee_nao }}</i>Não</span>
+    </div>
+    <div class="nee-grid">
+      <span class="op outro"><i class="cb">{{ nee_outro }}</i><span class="rotulo-normal">Outro:</span><span class="valor-normal">{{ nee_outro_texto }}</span></span>
+      <span class="op"><i class="cb">{{ nee_dislexia }}</i><span class="rotulo-normal">Dislexia</span></span>
+      <span class="op"><i class="cb">{{ nee_baixa_visao }}</i><span class="rotulo-normal">Baixa Visão</span></span>
+      <span class="op"><i class="cb">{{ nee_def_auditiva }}</i><span class="rotulo-normal">Deficiência Auditiva</span></span>
+      <span class="op"><i class="cb">{{ nee_tea }}</i><span class="rotulo-normal">Transtorno do Espectro Autista</span></span>
+
+      <span class="op"><i class="cb">{{ nee_surdo_cegueira }}</i><span class="rotulo-normal">Surdo cegueira</span></span>
+      <span class="op"><i class="cb">{{ nee_dislalia }}</i><span class="rotulo-normal">Dislalia</span></span>
+      <span class="op"><i class="cb">{{ nee_cegueira }}</i><span class="rotulo-normal">Cegueira</span></span>
+      <span class="op"><i class="cb">{{ nee_tdah }}</i><span class="rotulo-normal">TDAH</span></span>
+      <span class="op"><i class="cb">{{ nee_altas_habilidades }}</i><span class="rotulo-normal">Altas Habilidades/Superdotação</span></span>
+
+      <span class="op"><i class="cb">{{ nee_def_intelectual }}</i><span class="rotulo-normal">Deficiência Intelectual</span></span>
+      <span class="op"><i class="cb">{{ nee_disgrafia }}</i><span class="rotulo-normal">Disgrafia</span></span>
+      <span class="op"><i class="cb">{{ nee_rett }}</i><span class="rotulo-normal">Síndrome de Rett</span></span>
+      <span class="op"><i class="cb">{{ nee_surdez }}</i><span class="rotulo-normal">Surdez</span></span>
+      <span class="op"><i class="cb">{{ nee_disturbios_aprendizagem }}</i><span class="rotulo-normal">Distúrbios de Aprendizagem</span></span>
+
+      <span class="op"><i class="cb">{{ nee_def_fisica }}</i><span class="rotulo-normal">Deficiência Física</span></span>
+      <span class="op"><i class="cb">{{ nee_discalculia }}</i><span class="rotulo-normal">Discalculia</span></span>
+      <span class="op"><i class="cb">{{ nee_asperger }}</i><span class="rotulo-normal">Síndrome de Asperger</span></span>
+      <span class="op"><i class="cb">{{ nee_def_multipla }}</i><span class="rotulo-normal">Deficiência Múltipla</span></span>
+      <span class="op"><i class="cb">{{ nee_desintegrativo }}</i><span class="rotulo-normal">Transtorno Desintegrativo da Infância</span></span>
+    </div>
+    <div class="linha" style="border-bottom:.25mm solid #000">
+      <div class="campo sem-linha"><span class="rotulo-normal">Restrição alimentar:</span><span class="v valor-normal">{{ restricao_alimentar }}</span></div>
+    </div>
+
+    <!-- ================= DADOS ESCOLARES ================= -->
+    <div class="secao">DADOS ESCOLARES PARA O ANO LETIVO DE {{ ano_letivo }}</div>
+
+    <div class="linha">
+      <div class="campo"><span class="rotulo-normal">CURSO:</span><span class="v valor-normal" style="border-bottom:0">{{ curso }}</span></div>
+      <div class="campo"><span class="rotulo-normal">Ano/Série:</span><span class="v valor-normal">{{ ano_serie }}</span></div>
+      <div class="campo"><span class="rotulo-normal">Turma:</span><span class="v valor-normal">{{ turma }}</span></div>
+      <div class="campo g2"><span class="rotulo-normal">Nº. Matrícula (aluno da rede):</span><span class="v valor-normal">{{ num_matricula }}</span></div>
+    </div>
+    <div class="linha">
+      <div class="campo"><span class="rotulo-normal">Goiânia,</span><span class="v valor-normal">{{ data_matricula }}</span></div>
+      <span class="op fixo rotulo-normal">Responsável pela matrícula:
+        <i class="cb">{{ resp_mat_mae }}</i>Mãe <i class="cb">{{ resp_mat_pai }}</i>Pai <i class="cb">{{ resp_mat_outro }}</i>Outro:</span>
+      <div class="campo"><span class="v valor-normal">{{ resp_mat_outro_texto }}</span></div>
+    </div>
+  </div>
+
+  <div class="assinatura">
+    <span class="rotulo-normal">ASSINATURA DO(A) RESPONSÁVEL PELO ESTUDANTE:</span><span class="v"></span>
+  </div>
+  <div class="nota">Ficha preenchida pela {{ preenchido_por }}</div>
+
+</div>
+</body>
+</html>
