@@ -1,12 +1,9 @@
-import os
-from os import PathLike
 from pathlib import Path
-from typing import Literal, Any
 from pandas import DataFrame, ExcelWriter
 
 from app.config.settings.functions import normalizar_diacrítica
 from app.core import ConsultaEstudantes
-from app.core.query.servidores.consultaservidores import ConsultaServidores
+from app.core.funcionalidades.query.servidores.consultaservidores import ConsultaServidores
 
 
 class ExportaçãoDatabaseXLSX :
