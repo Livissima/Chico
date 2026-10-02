@@ -5,7 +5,7 @@ from app.ui.customtkinter.config.registrotelas import RegistroTelas
 from app.ui.customtkinter.widgets.modelos_widgets import frame_feedback, botão_back
 from app.ui.customtkinter.widgets import Botão
 from app.config.parâmetros import parâmetros
-from app.core.frequency.compiladordefaltas import CompiladorDeFaltas
+from app.core.funcionalidades.monitoramento_de_frequência import CompiladorDeFaltas
 
 if TYPE_CHECKING :
     from app.ui.customtkinter.screens.janela import Janela

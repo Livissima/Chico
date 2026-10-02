@@ -1,5 +1,7 @@
 from datetime import timedelta
 from pathlib import Path
+
+import pandas as pd
 import streamlit as st
 import yfinance
 
@@ -14,7 +16,14 @@ def carregar_dados(empresas):
     cotação = cotação['Close']
     return cotação
 
-ações = ['ITUB4.SA', 'PETR4.SA', 'MGLU3.SA', 'VALE3.SA', 'ABEV3.SA', 'GGBR4.SA']
+@st.cache_data
+def carregar_tickers_ações():
+    base_tickers = pd.read_csv('IBOV.csv', sep=';')
+    tickers = list(base_tickers['Código'])
+    tickers = [item + '.SA' for item in tickers]
+    return tickers
+
+ações = carregar_tickers_ações()
 dados = carregar_dados(ações)
 
 st.write(
@@ -42,7 +51,7 @@ slider_intervalo_datas = st.sidebar.slider(
     min_value=data_inicial,
     max_value=data_final,
     value=(data_inicial, data_final),
-    step=timedelta(days=60)
+    step=timedelta(days=365)
 )
 
 print(f'{slider_intervalo_datas = }')
