@@ -12,7 +12,9 @@ DATA_EMISSÃO_CN = 'Dt. Emissão (CN)'
 CARTÓRIO_REGISTRO = 'Cartório de Registro'
 MUNICÍPIO_REGISTRO = 'Município de Registro'
 ETNIA = 'Cor/Etnia'
+ETNIAS = ["Branca", "Preta", "Parda", "Indígena", "Amarela", "Não declarada"]
 RELIGIÃO = 'Religião'
+RELIGIÕES = ["Budismo", "Catolicismo", "Evangelismo", "Congregação", "Espírita", "Sem religião"]
 BERMUDA = 'Bermuda'
 CAMISETA = 'Camiseta'
 CALÇA = 'Calça'
@@ -50,7 +52,8 @@ RESPONSÁVEL_SEÇÃO = 'Seção eleitirao (Responsável)'
 RESPONSÁVEL_PROFISSÃO = 'Profissão (Responsável)'
 RESPONSÁVEL_VÍNCULO = 'Tipo de vínculo (mãe, pai, tutor legal etc)'
 ###### Núcleo familiar #######
-NÚCLEO_OPÇÕES = 'Quem mora com o(a) estudante'
+NÚCLEO_FAMILIAR = 'Quem mora com o(a) estudante'
+NÚCLEO_FAMILIAR_OPÇÕES = ["Mãe", "Pai", "Irmãos", "Madrasta", "Tutor Legal", "Tios", "Avós", "Primos", "Padrasto", "Outros"]
 NÚCLEO_OUTROS = 'Outros'
 NÚCLEO_OUTROS_INPUT = 'Especifique "Outros" no núcleo famíliar'
 ######################## ENDEREÇO E CONTATOS ################################
@@ -82,5 +85,16 @@ NUM_MATRÍCULA = 'Nº Matrícula (aluno da rede)'
 DATA_MATRÍCULA = 'Data Matrícula (dd/mm/aaaa)'
 RESPONSÁVEL_MATRÍCULA = 'Responsável pela matrícula'
 RESPONSÁVEL_MATRÍCULA_OUTRO = 'Especifique o responsável pela matrícula:'
-PREENCHEDOR_MATRÍCULA = 'Ficha preenchida por:'
+PREENCHEDORA_MATRÍCULA = 'Ficha preenchida por:'
 STR_BOTÃO_GERAR_FICHA = 'Gerar Ficha'
+
+QUESTÃO_NEE = "Possui Necessidade Educacional Especial?"
+SELECIONE_NEE = 'Selecione as opções de NEE:"'
+NECESSIDADES = [
+    "Dislexia", "Baixa Visão", "Deficiência Auditiva", "Transtorno do Espectro Autista", "Surdo cegueira",
+    "Dislalia", "Cegueira", "TDAH", "Altas Habilidades/Superdotação", "Deficiência Intelectual", "Disgrafia",
+    "Síndrome de Rett", "Surdez", "Distúrbios de Aprendizagem", "Deficiência Física", "Discalculia",
+    "Síndrome de Asperger", "Deficiência Múltipla", "Transtorno Desintegrativo da Infância", "Outro"
+]
+NEE_OUTRA = "Especifique a NEE (Outro):"
+RESTRIÇÃO_ALIMENTAR = "Restrição alimentar (se houver):"
