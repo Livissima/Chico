@@ -76,3 +76,19 @@ def truncar_diretório(_dir: str) -> str:
     _diretório = os.path.join(*_diretório[0 :3], '...', '...', *_diretório[-2 :])
     _diretório = _diretório.replace(':', ':\\')
     return _diretório
+
+
+def encontrar_raiz_projeto(arquivo_referencia=__file__) -> Path:
+    """
+    Sobe os diretórios até encontrar a raiz do repositório
+    (identificada pela presença da pasta 'app', '.git' ou 'pyproject.toml').
+    """
+    atual = Path(arquivo_referencia).resolve().parent
+    for ancestral in [atual] + list(atual.parents):
+        if (
+            (ancestral / ".git").exists()
+            or (ancestral / "pyproject.toml").exists()
+            or (ancestral / "app").is_dir()
+        ):
+            return ancestral
+    return atual

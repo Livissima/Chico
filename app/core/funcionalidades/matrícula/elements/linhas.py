@@ -1,4 +1,4 @@
-from .estrutura import Campo, LinhaFormulário, SeçãoFormulário
+from .templates import Campo, LinhaFormulário, SeçãoFormulário
 from .campos import *
 
 linha1 = LinhaFormulário(proporções=[3, 1, 1], campos=[nome_estudante, dn, gênero])

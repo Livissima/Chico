@@ -7,7 +7,7 @@ from app.ui.customtkinter.config.registrotelas import RegistroTelas
 from app.ui.customtkinter.widgets.modelos_widgets import frame_feedback, campo_input, botão_back
 from app.ui.customtkinter.widgets import Botão, CheckBox
 from typing import TYPE_CHECKING
-from app.ui.customtkinter.functions.pesquisadiretório import PesquisaDiretório
+from app.ui.customtkinter.navegabilidade.pesquisadiretório import PesquisaDiretório
 
 if TYPE_CHECKING:
     pass

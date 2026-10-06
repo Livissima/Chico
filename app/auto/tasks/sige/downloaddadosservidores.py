@@ -1,9 +1,9 @@
 #app/auto/tasks/sige/downloaddadosservidores.py
 
-from app.config.settings.functions import escrever_json, ler_json
+from app.utils.genéricas import escrever_json, ler_json
 from app.auto.tasks.registrotasks import RegistroTasks
 from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
-from app.auto.functions.navegaçãoweb import NavegaçãoWeb
+from app.auto.navegabilidade.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
 from pathlib import Path
 

@@ -1,10 +1,7 @@
-import json
-
 from json import JSONDecodeError
-from os import PathLike
 from pathlib import Path
 
-from app.config.settings.functions import ler_json
+from app.utils.genéricas import ler_json
 
 
 class Prévias:

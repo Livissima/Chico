@@ -4,10 +4,10 @@ from typing import TYPE_CHECKING
 from customtkinter import CTk, CTkFrame
 
 from app.config.settings.app_config import DIRETÓRIO_SECRETARIA
-from app.config.settings.functions import truncar_diretório
+from app.utils.genéricas import truncar_diretório
 from app.core import ConsultaEstudantes, Exportação
 from app.core.funcionalidades.query.servidores.consultaservidores import ConsultaServidores
-from app.core.utils.pastador import Pastador
+from app.core.utils.gerenciadordepastasdeestudantes import GerenciadorDePastasDeEstudantes
 from app.config.parâmetros import parâmetros
 from app.ui.customtkinter.config.registrotelas import RegistroTelas
 
@@ -15,7 +15,7 @@ from app.ui.customtkinter.widgets.modelos_widgets import frame_feedback, botão_
 from app.ui.customtkinter.widgets.botão import Botão
 
 if TYPE_CHECKING:
-    from app.ui.customtkinter.screens.janela import Janela
+    from app.ui.customtkinter.telas.janela import Janela
     pass
 
 
@@ -86,7 +86,7 @@ class TelaConsulta(CTkFrame):
 
             Exportação(consulta=consulta, path_destino=diretório_base).exportar_tudo()
 
-            Pastador(diretório_base=diretório_base, diretório_secretaria=DIRETÓRIO_SECRETARIA).criar_pastas()
+            GerenciadorDePastasDeEstudantes(diretório_base=diretório_base, diretório_secretaria=DIRETÓRIO_SECRETARIA).criar_pastas()
 
             self._tx_feedback.atualizar(
                 f'Planilhas geradas e exportadas para\n{diretório_base}',

@@ -3,7 +3,7 @@ from typing import Literal, TYPE_CHECKING, Optional, Union, Callable
 
 from customtkinter import CTkFrame, CTkOptionMenu
 if TYPE_CHECKING:
-    from app.ui.customtkinter.screens.janela import Janela
+    from app.ui.customtkinter.telas.janela import Janela
 
 class Dropdown(CTkFrame):
     def __init__(

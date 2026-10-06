@@ -2,7 +2,7 @@ import sys
 from pandas import DataFrame
 
 from app.auto.tasks.registrotasks import RegistroTasks
-from app.auto.functions.navegaçãoweb import NavegaçãoWeb
+from app.auto.navegabilidade.navegaçãoweb import NavegaçãoWeb
 from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
 import pandas as pd
 

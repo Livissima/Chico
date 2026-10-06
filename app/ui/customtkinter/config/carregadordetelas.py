@@ -1,6 +1,6 @@
 import importlib
 import pkgutil
-from app.ui.customtkinter import screens
+from app.ui.customtkinter import telas
 from app.ui.customtkinter.config.registrotelas import RegistroTelas
 
 class CarregadorDeTelas:
@@ -14,8 +14,8 @@ class CarregadorDeTelas:
         if cls._telas_carregadas:
             return
 
-        path = screens.__path__
-        prefix = screens.__name__ + "."
+        path = telas.__path__
+        prefix = telas.__name__ + "."
 
         for loader, module_name, ispkg in pkgutil.walk_packages(path=path, prefix=prefix):
             try:

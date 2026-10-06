@@ -1,9 +1,7 @@
-import time
-
 from selenium.webdriver.common.by import By
 
 from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
-from app.auto.functions import NavegaçãoWeb
+from app.utils.automação import NavegaçãoWeb
 from app.auto.tasks.registrotasks import RegistroTasks
 from selenium.webdriver import Edge
 

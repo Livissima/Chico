@@ -11,8 +11,8 @@ from selenium.webdriver.support.expected_conditions import presence_of_element_l
 
 from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
 from app.auto.data.dataclasses.siteconfig import SiteConfig
-from app.config.settings.functions import escrever_json
-from app.auto.functions.javascript import Javascript
+from app.functions.genéricas import escrever_json
+from app.functions.automação.javascript import Javascript
 from app.config.parâmetros import parâmetros
 from app.config.parâmetros.estruturadeseleção import EstruturaDeSeleção
 

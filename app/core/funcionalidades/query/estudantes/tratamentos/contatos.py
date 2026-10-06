@@ -1,7 +1,7 @@
 from pandas import DataFrame, Series
 import pandas as pd
 
-from app.config.classes.telefone import Telefone
+from app.config.types.telefone import Telefone
 
 
 class TratamentoContatos:
