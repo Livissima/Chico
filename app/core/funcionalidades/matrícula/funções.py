@@ -135,7 +135,7 @@ def gerar_html_corpo_formulario(secoes) :
 
 
 def montar_html_completo(corpo_html) :
-    """Gera o documento HTML com estilos ajustados para layouts flexíveis e tema escuro."""
+    """Gera o HTML com validação de dados em tempo real e bloqueio de envio."""
     return f"""<!DOCTYPE html>
 <html>
 <head>
@@ -161,6 +161,7 @@ def montar_html_completo(corpo_html) :
       flex-direction: column;
       box-sizing: border-box;
       min-width: 0;
+      position: relative;
     }}
     label {{
       font-size: 14px;
@@ -178,10 +179,25 @@ def montar_html_completo(corpo_html) :
       width: 100%;
       background: #262730;
       color: #FFFFFF;
+      transition: border-color 0.2s;
     }}
     input:focus, select:focus {{
       border-color: #FF4B4B;
       box-shadow: 0 0 0 1px #FF4B4B;
+    }}
+    /* Estilos de Validação */
+    input.invalido, select.invalido {{
+      border-color: #FF2B2B !important;
+      background-color: #331A1A;
+    }}
+    .erro-mensagem {{
+      color: #FF6B6B;
+      font-size: 11px;
+      margin-top: 3px;
+      display: none;
+    }}
+    .campo-box.com-erro .erro-mensagem {{
+      display: block;
     }}
     .secao-titulo {{
       font-size: 18px;
@@ -210,7 +226,7 @@ def montar_html_completo(corpo_html) :
 </head>
 <body>
 
-  <form id="formMatricula">
+  <form id="formMatricula" novalidate>
     {corpo_html}
     <button type="submit">Gerar Ficha de Matrícula</button>
   </form>
@@ -233,7 +249,111 @@ def montar_html_completo(corpo_html) :
       sendToStreamlit("streamlit:setComponentValue", {{ value: val }});
     }}
 
-    // Máscaras de entrada
+    // --- REGRAS DE VALIDAÇÃO LOGICA ---
+
+    function validarDataValida(strData, minAno = 1900, maxAno = new Date().getFullYear()) {{
+      if (!strData || strData.length < 10) return false;
+      const partes = strData.split('/');
+      if (partes.length !== 3) return false;
+
+      const dia = parseInt(partes[0], 10);
+      const mes = parseInt(partes[1], 10);
+      const ano = parseInt(partes[2], 10);
+
+      if (isNaN(dia) || isNaN(mes) || isNaN(ano)) return false;
+      if (ano < minAno || ano > maxAno) return false;
+      if (mes < 1 || mes > 12) return false;
+
+      // Validação real considerando dias do mês e ano bissexto
+      const dataObj = new Date(ano, mes - 1, dia);
+      return (
+        dataObj.getFullYear() === ano &&
+        dataObj.getMonth() === (mes - 1) &&
+        dataObj.getDate() === dia
+      );
+    }}
+
+    function validarCPFValido(cpf) {{
+      cpf = cpf.replace(/\\D/g, '');
+      if (cpf.length !== 11 || /^(\\d)\\1{{10}}$/.test(cpf)) return false;
+
+      let soma = 0, resto;
+      for (let i = 1; i <= 9; i++) soma += parseInt(cpf.substring(i-1, i)) * (11 - i);
+      resto = (soma * 10) % 11;
+      if (resto === 10 || resto === 11) resto = 0;
+      if (resto !== parseInt(cpf.substring(9, 10))) return false;
+
+      soma = 0;
+      for (let i = 1; i <= 10; i++) soma += parseInt(cpf.substring(i-1, i)) * (12 - i);
+      resto = (soma * 10) % 11;
+      if (resto === 10 || resto === 11) resto = 0;
+      if (resto !== parseInt(cpf.substring(10, 11))) return false;
+
+      return true;
+    }}
+
+    function aplicarErro(el, mensagem) {{
+      const box = el.closest('.campo-box');
+      el.classList.add('invalido');
+      if (box) {{
+        box.classList.add('com-erro');
+        let msgSpan = box.querySelector('.erro-mensagem');
+        if (!msgSpan) {{
+          msgSpan = document.createElement('span');
+          msgSpan.className = 'erro-mensagem';
+          box.appendChild(msgSpan);
+        }}
+        msgSpan.innerText = mensagem;
+      }}
+    }}
+
+    function limparErro(el) {{
+      const box = el.closest('.campo-box');
+      el.classList.remove('invalido');
+      if (box) {{
+        box.classList.remove('com-erro');
+      }}
+    }}
+
+    function validarCampo(el) {{
+      const tipo = el.getAttribute('data-tipo');
+      const valor = el.value.trim();
+
+      // Ignora campos ocultos
+      if (el.closest('.oculto')) {{
+        limparErro(el);
+        return true;
+      }}
+
+      if (!valor) {{
+        limparErro(el);
+        return true; // Deixa o 'required' para validações estritas de preenchimento
+      }}
+
+      if (tipo === 'date') {{
+        if (!validarDataValida(valor)) {{
+          aplicarErro(el, 'Data inválida ou fora do intervalo.');
+          return false;
+        }}
+      }} else if (tipo === 'cpf') {{
+        if (!validarCPFValido(valor)) {{
+          aplicarErro(el, 'CPF inválido.');
+          return false;
+        }}
+      }} else if (tipo === 'telefone') {{
+        const num = valor.replace(/\\D/g, '');
+        if (num.length < 10 || num.length > 11) {{
+          aplicarErro(el, 'Telefone incompleto.');
+          return false;
+        }}
+      }}
+
+      limparErro(el);
+      return true;
+    }}
+
+    // --- MÁSCARAS E MUDANÇAS EM TEMPO REAL ---
+
     document.getElementById('formMatricula').addEventListener('input', (e) => {{
       const el = e.target;
       const tipo = el.getAttribute('data-tipo');
@@ -261,7 +381,14 @@ def montar_html_completo(corpo_html) :
       el.value = v;
     }});
 
-    // Campos condicionais
+    // Valida o campo quando o usuário clica fora dele (blur)
+    document.getElementById('formMatricula').addEventListener('focusout', (e) => {{
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') {{
+        validarCampo(e.target);
+      }}
+    }});
+
+    // Lógica de dependências condicionais
     function checarDependencias() {{
       const camposCondicionais = document.querySelectorAll('[data-depende-de]');
       camposCondicionais.forEach(box => {{
@@ -274,7 +401,10 @@ def montar_html_completo(corpo_html) :
           }} else {{
             box.classList.add('oculto');
             const input = box.querySelector('input, select, textarea');
-            if (input) input.value = '';
+            if (input) {{
+              input.value = '';
+              limparErro(input);
+            }}
           }}
         }}
       }});
@@ -284,14 +414,29 @@ def montar_html_completo(corpo_html) :
     document.getElementById('formMatricula').addEventListener('change', checarDependencias);
     checarDependencias();
 
-    // Envio dos dados
+    // Envio com validação completa de todos os campos
     document.getElementById('formMatricula').addEventListener('submit', (e) => {{
       e.preventDefault();
-      const dados = {{}};
+
       const elementos = e.target.querySelectorAll('input, select, textarea');
+      let formularioValido = true;
+
       elementos.forEach(el => {{
-        if (el.id) dados[el.id] = el.value;
+        if (!validarCampo(el)) {{
+          formularioValido = false;
+        }}
       }});
+
+      if (!formularioValido) {{
+        setFrameHeight();
+        return;
+      }}
+
+      const dados = {{}};
+      elementos.forEach(el => {{
+        if (el.id && !el.closest('.oculto')) dados[el.id] = el.value;
+      }});
+
       setComponentValue(dados);
     }});
 
