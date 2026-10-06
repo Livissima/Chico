@@ -5,10 +5,10 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
-from app.config.settings.functions import escrever_json
+from app.utils.genéricas import escrever_json
 from app.auto.tasks.registrotasks import RegistroTasks
 from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
-from app.auto.functions.navegaçãoweb import NavegaçãoWeb
+from app.auto.navegabilidade.navegaçãoweb import NavegaçãoWeb
 from app.config.parâmetros import parâmetros
 from app.config.parâmetros.getters.tempo import tempo
 

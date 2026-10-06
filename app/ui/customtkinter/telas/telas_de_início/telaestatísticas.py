@@ -9,7 +9,7 @@ from app.ui.customtkinter.widgets import Texto, Botão
 from app.auto.bot import Bot
 
 if TYPE_CHECKING:
-    from app.ui.customtkinter.screens.janela import Janela
+    from app.ui.customtkinter.telas.janela import Janela
 
 @RegistroTelas.registrar(
     nome_tela='estatísticas',

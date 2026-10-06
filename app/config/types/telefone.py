@@ -1,6 +1,6 @@
 from typing import Optional
 
-from app.config.settings.functions import obter_string_numérica
+from app.functions.genéricas import obter_string_numérica
 
 
 class Telefone :

@@ -3,10 +3,10 @@ from pathlib import Path
 import pandas as pd
 from pandas import DataFrame
 
-from app.config.settings.functions import normalizar_diacrítica
+from app.functions.genéricas import normalizar_diacrítica
 
 
-class Pastador:
+class GerenciadorDePastasDeEstudantes:
     def __init__(self, diretório_base: str | Path, diretório_secretaria: Path):
         self._path_df = Path(diretório_base, 'Database.xlsx')
         self._path_pasta_estudantes = Path(diretório_secretaria, 'Estudantes')

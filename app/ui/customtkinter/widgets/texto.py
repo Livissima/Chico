@@ -2,7 +2,7 @@ from typing import Literal, TYPE_CHECKING
 
 from customtkinter import CTkFrame, CTkLabel
 if TYPE_CHECKING:
-    from app.ui.customtkinter.screens.janela import Janela
+    from app.ui.customtkinter.telas.janela import Janela
 
 class Texto(CTkFrame):
     def __init__(

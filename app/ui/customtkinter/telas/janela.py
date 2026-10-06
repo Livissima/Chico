@@ -1,6 +1,6 @@
 from customtkinter import CTk, CTkFrame
 from app.ui.customtkinter.config.dimensionamento import Dimensionamento
-from app.ui.customtkinter.functions.alternadordetelas import AlternadorDeTelas
+from app.ui.customtkinter.navegabilidade.alternadordetelas import AlternadorDeTelas
 
 
 class Janela(CTk):

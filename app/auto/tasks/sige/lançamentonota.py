@@ -1,6 +1,6 @@
 from selenium.webdriver import Chrome
 from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
-from app.auto.functions.navegaçãoweb import NavegaçãoWeb
+from app.auto.navegabilidade.navegaçãoweb import NavegaçãoWeb
 from app.auto.tasks.registrotasks import RegistroTasks
 from app.config.parâmetros.estruturadeseleção import EstruturaDeSeleção
 

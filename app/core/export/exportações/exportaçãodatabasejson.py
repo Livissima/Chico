@@ -1,7 +1,6 @@
-import json
 from pathlib import Path
 
-from app.config.settings.functions import escrever_json
+from app.utils.genéricas import escrever_json
 from app.core import ConsultaEstudantes
 
 

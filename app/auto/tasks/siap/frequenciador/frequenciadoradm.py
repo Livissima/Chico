@@ -2,8 +2,8 @@ from pandas import DataFrame
 from selenium.webdriver.common.by import By
 
 from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
-from app.auto.functions.javascript import Javascript
-from app.auto.functions.navegaçãoweb import NavegaçãoWeb
+from app.utils.automação.javascript import Javascript
+from app.auto.navegabilidade.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
 
 

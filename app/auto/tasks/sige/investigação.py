@@ -3,14 +3,14 @@ import time
 from pathlib import Path
 import pandas as pd
 from selenium.webdriver import Chrome
-from selenium.common.exceptions import NoAlertPresentException, TimeoutException
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
-from app.auto.functions import NavegaçãoWeb
-from app.config.settings.functions import ajustar_print_pandas, escrever_json
+from app.utils.automação import NavegaçãoWeb
+from app.utils.genéricas import ajustar_print_pandas, escrever_json
 from app.auto.tasks.registrotasks import RegistroTasks
-from app.config.parâmetros.getters.tempo import Tempo, tempo
+from app.config.parâmetros.getters.tempo import tempo
 
 
 ajustar_print_pandas()

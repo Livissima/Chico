@@ -8,7 +8,7 @@ from app.config.parâmetros import parâmetros
 from app.core.funcionalidades.monitoramento_de_frequência import CompiladorDeFaltas
 
 if TYPE_CHECKING :
-    from app.ui.customtkinter.screens.janela import Janela
+    from app.ui.customtkinter.telas.janela import Janela
 
 @RegistroTelas.registrar(
     nome_tela='frequência',
