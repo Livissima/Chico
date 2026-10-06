@@ -15,3 +15,4 @@ dist/
 # Byte-compiled / arquivos de cache
 __pycache__/
 *.py[cod]
+/app/core/funcionalidades/matrícula/component_form_dinamico/index.html
