@@ -1,7 +1,7 @@
 class ContextAdapter:
 
     @staticmethod
-    def para_jinja_contexto(dados: dict) -> dict:
+    def conextualizar_jinja(dados: dict) -> dict:
         contexto = dados.copy()
 
         gênero = dados.get('gênero', '')

@@ -1,44 +1,32 @@
-from estrutura_de_dados.linhas import *
-from estrutura_de_dados.estrutura import SeçãoFormulário, LinhaFormulário, Campo
+import streamlit as st
 
-# ==========================================
-# 1. DADOS PESSOAIS
-SECAO_DADOS_PESSOAIS = SeçãoFormulário(
-    título="1. Dados Pessoais",
-    linhas=[linha1, linha2, linha3, linha4, linha5, linha6]
-)
-# ==========================================
-# 2. DADOS FAMILIARES
-# ==========================================
-SECAO_DADOS_FAMILIARES = SeçãoFormulário(
-    título="2. Dados Familiares",
-    linhas=[linha7, linha8, linha9, linha10, linha11, linha12, linha13, linha14, linha15, linha16, linha17]
-)
-# ==========================================
-# 3. ENDEREÇO E CONTATO
-# ==========================================
-SECAO_ENDERECO_CONTATO = SeçãoFormulário(
-    título="3. Endereço e Contato",
-    linhas=[linha18, linha19, linha20, linha21, linha22]
-)
+from app.core.funcionalidades.matrícula.esqueleto import TODAS_AS_SECOES
+from app.core.funcionalidades.matrícula.funções import renderizar_formulario_completo, render_html_template
+from app.core.funcionalidades.matrícula.validator import FormValidator
+from app.core.funcionalidades.matrícula.context_adapter import ContextAdapter
 
-# ==========================================
-# 4. NECESSIDADE EDUCACIONAL ESPECIAL (NEE)
-# ==========================================
-SECAO_NEE = SeçãoFormulário(
-    título="4. Necessidade Educacional Especial (NEE)",
-    linhas=[linha23, linha24, linha25, linha26]
-)
-# ==========================================
-# 5. DADOS ESCOLARES E MATRÍCULA
-# ==========================================
-SECAO_DADOS_ESCOLARES = SeçãoFormulário(
-    título="5. Dados Escolares e Matrícula",
-    linhas=[linha27, linha28, linha29, linha30]
-)
-# ==========================================
-# EXPORTAÇÃO FINAL
-# ==========================================
-TODAS_AS_SECOES = [
-    SECAO_DADOS_PESSOAIS, SECAO_DADOS_FAMILIARES, SECAO_ENDERECO_CONTATO, SECAO_NEE, SECAO_DADOS_ESCOLARES
-]
+st.set_page_config(page_title='Nova Matrícula', layout='wide')
+st.title('Preenchimento da Ficha de Matrícula', text_alignment='center')
+
+# Renderiza todas as seções do formulário
+dados_coletados = renderizar_formulario_completo(TODAS_AS_SECOES)
+
+if dados_coletados:
+    # Agora dados_coletados é um dicionário Python legítimo
+    válido, erros = FormValidator.validar(TODAS_AS_SECOES, dados_coletados)
+
+    if not válido:
+        st.error('Corrija os erros abaixo:')
+        for erro in erros:
+            st.error(f'– {erro}')
+    else:
+        contexto = ContextAdapter.conextualizar_jinja(dados_coletados)
+        html_gerado = render_html_template(contexto)
+
+        st.success('Ficha gerada com sucesso!')
+        st.download_button(
+            label="📥 Baixar Ficha (HTML)",
+            data=html_gerado,
+            file_name=f"Ficha_{dados_coletados.get('nome_estudante', 'Estudante')}.html",
+            mime="text/html"
+        )

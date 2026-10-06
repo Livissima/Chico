@@ -1,8 +1,8 @@
 from .rótulos import *
-from .estrutura import Campo
+from .templates import Campo
 
 ### LINHA 1
-nome_estudante = Campo(chave="nome_estudante", rótulo=NOME_ESTUDANTE, obrigatório=True, cumprimento_mínimo=3)
+nome_estudante = Campo(chave="nome_estudante", rótulo=NOME_ESTUDANTE, obrigatório=True, cumprimento_mínimo=3, apenas_letras=True)
 dn = Campo(chave="data_nascimento", rótulo=DATA_NASCIMENTO, obrigatório=True, tipo_dado="date")
 gênero = Campo(chave="genero", rótulo=GÊNERO, tipo="select", opções=["", "Masculino", "Feminino"])
 
