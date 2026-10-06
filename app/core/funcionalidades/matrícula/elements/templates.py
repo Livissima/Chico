@@ -1,9 +1,5 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Any
-import re
-
-from dataclasses import dataclass, field
-from typing import List, Optional, Any
 
 @dataclass
 class Campo:
