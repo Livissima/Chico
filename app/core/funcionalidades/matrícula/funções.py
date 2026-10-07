@@ -28,6 +28,7 @@ def get_jinja_env():
         raiz / "app" / "ui" / "assets",
         raiz / "app" / "assets",
         raiz / "assets",
+        raiz / 'app' / 'core' / 'funcionalidades' / 'matrícula' / 'templates',
         Path(__file__).resolve().parent / "assets",
         ]
 
@@ -42,7 +43,7 @@ def get_jinja_env():
     return Environment(loader=FileSystemLoader(diretorios_validos))
 
 
-def render_html_template(dados, nome_template="ficha_matricula.html"):
+def render_html_template(dados, nome_template="pagina_print.html"):
     env = get_jinja_env()
     template = env.get_template(nome_template)
     return template.render(**dados)
