@@ -2,6 +2,8 @@ import inspect
 import os
 import sys
 import types
+from typing import List, Dict, Any, Tuple
+
 import streamlit.components.v1 as components
 
 
@@ -12,6 +14,7 @@ from pathlib import Path
 import streamlit as st
 from jinja2 import Environment, FileSystemLoader
 
+from app.core.funcionalidades.matrícula.elements.templates import SeçãoFormulário
 from app.functions.genéricas import encontrar_raiz_projeto
 
 
@@ -480,3 +483,32 @@ def renderizar_formulario_completo(secoes) :
 
     componente = _declarar_componente_seguro()
     return componente(key="form_matricula_completo", default=None)
+
+
+def conextualizar_jinja(dados: dict) -> dict:
+    contexto = dados.copy()
+
+    gênero = dados.get('gênero', '')
+    contexto['gênero_m'] = 'X' if gênero == 'Masculino' else ''
+    contexto['gênero_f'] = 'X' if gênero == 'Feminino' else ''
+
+    cor_etnia = dados.get('cor_etnia', '')
+    for opção in ['Branca', 'Preta', 'Parda', 'Indígena', 'Amarela', 'Não declarado']:
+        chave_cor = f'cor_{opção.lower().replace(' ', '_').replace('í', 'i')}'
+        contexto[chave_cor] = 'X' if cor_etnia == opção else ''
+
+    return contexto
+
+
+def validar(seções: List[SeçãoFormulário], dados: Dict[str, Any]) -> Tuple[bool, List[str]]:
+    erros = []
+    for seção in seções:
+        for linha in seção.linhas:
+            for campo in linha.campos:
+                valor = dados.get(campo.chave)
+                erro = campo.validar(valor)
+
+                if erro: erros.append(erro)
+
+    é_valido = len(erros) == 0
+    return é_valido, erros
