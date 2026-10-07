@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from app.utils.genéricas import escrever_json
+from app.functions.genéricas import escrever_json
 from app.core import ConsultaEstudantes
 
 
