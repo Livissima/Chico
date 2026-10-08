@@ -1,7 +1,7 @@
 import time
 from selenium.webdriver import Edge
 
-from app.auto.functions.navegaçãoweb import NavegaçãoWeb
+from app.auto.navegabilidade.navegaçãoweb import NavegaçãoWeb
 from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
 
 

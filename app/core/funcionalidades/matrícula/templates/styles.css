@@ -1,0 +1,103 @@
+:root {
+  --text-main: #31333F;
+  --text-label: #31333F;
+  --bg-input: #F0F2F6;
+  --border-input: #C3C6D0;
+  --text-input: #31333F;
+  --border-secao: #E0E0E0;
+  --bg-invalido: #FFE6E6;
+  --border-invalido: #FF2B2B;
+  --msg-erro: #D32F2F;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  color: var(--text-main);
+  padding: 10px;
+  margin: 0;
+  background: transparent;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.campo-box {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-width: 0;
+  position: relative;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text-label);
+}
+
+input, select {
+  padding: 8px 10px;
+  border: 1px solid var(--border-input);
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  width: 100%;
+  background: var(--bg-input);
+  color: var(--text-input);
+  transition: border-color 0.2s, background-color 0.2s, color 0.2s;
+}
+
+input:focus, select:focus {
+  border-color: #FF4B4B;
+  box-shadow: 0 0 0 1px #FF4B4B;
+}
+
+input.invalido, select.invalido {
+  border-color: var(--border-invalido) !important;
+  background-color: var(--bg-invalido);
+}
+
+.erro-mensagem {
+  color: var(--msg-erro);
+  font-size: 11px;
+  margin-top: 3px;
+  display: none;
+}
+
+.campo-box.com-erro .erro-mensagem {
+  display: block;
+}
+
+.secao-titulo {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 20px 0 12px 0;
+  border-bottom: 2px solid var(--border-secao);
+  padding-bottom: 6px;
+  color: var(--text-main);
+}
+
+.oculto { display: none !important; }
+
+button {
+  background-color: #FF4B4B;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 20px;
+  width: 100%;
+}
+
+button:hover { background-color: #E03E3E; }

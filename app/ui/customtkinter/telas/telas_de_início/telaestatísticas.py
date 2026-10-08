@@ -1,0 +1,116 @@
+from typing import TYPE_CHECKING
+
+from customtkinter import CTkFrame, CTk
+
+from app.config.parâmetros import parâmetros
+from app.ui.customtkinter.config.registrotelas import RegistroTelas
+from app.ui.customtkinter.widgets.modelos_widgets import botão_back
+from app.ui.customtkinter.widgets import Texto, Botão
+from app.auto.bot import Bot
+
+if TYPE_CHECKING:
+    from app.ui.customtkinter.telas.janela import Janela
+
+@RegistroTelas.registrar(
+    nome_tela='estatísticas',
+    título_da_janela='Estatísticas',
+    cabeçalho='Estatísticas',
+    descrição=parâmetros.nome_ue
+)
+class TelaEstatísticas(CTkFrame):
+    def __init__(self, master, controller: "Janela"):
+        super().__init__(controller)
+        self._bt_desfazer = None
+        self.master: CTk = master
+        self.controller = controller
+
+        self._inserir_widgets()
+
+
+    def _inserir_widgets(self):
+        self.primeira_linha = 80
+
+        self.__inserir_textos()
+        self.segunda_linha = self.primeira_linha + self.tx_valores.altura_somada + self.tx_valores.altura_widget - 15
+        self.__inserir_botões()
+        self.__inserir_inputs()
+
+    def __inserir_textos(self):
+        self._tx_chaves = Texto(
+            self,
+            textos_empilhados=list(self.estatísticas().keys()),
+            largura=200,
+            altura=20,
+            formato='bold',
+            anchor='w',
+            # compound='top',
+            x=10,
+            y=self.primeira_linha
+        )
+        _x = 190
+        largura = self.controller.largura - _x - 5
+
+        self.tx_valores = Texto(
+            self,
+            textos_empilhados=['-' for _ in list(self.estatísticas().keys())],
+            largura=largura,
+            altura=20,
+            x=_x,
+            anchor='w',
+            y=self.primeira_linha
+        )
+
+        self.tx_valores = Texto(
+            self,
+            textos_empilhados=list(self.estatísticas().values()),
+            largura=largura,
+            altura=20,
+            x=_x,
+            anchor='w',
+            y=self.primeira_linha
+        )
+        self._condicionar_cores()
+
+    def __inserir_inputs(self):
+        pass
+
+    def __inserir_botões(self):
+        self.bt_sondar = Botão(
+            self,
+            função=lambda: self.sondar(),
+            texto='Atualizar',
+            fonte=('times new roman', 20),
+            formato='bold',
+            y=self.segunda_linha,
+            largura=100
+        )
+
+        self.bt_back = botão_back(self)
+
+    def sondar(self):
+        #todo: definir locks para que a tela seja atualizada apropriadamente
+        Bot(tarefa='sondagem', parâmetros_web=None, path=parâmetros.diretório_base),
+        self.controller.alternador.abrir('inicial')
+        self.controller.alternador.abrir('estatísticas')
+
+    @staticmethod
+    def estatísticas():
+        resumo = parâmetros.resumo
+        chaves = [
+            "Composições", "Turnos", "Tipos", "Excedente autorizado", "Excedente ocupado", "Capacidade física",
+            "Capacidade legal", "Capacidade Total", "Efetivados", "Vagas disponíveis", "Vagas absolutas",
+            "Balanço Físico", "Balanço absoluto", "Turmas Ativas"
+        ]
+
+        return {f"{chave}:" : resumo.get(chave, "__ERRO__") for chave in chaves}
+
+    def _condicionar_cores(self):
+        valores = list(self.estatísticas().values())
+
+        for índice, valor in enumerate(valores):
+            if valor == '__ERRO__':
+                self.tx_valores.atualizar(
+                    novo_texto=valor,
+                    cor='red',
+                    índice=índice
+                )

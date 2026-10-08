@@ -4,7 +4,7 @@ from app.core import ConsultaEstudantes
 from app.core.export.exportações.exportaçãocontatoscsv import ExportaçãoContatosCSV
 from app.core.export.exportações.exportaçãodatabasejson import ExportaçãoDatabaseJSON
 from app.core.export.exportações.exportaçãodatabasexlsx import ExportaçãoDatabaseXLSX
-from app.core.query.servidores.consultaservidores import ConsultaServidores
+from app.core.funcionalidades.query.servidores.consultaservidores import ConsultaServidores
 
 
 class Exportação:

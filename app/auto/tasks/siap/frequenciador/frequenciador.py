@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 
 from app.auto.tasks.registrotasks import RegistroTasks
 from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
-from app.auto.functions.navegaçãoweb import NavegaçãoWeb
+from app.auto.navegabilidade.navegaçãoweb import NavegaçãoWeb
 from selenium.webdriver import Chrome
 
 from app.auto.tasks.siap.frequenciador import FrequenciadorAdm, FrequenciadorProf
