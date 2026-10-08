@@ -19,3 +19,6 @@ __pycache__/
 *.pyd
 *.py[cod]
 /app/core/funcionalidades/matrícula/component_form_dinamico/index.html
+
+*.txt
+
