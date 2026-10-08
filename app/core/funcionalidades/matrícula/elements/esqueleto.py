@@ -1,5 +1,5 @@
-from elements.linhas import *
-from elements.templates import SeçãoFormulário, LinhaFormulário, Campo
+from .linhas import *
+from .templates import SeçãoFormulário, LinhaFormulário, Campo
 
 # ==========================================
 # 1. DADOS PESSOAIS
