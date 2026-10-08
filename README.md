@@ -99,7 +99,7 @@ Credenciais nunca devem ser commitadas. O arquivo `.env` está no `.gitignore`, 
 
 
 Há várias funcionalidades que ainda estão sendo planejadas e/ou testadas para serem implementadas efetivamente no projeto.
-Algumas estão no package [sketches](sketches), outras apenas em minha cabeça. 
+Algumas estão no package [sketches](app/core/utils/sketches), outras apenas em minha cabeça. 
 É possível e até provável que existam novidades não documentadas neste arquivo.
 
 Os produtos deste programa sustentam uma cadeia de consultas externas em `VBA` e `Excel`, que em algum futuro serão portadas para python. 
