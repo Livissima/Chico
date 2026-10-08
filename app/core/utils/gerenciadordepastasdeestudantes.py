@@ -3,7 +3,7 @@ from pathlib import Path
 import pandas as pd
 from pandas import DataFrame
 
-from app.functions.genéricas import normalizar_diacrítica
+from app.functions.string import normalizar_diacrítica
 
 
 class GerenciadorDePastasDeEstudantes:

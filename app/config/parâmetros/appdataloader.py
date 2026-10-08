@@ -1,6 +1,6 @@
 import os
 from app.config.parâmetros.parâmetros import Parâmetros, ANO_ATUAL
-from app.functions.genéricas import ler_json
+from app.functions.data import ler_json
 from app.config.parâmetros.getters.dias_letivos import DiasLetivos
 from app.config.parâmetros.getters.modulação_servidor import ModulaçãoServidor
 from app.config.parâmetros.getters.turmasséries import TurmasSéries

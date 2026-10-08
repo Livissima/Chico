@@ -1,7 +1,7 @@
 from selenium import webdriver
 
 from app.auto.tasks.registrotasks import RegistroTasks
-from app.functions.genéricas import normalizar_unicode
+from app.functions.string import normalizar_unicode
 
 
 class Bot:

@@ -1,4 +1,3 @@
-from pathlib import Path
 import inspect
 import os
 import sys
@@ -16,20 +15,18 @@ import streamlit as st
 from jinja2 import Environment, FileSystemLoader
 
 from app.core.funcionalidades.matrícula.elements.templates import SeçãoFormulário
-from app.functions.genéricas import encontrar_raiz_projeto
+from app.core.funcionalidades.matrícula.gerar_html_form import gerar_html_formulário
+from app.functions.geral import encontrar_raiz_projeto
 
 
 @st.cache_resource
-def get_jinja_env():
+def obter_ambiente_jinja():
+    """Essa aqui é usada para obter o template HTML que receberá os dados preenchidos"""
     raiz = encontrar_raiz_projeto()
 
-    # Mapeia possíveis locais de assets no projeto
     locais_busca = [
-        raiz / "app" / "ui" / "assets",
-        raiz / "app" / "assets",
-        raiz / "assets",
         raiz / 'app' / 'core' / 'funcionalidades' / 'matrícula' / 'templates',
-        Path(__file__).resolve().parent / "assets",
+        Path(__file__).resolve().parent / "templates",
         ]
 
     # Filtra apenas os caminhos que realmente existem no disco
@@ -43,8 +40,8 @@ def get_jinja_env():
     return Environment(loader=FileSystemLoader(diretorios_validos))
 
 
-def render_html_template(dados, nome_template="pagina_print.html"):
-    env = get_jinja_env()
+def renderizar_template_html(dados, nome_template: str):
+    env = obter_ambiente_jinja()
     template = env.get_template(nome_template)
     return template.render(**dados)
 
@@ -57,107 +54,20 @@ os.makedirs(COMPONENT_DIR, exist_ok=True)
 INDEX_HTML_PATH = os.path.join(COMPONENT_DIR, "index.html")
 
 
-def gerar_html_corpo_formulario(secoes) :
-    """Converte o objeto TODAS_AS_SECOES em HTML calculando a proporção exata de cada coluna."""
-    html_buffer = []
-
-    for sec in secoes :
-        titulo = getattr(sec, "título", getattr(sec, "titulo", ""))
-        html_buffer.append(f'<div class="secao-titulo">{titulo}</div>')
-
-        for linha in sec.linhas :
-            props = getattr(linha, "proporções", getattr(linha, "proporcoes", []))
-            qtd_campos = len(linha.campos)
-
-            # Caso não haja proporções definidas, distribui uniformemente
-            if not props or len(props) != qtd_campos :
-                props = [1] * qtd_campos
-
-            soma_props = sum(props) if sum(props) > 0 else 1
-            html_buffer.append('<div class="grid">')
-
-            for idx, c in enumerate(linha.campos) :
-                p = props[idx]
-                # Normaliza a proporção em percentagem real do container
-                flex_pct = round((p / soma_props) * 100, 4)
-
-                chave = getattr(c, "chave", "")
-                rotulo = getattr(c, "rótulo", getattr(c, "rotulo", ""))
-                tipo = getattr(c, "tipo", "text")
-                tipo_dado = getattr(c, "tipo_dado", "str")
-                letras = getattr(c, "apenas_letras", False)
-                numeros = getattr(c, "apenas_numeros", False)
-                c_max = getattr(c, "cumprimento_máximo", getattr(c, "cumprimento_maximo", None))
-                opcoes = getattr(c, "opções", getattr(c, "opcoes", []))
-                depende = getattr(c, "depende_de", None)
-
-                style = f"flex: 0 0 calc({flex_pct}% - 12px); max-width: calc({flex_pct}% - 12px);"
-                classes = ["campo-box"]
-                data_attrs = []
-
-                if depende :
-                    classes.append("oculto")
-                    pai_id, val_esp = depende
-                    data_attrs.append(f'data-depende-de="{pai_id}"')
-                    data_attrs.append(f'data-valor-esperado="{val_esp}"')
-
-                class_str = " ".join(classes)
-                data_str = " ".join(data_attrs)
-
-                html_buffer.append(f'<div class="{class_str}" id="box_{chave}" style="{style}"'
-                                   f" {data_str}>")
-                html_buffer.append(f"<label>{rotulo}</label>")
-
-                if tipo in ["select", "radio"] :
-                    html_buffer.append(f'<select id="{chave}">')
-                    for opt in opcoes :
-                        html_buffer.append(f'<option value="{opt}">{opt}</option>')
-                    html_buffer.append("</select>")
-                else :
-                    attrs = [f'id="{chave}"', 'type="text"']
-                    if tipo_dado :
-                        attrs.append(f'data-tipo="{tipo_dado}"')
-                    if letras :
-                        attrs.append('data-letras="true"')
-                    if numeros :
-                        attrs.append('data-numeros="true"')
-                    if c_max :
-                        attrs.append(f'maxlength="{c_max}"')
-
-                    if tipo_dado == "cpf" :
-                        attrs.append('placeholder="000.000.000-00"')
-                    elif tipo_dado == "date" :
-                        attrs.append('placeholder="DD/MM/AAAA"')
-                    elif tipo_dado == "telefone" :
-                        attrs.append('placeholder="(00) 00000-0000"')
-
-                    html_buffer.append(f'<input {" ".join(attrs)} />')
-
-                html_buffer.append("</div>")
-            html_buffer.append("</div>")
-
-    return "\n".join(html_buffer)
+# Localiza o diretório /templates relativo a este arquivo
 
 
-
-# Localiza o diretório /templates relativo a este ficheiro
-
-
-def _ler_ficheiro_template(nome_ficheiro: str) -> str:
+def ler_arquivo_template(nome_arquivo: str) -> str:
     DIRETORIO_TEMPLATES = Path(__file__).parent / "templates"
-    """Função auxiliar para ler o conteúdo de um ficheiro de template."""
-    caminho = DIRETORIO_TEMPLATES / nome_ficheiro
+    """Função auxiliar para ler o conteúdo de um arquivo de template."""
+    caminho = DIRETORIO_TEMPLATES / nome_arquivo
     return caminho.read_text(encoding="utf-8")
 
 
 def montar_html_completo(corpo_html: str) -> str:
-    """
-    Carrega os ficheiros HTML, CSS e JS separados e compõe a string
-    HTML final para renderização no Streamlit.
-    """
-    html_base = _ler_ficheiro_template("preenchimento.html")
-    styles = _ler_ficheiro_template("styles.css")
-    scripts = _ler_ficheiro_template("scripts.js")
+    html_base = ler_arquivo_template("preenchimento.html")
+    styles = ler_arquivo_template("styles.css")
+    scripts = ler_arquivo_template("scripts.js")
 
     return html_base.format(
         styles=styles,
@@ -184,7 +94,7 @@ def _declarar_componente_seguro() :
 
 def renderizar_formulario_completo(secoes) :
     """Gera o HTML estático no servidor Python e renderiza o componente."""
-    corpo_html = gerar_html_corpo_formulario(secoes)
+    corpo_html = gerar_html_formulário(secoes)
     html_final = montar_html_completo(corpo_html)
 
     with open(INDEX_HTML_PATH, "w", encoding="utf-8") as f :

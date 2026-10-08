@@ -1,4 +1,4 @@
-from app.functions.genéricas import normalizar_diacrítica
+from app.functions.string import normalizar_diacrítica
 from app.core.funcionalidades.query.estudantes.workflow.extra.common import preposições_nominais
 
 

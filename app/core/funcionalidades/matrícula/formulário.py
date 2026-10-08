@@ -1,6 +1,6 @@
 import streamlit as st
-from app.core.funcionalidades.matrícula.esqueleto import TODAS_AS_SECOES
-from app.core.funcionalidades.matrícula.funções import renderizar_formulario_completo, render_html_template, validar, conextualizar_jinja
+from app.core.funcionalidades.matrícula.elements.esqueleto import TODAS_AS_SECOES
+from app.core.funcionalidades.matrícula.funções import renderizar_formulario_completo, renderizar_template_html, validar, conextualizar_jinja
 
 st.set_page_config(page_title='Nova Matrícula', layout='wide')
 st.title('Preenchimento da Ficha de Matrícula', text_alignment='center')
@@ -18,7 +18,7 @@ if dados_coletados:
             st.error(f'– {erro}')
     else:
         contexto = conextualizar_jinja(dados_coletados)
-        html_gerado = render_html_template(contexto)
+        html_gerado = renderizar_template_html(contexto, 'pagina_print.html')
 
         st.success('Ficha gerada com sucesso!')
         st.download_button(

@@ -1,7 +1,7 @@
 from pathlib import Path
 from pandas import DataFrame, ExcelWriter
 
-from app.functions.genéricas import normalizar_diacrítica
+from app.functions.string import normalizar_diacrítica
 from app.core import ConsultaEstudantes
 from app.core.funcionalidades.query.servidores.consultaservidores import ConsultaServidores
 
