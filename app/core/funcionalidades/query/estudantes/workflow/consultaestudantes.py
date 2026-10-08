@@ -3,7 +3,7 @@ import os
 from app.core.funcionalidades.query.estudantes.workflow.processamentoinicial import ProcessamentoInicial
 from app.core.funcionalidades.query.estudantes.workflow.formatação import Formatação
 from app.core.funcionalidades.query.estudantes.workflow.integração import Integração
-from app.core.funcionalidades.query.leitura import Leitura
+from app.core.funcionalidades.query.query import Leitura
 from pandas import DataFrame
 
 

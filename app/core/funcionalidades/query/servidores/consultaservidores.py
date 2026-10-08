@@ -2,7 +2,7 @@ from pathlib import Path
 from pandas import DataFrame, ExcelWriter
 
 from app.config.parâmetros import parâmetros
-from app.core.funcionalidades.query.leitura import Leitura
+from app.core.funcionalidades.query.query import Leitura
 
 
 
