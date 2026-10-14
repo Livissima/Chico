@@ -7,8 +7,8 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
-from app.utils.automação import NavegaçãoWeb
-from app.utils.genéricas import ajustar_print_pandas, escrever_json
+from app.auto.navegabilidade.navegaçãoweb import NavegaçãoWeb
+from app.functions.data import ajustar_print_pandas, escrever_json
 from app.auto.tasks.registrotasks import RegistroTasks
 from app.config.parâmetros.getters.tempo import tempo
 

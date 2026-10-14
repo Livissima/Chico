@@ -1,7 +1,7 @@
 from json import JSONDecodeError
 from pathlib import Path
 
-from app.utils.genéricas import ler_json
+from app.functions.data import ler_json
 
 
 class Prévias:

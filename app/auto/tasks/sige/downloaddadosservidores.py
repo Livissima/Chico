@@ -1,6 +1,6 @@
 #app/auto/tasks/sige/downloaddadosservidores.py
 
-from app.utils.genéricas import escrever_json, ler_json
+from app.functions.data import escrever_json, ler_json
 from app.auto.tasks.registrotasks import RegistroTasks
 from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
 from app.auto.navegabilidade.navegaçãoweb import NavegaçãoWeb

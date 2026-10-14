@@ -1,29 +1,25 @@
 import streamlit as st
-from app.core.funcionalidades.matrícula.elements.esqueleto import TODAS_AS_SECOES
-from app.core.funcionalidades.matrícula.funções import renderizar_formulario_completo, renderizar_template_html, validar, conextualizar_jinja
+
+from app.core.funcionalidades.matrícula.composicao import montar_aplicacao
 
 st.set_page_config(page_title='Nova Matrícula', layout='wide')
 st.title('Preenchimento da Ficha de Matrícula', text_alignment='center')
 
-# Renderiza todas as seções do formulário
-dados_coletados = renderizar_formulario_completo(TODAS_AS_SECOES)
+servico, formulario = montar_aplicacao()
+dados = formulario.coletar()
 
-if dados_coletados:
-    # Agora dados_coletados é um dicionário Python legítimo
-    válido, erros = validar(TODAS_AS_SECOES, dados_coletados)
+if dados:
+    resultado = servico.gerar(dados)
 
-    if not válido:
+    if not resultado.valido:
         st.error('Corrija os erros abaixo:')
-        for erro in erros:
+        for erro in resultado.erros:
             st.error(f'– {erro}')
     else:
-        contexto = conextualizar_jinja(dados_coletados)
-        html_gerado = renderizar_template_html(contexto, 'pagina_print.html')
-
         st.success('Ficha gerada com sucesso!')
         st.download_button(
             label="📥 Baixar Ficha (HTML)",
-            data=html_gerado,
-            file_name=f"Ficha_{dados_coletados.get('nome_estudante', 'Estudante')}.html",
-            mime="text/html"
+            data=resultado.html,
+            file_name=servico.nome_arquivo(dados),
+            mime="text/html",
         )

@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 
 from app.auto.data.dataclasses.propriedadesweb import PropriedadesWeb
-from app.utils.automação import NavegaçãoWeb
+from app.auto.navegabilidade.navegaçãoweb import NavegaçãoWeb
 from app.auto.tasks.registrotasks import RegistroTasks
 from selenium.webdriver import Edge
 

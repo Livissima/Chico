@@ -3,9 +3,9 @@ from os import PathLike
 from pathlib import Path
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
-from app.utils.genéricas import escrever_json
+from app.functions.data import escrever_json
 from app.auto.tasks.registrotasks import RegistroTasks
-from app.utils.automação import NavegaçãoWeb
+from app.auto.navegabilidade.navegaçãoweb import NavegaçãoWeb
 from app.config.parâmetros import parâmetros
 
 @RegistroTasks.registrar('consultar dias letivos')

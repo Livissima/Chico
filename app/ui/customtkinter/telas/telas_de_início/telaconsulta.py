@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from customtkinter import CTk, CTkFrame
 
 from app.config.settings.app_config import DIRETÓRIO_SECRETARIA
-from app.utils.genéricas import truncar_diretório
+from app.functions.string import truncar_diretório
 from app.core import ConsultaEstudantes, Exportação
 from app.core.funcionalidades.query.servidores.consultaservidores import ConsultaServidores
 from app.core.utils.gerenciadordepastasdeestudantes import GerenciadorDePastasDeEstudantes

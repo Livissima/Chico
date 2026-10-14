@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 import pandas as pd
 from app.config.settings.app_config import DIRETÓRIO_BASE_PADRÃO, DIRETÓRIO_SECRETARIA
-from app.utils.genéricas import normalizar_diacrítica
+from app.functions.string import normalizar_diacrítica
 import shutil
 
 
