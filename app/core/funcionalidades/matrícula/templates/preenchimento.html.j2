@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   <style>
-    {styles}
+{{ styles | safe }}
   </style>
 </head>
 <body>
 
   <form id="formMatricula" novalidate>
-    {corpo_html}
+    {% include "formulario.html.j2" %}
     <button type="submit">Gerar Ficha de Matrícula</button>
   </form>
 
   <script>
-    {scripts}
+{{ scripts | safe }}
   </script>
 </body>
 </html>

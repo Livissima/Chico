@@ -1,0 +1,5 @@
+<div class="multiselect" id="{{ campo.chave }}" data-multiselect="true">
+  {% for opcao in campo.opcoes %}
+  <label class="opcao"><input type="checkbox" value="{{ opcao }}"> {{ opcao }}</label>
+  {% endfor %}
+</div>

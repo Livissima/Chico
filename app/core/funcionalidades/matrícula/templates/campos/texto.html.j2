@@ -1,0 +1,2 @@
+<input id="{{ campo.chave }}" type="text" value="{{ campo.valor_padrao }}"
+{%- for nome, valor in campo.atributos_html().items() %} {{ nome }}="{{ valor }}"{% endfor %} />

@@ -32,4 +32,3 @@ class Bot:
 
         finally :
             navegador.quit()
-

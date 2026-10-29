@@ -1,0 +1,5 @@
+<select id="{{ campo.chave }}">
+  {% for opcao in campo.opcoes %}
+  <option value="{{ opcao }}"{% if opcao == campo.valor_padrao %} selected{% endif %}>{{ opcao }}</option>
+  {% endfor %}
+</select>

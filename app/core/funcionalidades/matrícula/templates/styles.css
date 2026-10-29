@@ -101,3 +101,28 @@ button {
 }
 
 button:hover { background-color: #E03E3E; }
+
+/* ---- multiselect (grupo de checkboxes) ---- */
+.multiselect {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  padding: 4px 0;
+}
+
+.multiselect label.opcao {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.multiselect input[type="checkbox"] {
+  width: auto;
+  padding: 0;
+  margin: 0;
+  accent-color: #FF4B4B;
+}

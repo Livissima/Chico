@@ -127,6 +127,8 @@ function validarCampo(el) {
   const tipo = el.getAttribute('data-tipo');
   const valor = el.value.trim();
 
+  if (el.type === 'checkbox') return true;
+
   if (el.closest('.oculto')) {
     limparErro(el);
     return true;
@@ -194,25 +196,53 @@ document.getElementById('formMatricula').addEventListener('focusout', (e) => {
   }
 });
 
-function checarDependencias() {
-  const camposCondicionais = document.querySelectorAll('[data-depende-de]');
-  camposCondicionais.forEach(box => {
-    const paiId = box.getAttribute('data-depende-de');
-    const valorEsperado = box.getAttribute('data-valor-esperado');
-    const elPai = document.getElementById(paiId);
-    if (elPai) {
-      if (elPai.value === valorEsperado) {
-        box.classList.remove('oculto');
-      } else {
-        box.classList.add('oculto');
-        const input = box.querySelector('input, select, textarea');
-        if (input) {
-          input.value = '';
-          limparErro(input);
-        }
-      }
-    }
+function valorDoCampo(id) {
+  const el = document.getElementById(id);
+  if (!el) return null;
+  if (el.hasAttribute('data-multiselect')) {
+    return Array.from(el.querySelectorAll('input:checked')).map(i => i.value);
+  }
+  return el.value;
+}
+
+function dependenciaSatisfeita(box) {
+  const valorPai = valorDoCampo(box.getAttribute('data-depende-de'));
+  if (valorPai === null) return true;
+  const esperado = box.getAttribute('data-valor-esperado');
+  return Array.isArray(valorPai) ? valorPai.includes(esperado) : valorPai === esperado;
+}
+
+function restaurarPadrao(el) {
+  if (el.tagName === 'SELECT') {
+    const padrao = Array.from(el.options).findIndex(o => o.defaultSelected);
+    el.selectedIndex = padrao >= 0 ? padrao : 0;
+  } else {
+    el.value = el.defaultValue;
+  }
+}
+
+function limparBox(box) {
+  box.querySelectorAll('input[type="checkbox"]').forEach(i => { i.checked = false; });
+  box.querySelectorAll('input:not([type="checkbox"]), select, textarea').forEach(el => {
+    restaurarPadrao(el);
+    limparErro(el);
   });
+}
+
+function checarDependencias() {
+  const caixas = document.querySelectorAll('[data-depende-de]');
+  // Repete até estabilizar: esconder um campo pode esconder quem depende dele.
+  for (let rodada = 0; rodada <= caixas.length; rodada++) {
+    let mudou = false;
+    caixas.forEach(box => {
+      const visivel = dependenciaSatisfeita(box);
+      if (visivel === !box.classList.contains('oculto')) return;
+      box.classList.toggle('oculto', !visivel);
+      if (!visivel) limparBox(box);
+      mudou = true;
+    });
+    if (!mudou) break;
+  }
   setFrameHeight();
 }
 
@@ -240,6 +270,11 @@ document.getElementById('formMatricula').addEventListener('submit', (e) => {
   elementos.forEach(el => {
     if (el.id && !el.closest('.oculto')) dados[el.id] = el.value;
   });
+  e.target.querySelectorAll('[data-multiselect]').forEach(grupo => {
+    if (!grupo.closest('.oculto')) {
+      dados[grupo.id] = Array.from(grupo.querySelectorAll('input:checked')).map(i => i.value);
+    }
+  });
 
   setComponentValue(dados);
 });
@@ -257,3 +292,4 @@ window.addEventListener("message", (e) => {
 // INICIALIZAÇÃO DO COMPONENTE
 sendToStreamlit("streamlit:componentReady", { apiVersion: 1 });
 setTimeout(setFrameHeight, 100);
+

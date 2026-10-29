@@ -1,0 +1,15 @@
+{# Recebe `esquema`. Cada campo escolhe o próprio template em campos/<tipo>.html.j2 #}
+{% for secao in esquema.secoes %}
+<div class="secao-titulo">{{ secao.titulo }}</div>
+{% for linha in secao.linhas %}
+<div class="grid">
+  {% for campo, pct in linha.com_larguras() %}
+  <div class="campo-box{{ ' oculto' if campo.depende_de else '' }}" id="box_{{ campo.chave }}" style="flex: 0 0 calc({{ pct }}% - 12px); max-width: calc({{ pct }}% - 12px);"
+       {%- if campo.depende_de %} data-depende-de="{{ campo.depende_de.chave }}" data-valor-esperado="{{ campo.depende_de.valor }}"{% endif %}>
+    <label{% if campo.tipo.value != 'multiselect' %} for="{{ campo.chave }}"{% endif %}>{{ campo.rotulo }}</label>
+    {% include "campos/" ~ campo.tipo.value ~ ".html.j2" %}
+  </div>
+  {% endfor %}
+</div>
+{% endfor %}
+{% endfor %}
