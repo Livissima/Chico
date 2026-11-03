@@ -3,9 +3,9 @@ from __future__ import annotations
 
 import streamlit as st
 
-from .apresentacao.jinja import RenderizadorJinja
+from app.core.funcionalidades.matrícula.infra.renderizador import RenderizadorJinja
 from .dominio.contexto import ConstrutorDeContexto
-from .dominio.definicao import ESQUEMA
+from app.core.funcionalidades.matrícula.dominio.definição.definicao import ESQUEMA
 from .infra.componente_streamlit import ComponenteFormulário
 from .servico import FormularioUI, ServicoFicha
 

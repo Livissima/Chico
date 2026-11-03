@@ -11,7 +11,7 @@ from typing import Any
 
 import streamlit.components.v1 as components
 
-from ..apresentacao.jinja import RenderizadorJinja
+from app.core.funcionalidades.matrícula.infra.renderizador import RenderizadorJinja
 from ..dominio.campos import Esquema
 
 DIRETORIO_COMPONENTE = Path(__file__).resolve().parent / "component_form_dinamico"
