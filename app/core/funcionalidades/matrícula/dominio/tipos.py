@@ -33,3 +33,4 @@ _PLACEHOLDERS: dict[TipoDado, str] = {
 }
 
 #todo: Inserir um campo paralelo que indique a idade de quem nasceu nesta data. Talvez o próprio tipo de campo de data poderia ser bifurcado para um tipo de data simples, e um tipo de data de nascimento, onde os campos de data de nascimento sempre tragam a indicação da idade resultante.
+#todo: bolar um esqueminha de validação de telefones e também de formatação de acordo com quantidade de dígitos: (xx) xxxxx xxxx / (xx) xxxx xxxx / xxxxx xxxx / xxxx xxxx

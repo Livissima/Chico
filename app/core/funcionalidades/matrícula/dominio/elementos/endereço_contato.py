@@ -1,14 +1,17 @@
 from __future__ import annotations
 
 from app.core.funcionalidades.matrícula.dominio.campos import Campo, Linha
+from app.core.funcionalidades.matrícula.dominio.elementos.regrinhas import obrigatório, obrigatório_número_max
 
 logradouro = Campo(
     chave="logradouro",
-    rotulo="Logradouro"
+    rotulo="Logradouro",
+    regras=obrigatório
 )
 quadra = Campo(
     chave="quadra",
     rotulo="Quadra"
+
 )
 lote = Campo(
     chave="lote",
@@ -18,9 +21,12 @@ número_casa = Campo(
     chave="numero",
     rotulo="Número"
 )
+
 cep = Campo(
     chave="cep",
-    rotulo="CEP"
+    rotulo="CEP",
+    regras=obrigatório_número_max(8)
+    #todo: Bolar um esqueminha de placeholder para cep e de formatação como cep (00000-000)
 )
 complemento = Campo(
     chave="complemento",
@@ -28,21 +34,26 @@ complemento = Campo(
 )
 bairro = Campo(
     chave="bairro",
-    rotulo="Bairro"
+    rotulo="Bairro",
+    regras=obrigatório
 )
 município = Campo(
     chave="municipio",
-    rotulo="Município"
+    rotulo="Município",
+    regras=obrigatório
 )
-cel_mãe = Campo(
+telefone_um = Campo(
+    #todo: bolar um esqueminha de validação de telefones e também de formatação de acordo com quantidade de dígitos: (xx) xxxxx xxxx / (xx) xxxx xxxx / xxxxx xxxx / xxxx xxxx
     chave="celular_mae",
-    rotulo="Celular da Mãe"
+    rotulo="Celular da Mãe",
+    regras=obrigatório_número_max(11)
 )
-cel_pai = Campo(
+
+telefone_dois = Campo(
     chave="celular_pai",
-    rotulo="Celular do Pai"
+    rotulo="Celular do Pai",
 )
-cel_ctt = Campo(
+telefone_três = Campo(
     chave="fone_contato",
     rotulo="Telefone p/ Contato"
 )
@@ -70,7 +81,7 @@ irmãos = Campo(
 
 linha_endereço_1 = Linha(proporcoes=(3, 1, 1, 1, 2), campos=(logradouro, quadra, lote, número_casa, cep,))
 linha_endereço_2 = Linha(proporcoes=(2, 2, 2), campos=(complemento, bairro, município,))
-linha_endereço_3 = Linha(proporcoes=(1, 1, 1, 1), campos=(cel_mãe, cel_pai, cel_ctt, cel_fixo,))
+linha_endereço_3 = Linha(proporcoes=(1, 1, 1, 1), campos=(telefone_um, telefone_dois, telefone_três, cel_fixo,))
 linha_endereço_4 = Linha(proporcoes=(2, 2, 1), campos=(email, uc_equatorial, cad_único,))
 linha_endereço_5 = Linha(proporcoes=(1,), campos=(irmãos,))
 
