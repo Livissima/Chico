@@ -31,3 +31,5 @@ _PLACEHOLDERS: dict[TipoDado, str] = {
     TipoDado.DATA: "DD/MM/AAAA",
     TipoDado.TELEFONE: "(00) 00000-0000",
 }
+
+#todo: Inserir um campo paralelo que indique a idade de quem nasceu nesta data. Talvez o próprio tipo de campo de data poderia ser bifurcado para um tipo de data simples, e um tipo de data de nascimento, onde os campos de data de nascimento sempre tragam a indicação da idade resultante.

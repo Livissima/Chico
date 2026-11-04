@@ -5,7 +5,7 @@ import streamlit as st
 
 from app.core.funcionalidades.matrícula.infra.renderizador import RenderizadorJinja
 from .dominio.contexto import ConstrutorDeContexto
-from app.core.funcionalidades.matrícula.dominio.definição.definicao import ESQUEMA
+from app.core.funcionalidades.matrícula.dominio.elementos.esquema import ESQUEMA
 from .infra.componente_streamlit import ComponenteFormulário
 from .servico import FormularioUI, ServicoFicha
 
