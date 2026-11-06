@@ -33,6 +33,7 @@ class Dependencia:
 
 @dataclass(frozen=True)
 class Campo:
+    #todo: bolar um esquema para bloquear o campo, de modo que ele pode até ter um valor padrão que vai ser usado na geração do relatório, mas que não pode ser alterado.
     chave: str
     rotulo: str
     tipo: TipoCampo = TipoCampo.TEXTO

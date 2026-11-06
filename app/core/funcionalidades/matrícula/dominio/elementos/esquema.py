@@ -18,6 +18,7 @@ from app.core.funcionalidades.matrícula.dominio.elementos.necessidades import l
 #todo: Talvez fosse uma boa criar uma lógica que deixasse o background dos campos verdes quando eles fossem preenchidos com um valor válido, mantendo o padrão caso estejam vazios
 
 
+
 SECAO_DADOS_PESSOAIS = Seção(titulo="1. Dados Pessoais", linhas=linhas_pessoal, )
 
 SECAO_DADOS_FAMILIARES = Seção(titulo="2. Dados Familiares", linhas=linhas_família, )

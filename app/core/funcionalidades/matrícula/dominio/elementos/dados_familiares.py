@@ -18,6 +18,7 @@ from app.core.funcionalidades.matrícula.dominio.tipos import TipoCampo, TipoDad
 #  As datas de nascimento inseridas em filiação_1, filiação_2 ou responsável alternativo nunca podem ser iguais ou posteriores à data de nascimento informada para o estudante.
 #  Como as condições envolve o preenchimento de campos que podem vir antes ou depois, incluindo de diferentes SEÇÕES, essa verificação pode ser feita após o preenchimento completo, quando ordenarmos a geração do relatório para impressão. Caso haja erros de acordo com as condições acima, a página acusa os campos incorretos ou pendentes, de acordo com a condição. Em casos que a verificação instantânea for possível/viável, ela deve ser aplicada. A condição de não preencher os dados sem informar o CPF da pessoa, por exemplo, provavelmente pode ser feita em tempo real, ao vincular os campos relacionados a cada pessoa e verificar se o nome foi preenchido antes de preencher CPF, DN ou falecimento.
 
+#todo: Bolar um esqueminha para dar uma separada em elementos de uma mesma seção para facilitar visualização, facilitando distinguir os campos da filiação1, filiação2 e responsável sem misturar.
 
 def linha_docs_responsável(prefixo: str, pessoa: str, rotulo_cpf: str | None = None) -> Linha:
     """CPF + título de eleitor (usado em Filiação 1, Filiação 2 e Responsável)."""
@@ -56,11 +57,11 @@ def linhas_filiação(numero: int, rotulo_nome: str, chave_falecido: str, rotulo
         opcoes=NAO_SIM,
         marcador=chave_falecido,
     )
-    # profissão = Campo(f"{prefixo}_profissao", f"Profissão ({pessoa})")  #Desativado. Por hora não pretendo perguntar a profissão
+    profissão = Campo(f"{prefixo}_profissao", f"Profissão ({pessoa})")  #Desativado. Por hora não pretendo perguntar a profissão
     return (
         Linha(proporcoes=(3, 1, 1), campos=(nome, dn_filiação, falecido, ), ),
         linha_docs_responsável(prefixo, pessoa),
-        # Linha(proporcoes=(1,), campos=(profissão, ) ),  #Desativado. Por hora não pretendo perguntar a profissão
+        Linha(proporcoes=(1,), campos=(profissão, ) ),  #Desativado. Por hora não pretendo perguntar a profissão  #reativei porque o jina quebra se não fornecer os valores das chaves de profissões que ele já está esperando.
     )
 
 
@@ -102,7 +103,7 @@ linhas_filiação_2 = linhas_filiação(2, "Nome Filiação 2 (de preferência o
 linha_responsável_alt_1 = Linha(proporcoes=(3, 1, 1), campos=(nome_responsável_alternativo, dn_responsável, responsável_relação, ))
 linha_responsável_alt_2 = linha_docs_responsável("responsavel", "Responsável", rotulo_cpf="CPF do responsável")
 
-
+#todo: Será possível aumentar o tamanho da fonte das opções do núcleo?
 linha_núcleo_1 = Linha(proporcoes=(1,), campos=(núcleo_familiar,))
 linha_núcleo_2 = Linha(proporcoes=(1,), campos=(núcleo_outros,))
 

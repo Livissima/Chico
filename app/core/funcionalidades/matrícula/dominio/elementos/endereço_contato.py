@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from app.core.funcionalidades.matrícula.dominio.campos import Campo, Linha
-from app.core.funcionalidades.matrícula.dominio.elementos.regrinhas import obrigatório, obrigatório_número_max
+from app.core.funcionalidades.matrícula.dominio.elementos.regrinhas import obrigatório, obrigatório_número_max, \
+    número_max, número
 
 logradouro = Campo(
     chave="logradouro",
@@ -11,17 +12,16 @@ logradouro = Campo(
 quadra = Campo(
     chave="quadra",
     rotulo="Quadra"
-
 )
 lote = Campo(
     chave="lote",
-    rotulo="Lote"
+    rotulo="Lote",
+    regras=número
 )
 número_casa = Campo(
     chave="numero",
     rotulo="Número"
 )
-
 cep = Campo(
     chave="cep",
     rotulo="CEP",
@@ -48,18 +48,20 @@ telefone_um = Campo(
     rotulo="Celular da Mãe",
     regras=obrigatório_número_max(11)
 )
-
 telefone_dois = Campo(
     chave="celular_pai",
     rotulo="Celular do Pai",
+    regras=número_max(11)
 )
 telefone_três = Campo(
     chave="fone_contato",
-    rotulo="Telefone p/ Contato"
+    rotulo="Telefone p/ Contato",
+    regras=número_max(11)
 )
 cel_fixo = Campo(
     chave="telefone_fixo",
-    rotulo="Telefone Fixo"
+    rotulo="Telefone Fixo",
+    regras=número_max(11)
 )
 email = Campo(
     chave="email_contato",
