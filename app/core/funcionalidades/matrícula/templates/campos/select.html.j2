@@ -1,5 +1,8 @@
-<select id="{{ campo.chave }}">
+<select id="{{ campo.chave }}"
+{%- for nome, valor in campo.atributos_comuns().items() %} {{ nome }}="{{ valor }}"{% endfor %}
+{%- if campo.bloqueado %} disabled{% endif %}
+{%- if campo.fonte_opcoes %} style="font-size: {{ campo.fonte_opcoes }}"{% endif %}>
   {% for opcao in campo.opcoes %}
-  <option value="{{ opcao }}"{% if opcao == campo.valor_padrao %} selected{% endif %}>{{ opcao }}</option>
+  <option value="{{ opcao }}"{% if opcao == campo.valor_inicial %} selected{% endif %}>{{ opcao }}</option>
   {% endfor %}
 </select>

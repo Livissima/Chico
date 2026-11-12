@@ -7,16 +7,31 @@ Convenção: toda regra, exceto `Obrigatorio`, ignora valores vazios.
 """
 from __future__ import annotations
 
-import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import date
 from typing import TYPE_CHECKING
 
+from .telefone import TelefoneInvalido, interpretar_telefone
+from .texto import analisar_data, só_dígitos
 from .tipos import TipoDado
 
 if TYPE_CHECKING:  # evita import circular em tempo de execução
     from .campos import Campo
+
+
+@dataclass(frozen=True)
+class Erro:
+    """Um problema encontrado na validação. `chave` é o campo principal; `relacionadas`,
+    outros campos que devem ser destacados junto com ele (a mensagem é uma só)."""
+
+    chave: str
+    mensagem: str
+    relacionadas: tuple[str, ...] = ()
+
+    @property
+    def chaves(self) -> tuple[str, ...]:
+        return (self.chave, *self.relacionadas)
 
 
 class Regra(ABC):
@@ -46,6 +61,9 @@ class ComprimentoMinimo(Regra):
         if valor and len(valor) < self.n:
             return f"{campo.rotulo} deve ter no mínimo {self.n} caracteres. {len(valor)} inseridos."
         return None
+
+    def atributos_html(self):
+        return {"data-minlength": str(self.n)}
 
 
 @dataclass(frozen=True)
@@ -93,7 +111,7 @@ class ApenasLetras(Regra):
 
 # ------------------------------------------------------- regras por tipo de dado
 def cpf_valido(texto: str) -> bool:
-    digitos = re.sub(r"\D", "", texto)
+    digitos = só_dígitos(texto)
     if len(digitos) != 11 or digitos == digitos[0] * 11:
         return False
     for tamanho in (9, 10):
@@ -107,22 +125,15 @@ def cpf_valido(texto: str) -> bool:
 
 
 def data_valida(texto: str, ano_minimo: int = 1900, ano_maximo: int | None = None) -> bool:
-    ano_maximo = ano_maximo or date.today().year
-    achado = re.fullmatch(r"(\d{2})/(\d{2})/(\d{4})", texto)
-    if not achado:
-        return False
-    dia, mes, ano = (int(g) for g in achado.groups())
-    if not ano_minimo <= ano <= ano_maximo:
-        return False
-    try:
-        date(ano, mes, dia)
-    except ValueError:
-        return False
-    return True
+    return analisar_data(texto, ano_minimo, ano_maximo) is not None
 
 
 def telefone_valido(texto: str) -> bool:
-    return len(re.sub(r"\D", "", texto)) in (10, 11)
+    try:
+        interpretar_telefone(texto)
+    except TelefoneInvalido:
+        return False
+    return True
 
 
 @dataclass(frozen=True)
@@ -142,17 +153,46 @@ class DataValida(Regra):
 
 
 @dataclass(frozen=True)
+class NascimentoValido(Regra):
+    """Data válida e que não esteja no futuro."""
+
+    def verificar(self, campo, valor):
+        if not valor:
+            return None
+        data = analisar_data(valor)
+        if data is None:
+            return f"{campo.rotulo}: data inválida ou fora do intervalo."
+        if data > date.today():
+            return f"{campo.rotulo}: a data de nascimento não pode estar no futuro."
+        return None
+
+
+@dataclass(frozen=True)
 class TelefoneValido(Regra):
     def verificar(self, campo, valor):
-        if valor and not telefone_valido(valor):
-            return f"{campo.rotulo}: telefone incompleto."
+        if not valor:
+            return None
+        try:
+            interpretar_telefone(valor)
+        except TelefoneInvalido as erro:
+            return f"{campo.rotulo}: {erro}"
+        return None
+
+
+@dataclass(frozen=True)
+class CepValido(Regra):
+    def verificar(self, campo, valor):
+        if valor and len(só_dígitos(valor)) != 8:
+            return f"{campo.rotulo}: o CEP deve ter 8 dígitos."
         return None
 
 
 _REGRA_POR_TIPO_DADO: dict[TipoDado, Regra] = {
     TipoDado.DATA: DataValida(),
+    TipoDado.NASCIMENTO: NascimentoValido(),
     TipoDado.CPF: CpfValido(),
     TipoDado.TELEFONE: TelefoneValido(),
+    TipoDado.CEP: CepValido(),
 }
 
 

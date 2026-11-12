@@ -14,12 +14,23 @@ class TipoCampo(StrEnum):
 
 
 class TipoDado(StrEnum):
-    """Natureza do dado. O valor é o que o scripts.js lê em `data-tipo`."""
+    """Natureza do dado. Define máscara, validação e formatação do campo."""
 
     TEXTO = "str"
     DATA = "date"
+    NASCIMENTO = "nascimento"  # data + exibição da idade ao lado do campo
     CPF = "cpf"
     TELEFONE = "telefone"
+    CEP = "cep"
+
+    @property
+    def tipo_js(self) -> str:
+        """Valor de `data-tipo` lido pelo scripts.js (nascimento se comporta como data)."""
+        return "date" if self is TipoDado.NASCIMENTO else self.value
+
+    @property
+    def mostra_idade(self) -> bool:
+        return self is TipoDado.NASCIMENTO
 
     @property
     def placeholder(self) -> str | None:
@@ -29,8 +40,7 @@ class TipoDado(StrEnum):
 _PLACEHOLDERS: dict[TipoDado, str] = {
     TipoDado.CPF: "000.000.000-00",
     TipoDado.DATA: "DD/MM/AAAA",
-    TipoDado.TELEFONE: "(00) 00000-0000",
+    TipoDado.NASCIMENTO: "DD/MM/AAAA",
+    TipoDado.TELEFONE: "(00) 00000 0000",
+    TipoDado.CEP: "00000-000",
 }
-
-#todo: Inserir um campo paralelo que indique a idade de quem nasceu nesta data. Talvez o próprio tipo de campo de data poderia ser bifurcado para um tipo de data simples, e um tipo de data de nascimento, onde os campos de data de nascimento sempre tragam a indicação da idade resultante.
-#todo: bolar um esqueminha de validação de telefones e também de formatação de acordo com quantidade de dígitos: (xx) xxxxx xxxx / (xx) xxxx xxxx / xxxxx xxxx / xxxx xxxx

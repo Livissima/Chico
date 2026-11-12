@@ -13,6 +13,9 @@
     <button type="submit">Gerar Ficha de Matrícula</button>
   </form>
 
+  {# Regras entre campos que o navegador também aplica em tempo real (ver Esquema.regras_js) #}
+  <script type="application/json" id="regras-esquema">{{ regras_js | tojson }}</script>
+
   <script>
 {{ scripts | safe }}
   </script>

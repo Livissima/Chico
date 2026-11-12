@@ -1,4 +1,6 @@
-<div class="multiselect" id="{{ campo.chave }}" data-multiselect="true">
+<div class="multiselect" id="{{ campo.chave }}" data-multiselect="true"
+{%- for nome, valor in campo.atributos_comuns().items() %} {{ nome }}="{{ valor }}"{% endfor %}
+{%- if campo.fonte_opcoes %} style="--fonte-opcoes: {{ campo.fonte_opcoes }}"{% endif %}>
   {% for opcao in campo.opcoes %}
   <label class="opcao"><input type="checkbox" value="{{ opcao }}"> {{ opcao }}</label>
   {% endfor %}

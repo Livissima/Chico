@@ -7,7 +7,7 @@ import sys
 import threading
 import types
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 
 import streamlit.components.v1 as components
 
@@ -63,22 +63,35 @@ class ComponenteFormulário:
         chave: str = "form_matricula_completo",
     ) -> None:
 
+        self._esquema = esquema
+        self._renderizador = renderizador
+        self._diretorio = diretorio
         self._chave = chave
         diretorio.mkdir(parents=True, exist_ok=True)
 
-        html = renderizador.renderizar(
+        self._publicar()
+        self._componente = _declarar_componente(nome, diretorio)
+
+    def _publicar(self) -> None:
+        """Gera o index.html do formulário. É refeito a cada execução da página (só grava se mudou)
+        para que valores padrão dinâmicos, como a data de hoje, não fiquem velhos."""
+        html = self._renderizador.renderizar(
             template= self.TEMPLATE,
 
             contexto= {
-                "esquema": esquema,
-                "styles": renderizador.ler_fonte("styles.css"),
-                "scripts": renderizador.ler_fonte("scripts.js"),
+                "esquema": self._esquema,
+                "regras_js": self._esquema.regras_js,
+                "styles": self._renderizador.ler_fonte("styles.css"),
+                "scripts": self._renderizador.ler_fonte("scripts.js"),
             },
         )
+        _gravar_se_mudou(self._diretorio / "index.html", html)
 
-        _gravar_se_mudou(diretorio / "index.html", html)
-        self._componente = _declarar_componente(nome, diretorio)
+    def coletar(self, erros: Mapping[str, str] | None = None, envio: Any = None) -> dict[str, Any] | None:
+        """Desenha o formulário e devolve os dados quando o usuário envia (ou None antes disso).
 
-    def coletar(self) -> dict[str, Any] | None:
-        """Desenha o formulário e devolve os dados quando o usuário envia (ou None antes disso)."""
-        return self._componente(key=self._chave, default=None)
+        `erros` (chave do campo -> mensagem) é destacado no formulário. `envio` identifica a submissão
+        a que os erros se referem: o formulário só os reaplica quando esse identificador muda.
+        """
+        self._publicar()
+        return self._componente(key=self._chave, default=None, erros=dict(erros or {}), envio=envio)

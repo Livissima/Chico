@@ -47,3 +47,6 @@ SÉRIES = (
 TURMAS = (
     "", "A", "B", "C", "D"
 )
+
+
+PREENCHEDORAS = ('', 'Nubia', 'Lívia', 'Karen', 'Tâmera', 'Meire')

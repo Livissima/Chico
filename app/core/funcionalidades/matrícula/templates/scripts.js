@@ -41,11 +41,15 @@ function aplicarTemaStreamlit(theme) {
     root.style.setProperty('--border-secao', '#31333F');
     root.style.setProperty('--bg-invalido', '#331A1A');
     root.style.setProperty('--msg-erro', '#FF6B6B');
+    root.style.setProperty('--bg-valido', '#143525');
+    root.style.setProperty('--border-valido', '#3FBF7F');
   } else {
     root.style.setProperty('--border-input', '#C3C6D0');
     root.style.setProperty('--border-secao', '#E0E0E0');
     root.style.setProperty('--bg-invalido', '#FFE6E6');
     root.style.setProperty('--msg-erro', '#D32F2F');
+    root.style.setProperty('--bg-valido', '#E3F6E8');
+    root.style.setProperty('--border-valido', '#2E9E5B');
   }
 }
 
@@ -81,6 +85,26 @@ function validarDataValida(strData, minAno = 1900, maxAno = new Date().getFullYe
   );
 }
 
+// 'dd/mm/aaaa' -> Date (meia-noite local), ou null se não for uma data válida
+function parseData(strData) {
+  if (!validarDataValida(strData)) return null;
+  const [dia, mes, ano] = strData.split('/').map(n => parseInt(n, 10));
+  return new Date(ano, mes - 1, dia);
+}
+
+function calcularIdade(nascimento, hoje = new Date()) {
+  let idade = hoje.getFullYear() - nascimento.getFullYear();
+  const mes = hoje.getMonth() - nascimento.getMonth();
+  if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) idade--;
+  return idade;
+}
+
+function textoDaIdade(idade) {
+  if (idade < 0) return '';
+  if (idade === 0) return 'menos de 1 ano';
+  return idade === 1 ? '1 ano' : idade + ' anos';
+}
+
 function validarCPFValido(cpf) {
   cpf = cpf.replace(/\D/g, '');
   if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
@@ -98,6 +122,90 @@ function validarCPFValido(cpf) {
   if (resto !== parseInt(cpf.substring(10, 11))) return false;
 
   return true;
+}
+
+// --- TELEFONE (mesma lógica de dominio/telefone.py; DDD padrão 62) ---
+//  8 dígitos : começa com 8 ou 9 -> celular sem o 9 extra; senão -> fixo
+//  9 dígitos : precisa começar com 98 ou 99 -> celular sem DDD
+// 10 dígitos : 3º dígito 8 ou 9 -> celular com DDD sem o 9 extra
+// 11 dígitos : 3º dígito 9 e 4º dígito 8 ou 9 -> celular completo
+
+const DDD_PADRAO = '62';
+
+function interpretarTelefone(texto) {
+  const invalido = (erro) => ({ ok: false, erro: erro });
+  const dddInvalido = (ddd) => ddd.indexOf('0') !== -1;
+
+  // Fixo já formatado ('(62) 3208 9777' ou '(62) 3208-9777') é aceito como está: é o valor que o próprio
+  // formulário produz (10 dígitos, 3º dígito diferente de 8/9), e precisa sobreviver a ser reprocessado.
+  const fixo = /^\((\d{2})\) (\d{4})[ -](\d{4})$/.exec(texto.trim());
+  if (fixo) {
+    if (dddInvalido(fixo[1])) return invalido('DDD inválido.');
+    return { ok: true, ddd: fixo[1], numero: fixo[2] + fixo[3] };
+  }
+
+  const d = texto.replace(/\D/g, '');
+
+  if (d.length === 8) {
+    return { ok: true, ddd: DDD_PADRAO, numero: ('89'.includes(d[0]) ? '9' : '') + d };
+  }
+  if (d.length === 9) {
+    if (d[0] !== '9' || !'89'.includes(d[1])) return invalido('com 9 dígitos, o número deve começar com 98 ou 99.');
+    return { ok: true, ddd: DDD_PADRAO, numero: d };
+  }
+  if (d.length === 10) {
+    const ddd = d.slice(0, 2), resto = d.slice(2);
+    if (!'89'.includes(resto[0])) {
+      return invalido('com 10 dígitos o número deve ser celular com DDD (3º dígito 8 ou 9). Telefone fixo deve ser digitado só com 8 dígitos.');
+    }
+    if (dddInvalido(ddd)) return invalido('DDD inválido.');
+    return { ok: true, ddd: ddd, numero: '9' + resto };
+  }
+  if (d.length === 11) {
+    const ddd = d.slice(0, 2), resto = d.slice(2);
+    if (resto[0] !== '9' || !'89'.includes(resto[1])) return invalido('com 11 dígitos, o 3º dígito deve ser 9 e o 4º deve ser 8 ou 9.');
+    if (dddInvalido(ddd)) return invalido('DDD inválido.');
+    return { ok: true, ddd: ddd, numero: resto };
+  }
+  return invalido('informe 8 dígitos (fixo ou celular sem DDD), 9, 10 ou 11 dígitos.');
+}
+
+function formatarTelefone(tel, separador = ' ') {
+  const corte = tel.numero.length === 9 ? 5 : 4;
+  return '(' + tel.ddd + ') ' + tel.numero.slice(0, corte) + separador + tel.numero.slice(corte);
+}
+
+function mascararCep(valor) {
+  const d = valor.replace(/\D/g, '').slice(0, 8);
+  return d.length > 5 ? d.slice(0, 5) + '-' + d.slice(5) : d;
+}
+
+// Completa/formata o valor do campo ao sair dele (telefone com DDD e 9 extra; CEP com hífen)
+function normalizarCampo(el) {
+  const tipo = el.getAttribute('data-tipo');
+  if (tipo === 'telefone' && el.value.trim()) {
+    const tel = interpretarTelefone(el.value);
+    if (tel.ok) el.value = formatarTelefone(tel, ' ');
+  } else if (tipo === 'cep') {
+    el.value = mascararCep(el.value);
+  }
+}
+
+// --- CAMADAS DE ERRO ---
+// Um campo pode ter erro de três origens; a mensagem exibida segue esta prioridade:
+//   campo    : validação do próprio valor (CPF inválido, data inválida, obrigatório...)
+//   regra    : regras entre campos aplicadas em tempo real (CPF repetido, datas incoerentes)
+//   servidor : erros devolvidos pelo Python ao gerar o relatório (apagados quando o campo é editado)
+
+const erros = { campo: {}, regra: {}, servidor: {} };
+
+function idDoControle(el) {
+  const grupo = el.closest('[data-multiselect]');
+  return grupo ? grupo.id : el.id;
+}
+
+function mensagemDe(id) {
+  return erros.campo[id] || erros.regra[id] || erros.servidor[id] || null;
 }
 
 function aplicarErro(el, mensagem) {
@@ -123,78 +231,102 @@ function limparErro(el) {
   }
 }
 
+function temValor(el) {
+  if (el.hasAttribute('data-multiselect')) return el.querySelector('input:checked') !== null;
+  return el.value.trim() !== '';
+}
+
+// Verde: campo preenchido, habilitado, editável e sem nenhum erro
+function atualizarValido(el) {
+  const elegivel = !el.disabled && !el.readOnly && !el.closest('.oculto')
+    && !el.classList.contains('invalido') && temValor(el);
+  el.classList.toggle('valido', elegivel);
+}
+
+function repintar(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const mensagem = mensagemDe(id);
+  if (mensagem) aplicarErro(el, mensagem); else limparErro(el);
+  atualizarValido(el);
+}
+
+function definirErro(camada, id, mensagem) {
+  if (mensagem) erros[camada][id] = mensagem; else delete erros[camada][id];
+  repintar(id);
+}
+
+function limparErrosDe(id) {
+  Object.keys(erros).forEach(camada => { delete erros[camada][id]; });
+  repintar(id);
+}
+
+function ignorado(el) {
+  return !el || el.closest('.oculto') || el.hasAttribute('data-desab-nome');
+}
+
 function validarCampo(el) {
+  if (el.type === 'checkbox') return true;
+
+  const id = el.id;
   const tipo = el.getAttribute('data-tipo');
   const valor = el.value.trim();
 
-  if (el.type === 'checkbox') return true;
-
-  if (el.closest('.oculto')) {
-    limparErro(el);
+  if (ignorado(el)) {
+    limparErrosDe(id);
     return true;
   }
 
   if (!valor) {
-    limparErro(el);
+    definirErro('campo', id, null);
     return true;
   }
 
+  let mensagem = null;
+
   if (tipo === 'date') {
     if (!validarDataValida(valor)) {
-      aplicarErro(el, 'Data inválida ou fora do intervalo.');
-      return false;
+      mensagem = 'Data inválida ou fora do intervalo.';
+    } else if (el.hasAttribute('data-idade') && parseData(valor) > new Date()) {
+      mensagem = 'A data de nascimento não pode estar no futuro.';
     }
   } else if (tipo === 'cpf') {
-    if (!validarCPFValido(valor)) {
-      aplicarErro(el, 'CPF inválido.');
-      return false;
-    }
+    if (!validarCPFValido(valor)) mensagem = 'CPF inválido.';
   } else if (tipo === 'telefone') {
-    const num = valor.replace(/\D/g, '');
-    if (num.length < 10 || num.length > 11) {
-      aplicarErro(el, 'Telefone incompleto.');
-      return false;
-    }
+    const tel = interpretarTelefone(valor);
+    if (!tel.ok) mensagem = 'Telefone inválido: ' + tel.erro;
+  } else if (tipo === 'cep') {
+    if (valor.replace(/\D/g, '').length !== 8) mensagem = 'O CEP deve ter 8 dígitos.';
   }
 
-  limparErro(el);
-  return true;
+  const minimo = parseInt(el.getAttribute('data-minlength') || '0', 10);
+  if (!mensagem && minimo && valor.length < minimo) {
+    mensagem = 'Digite no mínimo ' + minimo + ' caracteres.';
+  }
+
+  definirErro('campo', id, mensagem);
+  return mensagem === null;
 }
 
-// --- EVENT LISTENERS E MÁSCARAS ---
+// Obrigatoriedade só é cobrada ao gerar (não incomoda quem ainda está preenchendo)
+function validarObrigatorio(el) {
+  if (el.type === 'checkbox' || !el.hasAttribute('data-obrigatorio')) return true;
+  if (ignorado(el) || el.disabled || temValor(el)) return true;
+  definirErro('campo', idDoControle(el), 'Campo obrigatório.');
+  return false;
+}
 
-document.getElementById('formMatricula').addEventListener('input', (e) => {
-  const el = e.target;
-  const tipo = el.getAttribute('data-tipo');
-  const soLetras = el.getAttribute('data-letras');
-  const soNumeros = el.getAttribute('data-numeros');
-  let v = el.value;
+// --- IDADE (campos de data de nascimento) ---
 
-  if (soNumeros === 'true') {
-    v = v.replace(/[^0-9]/g, '');
-  } else if (soLetras === 'true') {
-    v = v.replace(/[^a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]/g, '');
-  }
+function atualizarIdade(el) {
+  if (!el.hasAttribute('data-idade')) return;
+  const alvo = document.getElementById('idade_' + el.id);
+  if (!alvo) return;
+  const nascimento = (!el.disabled && !ignorado(el)) ? parseData(el.value.trim()) : null;
+  alvo.textContent = nascimento ? textoDaIdade(calcularIdade(nascimento)) : '';
+}
 
-  if (tipo === 'cpf') {
-    v = v.replace(/\D/g, '').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-  } else if (tipo === 'date') {
-    v = v.replace(/\D/g, '').replace(/(\d{2})(\d)/, '$1/$2').replace(/(\d{2})(\d)/, '$1/$2').replace(/(\d{4})\d+?$/, '$1');
-  } else if (tipo === 'telefone') {
-    v = v.replace(/\D/g, '');
-    if (v.length > 10) v = v.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
-    else if (v.length > 6) v = v.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
-    else if (v.length > 2) v = v.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
-  }
-
-  el.value = v;
-});
-
-document.getElementById('formMatricula').addEventListener('focusout', (e) => {
-  if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') {
-    validarCampo(e.target);
-  }
-});
+// --- VALORES E DEPENDÊNCIAS ENTRE CAMPOS ---
 
 function valorDoCampo(id) {
   const el = document.getElementById(id);
@@ -225,8 +357,10 @@ function limparBox(box) {
   box.querySelectorAll('input[type="checkbox"]').forEach(i => { i.checked = false; });
   box.querySelectorAll('input:not([type="checkbox"]), select, textarea').forEach(el => {
     restaurarPadrao(el);
-    limparErro(el);
+    limparErrosDe(el.id);
+    atualizarIdade(el);
   });
+  box.querySelectorAll('[data-multiselect]').forEach(grupo => limparErrosDe(grupo.id));
 }
 
 function checarDependencias() {
@@ -246,20 +380,171 @@ function checarDependencias() {
   setFrameHeight();
 }
 
-document.getElementById('formMatricula').addEventListener('change', checarDependencias);
-checarDependencias();
+// --- REGRAS ENTRE CAMPOS EM TEMPO REAL ---
+// As regras vêm do Python (Esquema.regras_js) em <script id="regras-esquema">. Tipos conhecidos:
+//   exige_nome    : desabilita os dados de uma pessoa enquanto o nome dela está vazio
+//   cpfs_distintos: o mesmo CPF não pode aparecer em dois campos
+//   ordem_datas   : uma data precisa ser anterior à outra
+// As demais regras (ex.: composição familiar) só são conferidas pelo servidor ao gerar.
 
-document.getElementById('formMatricula').addEventListener('submit', (e) => {
+let regrasEsquema = [];
+try {
+  regrasEsquema = JSON.parse(document.getElementById('regras-esquema').textContent);
+} catch (_) { /* sem regras */ }
+
+function aplicarExigeNome(regra) {
+  const nome = String(valorDoCampo(regra.nome) || '').trim();
+  const bloquear = nome === '';
+  regra.dependentes.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el || el.hasAttribute('data-bloqueado')) return;
+    if (bloquear) {
+      el.disabled = true;
+      el.setAttribute('data-desab-nome', 'true');
+      limparErrosDe(id);
+    } else if (el.hasAttribute('data-desab-nome')) {
+      el.disabled = false;
+      el.removeAttribute('data-desab-nome');
+    }
+    atualizarIdade(el);
+  });
+}
+
+function verificarCpfsDistintos(regra, novos) {
+  const porCpf = {};
+  regra.chaves.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el || ignorado(el)) return;
+    const digitos = el.value.replace(/\D/g, '');
+    if (digitos.length === 11) (porCpf[digitos] = porCpf[digitos] || []).push(id);
+  });
+  Object.values(porCpf).forEach(ids => {
+    if (ids.length < 2) return;
+    ids.forEach(id => {
+      const outros = ids.filter(o => o !== id).map(o => regra.rotulos[o]).join(', ');
+      novos[id] = 'Este CPF já foi informado em: ' + outros + '.';
+    });
+  });
+}
+
+function verificarOrdemDeDatas(regra, novos) {
+  const elAntes = document.getElementById(regra.anterior);
+  const elDepois = document.getElementById(regra.posterior);
+  if (!elAntes || !elDepois || ignorado(elAntes) || ignorado(elDepois)) return;
+  const antes = parseData(elAntes.value.trim());
+  const depois = parseData(elDepois.value.trim());
+  if (antes && depois && !(antes < depois)) novos[regra.alvo] = regra.mensagem;
+}
+
+function avaliarRegras() {
+  regrasEsquema.filter(r => r.tipo === 'exige_nome').forEach(aplicarExigeNome);
+
+  const novos = {};
+  regrasEsquema.forEach(regra => {
+    if (regra.tipo === 'cpfs_distintos') verificarCpfsDistintos(regra, novos);
+    else if (regra.tipo === 'ordem_datas') verificarOrdemDeDatas(regra, novos);
+  });
+
+  const afetados = new Set(Object.keys(erros.regra).concat(Object.keys(novos)));
+  erros.regra = novos;
+  afetados.forEach(repintar);
+}
+
+// --- ERROS DEVOLVIDOS PELO SERVIDOR ---
+
+let ultimoEnvioAplicado;
+
+function aplicarErrosDoServidor(mapa) {
+  const antes = Object.keys(erros.servidor);
+  erros.servidor = Object.assign({}, mapa);
+  new Set(antes.concat(Object.keys(mapa))).forEach(repintar);
+  setFrameHeight();
+}
+
+// --- EVENT LISTENERS E MÁSCARAS ---
+
+const formulario = document.getElementById('formMatricula');
+
+formulario.addEventListener('input', (e) => {
+  const el = e.target;
+  const id = idDoControle(el);
+
+  // editar um campo apaga o erro que o servidor tinha apontado nele e o verde até ser revalidado
+  if (erros.servidor[id]) {
+    delete erros.servidor[id];
+    repintar(id);
+  }
+  el.classList.remove('valido');
+
+  if (el.type !== 'checkbox') {
+    const tipo = el.getAttribute('data-tipo');
+    const soLetras = el.getAttribute('data-letras');
+    const soNumeros = el.getAttribute('data-numeros');
+    let v = el.value;
+
+    if (soNumeros === 'true') {
+      v = v.replace(/[^0-9]/g, '');
+    } else if (soLetras === 'true') {
+      v = v.replace(/[^a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]/g, '');
+    }
+
+    if (tipo === 'cpf') {
+      v = v.replace(/\D/g, '').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    } else if (tipo === 'date') {
+      v = v.replace(/\D/g, '').replace(/(\d{2})(\d)/, '$1/$2').replace(/(\d{2})(\d)/, '$1/$2').replace(/(\d{4})\d+?$/, '$1');
+    } else if (tipo === 'telefone') {
+      // só dígitos enquanto digita; a formatação (DDD, 9 extra, espaço) é aplicada ao sair do campo
+      v = v.replace(/\D/g, '').slice(0, 11);
+    } else if (tipo === 'cep') {
+      v = mascararCep(v);
+    }
+
+    if (v !== el.value) el.value = v;
+    atualizarIdade(el);
+  }
+
+  avaliarRegras();
+});
+
+formulario.addEventListener('focusout', (e) => {
+  const el = e.target;
+  if (el.tagName === 'INPUT' || el.tagName === 'SELECT') {
+    if (el.type === 'checkbox') return;
+    normalizarCampo(el);
+    validarCampo(el);
+    avaliarRegras();
+  }
+});
+
+formulario.addEventListener('change', (e) => {
+  const el = e.target;
+  checarDependencias();
+  if (el.tagName === 'SELECT') validarCampo(el);
+  if (el.type === 'checkbox') repintar(idDoControle(el));
+  avaliarRegras();
+});
+
+checarDependencias();
+avaliarRegras();
+
+formulario.addEventListener('submit', (e) => {
   e.preventDefault();
 
   const elementos = e.target.querySelectorAll('input, select, textarea');
   let formularioValido = true;
 
   elementos.forEach(el => {
-    if (!validarCampo(el)) {
-      formularioValido = false;
-    }
+    if (el.type === 'checkbox') return;
+    normalizarCampo(el);
+    if (!validarCampo(el)) formularioValido = false;
+    if (!validarObrigatorio(el)) formularioValido = false;
   });
+  e.target.querySelectorAll('[data-multiselect]').forEach(grupo => {
+    if (!validarObrigatorio(grupo)) formularioValido = false;
+  });
+
+  avaliarRegras();
+  if (Object.keys(erros.regra).length > 0) formularioValido = false;
 
   if (!formularioValido) {
     setFrameHeight();
@@ -268,22 +553,29 @@ document.getElementById('formMatricula').addEventListener('submit', (e) => {
 
   const dados = {};
   elementos.forEach(el => {
-    if (el.id && !el.closest('.oculto')) dados[el.id] = el.value;
+    if (el.id && !el.closest('.oculto') && !el.hasAttribute('data-desab-nome')) dados[el.id] = el.value;
   });
   e.target.querySelectorAll('[data-multiselect]').forEach(grupo => {
     if (!grupo.closest('.oculto')) {
       dados[grupo.id] = Array.from(grupo.querySelectorAll('input:checked')).map(i => i.value);
     }
   });
+  // identifica esta submissão (o Python só reprocessa quando este valor muda)
+  dados._envio = Date.now();
 
   setComponentValue(dados);
 });
 
-// ESCUTA EVENTOS DO STREAMLIT (RESIZING E TEMA)
+// ESCUTA EVENTOS DO STREAMLIT (RESIZING, TEMA E ERROS DO SERVIDOR)
 window.addEventListener("message", (e) => {
   if (e.data && e.data.type === "streamlit:render") {
     if (e.data.theme) {
       aplicarTemaStreamlit(e.data.theme);
+    }
+    const args = e.data.args || {};
+    if (args.envio !== ultimoEnvioAplicado) {
+      ultimoEnvioAplicado = args.envio;
+      aplicarErrosDoServidor(args.erros || {});
     }
     setFrameHeight();
   }
@@ -292,4 +584,3 @@ window.addEventListener("message", (e) => {
 // INICIALIZAÇÃO DO COMPONENTE
 sendToStreamlit("streamlit:componentReady", { apiVersion: 1 });
 setTimeout(setFrameHeight, 100);
-

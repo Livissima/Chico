@@ -12,6 +12,9 @@
 
 /* ===== Página A4 ===== */
 * { box-sizing: border-box; }
+/* Mantém as cores de fundo (ex.: barras das seções) ao imprimir e ao gerar o PDF. Sem isto, o navegador
+   descarta os fundos, a menos que o usuário marque "Gráficos de segundo plano" na tela de impressão. */
+* { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 body { margin: 0; background: #8a8a8a; padding: 8mm 0; }
 .pagina {
   width: 210mm; height: 297mm; margin: 0 auto; background: #fff;

@@ -8,6 +8,8 @@
   --bg-invalido: #FFE6E6;
   --border-invalido: #FF2B2B;
   --msg-erro: #D32F2F;
+  --bg-valido: #E3F6E8;
+  --border-valido: #2E9E5B;
 }
 
 body {
@@ -65,6 +67,40 @@ input.invalido, select.invalido {
   background-color: var(--bg-invalido);
 }
 
+/* campo preenchido com valor válido (o padrão volta quando está vazio) */
+input.valido, select.valido {
+  border-color: var(--border-valido);
+  background-color: var(--bg-valido);
+}
+
+/* Autopreenchimento do navegador (sugestões salvas de outros preenchimentos): o Chrome/Edge pintam o
+   campo de branco/azul-claro e trocam a cor do texto. Redesenhamos com as cores do formulário, por estado. */
+input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus,
+select:-webkit-autofill, select:-webkit-autofill:hover, select:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--bg-input) inset !important;
+  -webkit-text-fill-color: var(--text-input) !important;
+  caret-color: var(--text-input);
+  transition: background-color 600000s 0s;
+}
+input.valido:-webkit-autofill, select.valido:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px var(--bg-valido) inset !important;
+}
+input.invalido:-webkit-autofill, select.invalido:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px var(--bg-invalido) inset !important;
+}
+
+/* desabilitado (ex.: dados de uma pessoa sem nome) e bloqueado (valor padrão que não pode ser alterado) */
+input:disabled, select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.campo-box.bloqueado input, .campo-box.bloqueado select {
+  opacity: 0.75;
+  cursor: not-allowed;
+  border-style: dashed;
+}
+
 .erro-mensagem {
   color: var(--msg-erro);
   font-size: 11px;
@@ -84,6 +120,39 @@ input.invalido, select.invalido {
   padding-bottom: 6px;
   color: var(--text-main);
 }
+
+/* cartão que agrupa os campos de uma pessoa/assunto dentro da seção */
+.bloco {
+  border: 1px solid var(--border-input);
+  border-radius: 10px;
+  padding: 14px 14px 2px 14px;
+  margin-bottom: 18px;
+  background: rgba(128, 128, 128, 0.06);
+}
+
+.bloco-titulo {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--text-main);
+}
+
+/* idade ao lado do rótulo, alinhada à direita */
+label.com-idade {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.idade {
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.8;
+  white-space: nowrap;
+}
+
+.idade:empty { display: none; }
 
 .oculto { display: none !important; }
 
@@ -107,21 +176,36 @@ button:hover { background-color: #E03E3E; }
   display: flex;
   flex-wrap: wrap;
   gap: 6px 18px;
-  padding: 4px 0;
+  padding: 6px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
 }
 
+.multiselect.invalido {
+  border-color: var(--border-invalido);
+  background-color: var(--bg-invalido);
+}
+
+.multiselect.valido {
+  border-color: var(--border-valido);
+  background-color: var(--bg-valido);
+}
+
+/* o tamanho da fonte vem do parâmetro `fonte_opcoes` do Campo (variável --fonte-opcoes) */
 .multiselect label.opcao {
   display: flex;
   align-items: center;
   gap: 6px;
   margin: 0;
-  font-size: 14px;
+  font-size: var(--fonte-opcoes, 14px);
   font-weight: 400;
   cursor: pointer;
 }
 
 .multiselect input[type="checkbox"] {
-  width: auto;
+  font-size: inherit;
+  width: 1.1em;
+  height: 1.1em;
   padding: 0;
   margin: 0;
   accent-color: #FF4B4B;

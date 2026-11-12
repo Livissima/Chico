@@ -6,6 +6,7 @@ from app.core.funcionalidades.matrícula.dominio.elementos.regrinhas import obri
     obrigatório_max, letra, número
 from app.core.funcionalidades.matrícula.dominio.regras import ApenasLetras, Obrigatorio, \
     ComprimentoMinimo
+from app.core.funcionalidades.matrícula.dominio.regras_esquema import OrdemDeDatas
 from app.core.funcionalidades.matrícula.dominio.tipos import TipoDado, TipoCampo
 
 nome_estudante = Campo(
@@ -21,9 +22,8 @@ nome_social = Campo(
 dn = Campo(
     chave="data_nascimento",
     rotulo="Data de Nascimento",
-    tipo_dado=TipoDado.DATA,
+    tipo_dado=TipoDado.NASCIMENTO,
     regras=obrigatório
-    #todo: Inserir um campo paralelo que indique a idade de quem nasceu nesta data. Talvez o próprio tipo de campo de data poderia ser bifurcado para um tipo de data simples, e um tipo de data de nascimento, onde os campos de data de nascimento sempre tragam a indicação da idade resultante.
 )
 cpf_estudante = Campo(
     chave="cpf_estudante",
@@ -87,7 +87,6 @@ data_emissão_cn = Campo(
     chave="dt_emissao_cn",
     rotulo="Dt. Emissão (CN)",
     tipo_dado=TipoDado.DATA
-    #todo: Adicionar uma regra para que a data inserida aqui (caso seja inserida) seja necessariamente posterior à data de nascimento
 )
 cartório_cn = Campo(
     chave="cartorio_registro",
@@ -133,4 +132,14 @@ linhas_pessoal = (
     linha3,
     linha4,
     linha5,
+)
+
+# Regras que envolvem mais de um campo (verificadas ao gerar o relatório).
+regras_pessoal = (
+    OrdemDeDatas(
+        anterior=dn.chave,
+        posterior=data_emissão_cn.chave,
+        alvo=data_emissão_cn.chave,
+        mensagem="A data de emissão da certidão deve ser posterior à data de nascimento do estudante.",
+    ),
 )

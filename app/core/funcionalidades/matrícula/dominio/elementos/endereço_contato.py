@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from app.core.funcionalidades.matrícula.dominio.campos import Campo, Linha
-from app.core.funcionalidades.matrícula.dominio.elementos.regrinhas import obrigatório, obrigatório_número_max, \
-    número_max, número
+from app.core.funcionalidades.matrícula.dominio.elementos.regrinhas import obrigatório, número
+from app.core.funcionalidades.matrícula.dominio.tipos import TipoDado
 
 logradouro = Campo(
     chave="logradouro",
@@ -25,8 +25,8 @@ número_casa = Campo(
 cep = Campo(
     chave="cep",
     rotulo="CEP",
-    regras=obrigatório_número_max(8)
-    #todo: Bolar um esqueminha de placeholder para cep e de formatação como cep (00000-000)
+    tipo_dado=TipoDado.CEP,
+    regras=obrigatório
 )
 complemento = Campo(
     chave="complemento",
@@ -43,25 +43,25 @@ município = Campo(
     regras=obrigatório
 )
 telefone_um = Campo(
-    #todo: bolar um esqueminha de validação de telefones e também de formatação de acordo com quantidade de dígitos: (xx) xxxxx xxxx / (xx) xxxx xxxx / xxxxx xxxx / xxxx xxxx
     chave="celular_mae",
     rotulo="Celular da Mãe",
-    regras=obrigatório_número_max(11)
+    tipo_dado=TipoDado.TELEFONE,
+    regras=obrigatório
 )
 telefone_dois = Campo(
     chave="celular_pai",
     rotulo="Celular do Pai",
-    regras=número_max(11)
+    tipo_dado=TipoDado.TELEFONE
 )
 telefone_três = Campo(
     chave="fone_contato",
     rotulo="Telefone p/ Contato",
-    regras=número_max(11)
+    tipo_dado=TipoDado.TELEFONE
 )
 cel_fixo = Campo(
     chave="telefone_fixo",
     rotulo="Telefone Fixo",
-    regras=número_max(11)
+    tipo_dado=TipoDado.TELEFONE
 )
 email = Campo(
     chave="email_contato",

@@ -1,12 +1,11 @@
 from __future__ import annotations
-
-from app.config.parâmetros.getters.tempo import tempo
 from app.core.funcionalidades.matrícula.dominio.campos import Campo, Dependencia, Linha
 from app.core.funcionalidades.matrícula.dominio.elementos.alternativas import ANO_LETIVO_PADRAO, RESPONSAVEL_MATRICULA, \
-    TURMAS, SÉRIES
+    TURMAS, SÉRIES, PREENCHEDORAS
 from app.core.funcionalidades.matrícula.dominio.elementos.regrinhas import obrigatório_número_max, obrigatório, \
     número_max, obrigatório_letra, obrigatório_letra_max
 from app.core.funcionalidades.matrícula.dominio.regras import Obrigatorio, ComprimentoMaximo, ApenasNumeros
+from app.core.funcionalidades.matrícula.dominio.texto import hoje
 from app.core.funcionalidades.matrícula.dominio.tipos import TipoCampo, TipoDado
 
 série = Campo(
@@ -27,13 +26,15 @@ ano_letivo = Campo(
     chave="ano_letivo",
     rotulo="Ano Letivo",
     valor_padrao=ANO_LETIVO_PADRAO,
-    regras=obrigatório
+    regras=obrigatório,
+    bloqueado=True
 )
 curso = Campo(
     chave="curso",
     rotulo="Curso",
-    valor_padrao="199",
-    regras=obrigatório_número_max(3)
+    valor_padrao="199 - Ensino Fundamental de 6º ao 9º Ano",
+    regras=obrigatório_número_max(3),
+    bloqueado=True
 )
 num_matrícula = Campo(
     chave="num_matricula",
@@ -44,7 +45,7 @@ data_matrícula = Campo(
     chave="data_matricula",
     rotulo="Data Matrícula (dd/mm/aaaa)",
     tipo_dado=TipoDado.DATA,
-    valor_padrao=tempo.hoje
+    valor_padrao=hoje
 )
 responsável_matrícula = Campo(
     chave="resp_mat_opcao",
@@ -65,7 +66,9 @@ responsável_matrícula_outro = Campo(
 preenchedora = Campo(
     chave="preenchido_por",
     rotulo="Ficha preenchida por:",
-    regras=obrigatório_letra
+    regras=obrigatório_letra,
+    tipo=TipoCampo.RADIO,
+    opcoes=PREENCHEDORAS
 )
 # logo_url = Campo(
 #     chave="logo_src",
@@ -73,8 +76,8 @@ preenchedora = Campo(
 # )
 
 
-linha_escolares_1 = Linha(proporcoes=(1, 1, 1, 1), campos=(série, turma, ano_letivo, curso, ))
-linha_escolares_2 = Linha(proporcoes=(1, 1, 1), campos=(data_matrícula, responsável_matrícula, num_matrícula,  ))
+linha_escolares_1 = Linha(proporcoes=(1, 1, 1, 1), campos=(série, turma, ano_letivo, curso ))
+linha_escolares_2 = Linha(proporcoes=(1, 1, 1), campos=(data_matrícula, responsável_matrícula, num_matrícula ))
 linha_escolares_3 = Linha(proporcoes=(1,), campos=(responsável_matrícula_outro, ))
 linha_escolares_4 = Linha(proporcoes=(1, 1), campos=(preenchedora, ))
 
